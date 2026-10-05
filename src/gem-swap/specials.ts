@@ -162,7 +162,7 @@ function effectCells(state: GameState, cell: number, kind: SpecialKind): readonl
 }
 
 /** Resolves one normal/special match wave into a unique clear set and protected creations. */
-export function planWave(state: GameState, naturalCells: readonly number[], p: number | null, q: number | null): ResolutionPlan {
+export function planWave(state: GameState, naturalCells: readonly number[], p: number | null, q: number | null, extraClearCells: readonly number[] = []): ResolutionPlan {
   const runs = runsOf(state); const specials = planCreations(state, runs, p, q); const protectedCells = new Set(specials.map(item => item.cell));
   const pairIds = new Set(p === null || q === null ? [] : [state.board[p]!.id, state.board[q]!.id]);
   const combo = p === null || q === null ? null : comboPlan(state, p, q, protectedCells, pairIds);
@@ -179,6 +179,7 @@ export function planWave(state: GameState, naturalCells: readonly number[], p: n
     if (isSpecial(gem)) addActivation(cell, conversionKinds.get(gem.id) ?? gem.kind);
   };
   for (const cell of naturalCells) addCell(cell);
+  for (const cell of extraClearCells) addCell(cell);
   if (combo) {
     events.push({ type: 'special-combination', combo: combo.name, centre: q });
     const convertedCells = new Set(combo.conversions.map(item => item.cell));
