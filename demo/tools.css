@@ -23,3 +23,6 @@
 :root { --intro-room: 4rem; --intro-room-wide: 4rem; }
 @media(max-width:760px) { header { gap: 8px; margin-bottom: 10px; } nav { gap: 6px; } nav .fam-button { padding-left: 10px; padding-right: 10px; } }
 @media(max-width:760px) { nav .api-link { display: none; } .full-board { --size: min(42px,calc((100vw - 76px - var(--cols) * 2px) / var(--cols)),max(28px,calc((100dvh - 540px) / var(--rows)))); } }
+.field input { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 10px; background: var(--page); }
+.full-cell.portal { background: #162019; }
+.portal-ring { color: #f2cf78; font-size: calc(var(--size)*.8); line-height: 1; opacity: calc(.3 + var(--strength)*.7); transform: scale(calc(.5 + var(--strength)*.5)); filter: drop-shadow(0 0 3px #efd277); }

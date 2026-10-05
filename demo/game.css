@@ -40,9 +40,11 @@ aside .micro { font-size: .78rem; color: var(--muted); }
 .material-wood { --board: #d7b680; }
 @media (max-width: 760px) { .well { --cell: min(42px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows))); } .layout { grid-template-columns: minmax(0, 1fr); } aside { order: 2; } .game-screen { order: 1; padding: 12px 8px; } .play-area { flex-wrap: wrap; gap: 6px; } .next-wrap { order: -1; flex-basis: 100%; display: flex; align-items: center; gap: 10px; justify-content: center; } .next-wrap h3 { margin: 0; } .next { display: flex; max-width: none; } }
 @media (max-width: 380px) { .well { --cell: min(36px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows))); } .play-area { gap: 4px; } .next-piece .gem { width: 25px; height: 25px; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
 
 .game-screen, .game-screen * { -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
 
 .well[data-width="10"] { --cell: min(40px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows))); }
 .well[data-width="12"] { --cell: min(34px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows))); }
+
+:root[data-animations="off"] .game-screen *, :root[data-motion="reduced"] .game-screen * { transition: none !important; animation: none !important; }

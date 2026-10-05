@@ -39,6 +39,31 @@ try{
    assert.notEqual(await page.evaluate(()=>getComputedStyle(document.querySelector('aside p')).userSelect),'none');
    await page.locator('#language').click();assert.equal(await page.locator('#tools-title').textContent(),'道具箱');await page.locator('#language').click();
   }
+  await page.locator('#animations').uncheck();await page.reload();assert.equal(await page.locator('#animations').isChecked(),false);
+  await page.goto(`${url}/`);assert.equal(await page.locator('#animations').isChecked(),false);
+  await page.locator('#animations').check();await page.goto(`${url}/tools.html`);assert.equal(await page.locator('#animations').isChecked(),true);
+  await page.locator('#code').fill('black-hole-browser');await page.locator('#advanced').check();await page.locator('#new').click();
+  async function ordinarySwap(){
+   const move=await page.evaluate(async()=>{
+    const module=await import('./dist/gem-swap.js');const grid=document.querySelector('#grid');
+    const cells=[...grid.children];const width=Number(grid.getAttribute('aria-colcount'));const height=Number(grid.getAttribute('aria-rowcount'));
+    const base=module.createGame({width,height,tools:true,advancedTools:true,seed:'inspection'});
+    const board=cells.map(cell=>cell.dataset.gemId?{id:Number(cell.dataset.gemId),colour:cell.dataset.colour,...(cell.dataset.kind?{kind:cell.dataset.kind}:{})}:null);
+    return module.legalActions({...base,board}).find(action=>action.kind==='swap');
+   });
+   assert.ok(move,'a legal ordinary swap exists');await page.locator(`[data-cell="${move.from}"]`).click();await page.locator(`[data-cell="${move.to}"]`).click();
+   await page.waitForFunction(()=>document.querySelector('#grid').dataset.phase==='ready');
+  }
+  for(let i=0;i<6;i++)await ordinarySwap();
+  const portalTool=page.locator('[data-tool="black-hole"]');assert.match(await portalTool.textContent(),/× 1/);
+  await portalTool.click();await page.locator('[data-cell="0"]').click();assert.equal(await page.locator('.full-cell.preview').count(),3);
+  await page.locator('#confirm').click();await page.waitForFunction(()=>document.querySelector('#grid').dataset.phase==='ready');
+  assert.equal(await page.locator('.portal').count(),1);assert.match(await portalTool.textContent(),/× 0/);
+  assert.match(await page.locator('#portal-state').textContent(),/5\/8/);
+  await ordinarySwap();await ordinarySwap();assert.equal(await page.locator('.portal').count(),0);
+  await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#restart').click();await ordinarySwap();
+  assert.equal(await page.evaluate(()=>document.querySelector('#grid').getAnimations({subtree:true}).length),0);
+  await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#advanced').uncheck();
   for(const mode of ['gem-swap','stone-collapse']) for(const shape of ['heart','star','hexagon']) {
    await page.locator('#game').selectOption(mode);await page.locator('#shape').selectOption(shape);await page.locator('#new').click();
    await page.locator('[data-cell] .gem').first().waitFor();const box=await page.locator('#grid').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width);

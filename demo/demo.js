@@ -1,9 +1,10 @@
+import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from '../dist/falling-triplets.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
-  en: { settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · ↑ cycle · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
-  ja: { settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
+  en: { animations:'Animation', settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · ↑ cycle · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
+  ja: { animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-falling-triplets-save'; const preferenceKey = 'houseki-ui';
 let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
@@ -26,16 +27,18 @@ function newGame(restart = false) {
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
   heldKeys.clear(); pendingReleases.clear(); render(); save(); $('.game-screen').focus({ preventScroll: true });
 }
-function gemMarkup(gem, extra = '') { return `<span class="gem ${gem.colour} ${extra}" aria-label="${gem.colour}">${symbols[gem.colour]}</span>`; }
+function gemMarkup(gem, extra = '') { return `<span ${gem.id!==undefined?`data-id="${gem.id}"`:""} class="gem ${gem.colour} ${extra}" aria-label="${gem.colour}">${symbols[gem.colour]}</span>`; }
 function render() {
   if (!game) return;
+  const previous=positions($('#well'));
   const w = game.settings.width; const h = game.settings.height; const totalH = h + 3; const cells = Array(w * totalH).fill('');
   game.board.forEach((gem, idx) => { if (gem) cells[idx] = gemMarkup(gem); });
   const ghostY = landingY(game); if (game.active && ghostY !== null) game.active.gems.forEach((gem, i) => { const at = (ghostY + i + 3) * w + game.active.x; if (!cells[at]) cells[at] = gemMarkup(gem, 'ghost'); });
   if (game.active) game.active.gems.forEach((gem, i) => { const y = game.active.y + i; const at = (y + 3) * w + game.active.x; if (at >= 0 && at < cells.length) cells[at] = gemMarkup(gem, 'active'); });
   const well = $('#well'); well.style.setProperty('--cols', String(w)); well.style.setProperty('--rows', String(h));
   well.style.gridTemplateRows = `repeat(3, calc(var(--cell) * .42)) repeat(${h}, var(--cell))`; well.dataset.width = String(w);
-  well.innerHTML = cells.map((content, index) => `<div class="cell" aria-label="${cellLabel(index, w, content)}">${content}</div>`).join('');
+  const markup = cells.map((content, index) => `<div class="cell" aria-label="${cellLabel(index, w, content)}">${content}</div>`).join('');
+  if(well.dataset.markup!==markup){well.innerHTML=markup;well.dataset.markup=markup;settle(well,previous);}
   $('#score').textContent = String(game.score); $('#chain').textContent = String(game.maxChain);
   $('#next').innerHTML = game.next.map(piece => `<div class="next-piece" aria-label="Next: ${piece.join(', ')}">${piece.map(colour => gemMarkup({ colour })).join('')}</div>`).join('');
   const t = words[lang]; let status = game.phase === 'lost' ? t.lost : game.phase === 'won' || game.phase === 'finished' ? t.won : game.phase === 'paused' ? t.paused : game.phase === 'clear-mark' ? (game.resolutionChain > 1 ? `Chain ${game.resolutionChain}` : `Clear · ${game.pendingClear?.length ?? 0}`) : t.place;
@@ -133,3 +136,5 @@ let recovered = false;
 try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved); startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
 if (!game) newGame(); else { resumeRequired = false; render(); $('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
+
+$('#animations').checked=animationEnabled();$('#animations').addEventListener('change',event=>setAnimations(event.target.checked));
