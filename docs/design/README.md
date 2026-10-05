@@ -69,3 +69,5 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md), [Magnetic Blocks and Floor Switch](MAGNETIC-BLOCKS.md), and [Earthquake, Lightning and deep boards](ENVIRONMENTAL-MODES.md). These documents describe proposed rules; they do not imply released support.
