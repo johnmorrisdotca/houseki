@@ -2,7 +2,8 @@ import { COLOURS, PRESETS, findMatches, listLegalSwaps, neighbors } from './boar
 import { drawColour, nextInt, seedState } from './random.js';
 import { isValidSpecialSwap, materializeSpecials, planWave } from './specials.js';
 import { previewTool } from './tools.js';
-import type { Action, BoardPreset, BoardShape, CreateOptions, GameEvent, GameState, GameStatus, Gem, GemColour, Settings, ToolKind, Transition } from './types.js';
+import { consumePortal, contactCells, placementCells } from './black-hole.js';
+import type { Action, BoardPreset, BoardShape, CreateOptions, GameEvent, GameState, GameStatus, Gem, GemColour, OrdinaryToolKind, Settings, ToolKind, Transition } from './types.js';
 
 /** Typed error for invalid settings or a board that cannot be generated safely. */
 export class GemSwapOptionsError extends RangeError {
@@ -39,9 +40,11 @@ function validateDimensions(width: number, height: number): void {
 }
 function optionsFor(options: CreateOptions): Settings {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new GemSwapOptionsError('invalid-options', 'Options must be an object');
-  const allowed = ['preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'tools'];
+  const allowed = ['preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'tools', 'advancedTools'];
   if (Object.keys(options).some(key => !allowed.includes(key))) throw new GemSwapOptionsError('unknown-option', 'Options contain an unsupported field');
   if (options.tools !== undefined && typeof options.tools !== 'boolean') throw new GemSwapOptionsError('invalid-tools-option', 'Tools must be enabled or disabled with a boolean');
+  if (options.advancedTools !== undefined && typeof options.advancedTools !== 'boolean') throw new GemSwapOptionsError('invalid-advanced-tools-option', 'Advanced tools must be enabled or disabled with a boolean');
+  if (options.advancedTools && !options.tools) throw new GemSwapOptionsError('advanced-tools-require-tools', 'Advanced tools require the stored-tool tray');
   const dimensions = options.width !== undefined || options.height !== undefined;
   let width: number; let height: number; let mask: readonly boolean[] | undefined; let shape: BoardShape | undefined;
   if (options.shape !== undefined) {
@@ -63,7 +66,7 @@ function optionsFor(options: CreateOptions): Settings {
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new GemSwapOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');
   const seed = options.seed ?? 'houseki-gem-swap';
   if (typeof seed === 'string' ? seed.length > 256 : (!Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff)) throw new GemSwapOptionsError('invalid-seed', 'Seed must be a string of at most 256 characters or an unsigned 32-bit integer');
-  return Object.freeze({ width: width!, height: height!, colourCount, seed, tools: options.tools ?? false, ...(shape ? { shape } : {}), mask: Object.freeze([...mask]) });
+  return Object.freeze({ width: width!, height: height!, colourCount, seed, tools: options.tools ?? false, advancedTools: options.advancedTools ?? false, ...(shape ? { shape } : {}), mask: Object.freeze([...mask]) });
 }
 
 function gem(id: number, colour: GemColour): Gem { return Object.freeze({ id, colour }); }
@@ -116,7 +119,8 @@ export function createGame(options: CreateOptions = {}): GameState {
 function initialState(settings: Settings, board: readonly (Gem | null)[], randomState: number, nextId: number, usedFallback: boolean): GameState {
   const start = settings.tools ? 1 : 0;
   return { game: 'gem-swap', rules: 'swap-1', settings, board, phase: 'ready', score: 0, moves: 0, randomState, nextId, usedFallback, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), gravityBoard: null,
-    inventory: Object.freeze({ bomb: start, 'row-clear': start, 'colour-clear': start }), selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolProgress: 0, toolAwardCursor: 0, assisted: false, toolWaveActive: false };
+    inventory: Object.freeze({ bomb: start, 'row-clear': start, 'colour-clear': start }), selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolProgress: 0, toolAwardCursor: 0, assisted: false, toolWaveActive: false,
+    blackHoleCharges: 0, blackHoleProgress: 0, blackHole: null, blackHoleMovePending: false, blackHoleContactPending: false, pendingBlackHole: false };
 }
 
 function rejected(state: GameState, reason: string): Transition { return { state, events: Object.freeze([]), accepted: false, reason }; }
@@ -136,12 +140,12 @@ export function applyAction(state: GameState, action: Action): Transition {
   if (!isValidSpecialSwap(board[from]!, board[to]!, matched.length > 0)) return rejected(state, board[from]!.colour === board[to]!.colour && !board[from]!.kind && !board[to]!.kind ? 'identical-gems' : 'swap-makes-no-match');
   const swapped = Object.freeze({ ...state, board: Object.freeze(board) });
   const plan = planWave(swapped, matched, from, to);
-  const next = Object.freeze({ ...swapped, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials, gravityBoard: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolWaveActive: false });
+  const next = Object.freeze({ ...swapped, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials, gravityBoard: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolWaveActive: false, blackHoleMovePending: state.blackHole !== null, blackHoleContactPending: state.blackHole !== null });
   return { state: next, events: Object.freeze([{ type: 'swap-accepted', from, to, ids: [state.board[from]!.id, state.board[to]!.id] }, ...(matched.length ? [{ type: 'match-marked', cells: matched, wave: 1 }] : []), ...plan.events]), accepted: true };
 }
 
-const TOOL_ORDER: readonly ToolKind[] = ['bomb', 'row-clear', 'colour-clear'];
-function validTool(tool: unknown): tool is ToolKind { return TOOL_ORDER.includes(tool as ToolKind); }
+const TOOL_ORDER: readonly OrdinaryToolKind[] = ['bomb', 'row-clear', 'colour-clear'];
+function validTool(tool: unknown): tool is ToolKind { return [...TOOL_ORDER, 'black-hole'].includes(tool as ToolKind); }
 function onReady(state: GameState): boolean { return state.phase === 'ready' && findMatches(state.board, state.settings).length === 0; }
 function applyToolAction(state: GameState, action: Exclude<Action, { readonly kind: 'swap' }>): Transition {
   if (!['select-tool', 'target-tool', 'confirm-tool', 'cancel-tool'].includes(action.kind)) return rejected(state, 'invalid-action');
@@ -151,13 +155,15 @@ function applyToolAction(state: GameState, action: Exclude<Action, { readonly ki
   if (!onReady(state)) return rejected(state, state.phase === 'ready' ? 'unstable-board' : 'resolution-in-progress');
   if (action.kind === 'select-tool') {
     if (!validTool(action.tool)) return rejected(state, 'invalid-action');
-    if (state.inventory[action.tool] < 1) return rejected(state, 'tool-unavailable');
+    if (action.tool === 'black-hole') {
+      if (!state.settings.advancedTools || state.blackHoleCharges < 1 || state.blackHole) return rejected(state, 'tool-unavailable');
+    } else if (state.inventory[action.tool] < 1) return rejected(state, 'tool-unavailable');
     const next = Object.freeze({ ...state, selectedTool: action.tool, toolTarget: null, toolPreview: Object.freeze([]) });
     return { state: next, events: Object.freeze([{ type: 'tool-selected', tool: action.tool }]), accepted: true };
   }
   if (action.kind === 'target-tool') {
     if (!Number.isInteger(action.cell) || !state.selectedTool || action.cell < 0 || action.cell >= state.board.length || !state.settings.mask[action.cell] || !state.board[action.cell]) return rejected(state, 'invalid-tool-target');
-    const preview = previewTool(state, state.selectedTool, action.cell);
+    const preview = state.selectedTool === 'black-hole' ? placementCells(state, action.cell) : previewTool(state, state.selectedTool, action.cell);
     const next = Object.freeze({ ...state, toolTarget: action.cell, toolPreview: preview });
     return { state: next, events: Object.freeze([{ type: 'tool-targeted', tool: state.selectedTool, cell: action.cell, cells: preview, count: preview.length }]), accepted: true };
   }
@@ -166,23 +172,34 @@ function applyToolAction(state: GameState, action: Exclude<Action, { readonly ki
     const next = Object.freeze({ ...state, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]) });
     return { state: next, events: Object.freeze([{ type: 'tool-cancelled' }]), accepted: true };
   }
-  if (!state.selectedTool || state.toolTarget === null || state.inventory[state.selectedTool] < 1) return rejected(state, 'tool-not-ready');
+  if (!state.selectedTool || state.toolTarget === null) return rejected(state, 'tool-not-ready');
+  if (state.selectedTool === 'black-hole') {
+    if (!state.settings.advancedTools || state.blackHoleCharges < 1 || state.blackHole) return rejected(state, 'tool-unavailable');
+    const cells = placementCells(state, state.toolTarget);
+    if (!cells.length) return rejected(state, 'invalid-tool-target');
+    const ids = cells.flatMap(cell => state.board[cell] ? [state.board[cell]!.id] : []);
+    const portal = Object.freeze({ cell: state.toolTarget, capacityRemaining: Math.max(0, 8 - ids.length), movesRemaining: 2, consumedIds: Object.freeze(ids) });
+    const next = Object.freeze({ ...state, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: cells, pendingSpecials: Object.freeze([]), gravityBoard: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), assisted: true, toolWaveActive: true, pendingBlackHole: true, blackHole: portal, blackHoleCharges: 0 as const, blackHoleMovePending: false, blackHoleContactPending: false });
+    return { state: next, events: Object.freeze([{ type: 'black-hole-opened', cell: portal.cell, capacityRemaining: portal.capacityRemaining, movesRemaining: portal.movesRemaining }, { type: 'black-hole-consumed', cells, ids }]), accepted: true };
+  }
+  if (state.inventory[state.selectedTool] < 1) return rejected(state, 'tool-not-ready');
   const preview = previewTool(state, state.selectedTool, state.toolTarget);
   if (!preview.length) return rejected(state, 'invalid-tool-target');
   const plan = planWave(state, [], null, null, preview);
   const inventory = Object.freeze({ ...state.inventory, [state.selectedTool]: state.inventory[state.selectedTool] - 1 });
-  const next = Object.freeze({ ...state, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: Object.freeze([]), gravityBoard: null, inventory, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), assisted: true, toolWaveActive: true });
+  const next = Object.freeze({ ...state, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: Object.freeze([]), gravityBoard: null, inventory, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), assisted: true, toolWaveActive: true, blackHoleMovePending: state.blackHoleMovePending || state.blackHole !== null, blackHoleContactPending: state.blackHoleContactPending || state.blackHole !== null });
   return { state: next, events: Object.freeze([{ type: 'tool-used', tool: state.selectedTool, target: state.toolTarget, cells: plan.cells, count: plan.cells.length }, ...plan.events]), accepted: true };
 }
 
 function gravityBoard(state: GameState): readonly (Gem | null)[] {
   const { width, height, mask } = state.settings; const result = [...state.board];
+  const blocked = (index: number) => !mask[index] || state.blackHole?.cell === index;
   for (let x = 0; x < width; x++) {
     let y = 0;
     while (y < height) {
-      while (y < height && !mask[y * width + x]) y++;
+      while (y < height && blocked(y * width + x)) y++;
       if (y >= height) break;
-      const start = y; while (y < height && mask[y * width + x]) y++; const end = y; const survivors: Gem[] = [];
+      const start = y; while (y < height && !blocked(y * width + x)) y++; const end = y; const survivors: Gem[] = [];
       for (let row = start; row < end; row++) { const item = state.board[row * width + x]; if (item) survivors.push(item); }
       for (let row = start; row < end; row++) result[row * width + x] = null;
       for (let offset = 0; offset < survivors.length; offset++) result[(end - survivors.length + offset) * width + x] = survivors[offset]!;
@@ -192,12 +209,13 @@ function gravityBoard(state: GameState): readonly (Gem | null)[] {
 }
 function refill(state: GameState): readonly [readonly (Gem | null)[], number, number, readonly GameEvent[]] {
   const { width, height, mask, colourCount } = state.settings; const board = [...state.board]; let randomState = state.randomState; let nextId = state.nextId; const draws: GameEvent[] = [];
+  const blocked = (index: number) => !mask[index] || state.blackHole?.cell === index;
   for (let x = 0; x < width; x++) {
     let y = 0;
     while (y < height) {
-      while (y < height && !mask[y * width + x]) y++;
+      while (y < height && blocked(y * width + x)) y++;
       if (y >= height) break;
-      const start = y; while (y < height && mask[y * width + x]) y++; const end = y;
+      const start = y; while (y < height && !blocked(y * width + x)) y++; const end = y;
       for (let row = end - 1; row >= start; row--) {
         const index = row * width + x; if (board[index]) continue;
         const [colour, next] = drawColour(randomState, colourCount); randomState = next; board[index] = gem(nextId++, colour);
@@ -218,6 +236,26 @@ function awardTools(state: GameState, removed: number): { readonly inventory: Ga
   }
   return { inventory: Object.freeze(inventory), progress, cursor, events: Object.freeze(events) };
 }
+function awardBlackHole(state: GameState, removed: number): { readonly charges: 0 | 1; readonly progress: number; readonly events: readonly GameEvent[] } {
+  if (!state.settings.advancedTools || state.toolWaveActive) return { charges: state.blackHoleCharges, progress: state.blackHoleProgress, events: Object.freeze([]) };
+  let progress = state.blackHoleProgress + removed; let charges: 0 | 1 = state.blackHoleCharges; const events: GameEvent[] = [];
+  while (progress >= 48) {
+    progress -= 48; const discarded = charges >= 1; if (!discarded) charges = 1;
+    events.push({ type: 'black-hole-awarded', charges, discarded });
+  }
+  return { charges, progress, events: Object.freeze(events) };
+}
+
+function scheduleContact(state: GameState, board: readonly (Gem | null)[]): { readonly state: GameState; readonly events: readonly GameEvent[] } | null {
+  if (!state.blackHole) return null;
+  const onBoard = Object.freeze({ ...state, board }); const cells = contactCells(onBoard, state.blackHole);
+  if (!cells.length) return null;
+  const ids = cells.flatMap(cell => board[cell] ? [board[cell]!.id] : []);
+  const portal = consumePortal(onBoard, cells);
+  const next = Object.freeze({ ...onBoard, phase: 'clear-mark' as const, resolutionTick: 0, pendingCells: cells, pendingSpecials: Object.freeze([]), gravityBoard: null, pendingBlackHole: true, toolWaveActive: true, blackHole: portal, blackHoleMovePending: portal ? state.blackHoleMovePending : false, blackHoleContactPending: false });
+  const closed = portal ? [] : [{ type: 'black-hole-closed', reason: 'capacity' } satisfies GameEvent];
+  return { state: next, events: Object.freeze([{ type: 'black-hole-consumed', cells, ids }, ...closed]) };
+}
 
 /** Advances marked-clear, removal, gravity and refill phases in bounded deterministic ticks. */
 export function advanceTicks(state: GameState, ticks: number): Transition {
@@ -229,12 +267,13 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
       const elapsed = current.resolutionTick + 1;
       if (elapsed < 7) { current = Object.freeze({ ...current, resolutionTick: elapsed }); continue; }
       const removed = new Set(current.pendingCells); const holes = current.board.map((item, index) => removed.has(index) ? null : item);
-      const points = current.pendingCells.filter(index => current.board[index]).length * 10 * current.wave;
-      const earning = awardTools(current, current.pendingCells.filter(index => current.board[index]).length);
+      const removedCount = current.pendingCells.filter(index => current.board[index]).length;
+      const blackHoleRemoval = current.pendingBlackHole; const points = removedCount * 10 * (blackHoleRemoval ? 1 : current.wave);
+      const earning = awardTools(current, removedCount); const rareEarning = awardBlackHole(current, removedCount);
       const createdEvents = current.pendingSpecials.map(planned => ({ type: 'special-created', cell: planned.cell, kind: planned.kind, id: current.board[planned.cell]!.id }));
       const board = materializeSpecials(Object.freeze(holes), current.pendingSpecials);
-      current = Object.freeze({ ...current, board, phase: 'clear-remove', resolutionTick: 0, score: current.score + points, pendingSpecials: Object.freeze([]), inventory: earning.inventory, toolProgress: earning.progress, toolAwardCursor: earning.cursor });
-      events.push({ type: 'cells-removed', cells: current.pendingCells, wave: current.wave, points, board }, ...createdEvents, ...earning.events);
+      current = Object.freeze({ ...current, board, phase: 'clear-remove', resolutionTick: 0, score: current.score + points, pendingSpecials: Object.freeze([]), pendingBlackHole: false, inventory: earning.inventory, toolProgress: earning.progress, toolAwardCursor: earning.cursor, blackHoleCharges: rareEarning.charges, blackHoleProgress: rareEarning.progress });
+      events.push({ type: 'cells-removed', cells: current.pendingCells, wave: current.wave, points, board, source: blackHoleRemoval ? 'black-hole' : 'match' }, ...createdEvents, ...earning.events, ...rareEarning.events);
       continue;
     }
     if (current.phase === 'clear-remove') {
@@ -246,8 +285,10 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
     if (current.phase === 'gravity') {
       const elapsed = current.resolutionTick + 1;
       if (elapsed < 9) { current = Object.freeze({ ...current, resolutionTick: elapsed }); continue; }
-      current = Object.freeze({ ...current, phase: 'refill', resolutionTick: 0, board: current.gravityBoard!, gravityBoard: null });
-      events.push({ type: 'gravity-completed', board: current.board }); continue;
+      const board = current.gravityBoard!;
+      current = Object.freeze({ ...current, phase: 'refill', resolutionTick: 0, board, gravityBoard: null });
+      events.push({ type: 'gravity-completed', board });
+      continue;
     }
     const [board, randomState, nextId, refillEvents] = refill(current);
     const matches = findMatches(board, current.settings);
@@ -256,11 +297,29 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
       current = Object.freeze({ ...current, board, randomState, nextId, phase: 'clear-mark', wave: nextWave, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials });
       events.push(...refillEvents, { type: 'match-marked', cells: matches, wave: current.wave }, ...plan.events);
     } else {
-      const stable = Object.freeze({ ...current, board, randomState, nextId, phase: 'ready' as const, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), toolWaveActive: false });
+      let stable: GameState = Object.freeze({ ...current, board, randomState, nextId, phase: 'ready' as const, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), toolWaveActive: false });
+      if (stable.blackHole && stable.blackHoleContactPending) {
+        const contact = scheduleContact(stable, stable.board);
+        if (contact) {
+          current = contact.state;
+          events.push(...refillEvents, ...contact.events); continue;
+        }
+        stable = Object.freeze({ ...stable, blackHoleContactPending: false });
+      }
+      if (stable.blackHole && stable.blackHoleMovePending) {
+        if (stable.blackHole.movesRemaining <= 1) {
+          stable = Object.freeze({ ...stable, blackHole: null, blackHoleMovePending: false, blackHoleContactPending: false, toolWaveActive: true, phase: 'gravity', gravityBoard: null });
+          const settledBoard = gravityBoard(stable); stable = Object.freeze({ ...stable, gravityBoard: settledBoard });
+          current = stable;
+          events.push(...refillEvents, { type: 'black-hole-closed', reason: 'duration' }, { type: 'gravity-started', board: stable.board, settledBoard });
+          continue;
+        }
+        stable = Object.freeze({ ...stable, blackHole: Object.freeze({ ...stable.blackHole, movesRemaining: stable.blackHole.movesRemaining - 1 }), blackHoleMovePending: false });
+      }
       const legal = listLegalSwaps(stable);
-      if (legal.length || availableToolCount(stable) > 0) current = stable;
+      if (legal.length || hasUsableTool(stable)) current = stable;
       else current = Object.freeze({ ...stable, phase: 'finished' as const });
-      events.push(...refillEvents, ...(legal.length || availableToolCount(stable) > 0 ? [] : [{ type: 'run-ended', result: 'no-legal-actions' } satisfies GameEvent]));
+      events.push(...refillEvents, ...(legal.length || hasUsableTool(stable) ? [] : [{ type: 'run-ended', result: 'no-legal-actions' } satisfies GameEvent]));
     }
   }
   return { state: current, events: Object.freeze(events), accepted: true };
@@ -281,6 +340,7 @@ export function legalActions(state: GameState): readonly Action[] {
   }
   if (state.settings.tools) {
     for (const tool of TOOL_ORDER) if (state.inventory[tool] > 0) actions.push({ kind: 'select-tool', tool });
+    if (state.settings.advancedTools && state.blackHoleCharges > 0 && !state.blackHole) actions.push({ kind: 'select-tool', tool: 'black-hole' });
     if (state.selectedTool) {
       for (let cell = 0; cell < state.board.length; cell++) if (state.settings.mask[cell] && state.board[cell]) actions.push({ kind: 'target-tool', cell });
       if (state.toolTarget !== null) actions.push({ kind: 'confirm-tool' });
@@ -290,5 +350,6 @@ export function legalActions(state: GameState): readonly Action[] {
   return Object.freeze(actions);
 }
 /** Returns the current score, move count and accurately enumerated legal move count. */
-function availableToolCount(state: GameState): number { return TOOL_ORDER.reduce((count, tool) => count + state.inventory[tool], 0); }
-export function statusOf(state: GameState): GameStatus { return { phase: state.phase, score: state.score, moves: state.moves, legalMoveCount: legalActions(state).filter(action => action.kind === 'swap').length, usedFallback: state.usedFallback, availableToolCount: availableToolCount(state), inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, assisted: state.assisted }; }
+function availableToolCount(state: GameState): number { return TOOL_ORDER.reduce<number>((count, tool) => count + state.inventory[tool], state.blackHoleCharges); }
+function hasUsableTool(state: GameState): boolean { return TOOL_ORDER.some(tool => state.inventory[tool] > 0) || (state.settings.advancedTools && state.blackHoleCharges > 0 && state.blackHole === null); }
+export function statusOf(state: GameState): GameStatus { return { phase: state.phase, score: state.score, moves: state.moves, legalMoveCount: legalActions(state).filter(action => action.kind === 'swap').length, usedFallback: state.usedFallback, availableToolCount: availableToolCount(state), inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, assisted: state.assisted, blackHoleCharges: state.blackHoleCharges, blackHoleProgress: state.blackHoleProgress, blackHole: state.blackHole }; }

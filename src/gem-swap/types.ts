@@ -1,8 +1,15 @@
 /** A colour used by a normal gem. */
 export type GemColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
 export type SpecialKind = 'row-beam' | 'column-beam' | 'bomb' | 'colour-burst';
-export type ToolKind = 'bomb' | 'row-clear' | 'colour-clear';
-export type ToolInventory = Readonly<Record<ToolKind, number>>;
+export type ToolKind = 'bomb' | 'row-clear' | 'colour-clear' | 'black-hole';
+export type OrdinaryToolKind = Exclude<ToolKind, 'black-hole'>;
+export type ToolInventory = Readonly<Record<OrdinaryToolKind, number>>;
+export interface BlackHolePortal {
+  readonly cell: number;
+  readonly capacityRemaining: number;
+  readonly movesRemaining: number;
+  readonly consumedIds: readonly number[];
+}
 /** A gem has a stable identity and stored colour until it is cleared. Missing kind means normal. */
 export interface Gem { readonly id: number; readonly colour: GemColour; readonly kind?: SpecialKind }
 export interface PlannedSpecial { readonly cell: number; readonly kind: SpecialKind }
@@ -15,6 +22,7 @@ export interface Settings {
   readonly colourCount: 4 | 5 | 6;
   readonly seed: string | number;
   readonly tools: boolean;
+  readonly advancedTools: boolean;
   readonly shape?: BoardShape;
   readonly mask: readonly boolean[];
 }
@@ -44,6 +52,12 @@ export interface GameState {
   readonly assisted: boolean;
   /** Remains true across cascades originating from one tool use. */
   readonly toolWaveActive: boolean;
+  readonly blackHoleCharges: 0 | 1;
+  readonly blackHoleProgress: number;
+  readonly blackHole: BlackHolePortal | null;
+  readonly blackHoleMovePending: boolean;
+  readonly blackHoleContactPending: boolean;
+  readonly pendingBlackHole: boolean;
 }
 /** Swaps two row-major cell addresses. */
 export interface SwapAction { readonly kind: 'swap'; readonly from: number; readonly to: number }
@@ -61,6 +75,7 @@ export interface CreateOptions {
   readonly colourCount?: 4 | 5 | 6;
   readonly seed?: string | number;
   readonly tools?: boolean;
+  readonly advancedTools?: boolean;
   readonly shape?: BoardShape;
   /** Row-major active-cell mask. Requires explicit custom dimensions. */
   readonly mask?: readonly boolean[];
@@ -76,4 +91,7 @@ export interface GameStatus {
   readonly toolProgress: number;
   readonly toolAwardCursor: number;
   readonly assisted: boolean;
+  readonly blackHoleCharges: 0 | 1;
+  readonly blackHoleProgress: number;
+  readonly blackHole: BlackHolePortal | null;
 }
