@@ -2,7 +2,7 @@ import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { API_CSS, apiOf, apiPage } from './api.mjs';
 import { packagePage } from './package-family.mjs';
 await mkdir('site/demo', { recursive: true });
-for (const file of ['index.html', 'family.css', 'game.css', 'demo.js', 'animation.js', 'tools.html', 'tools.js', 'tools.css']) await cp(`demo/${file}`, `site/${file}`);
+for (const file of ['index.html', 'family.css', 'game.css', 'demo.js', 'animation.js', 'chains.js', 'chains.html', 'tools.html', 'tools.js', 'tools.css']) await cp(`demo/${file}`, `site/${file}`);
 await cp('dist', 'site/dist', { recursive: true });
 const html = await readFile('site/index.html', 'utf8');
 await writeFile('site/index.html', html.replace('src="demo.js"', 'src="demo.js"'));

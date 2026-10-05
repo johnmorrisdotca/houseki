@@ -48,3 +48,5 @@ aside .micro { font-size: .78rem; color: var(--muted); }
 .well[data-width="12"] { --cell: min(34px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows))); }
 
 :root[data-animations="off"] .game-screen *, :root[data-motion="reduced"] .game-screen * { transition: none !important; animation: none !important; }
+
+#objective { margin: 8px 0; } #objective p { margin: 4px 0; } #goal-progress { width: min(100%,320px); accent-color: var(--frame); }

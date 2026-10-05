@@ -13,6 +13,36 @@ try { browser = await chromium.launch(); } catch(error) { server.kill(); throw e
 try{
  for(const viewport of [{width:1280,height:900},{width:390,height:844}]){
   const page=await browser.newPage({viewport});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  await page.goto(`${url}/chains.html`);await page.waitForSelector('#well .active');
+  const colours=()=>page.locator('#well .active').evaluateAll(gems=>gems.map(gem=>gem.className));
+  const beforeRotation=await colours();await page.keyboard.press('ArrowUp');await page.waitForTimeout(80);
+  const rotated=await colours();assert.equal(rotated.length,2);
+  const activeBoxes=await page.locator('#well .active').evaluateAll(gems=>gems.map(gem=>({x:gem.parentElement.offsetLeft,y:gem.parentElement.offsetTop})));
+  assert.equal(activeBoxes[0].y,activeBoxes[1].y,'Up rotates the vertical pair horizontally');
+  await page.keyboard.press('Numpad2');await page.waitForTimeout(400);
+  assert.ok(await page.locator('#well .gem:not(.ghost):not(.active)').count()>=2,'keypad placement settles the pair');
+  for(const mode of ['arcade','daily']){await page.locator('#mode').selectOption(mode);await page.locator('#new').click();await page.waitForSelector('#well .active');}
+  await page.locator('#mode').selectOption('relaxed');await page.locator('#new').click();
+  assert.deepEqual(errors,[]);
+  for(const [path,entry,count] of [['index.html','falling-triplets',100],['chains.html','colour-chains',50]]){
+   await page.goto(`${url}/${path}`);await page.waitForSelector('#level option:nth-child(2)',{state:'attached'});
+   assert.equal(await page.locator('#level option').count(),count+1);
+   await page.locator('#level').selectOption({index:1});await page.locator('#new').click();assert.equal(await page.locator('#objective').isVisible(),true);
+   const plan=await page.evaluate(async(entry)=>{
+    const m=await import(`./dist/${entry}.js`);let state=m.createLevel(1);const plan=[];
+    for(const witness of m.levelManifest[0].witness){const commands=[];const x=state.active.x??state.active.pivot.x;const destination=witness.x??witness.pivotX;
+     for(let i=0;i<Math.abs(destination-x);i++)commands.push(destination<x?'ArrowLeft':'ArrowRight');
+     const turns=typeof witness.orientation==='number'?witness.orientation:({up:0,right:1,down:2,left:3}[witness.orientation]);
+     for(let i=0;i<turns;i++)commands.push('ArrowUp');commands.push('Space');
+     for(const key of commands){const kind=key==='ArrowLeft'?'left':key==='ArrowRight'?'right':key==='Space'?'hard-drop':entry==='colour-chains'?'rotate-clockwise':'cycle-forward';state=m.applyAction(state,{kind}).state;}
+     state=m.advanceTicks(state,200).state;plan.push(commands);
+    }return plan;
+   },entry);
+   for(const commands of plan){for(const key of commands){await page.keyboard.press(key);await page.waitForTimeout(40);}await page.waitForFunction(()=>['falling','won','finished','lost'].includes(document.querySelector('#well').dataset.phase));}
+   assert.equal(await page.locator('#well').getAttribute('data-phase'),'won');
+   assert.equal(await page.locator('#goal-progress').evaluate(p=>p.value===p.max),true);
+   await page.locator('#restart').click();assert.equal(await page.locator('#goal-progress').evaluate(p=>p.value),0);
+  }
   await page.goto(`${url}/tools.html`);await page.waitForSelector('[data-cell] .gem');
   for(const mode of ['gem-swap','stone-collapse']){
    await page.locator('#game').selectOption(mode);await page.locator('#new').click();
