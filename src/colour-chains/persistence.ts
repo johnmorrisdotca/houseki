@@ -19,7 +19,7 @@ function challengeOptions(settings: Settings): ChallengeOptions {
 function createFromSettings(settings: Settings): GameState {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw new TypeError('Save has invalid settings');
   if (settings.mode === 'challenge') return createChallenge(challengeOptions(settings));
-  const options: CreateOptions = settings.mode === 'daily' ? { mode: 'daily', dailyDate: settings.date } : { mode: settings.mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, ...(settings.nature ? { nature: true } : {}) };
+  const options: CreateOptions = settings.mode === 'daily' ? { mode: 'daily', dailyDate: settings.date } : { mode: settings.mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, ...(settings.nature ? { nature: true } : {}), ...(settings.weather ? { weather: settings.weather } : {}) };
   const state = createGame(options);
   if (stable(state.settings) !== stable(settings)) throw new TypeError('Save settings are not canonical');
   return state;

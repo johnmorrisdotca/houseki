@@ -1,6 +1,6 @@
 import { compactBoard, findGroups } from './match.js';
 import { drawPair, seedState } from './random.js';
-import { applyMagneticPulse, createNatureState, markMagneticStones, previewPowerDrop } from '../nature.js';
+import { applyEarthquake, applyLightning, applyMagneticPulse, createNatureState, isEnvironmentTurnScheduled, markMagneticStones, previewPowerDrop } from '../nature.js';
 import type { PowerDropPreview } from '../nature/types.js';
 import { StoneChainsOptionsError, normalizeOptions } from './validation.js';
 import type { Action, Cell, Colour, CreateOptions, GameEvent, GameState, GameStatus, Gem, Landing, Orientation, Pair, Settings, Transition } from './types.js';
@@ -56,6 +56,26 @@ function naturePulse(state: GameState, board: readonly (Gem | null)[]): { board:
   }
   return { board: updated, events: result.events.map(event => ({ ...event })) };
 }
+function boardWithNatureCells(state: GameState, board: readonly (Gem | null)[], cells: readonly ({ id: number; kind: 'stone' | 'obstacle'; colour?: string; magnetic?: boolean } | null)[]): readonly (Gem | null)[] {
+  const width = state.settings.width, updated = [...board];
+  for (let index = 0; index < cells.length; index++) {
+    const entity = cells[index];
+    updated[index + width * HIDDEN] = entity?.kind === 'stone' ? { id: entity.id, colour: entity.colour as Colour, ...(entity.magnetic ? { magnetic: true } : {}) } : null;
+  }
+  return updated;
+}
+function applyWeather(state: GameState): { board: readonly (Gem | null)[]; events: readonly GameEvent[] } {
+  const nature = natureBoard(state); const turn = state.completedPairs;
+  const interval = state.settings.weather === 'frequent' ? 2 : 8;
+  const eventIndex = Math.floor(turn / interval) - 1;
+  const kind = eventIndex % 2 === 0 ? 'jumble' : 'lightning';
+  if (kind === 'jumble') {
+    const result = applyEarthquake(createNatureState({ width: nature.width, height: nature.height, seed: `${state.settings.seed}|arashi|turn-${turn}`, cells: nature.cells }), { kind: 'jumble' });
+    return { board: boardWithNatureCells(state, state.board, result.state.cells), events: [{ type: 'weather-triggered', kind, turn }, ...result.events.map(event => ({ ...event }))] };
+  }
+  const result = applyLightning(createNatureState({ width: nature.width, height: nature.height, seed: `${state.settings.seed}|arashi|turn-${turn}`, cells: nature.cells }));
+  return { board: boardWithNatureCells(state, state.board, result.state.cells), events: [{ type: 'weather-triggered', kind, turn }, ...result.events.map(event => ({ ...event }))] };
+}
 function takeNextPair(state: GameState): readonly [GameState, readonly GameEvent[]] {
   const colours = state.next[0]!; const draw = drawPair(state); const next = [...state.next.slice(1), draw[0]];
   const flags = state.settings.nature ? state.nextMagnetic?.[0] : undefined;
@@ -78,16 +98,34 @@ function satisfied(state: GameState): boolean {
 function terminalAfterResolution(state: GameState): readonly [GameState, readonly GameEvent[]] {
   if (state.settings.mode === 'challenge' && satisfied(state)) return [{ ...state, phase: 'won', active: null, reason: 'goal-complete' }, [{ type: 'run-ended', reason: 'goal-complete', score: state.score }]];
   if (state.board.slice(0, state.settings.width * HIDDEN).some(gem => gem !== null)) return [{ ...state, phase: 'lost', active: null, reason: 'top-out' }, [{ type: 'run-ended', reason: 'top-out' }]];
-  if (state.settings.mode === 'challenge') {
-    const nextIndex = state.completedPairs;
-    if (nextIndex >= (state.settings.queue?.length ?? 0)) return [{ ...state, phase: 'lost', active: null, reason: 'challenge-queue-exhausted' }, [{ type: 'run-ended', reason: 'challenge-queue-exhausted' }]];
-    const queue = state.settings.queue!; const colours = queue[nextIndex]!; const pair = makePair(state, colours);
-    const next = { ...state, active: pair, next: queue.slice(nextIndex + 1, nextIndex + 4), nextId: state.nextId + 2 };
-    if (!pairFits(next, pair)) return [{ ...next, active: null, phase: 'lost', reason: 'spawn-collision' }, [{ type: 'run-ended', reason: 'spawn-collision' }]];
-    return [next, [{ type: 'pair-spawned', ids: pair.gems.map(gem => gem.id), colours }]];
+  let current = state; const weatherEvents: GameEvent[] = [];
+  if (state.settings.weather && state.weatherResolvedPairs !== state.completedPairs) {
+    const turn = state.completedPairs;
+    current = { ...current, weatherResolvedPairs: turn };
+    if (isEnvironmentTurnScheduled(turn, { kind: state.settings.weather })) {
+      const effect = applyWeather(current); weatherEvents.push(...effect.events);
+      current = { ...current, board: effect.board };
+      const groups = findGroups(current.board, current.settings.width, current.settings.height + HIDDEN);
+      if (groups.length) {
+        const cells = [...new Set(groups.flat())].sort((a, b) => a - b);
+        return [{ ...current, phase: 'clear-mark', active: null, clearCells: cells, gravityBoard: null, resolutionTick: 0 }, [...weatherEvents, { type: 'match-marked', chain: current.waves.length + 1, cells, ids: cells.map(index => current.board[index]!.id), groups }]];
+      }
+      const settled = compactBoard(current.board, current.settings.width, current.settings.height + HIDDEN);
+      const movement = movedEntries(current.board, settled, current.settings.width);
+      if (movement.length) return [{ ...current, phase: 'gravity', active: null, gravityBoard: settled, resolutionTick: 0 }, [...weatherEvents, { type: 'cells-fell', cells: movement, before: current.board, after: settled }]];
+      current = { ...current, board: settled };
+    }
   }
-  if (state.settings.pairLimit !== undefined && state.completedPairs >= state.settings.pairLimit) return [{ ...state, phase: 'finished', active: null, reason: 'pair-limit' }, [{ type: 'run-ended', reason: 'pair-limit', score: state.score }]];
-  const [spawned, events] = takeNextPair(state); return [spawned, events];
+  if (current.settings.mode === 'challenge') {
+    const nextIndex = current.completedPairs;
+    if (nextIndex >= (current.settings.queue?.length ?? 0)) return [{ ...current, phase: 'lost', active: null, reason: 'challenge-queue-exhausted' }, [...weatherEvents, { type: 'run-ended', reason: 'challenge-queue-exhausted' }]];
+    const queue = current.settings.queue!; const colours = queue[nextIndex]!; const pair = makePair(current, colours);
+    const next = { ...current, active: pair, next: queue.slice(nextIndex + 1, nextIndex + 4), nextId: current.nextId + 2 };
+    if (!pairFits(next, pair)) return [{ ...next, active: null, phase: 'lost', reason: 'spawn-collision' }, [...weatherEvents, { type: 'run-ended', reason: 'spawn-collision' }]];
+    return [next, [...weatherEvents, { type: 'pair-spawned', ids: pair.gems.map(gem => gem.id), colours }]];
+  }
+  if (current.settings.pairLimit !== undefined && current.completedPairs >= current.settings.pairLimit) return [{ ...current, phase: 'finished', active: null, reason: 'pair-limit' }, [...weatherEvents, { type: 'run-ended', reason: 'pair-limit', score: current.score }]];
+  const [spawned, events] = takeNextPair(current); return [spawned, [...weatherEvents, ...events]];
 }
 function startWave(state: GameState, chain: number): readonly [GameState, readonly GameEvent[]] {
   const groups = findGroups(state.board, state.settings.width, state.settings.height + HIDDEN);
@@ -312,7 +350,7 @@ export function initialChallengeState(settings: Settings, visibleBoard: readonly
 }
 /** Creates a deterministic seeded game with one active pair and three previews. */
 export function createGame(options: CreateOptions = {}): GameState {
-  const valid = normalizeOptions(options); let state: GameState = { game: 'colour-chains', rules: RULES, settings: valid, board: Array(valid.width * (valid.height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState: seedState(`colour-chains|${RULES}|${valid.seed}`), nextId: 1, score: 0, maxChain: 0, allClears: 0, completedPairs: 0, resolutionTick: 0, waves: [], clearCells: [], gravityBoard: null, resolutionHadClear: false, elapsedTicks: 0, assisted: false, witnessIndex: -1, recording: [] };
+  const valid = normalizeOptions(options); let state: GameState = { game: 'colour-chains', rules: RULES, settings: valid, board: Array(valid.width * (valid.height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState: seedState(`colour-chains|${RULES}|${valid.seed}`), nextId: 1, score: 0, maxChain: 0, allClears: 0, completedPairs: 0, resolutionTick: 0, waves: [], clearCells: [], gravityBoard: null, resolutionHadClear: false, elapsedTicks: 0, assisted: false, witnessIndex: -1, recording: [], ...(valid.weather ? { weatherResolvedPairs: 0 } : {}) };
   const first = drawPair(state); state = { ...state, bag: first[1], randomState: first[2] }; const active = makePair(state, first[0], valid.nature ? magneticFlags(valid.seed, 0, first[0]) : undefined); state = { ...state, active, nextId: 3 };
   const next: (readonly [Colour, Colour])[] = [];
   const nextMagnetic: (readonly [boolean, boolean])[] = [];

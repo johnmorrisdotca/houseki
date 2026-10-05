@@ -17,20 +17,22 @@ function validateSize(width: number, height: number): void {
 /** Validates public modes and canonical category dimensions before a random draw. */
 export function normalizeOptions(options: CreateOptions): NormalizedOptions {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new StoneChainsOptionsError('invalid-options', 'Options must be an object');
-  const keys = ['mode', 'seed', 'dailyDate', 'preset', 'width', 'height', 'colourCount', 'pairLimit', 'nature'];
+  const keys = ['mode', 'seed', 'dailyDate', 'preset', 'width', 'height', 'colourCount', 'pairLimit', 'nature', 'weather'];
   if (Object.keys(options).some(key => !keys.includes(key))) throw new StoneChainsOptionsError('unknown-option', 'Options contain an unsupported field');
   const mode = options.mode ?? 'relaxed';
   if (!['relaxed', 'arcade', 'daily'].includes(mode)) throw new StoneChainsOptionsError('invalid-mode', 'Use Relaxed, Arcade or Daily; Challenges use createChallenge');
   const colourCount = options.colourCount ?? 4;
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new StoneChainsOptionsError('invalid-colour-count', 'Colour count must be 4, 5 or 6');
   if (mode === 'daily') {
-    if (options.nature !== undefined) throw new StoneChainsOptionsError('noncanonical-daily-settings', 'Daily does not use Shizen rules');
+    if (options.nature !== undefined || options.weather !== undefined) throw new StoneChainsOptionsError('noncanonical-daily-settings', 'Daily does not use optional nature rules');
     if (typeof options.dailyDate !== 'string' || !validDate(options.dailyDate)) throw new StoneChainsOptionsError('invalid-daily-date', 'Daily requires a valid UTC YYYY-MM-DD date from the host');
     if (options.seed !== undefined || options.preset !== undefined || options.width !== undefined || options.height !== undefined || options.colourCount !== undefined && options.colourCount !== 4 || options.pairLimit !== undefined && options.pairLimit !== 60) throw new StoneChainsOptionsError('noncanonical-daily-settings', 'Daily uses the standard 6×12 four-colour well and 60 resolved pairs');
     return { mode, width: 6, height: 12, colourCount: 4, date: options.dailyDate, seed: `colour-chains:daily:${options.dailyDate}`, pairLimit: 60 };
   }
   if (options.dailyDate !== undefined) throw new StoneChainsOptionsError('daily-date-outside-daily', 'dailyDate is supported only in Daily mode');
   if (options.nature !== undefined && typeof options.nature !== 'boolean') throw new StoneChainsOptionsError('invalid-nature-option', 'nature must be a boolean');
+  if (options.weather !== undefined && options.weather !== 'frequent' && options.weather !== 'rare') throw new StoneChainsOptionsError('invalid-weather-option', 'weather must be frequent or rare');
+  if (options.weather !== undefined && options.nature !== true) throw new StoneChainsOptionsError('weather-requires-nature', 'Arashi weather requires nature:true');
   if (options.preset !== undefined && !Object.hasOwn(PRESETS, options.preset)) throw new StoneChainsOptionsError('invalid-preset', 'Unsupported board preset');
   if (options.preset !== undefined && (options.width !== undefined || options.height !== undefined)) throw new StoneChainsOptionsError('conflicting-board-options', 'Choose a preset or custom dimensions');
   const [presetWidth, presetHeight] = PRESETS[options.preset ?? 'standard'];
@@ -38,7 +40,7 @@ export function normalizeOptions(options: CreateOptions): NormalizedOptions {
   const seed = options.seed ?? 'houseki-colour-chains';
   if (typeof seed !== 'string' || seed.length < 1 || seed.length > 200) throw new StoneChainsOptionsError('invalid-seed', 'Seed must contain 1–200 characters');
   if (options.pairLimit !== undefined) throw new StoneChainsOptionsError('unsupported-pair-limit', 'Pair limits are defined only for Daily and Challenges');
-  return { mode, width, height, colourCount, seed, ...(options.nature === true ? { nature: true as const } : {}) };
+  return { mode, width, height, colourCount, seed, ...(options.nature === true ? { nature: true as const } : {}), ...(options.weather ? { weather: options.weather } : {}) };
 }
 export function validateChallengeGoal(goal: ChallengeGoal, ids: ReadonlySet<number>): ChallengeGoal {
   if (!goal || typeof goal !== 'object' || Array.isArray(goal)) throw new StoneChainsOptionsError('invalid-goal', 'Challenge goal must be an object');

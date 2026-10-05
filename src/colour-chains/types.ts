@@ -13,9 +13,10 @@ export interface Pair { readonly pivot: Cell; readonly orientation: Orientation;
 /** Supported well presets. */
 export type Preset = 'narrow' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
 export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
-export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly dailyDate?: string; readonly preset?: Preset; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pairLimit?: number; readonly nature?: boolean }
+export type WeatherSchedule = 'frequent' | 'rare';
+export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly dailyDate?: string; readonly preset?: Preset; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pairLimit?: number; readonly nature?: boolean; readonly weather?: WeatherSchedule }
 /** Run settings fixed at game creation. */
-export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly date?: string; readonly pairLimit?: number; readonly nature?: true; readonly challengeId?: string; readonly goal?: ChallengeGoal; readonly initialBoard?: readonly (ChallengeGem | null)[]; readonly queue?: readonly (readonly [Colour, Colour])[]; readonly witness?: readonly WitnessStep[] }
+export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly date?: string; readonly pairLimit?: number; readonly nature?: true; readonly weather?: WeatherSchedule; readonly challengeId?: string; readonly goal?: ChallengeGoal; readonly initialBoard?: readonly (ChallengeGem | null)[]; readonly queue?: readonly (readonly [Colour, Colour])[]; readonly witness?: readonly WitnessStep[] }
 /** Challenge objective; target IDs refer to the visible starting board. */
 export type ChallengeGoal = { readonly kind: 'clear-targets'; readonly targetIds: readonly number[] } | { readonly kind: 'minimum-chain'; readonly chain: number } | { readonly kind: 'empty-board' };
 export interface WitnessStep { readonly pivotX: number; readonly orientation: Orientation }
@@ -35,6 +36,7 @@ export interface GameState {
   readonly board: readonly (Gem | null)[]; readonly phase: Phase; readonly pausedPhase?: Exclude<Phase, 'paused'>; readonly active: Pair | null;
   readonly next: readonly (readonly [Colour, Colour])[]; readonly bag: readonly Colour[]; readonly randomState: number;
   readonly nextMagnetic?: readonly (readonly [boolean, boolean])[]; readonly lastHorizontalDirection?: 'left' | 'right'; readonly naturePulsePending?: boolean;
+  readonly weatherResolvedPairs?: number;
   readonly nextId: number; readonly score: number; readonly maxChain: number; readonly allClears: number; readonly completedPairs: number;
   readonly resolutionTick: number; readonly resolutionLevel?: number; readonly waves: readonly Wave[]; readonly clearCells: readonly number[];
   readonly gravityBoard: readonly (Gem | null)[] | null; readonly resolutionHadClear: boolean; readonly elapsedTicks: number;
