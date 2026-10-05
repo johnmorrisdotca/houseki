@@ -123,3 +123,7 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Stored tools
+
+Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.

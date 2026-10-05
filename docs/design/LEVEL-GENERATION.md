@@ -44,3 +44,7 @@ Display five difficulty marks computed from the stored 0–100 score, matching t
 Each level records persistent ID, display number, title in both languages, settings, goal, seed/queue, witness, canonical duplicate key, technique tags, raw grade measures, grade score/marks, grading version, proof status and review status. A campaign records count, linear/block ordering policy, generation revision and checksum. Witnesses and hints are separate from authoritative player saves.
 
 Tests must regenerate scores and order, replay every selected witness, check all display numbers 1..N and no gaps, verify opening and closing difficulty bands, and pin representative easy/medium/hard fixtures. Also verify that solved progress uses stable IDs rather than mutable level numbers. Difficulty labels must not be assigned from the index after sorting; they derive from actual measures. Human feel and translation reviews remain separately pending where not performed.
+
+### Stored tools
+
+Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.
