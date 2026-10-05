@@ -5,8 +5,8 @@ import { fallbackBoard } from '../dist/stone-collapse/engine.js';
 
 const colour = { R: 'red', B: 'blue', G: 'green', Y: 'gold', P: 'purple', T: 'teal' };
 // Fixture-only constructor: hand-built boards exercise positions the seeded public generator rarely emits.
-function fixture(rows, { mask, width = rows[0].length, height = rows.length } = {}) {
-  const state = createGame({ width, height, seed: 'fixture' });
+function fixture(rows, { mask, width = rows[0].length, height = rows.length, tools = false } = {}) {
+  const state = createGame({ width, height, seed: 'fixture', tools });
   const active = mask ?? Array(width * height).fill(true);
   let id = 1;
   const board = rows.join('').split('').map((token, index) => {
@@ -31,6 +31,11 @@ function selectAndConfirm(state, stoneId) {
   const committed = applyAction(selected.state, { kind: 'confirm' });
   assert.equal(committed.accepted, true, committed.reason);
   return committed.state;
+}
+function targetAndConfirmTool(state, tool, cell) {
+  state = applyAction(state, { kind: 'select-tool', tool }).state;
+  state = applyAction(state, { kind: 'target-tool', cell }).state;
+  return applyAction(state, { kind: 'confirm-tool' }).state;
 }
 function challenge(board, goal, witness, moveLimit) {
   return createChallenge({ id: 'test.challenge', width: 4, height: 4, colourCount: 4, initialBoard: board, goal, witness, ...(moveLimit ? { moveLimit } : {}) });
@@ -328,4 +333,134 @@ test('replay rejects changed actions, forged checkpoints, malformed challenge de
   assert.throws(() => decodeGame(' '.repeat(2 * 1024 * 1024 + 1)), RangeError);
   assert.throws(() => encodeGame({ ...createGame({ width: 4, height: 4 }), recording: Array.from({ length: 100_001 }, () => ({ kind: 'remove', move: 1, stoneId: 1 })) }), RangeError);
   assert.throws(() => encodeGame(createGame({ width: 4, height: 4, seed: '😀'.repeat(300_000) })), RangeError);
+});
+
+test('stored tools are opt-in for Relaxed and Arcade, unavailable in Daily and authored Challenges', () => {
+  const options = { width: 4, height: 4, seed: 'tool-default' };
+  const ordinary = createGame(options); const disabled = createGame({ ...options, tools: false });
+  assert.deepEqual(ordinary, disabled); assert.deepEqual(ordinary.inventory, { bomb: 0, pick: 0 });
+  assert.ok(!legalActions(ordinary).some(action => action.kind === 'select-tool'));
+  const relaxed = createGame({ ...options, tools: true });
+  assert.deepEqual(relaxed.inventory, { bomb: 1, pick: 1 }); assert.equal(relaxed.settings.tools, true);
+  const arcade = createGame({ ...options, mode: 'arcade', tools: true });
+  assert.deepEqual(arcade.inventory, { bomb: 1, pick: 1 });
+  assert.throws(() => createGame({ mode: 'daily', dailyDate: '2026-10-05', tools: true }), /Daily does not allow stored tools/);
+  assert.throws(() => createGame({ ...options, tools: 'yes' }), /tools must be a boolean/);
+  const authored = challenge(challengeBoard, { kind: 'clear-targets', targetIds: [1, 2] }, [[1, 2]], 1);
+  assert.equal(authored.settings.tools, false); assert.deepEqual(authored.inventory, { bomb: 0, pick: 0 });
+  assert.throws(() => createChallenge({ ...authored.challenge, tools: true }), /unsupported field/);
+  assert.deepEqual(restartGame(relaxed), relaxed);
+});
+
+test('bomb targeting previews occupied active cells clipped to board and mask, with cancel and retarget costing nothing', () => {
+  const width = 5, height = 4, mask = Array(width * height).fill(true); mask[1] = false; mask[6] = false; mask[18] = false; mask[19] = false;
+  const start = fixture(['RGBG.', 'G.BGR', 'BRG.P', 'RGBGR'], { width, height, mask, tools: true });
+  const before = { inventory: start.inventory, moves: start.moves, score: start.score, randomState: start.randomState, progress: start.toolProgress, cursor: start.toolAwardCursor, assisted: start.assisted };
+  const selected = applyAction(start, { kind: 'select-tool', tool: 'bomb' });
+  assert.equal(selected.accepted, true); assert.equal(selected.state.selectedTool, 'bomb');
+  assert.equal(applyAction(selected.state, { kind: 'target-tool', cell: 1 }).accepted, false);
+  assert.equal(applyAction(selected.state, { kind: 'target-tool', cell: 0, extra: true }).accepted, false);
+  const aimed = applyAction(selected.state, { kind: 'target-tool', cell: 0 });
+  assert.equal(aimed.accepted, true); assert.deepEqual(aimed.state.toolPreview, [0, 5]); assert.deepEqual(aimed.events[0].ids, [start.board[0].id, start.board[5].id]);
+  const retargeted = applyAction(aimed.state, { kind: 'select-tool', tool: 'pick' });
+  assert.equal(retargeted.state.selectedTool, 'pick'); assert.equal(retargeted.state.toolTarget, null); assert.deepEqual(retargeted.state.toolPreview, []);
+  const cancelled = applyAction(retargeted.state, { kind: 'cancel-tool' });
+  assert.equal(cancelled.accepted, true); assert.equal(cancelled.state.selectedTool, null);
+  assert.deepEqual({ inventory: cancelled.state.inventory, moves: cancelled.state.moves, score: cancelled.state.score, randomState: cancelled.state.randomState, progress: cancelled.state.toolProgress, cursor: cancelled.state.toolAwardCursor, assisted: cancelled.state.assisted }, before);
+  assert.equal(applyAction(cancelled.state, { kind: 'cancel-tool' }).state, cancelled.state);
+  assert.deepEqual(applyAction(start, { kind: 'select-tool', tool: 'torch' }).state, start);
+});
+
+test('confirmed bomb uses exact preview, scores ten per stone and resolves through 7/6/9 phases', () => {
+  const width = 5, height = 4, mask = Array(width * height).fill(true); mask[1] = false; mask[6] = false; mask[18] = false; mask[19] = false;
+  const start = fixture(['RGBG.', 'G.BGR', 'BRG.P', 'RGBGR'], { width, height, mask, tools: true });
+  let aimed = applyAction(start, { kind: 'select-tool', tool: 'bomb' }).state;
+  aimed = applyAction(aimed, { kind: 'target-tool', cell: 0 }).state;
+  assert.deepEqual(aimed.toolPreview, [0, 5]);
+  const committed = applyAction(aimed, { kind: 'confirm-tool' }); const mark = committed.state;
+  assert.equal(committed.accepted, true); assert.equal(mark.phase, 'clear-mark'); assert.equal(mark.moves, 1);
+  assert.equal(mark.score, 20); assert.equal(mark.assisted, true); assert.deepEqual(mark.inventory, { bomb: 0, pick: 1 });
+  assert.equal(mark.toolProgress, 0); assert.equal(mark.toolAwardCursor, 0);
+  assert.deepEqual(mark.pendingIds, [start.board[0].id, start.board[5].id]); assert.deepEqual(ids(mark.board), ids(start.board));
+  const marked = advanceTicks(mark, 6).state; assert.equal(marked.phase, 'clear-mark'); assert.equal(marked.removed, 0);
+  const removed = advanceTicks(marked, 1).state; assert.equal(removed.phase, 'clear-remove'); assert.equal(removed.board[0], null); assert.equal(removed.removed, 2);
+  const removalDone = advanceTicks(removed, 6).state; assert.equal(removalDone.phase, 'gravity');
+  const settled = advanceTicks(removalDone, 9).state;
+  assert.equal(settled.phase, 'ready'); assert.equal(settled.moves, 1); assert.equal(settled.score, 20);
+  assert.ok(settled.board[0] === null || settled.board[0]?.id !== start.board[0].id);
+});
+
+test('pick removes exactly one stone, tool uses do not earn tools, and ordinary removals award alternately with cap carry', () => {
+  let picked = fixture(['RBGY', 'GBPR', 'BRGY', 'YRGB'], { tools: true });
+  picked = { ...picked, toolProgress: 11, toolAwardCursor: 1 };
+  const single = picked.board.find(stone => stone);
+  const toolMove = targetAndConfirmTool(picked, 'pick', picked.board.indexOf(single));
+  assert.deepEqual(toolMove.pendingIds, [single.id]); assert.equal(toolMove.score, 10); assert.equal(toolMove.moves, 1);
+  assert.equal(toolMove.toolProgress, 11); assert.equal(toolMove.toolAwardCursor, 1);
+  assert.deepEqual(toolMove.inventory, { bomb: 1, pick: 0 });
+
+  let earned = fixture(['RR..', '....', '....', '....'], { tools: true });
+  earned = { ...earned, toolProgress: 10, toolAwardCursor: 0 };
+  const awarded = applyAction(applyAction(earned, { kind: 'select', stoneId: 1 }).state, { kind: 'confirm' });
+  assert.equal(awarded.state.toolProgress, 0); assert.equal(awarded.state.toolAwardCursor, 1);
+  assert.deepEqual(awarded.state.inventory, { bomb: 2, pick: 1 });
+  assert.ok(awarded.events.some(event => event.type === 'tool-awarded' && event.tool === 'bomb' && !event.discarded));
+  let nextAward = fixture(['RR..', '....', '....', '....'], { tools: true });
+  nextAward = { ...nextAward, toolProgress: 10, toolAwardCursor: 1 };
+  const alternated = applyAction(applyAction(nextAward, { kind: 'select', stoneId: 1 }).state, { kind: 'confirm' });
+  assert.equal(alternated.state.inventory.pick, 2); assert.equal(alternated.state.toolAwardCursor, 0);
+  assert.ok(alternated.events.some(event => event.type === 'tool-awarded' && event.tool === 'pick'));
+
+  let capped = fixture(['RR..', '....', '....', '....'], { tools: true });
+  capped = { ...capped, inventory: Object.freeze({ bomb: 3, pick: 3 }), toolProgress: 11, toolAwardCursor: 0 };
+  const overflow = applyAction(applyAction(capped, { kind: 'select', stoneId: 1 }).state, { kind: 'confirm' });
+  assert.deepEqual(overflow.state.inventory, { bomb: 3, pick: 3 }); assert.equal(overflow.state.toolProgress, 1);
+  assert.equal(overflow.state.toolAwardCursor, 1); assert.ok(overflow.events.some(event => event.type === 'tool-awarded' && event.discarded));
+});
+
+test('a ready board with no ordinary group remains usable while a stored tool can rescue it, then ends after the last use', () => {
+  const start = fixture(['RBRB', 'BRBR', 'RBRB', 'BRBR'], { tools: true });
+  let rescued = finishResolution(targetAndConfirmTool(start, 'pick', 0));
+  assert.equal(rescued.phase, 'ready'); assert.deepEqual(rescued.inventory, { bomb: 1, pick: 0 });
+  assert.ok(legalActions(rescued).some(action => action.kind === 'select-tool' && action.tool === 'bomb'));
+  rescued = finishResolution(targetAndConfirmTool(rescued, 'bomb', 1));
+  assert.ok(['finished', 'won', 'ready'].includes(rescued.phase));
+  if (rescued.phase === 'ready') assert.ok(legalActions(rescued).some(action => action.kind === 'select' || action.kind === 'select-tool'));
+
+  const oneTool = { ...start, inventory: Object.freeze({ bomb: 0, pick: 1 }) };
+  const exhausted = finishResolution(targetAndConfirmTool(oneTool, 'pick', 0));
+  assert.equal(exhausted.phase, 'finished'); assert.equal(exhausted.reason, 'no-legal-groups');
+});
+
+test('tool configuration, target previews, mid-resolution replay, batched ticks, undo, and restart are canonical', () => {
+  const start = createGame({ width: 4, height: 4, seed: 'tool-save', tools: true });
+  let aimed = applyAction(start, { kind: 'select-tool', tool: 'bomb' }).state;
+  aimed = applyAction(aimed, { kind: 'target-tool', cell: 5 }).state;
+  assert.deepEqual(decodeGame(encodeGame(aimed)), aimed);
+  const alteredInventory = JSON.parse(encodeGame(aimed)); alteredInventory.checkpoint.inventory.bomb++;
+  assert.throws(() => decodeGame(JSON.stringify(alteredInventory)), /checkpoint/);
+  const alteredPreview = JSON.parse(encodeGame(aimed)); alteredPreview.checkpoint.toolPreview = [5];
+  assert.throws(() => decodeGame(JSON.stringify(alteredPreview)), /checkpoint/);
+  const alteredTarget = JSON.parse(encodeGame(aimed)); alteredTarget.actions[1].cell = 6;
+  assert.throws(() => decodeGame(JSON.stringify(alteredTarget)), /checkpoint/);
+  const committed = applyAction(aimed, { kind: 'confirm-tool' }).state;
+  const batched = advanceTicks(committed, 22).state;
+  const stepped = advanceTicks(advanceTicks(advanceTicks(committed, 7).state, 6).state, 9).state;
+  assert.deepEqual(batched, stepped); assert.deepEqual(decodeGame(encodeGame(advanceTicks(committed, 9).state)), advanceTicks(committed, 9).state);
+  assert.deepEqual(decodeGame(encodeGame(batched)), batched);
+  const groupId = legalActions(aimed).find(action => action.kind === 'select')?.stoneId;
+  assert.ok(groupId);
+  const ordinarySelection = applyAction(aimed, { kind: 'select', stoneId: groupId }).state;
+  assert.equal(ordinarySelection.selectedTool, null); assert.equal(ordinarySelection.toolTarget, null); assert.deepEqual(ordinarySelection.toolPreview, []);
+  const ordinaryMove = finishResolution(applyAction(ordinarySelection, { kind: 'confirm' }).state);
+  assert.deepEqual(decodeGame(encodeGame(ordinaryMove)), ordinaryMove);
+  const undone = undo(batched);
+  assert.equal(undone.accepted, true); assert.deepEqual(undone.state.inventory, aimed.inventory);
+  assert.equal(undone.state.toolProgress, aimed.toolProgress); assert.equal(undone.state.toolAwardCursor, aimed.toolAwardCursor);
+  assert.equal(undone.state.selectedTool, aimed.selectedTool); assert.equal(undone.state.toolTarget, aimed.toolTarget);
+  assert.deepEqual(undone.state.toolPreview, aimed.toolPreview); assert.equal(undone.state.assisted, true);
+  assert.deepEqual(decodeGame(encodeGame(undone.state)), undone.state);
+  const restarted = restartGame(batched);
+  assert.deepEqual(restarted, start); assert.deepEqual(restarted.inventory, { bomb: 1, pick: 1 });
+  assert.throws(() => decodeGame(JSON.stringify({ ...JSON.parse(encodeGame(start)), settings: { ...start.settings, tools: 'yes' } })));
 });

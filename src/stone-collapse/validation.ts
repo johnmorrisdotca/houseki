@@ -18,6 +18,7 @@ export interface NormalizedOptions {
   readonly height: number;
   readonly colourCount: 4 | 5 | 6;
   readonly seed: string | number;
+  readonly tools: boolean;
   readonly shape?: BoardShape;
   readonly mask: readonly boolean[];
 }
@@ -71,14 +72,16 @@ function isUtcDate(value: string): boolean {
 /** Validates all public score-game options before any random draw occurs. */
 export function optionsFor(options: CreateOptions): NormalizedOptions {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new StoneCollapseOptionsError('invalid-options', 'Options must be an object');
-  const allowedKeys = ['mode', 'preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'dailyDate'];
+  const allowedKeys = ['mode', 'preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'dailyDate', 'tools'];
   if (Object.keys(options).some(key => !allowedKeys.includes(key))) throw new StoneCollapseOptionsError('unknown-option', 'Create options contain an unsupported field');
   const mode = options.mode === undefined ? 'relaxed' : options.mode;
   if (!['relaxed', 'arcade', 'daily'].includes(mode)) throw new StoneCollapseOptionsError('invalid-mode', 'Create options support Relaxed, Arcade, or Daily score play');
+  if (options.tools !== undefined && typeof options.tools !== 'boolean') throw new StoneCollapseOptionsError('invalid-tools-option', 'tools must be a boolean');
   if (mode === 'daily') {
+    if (options.tools === true) throw new StoneCollapseOptionsError('daily-tools-disabled', 'Daily does not allow stored tools');
     if (typeof options.dailyDate !== 'string' || !isUtcDate(options.dailyDate)) throw new StoneCollapseOptionsError('invalid-daily-date', 'Daily requires a valid UTC YYYY-MM-DD date from the host');
     if (options.preset !== undefined || options.width !== undefined || options.height !== undefined || options.colourCount !== undefined || options.seed !== undefined || options.shape !== undefined || options.mask !== undefined) throw new StoneCollapseOptionsError('noncanonical-daily-settings', 'Daily uses the fixed standard 8×10 rectangular board and four colours');
-    return { mode, dailyDate: options.dailyDate, width: 8, height: 10, colourCount: 4, seed: `stone-collapse:daily:${options.dailyDate}`, mask: Array(80).fill(true) };
+    return { mode, dailyDate: options.dailyDate, width: 8, height: 10, colourCount: 4, seed: `stone-collapse:daily:${options.dailyDate}`, tools: false, mask: Array(80).fill(true) };
   }
   if (options.dailyDate !== undefined) throw new StoneCollapseOptionsError('daily-date-outside-daily', 'dailyDate is supported only in Daily mode');
   const hasDimensions = options.width !== undefined || options.height !== undefined;
@@ -104,5 +107,5 @@ export function optionsFor(options: CreateOptions): NormalizedOptions {
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new StoneCollapseOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');
   const seed = options.seed === undefined ? 'houseki-stone-collapse' : options.seed;
   if (typeof seed !== 'string' && (!Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff)) throw new StoneCollapseOptionsError('invalid-seed', 'Numeric seed must be an unsigned 32-bit integer');
-  return { mode, width: width!, height: height!, colourCount, seed, ...(shape ? { shape } : {}), mask: [...mask!] };
+  return { mode, width: width!, height: height!, colourCount, seed, tools: options.tools ?? false, ...(shape ? { shape } : {}), mask: [...mask!] };
 }

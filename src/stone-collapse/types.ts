@@ -5,6 +5,8 @@ export interface Stone { readonly id: number; readonly colour: StoneColour }
 export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall';
 export type BoardShape = 'heart' | 'star' | 'hexagon';
 export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type StoredTool = 'bomb' | 'pick';
+export interface ToolInventory { readonly bomb: number; readonly pick: number }
 export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'won' | 'lost' | 'finished';
 export type ChallengeGoal =
   | { readonly kind: 'clear-all' }
@@ -22,6 +24,7 @@ export interface Settings {
   readonly challengeId?: string;
   readonly goal?: ChallengeGoal;
   readonly moveLimit?: number;
+  readonly tools: boolean;
 }
 export interface ChallengeDefinition {
   readonly id: string;
@@ -50,15 +53,25 @@ export interface UndoFrame {
   readonly selectedIds: readonly number[];
   readonly previewScore: number;
   readonly witnessIndex: number;
+  readonly inventory: ToolInventory;
+  readonly toolProgress: number;
+  readonly toolAwardCursor: 0 | 1;
+  readonly selectedTool: StoredTool | null;
+  readonly toolTarget: number | null;
+  readonly toolPreview: readonly number[];
 }
 export type RecordedAction =
   | { readonly kind: 'remove'; readonly move: number; readonly stoneId: number }
+  | { readonly kind: 'select-tool'; readonly tool: StoredTool }
+  | { readonly kind: 'target-tool'; readonly cell: number }
+  | { readonly kind: 'confirm-tool'; readonly move: number }
+  | { readonly kind: 'cancel-tool' }
   | { readonly kind: 'undo'; readonly move: number }
   | { readonly kind: 'hint'; readonly witnessIndex: number }
   | { readonly kind: 'ticks'; readonly count: number };
 export interface GameState {
   readonly game: 'stone-collapse';
-  readonly rules: 'collapse-1';
+  readonly rules: 'collapse-2';
   readonly settings: Settings;
   readonly challenge: ChallengeDefinition | null;
   readonly initialBoard: readonly (Stone | null)[];
@@ -86,13 +99,26 @@ export interface GameState {
   readonly elapsedTicks: number;
   readonly reason?: string;
   readonly recording: readonly RecordedAction[];
+  readonly inventory: ToolInventory;
+  /** Ordinary removed stones carried toward the next tool award; always 0–11. */
+  readonly toolProgress: number;
+  /** 0 awards Bomb next; 1 awards Pick next. */
+  readonly toolAwardCursor: 0 | 1;
+  readonly selectedTool: StoredTool | null;
+  readonly toolTarget: number | null;
+  /** Exact row-major cells affected by the current target. */
+  readonly toolPreview: readonly number[];
 }
 export type Action =
   | { readonly kind: 'select'; readonly stoneId: number }
   | { readonly kind: 'confirm' }
   | { readonly kind: 'cancel' }
   | { readonly kind: 'undo' }
-  | { readonly kind: 'hint' };
+  | { readonly kind: 'hint' }
+  | { readonly kind: 'select-tool'; readonly tool: StoredTool }
+  | { readonly kind: 'target-tool'; readonly cell: number }
+  | { readonly kind: 'confirm-tool' }
+  | { readonly kind: 'cancel-tool' };
 export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
 export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
 export interface CreateOptions {
@@ -107,6 +133,8 @@ export interface CreateOptions {
   readonly mask?: readonly boolean[];
   /** Required for Daily; supplied by the host in UTC. */
   readonly dailyDate?: string;
+  /** Optional Bomb and Pick tray; available only in Relaxed and Arcade. */
+  readonly tools?: boolean;
 }
 export interface ChallengeOptions {
   readonly id: string;
@@ -132,4 +160,10 @@ export interface GameStatus {
   readonly assisted: boolean;
   readonly goal?: ChallengeGoal;
   readonly reason?: string;
+  readonly inventory: ToolInventory;
+  readonly toolProgress: number;
+  readonly toolAwardCursor: 0 | 1;
+  readonly selectedTool: StoredTool | null;
+  readonly toolTarget: number | null;
+  readonly toolPreview: readonly number[];
 }

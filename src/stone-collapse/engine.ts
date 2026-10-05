@@ -1,10 +1,10 @@
-import type { Action, ChallengeDefinition, ChallengeGoal, ChallengeOptions, CreateOptions, GameEvent, GameMode, GameState, GameStatus, Settings, Stone, StoneColour, Transition, UndoFrame } from './types.js';
+import type { Action, ChallengeDefinition, ChallengeGoal, ChallengeOptions, CreateOptions, GameEvent, GameMode, GameState, GameStatus, Settings, Stone, StoneColour, StoredTool, Transition, UndoFrame } from './types.js';
 import { optionsFor, neighbors, StoneCollapseOptionsError } from './validation.js';
 import type { NormalizedOptions } from './validation.js';
 
 const COLOURS: readonly StoneColour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 const COLOURS_USED: readonly StoneColour[] = COLOURS;
-const RULES = 'collapse-1' as const;
+const RULES = 'collapse-2' as const;
 const MARK_TICKS = 7;
 const REMOVE_TICKS = 6;
 const GRAVITY_TICKS = 9;
@@ -47,6 +47,28 @@ function groupAt(board: readonly (Stone | null)[], settings: GameState['settings
 function hasLegalGroup(board: readonly (Stone | null)[], settings: GameState['settings']): boolean {
   return board.some((stone, index) => Boolean(stone && groupAt(board, settings, index).length >= 2));
 }
+function canUseTool(state: GameState): boolean {
+  return state.settings.tools && state.board.some(Boolean) && (state.inventory.bomb > 0 || state.inventory.pick > 0);
+}
+function previewAt(state: GameState, tool: StoredTool, target: number): readonly number[] {
+  if (!Number.isInteger(target) || target < 0 || target >= state.board.length || !state.settings.mask[target] || !state.board[target]) return [];
+  if (tool === 'pick') return [target];
+  const { width, height, mask } = state.settings; const tx = target % width, ty = Math.floor(target / width); const cells: number[] = [];
+  for (let y = Math.max(0, ty - 1); y <= Math.min(height - 1, ty + 1); y++) for (let x = Math.max(0, tx - 1); x <= Math.min(width - 1, tx + 1); x++) {
+    const index = y * width + x;
+    if (mask[index] && state.board[index]) cells.push(index);
+  }
+  return cells;
+}
+function clearToolSelection(state: GameState): Pick<GameState, 'selectedTool' | 'toolTarget' | 'toolPreview'> {
+  return { selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]) };
+}
+function recordToolAction(state: GameState, action: GameState['recording'][number]): readonly GameState['recording'][number][] | null {
+  return state.recording.length >= MAX_RECORDED_ACTIONS ? null : Object.freeze([...state.recording, action]);
+}
+function undoFrame(state: GameState): UndoFrame {
+  return Object.freeze({ board: state.board, score: state.score, moves: state.moves, removed: state.removed, randomState: state.randomState, nextId: state.nextId, usedFallback: state.usedFallback, finishAdjustmentApplied: state.finishAdjustmentApplied, selectedId: state.selectedId, selectedIds: state.selectedIds, previewScore: state.previewScore, witnessIndex: state.witnessIndex, inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, selectedTool: state.selectedTool, toolTarget: state.toolTarget, toolPreview: state.toolPreview });
+}
 
 /** @internal Constructs the generator's bounded valid-pair fallback for direct invariant checks. */
 export function fallbackBoard(mask: readonly boolean[], width: number, height: number, colourCount: number): readonly (Stone | null)[] {
@@ -58,13 +80,15 @@ export function fallbackBoard(mask: readonly boolean[], width: number, height: n
 }
 function baseState(settings: Settings, board: readonly (Stone | null)[], randomState: number, challenge: ChallengeDefinition | null, usedFallback = false): GameState {
   const initialBoard = Object.freeze([...board]);
+  const inventory = settings.tools ? { bomb: 1, pick: 1 } : { bomb: 0, pick: 0 };
   return {
     game: 'stone-collapse', rules: RULES, settings: Object.freeze({ ...settings, mask: Object.freeze([...settings.mask]) }), challenge,
     initialBoard, board: initialBoard, phase: 'ready', selectedId: null, selectedIds: Object.freeze([]), previewScore: 0,
     score: 0, moves: 0, removed: 0, randomState, nextId: Math.max(0, ...board.flatMap(stone => stone ? [stone.id] : [])) + 1,
     usedFallback, resolutionTick: 0, pendingIds: Object.freeze([]), gravityBoard: null,
     finishAdjustmentApplied: false, assisted: false, history: Object.freeze([]), witnessIndex: challenge ? 0 : -1,
-    elapsedTicks: 0, recording: Object.freeze([]),
+    elapsedTicks: 0, recording: Object.freeze([]), inventory: Object.freeze(inventory), toolProgress: 0, toolAwardCursor: 0,
+    selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]),
   };
 }
 /** Creates a seeded full board; an all-singleton draw retries before using a checked adjacent pair. */
@@ -137,7 +161,7 @@ export function createChallenge(options: ChallengeOptions): GameState {
   if (options.moveLimit !== undefined && witness.length > options.moveLimit) throw new StoneCollapseOptionsError('witness-exceeds-budget', 'Witness is longer than the challenge move limit');
   const seed = base.seed;
   const challenge: ChallengeDefinition = Object.freeze({ id: options.id, width: base.width, height: base.height, colourCount: base.colourCount, seed, mask: Object.freeze([...base.mask]), initialBoard: Object.freeze(initialBoard), goal, ...(options.moveLimit === undefined ? {} : { moveLimit: options.moveLimit }), witness: Object.freeze(witness) });
-  const settings: Settings = { mode: 'challenge', width: base.width, height: base.height, colourCount: base.colourCount, seed, mask: challenge.mask, challengeId: challenge.id, goal, ...(options.moveLimit === undefined ? {} : { moveLimit: options.moveLimit }) };
+  const settings: Settings = { mode: 'challenge', width: base.width, height: base.height, colourCount: base.colourCount, seed, mask: challenge.mask, challengeId: challenge.id, goal, tools: false, ...(options.moveLimit === undefined ? {} : { moveLimit: options.moveLimit }) };
   let state = baseState(settings, challenge.initialBoard, hashSeed(`stone-collapse|${RULES}|${String(seed)}`), challenge);
   let board = challenge.initialBoard; let score = 0; let moves = 0;
   for (let index = 0; index < challenge.witness.length; index++) {
@@ -199,6 +223,7 @@ function terminal(state: GameState): readonly [GameState, readonly GameEvent[]] 
     return [{ ...state, phase: 'won', reason: 'board-empty', score: state.score + 1000, finishAdjustmentApplied: true }, [{ type: 'run-ended', result: 'won', reason: 'board-empty', bonus: 1000, score: state.score + 1000 }]];
   }
   if (!hasLegalGroup(state.board, state.settings)) {
+    if (canUseTool(state)) return [state, []];
     const penalty = Math.min(state.score, 10 * state.board.filter(Boolean).length);
     if (state.finishAdjustmentApplied) return [state, []];
     return [{ ...state, phase: 'finished', reason: 'no-legal-groups', score: state.score - penalty, finishAdjustmentApplied: true }, [{ type: 'run-ended', result: 'finished', reason: 'no-legal-groups', penalty, remaining: state.board.filter(Boolean).length, score: state.score - penalty }]];
@@ -223,11 +248,42 @@ function confirmSelected(state: GameState): Transition {
   const ids = [...state.selectedIds]; const points = groupScore(ids.length); const score = state.score + points;
   const gravityBoard = removeAndSettle(state, ids);
   const moves = state.moves + 1;
-  const frame: UndoFrame = Object.freeze({ board: state.board, score: state.score, moves: state.moves, removed: state.removed, randomState: state.randomState, nextId: state.nextId, usedFallback: state.usedFallback, finishAdjustmentApplied: state.finishAdjustmentApplied, selectedId: state.selectedId, selectedIds: state.selectedIds, previewScore: state.previewScore, witnessIndex: state.witnessIndex });
+  const frame = undoFrame(state);
+  let inventory = state.inventory; let toolProgress = state.toolProgress; let toolAwardCursor = state.toolAwardCursor;
+  const awardEvents: GameEvent[] = [];
+  if (state.settings.tools) {
+    const total = state.toolProgress + ids.length; let awards = Math.floor(total / 12); toolProgress = total % 12;
+    const awardedInventory = { ...state.inventory };
+    while (awards-- > 0) {
+      const tool: StoredTool = toolAwardCursor === 0 ? 'bomb' : 'pick'; toolAwardCursor = (toolAwardCursor === 0 ? 1 : 0);
+      const discarded = awardedInventory[tool] >= 3;
+      if (!discarded) awardedInventory[tool]++;
+      awardEvents.push({ type: 'tool-awarded', tool, count: awardedInventory[tool], discarded });
+    }
+    inventory = Object.freeze(awardedInventory);
+  }
   const expected = state.challenge?.witness[state.witnessIndex];
   const witnessIndex = expected && expected.length === ids.length && expected.every((id, i) => [...ids].sort((a, b) => a - b)[i] === id) ? state.witnessIndex + 1 : state.challenge ? -1 : -1;
-  const next: GameState = { ...state, selectedId: null, selectedIds: Object.freeze([]), previewScore: 0, score, moves, phase: 'clear-mark', resolutionTick: 0, pendingIds: Object.freeze(ids), gravityBoard, history: Object.freeze([...state.history, frame]), witnessIndex, recording: Object.freeze([...state.recording, { kind: 'remove', move: moves, stoneId: state.selectedId }]) };
-  return { state: next, events: [{ type: 'group-committed', ids, points, move: moves }, { type: 'score-changed', score, points }], accepted: true };
+  const next: GameState = { ...state, selectedId: null, selectedIds: Object.freeze([]), previewScore: 0, ...clearToolSelection(state), inventory, toolProgress, toolAwardCursor, score, moves, phase: 'clear-mark', resolutionTick: 0, pendingIds: Object.freeze(ids), gravityBoard, history: Object.freeze([...state.history, frame]), witnessIndex, recording: Object.freeze([...state.recording, { kind: 'remove', move: moves, stoneId: state.selectedId }]) };
+  return { state: next, events: [{ type: 'group-committed', ids, points, move: moves }, { type: 'score-changed', score, points }, ...awardEvents], accepted: true };
+}
+
+function confirmTool(state: GameState): Transition {
+  if (!state.settings.tools || !state.selectedTool || state.toolTarget === null || state.recording.length >= MAX_RECORDED_ACTIONS) return emptyTransition(state, 'tool-not-ready');
+  const count = state.inventory[state.selectedTool];
+  const preview = previewAt(state, state.selectedTool, state.toolTarget);
+  if (count < 1 || !preview.length || preview.length !== state.toolPreview.length || preview.some((cell, index) => state.toolPreview[index] !== cell)) return emptyTransition(state, 'stale-tool-preview');
+  const ids = preview.map(index => state.board[index]!.id); const points = 10 * ids.length; const moves = state.moves + 1;
+  const inventory = Object.freeze({ ...state.inventory, [state.selectedTool]: count - 1 });
+  const frame = undoFrame(state); const recording = recordToolAction(state, { kind: 'confirm-tool', move: moves });
+  if (!recording) return emptyTransition(state, 'recording-action-limit');
+  const next: GameState = {
+    ...state, ...clearToolSelection(state), selectedId: null, selectedIds: Object.freeze([]), previewScore: 0,
+    inventory: inventory, score: state.score + points, moves, phase: 'clear-mark', resolutionTick: 0,
+    pendingIds: Object.freeze(ids), gravityBoard: removeAndSettle(state, ids), history: Object.freeze([...state.history, frame]),
+    assisted: true, recording,
+  };
+  return { state: next, events: [{ type: 'tool-used', tool: state.selectedTool, target: state.toolTarget, cells: preview, ids, points, move: moves }, { type: 'score-changed', score: next.score, points }], accepted: true };
 }
 
 function hintGroup(state: GameState): readonly number[] | null {
@@ -249,17 +305,39 @@ function undoCore(state: GameState): Transition {
 }
 
 function applyCore(state: GameState, action: Action): Transition {
-  if (!action || typeof action !== 'object' || !['select', 'confirm', 'cancel', 'undo', 'hint'].includes((action as { kind?: string }).kind ?? '') || action.kind === 'select' && !Number.isInteger(action.stoneId)) return emptyTransition(state, 'invalid-action');
-  const actionKeys = action.kind === 'select' ? ['kind', 'stoneId'] : ['kind'];
+  if (!action || typeof action !== 'object' || !['select', 'confirm', 'cancel', 'undo', 'hint', 'select-tool', 'target-tool', 'confirm-tool', 'cancel-tool'].includes((action as { kind?: string }).kind ?? '') || action.kind === 'select' && !Number.isInteger(action.stoneId) || action.kind === 'select-tool' && !['bomb', 'pick'].includes(action.tool) || action.kind === 'target-tool' && !Number.isInteger(action.cell)) return emptyTransition(state, 'invalid-action');
+  const actionKeys = action.kind === 'select' ? ['kind', 'stoneId'] : action.kind === 'select-tool' ? ['kind', 'tool'] : action.kind === 'target-tool' ? ['kind', 'cell'] : ['kind'];
   if (Object.keys(action).some(key => !actionKeys.includes(key))) return emptyTransition(state, 'invalid-action');
   if (action.kind === 'undo') return undoCore(state);
   if (state.phase !== 'ready') return emptyTransition(state, 'resolution-in-progress');
+  if (action.kind === 'select-tool') {
+    if (!state.settings.tools) return emptyTransition(state, 'tools-disabled');
+    if (state.inventory[action.tool] < 1) return emptyTransition(state, 'tool-out-of-stock');
+    if (state.recording.length > MAX_RECORDED_ACTIONS - 3) return emptyTransition(state, 'recording-action-limit');
+    const recording = recordToolAction(state, action); if (!recording) return emptyTransition(state, 'recording-action-limit');
+    return { state: { ...state, selectedId: null, selectedIds: Object.freeze([]), previewScore: 0, selectedTool: action.tool, toolTarget: null, toolPreview: Object.freeze([]), recording }, events: [{ type: 'tool-selected', tool: action.tool, count: state.inventory[action.tool] }], accepted: true };
+  }
+  if (action.kind === 'target-tool') {
+    if (!state.settings.tools || !state.selectedTool) return emptyTransition(state, 'tool-not-selected');
+    if (state.recording.length > MAX_RECORDED_ACTIONS - 2) return emptyTransition(state, 'recording-action-limit');
+    const preview = previewAt(state, state.selectedTool, action.cell);
+    if (!preview.length) return emptyTransition(state, 'tool-target-must-be-occupied');
+    const recording = recordToolAction(state, action); if (!recording) return emptyTransition(state, 'recording-action-limit');
+    const ids = preview.map(index => state.board[index]!.id);
+    return { state: { ...state, toolTarget: action.cell, toolPreview: Object.freeze([...preview]), recording }, events: [{ type: 'tool-targeted', tool: state.selectedTool, target: action.cell, cells: preview, ids, count: preview.length }], accepted: true };
+  }
+  if (action.kind === 'confirm-tool') return confirmTool(state);
+  if (action.kind === 'cancel-tool') {
+    if (!state.selectedTool) return emptyTransition(state, 'tool-not-selected');
+    const recording = recordToolAction(state, action); if (!recording) return emptyTransition(state, 'recording-action-limit');
+    return { state: { ...state, ...clearToolSelection(state), recording }, events: [{ type: 'tool-cancelled' }], accepted: true };
+  }
   if (action.kind === 'hint') {
     if (state.recording.length >= MAX_RECORDED_ACTIONS) return emptyTransition(state, 'recording-action-limit');
     const group = hintGroup(state);
     if (!group) return emptyTransition(state, state.settings.mode === 'challenge' ? 'no-proved-hint' : 'hints-disabled');
     const stoneId = group[0]!;
-    return { state: { ...state, selectedId: stoneId, selectedIds: Object.freeze(group), previewScore: groupScore(group.length), assisted: true, recording: Object.freeze([...state.recording, { kind: 'hint', witnessIndex: state.witnessIndex }]) }, events: [{ type: 'hint-shown', ids: group, points: groupScore(group.length), assisted: true }], accepted: true };
+    return { state: { ...state, ...clearToolSelection(state), selectedId: stoneId, selectedIds: Object.freeze(group), previewScore: groupScore(group.length), assisted: true, recording: Object.freeze([...state.recording, { kind: 'hint', witnessIndex: state.witnessIndex }]) }, events: [{ type: 'hint-shown', ids: group, points: groupScore(group.length), assisted: true }], accepted: true };
   }
   if (action.kind === 'select') {
     const index = indexOfId(state.board, action.stoneId);
@@ -268,7 +346,7 @@ function applyCore(state: GameState, action: Action): Transition {
     if (ids.length < 2) return emptyTransition(state, 'choose-two-or-more-connected-stones');
     const selectedIds = ids.map(at => state.board[at]!.id);
     if (state.selectedId !== null && state.selectedIds.length === selectedIds.length && state.selectedIds.every((id, i) => id === selectedIds[i])) return confirmSelected(state);
-    return { state: { ...state, selectedId: action.stoneId, selectedIds: Object.freeze(selectedIds), previewScore: groupScore(ids.length) }, events: [{ type: 'group-selected', ids: selectedIds, size: ids.length, points: groupScore(ids.length) }], accepted: true };
+    return { state: { ...state, ...clearToolSelection(state), selectedId: action.stoneId, selectedIds: Object.freeze(selectedIds), previewScore: groupScore(ids.length) }, events: [{ type: 'group-selected', ids: selectedIds, size: ids.length, points: groupScore(ids.length) }], accepted: true };
   }
   if (action.kind === 'cancel') {
     if (state.selectedId === null) return emptyTransition(state, 'nothing-selected');
@@ -333,6 +411,14 @@ export function legalActions(state: GameState): readonly Action[] {
     actions.push({ kind: 'select', stoneId: stone.id });
   }
   if (state.selectedId !== null) { if (recordingRoom) actions.push({ kind: 'confirm' }); actions.push({ kind: 'cancel' }); }
+  if (state.settings.tools) {
+    if (state.recording.length <= MAX_RECORDED_ACTIONS - 3) for (const tool of ['bomb', 'pick'] as const) if (state.inventory[tool] > 0) actions.push({ kind: 'select-tool', tool });
+    if (state.selectedTool) {
+      if (state.recording.length <= MAX_RECORDED_ACTIONS - 2) for (let cell = 0; cell < state.board.length; cell++) if (state.board[cell] && state.settings.mask[cell]) actions.push({ kind: 'target-tool', cell });
+      if (recordingRoom) actions.push({ kind: 'cancel-tool' });
+      if (recordingRoom && state.toolTarget !== null && state.toolPreview.length) actions.push({ kind: 'confirm-tool' });
+    }
+  }
   if (recordingRoom && hintGroup(state)) actions.push({ kind: 'hint' });
   if (canUndo(state)) actions.push({ kind: 'undo' });
   return actions;
@@ -340,6 +426,5 @@ export function legalActions(state: GameState): readonly Action[] {
 
 /** Returns the stable public game status and the remaining-stone count. */
 export function statusOf(state: GameState): GameStatus {
-  return { mode: state.settings.mode, phase: state.phase, score: state.score, moves: state.moves, removed: state.removed, remaining: state.board.filter(Boolean).length, previewScore: state.previewScore, usedFallback: state.usedFallback, assisted: state.assisted, ...(state.settings.goal ? { goal: state.settings.goal } : {}), ...(state.reason ? { reason: state.reason } : {}) };
+  return { mode: state.settings.mode, phase: state.phase, score: state.score, moves: state.moves, removed: state.removed, remaining: state.board.filter(Boolean).length, previewScore: state.previewScore, usedFallback: state.usedFallback, assisted: state.assisted, inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, selectedTool: state.selectedTool, toolTarget: state.toolTarget, toolPreview: state.toolPreview, ...(state.settings.goal ? { goal: state.settings.goal } : {}), ...(state.reason ? { reason: state.reason } : {}) };
 }
-

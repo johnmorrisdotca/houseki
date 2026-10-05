@@ -1,7 +1,7 @@
 import type { Action, ChallengeDefinition, CreateOptions, GameState, RecordedAction, Settings, Stone, Transition } from './types.js';
 import { advanceTicks, applyAction, createChallenge, createGame, requestHint, undo } from './engine.js';
 
-const RULES = 'collapse-1' as const;
+const RULES = 'collapse-2' as const;
 const MAX_RECORDED_ACTIONS = 100_000;
 const MAX_RECORDED_TICKS = 10_000_000;
 function groupScore(size: number): number { return 5 * size * (size - 1); }
@@ -27,7 +27,7 @@ export function restartGame(state: GameState): GameState {
   if (state.settings.mode === 'daily') return createGame({ mode: 'daily', dailyDate: state.settings.dailyDate });
   const { settings } = state;
   const mode: 'relaxed' | 'arcade' = settings.mode === 'arcade' ? 'arcade' : 'relaxed';
-  return createGame({ mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) });
+  return createGame({ mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) });
 }
 
 /** Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint. */
@@ -50,11 +50,11 @@ function applyUiSelection(state: GameState, stoneId: number | null): GameState {
   const cells = groupAt(state.board, state.settings, at);
   if (cells.length < 2) throw new TypeError('Checkpoint selection is not a legal group');
   const ids = cells.map(cell => state.board[cell]!.id);
-  return { ...state, selectedId: stoneId, selectedIds: Object.freeze(ids), previewScore: groupScore(ids.length) };
+  return { ...state, selectedId: stoneId, selectedIds: Object.freeze(ids), previewScore: groupScore(ids.length), selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]) };
 }
 function stateFromInitial(settings: Settings, challenge: ChallengeDefinition | null): GameState {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw new TypeError('Save has invalid initial settings');
-  const settingsKeys = ['mode', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'dailyDate', 'challengeId', 'goal', 'moveLimit'];
+  const settingsKeys = ['mode', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'dailyDate', 'challengeId', 'goal', 'moveLimit', 'tools'];
   if (Object.keys(settings).some(key => !settingsKeys.includes(key))) throw new TypeError('Initial settings contain unsupported fields');
   if (settings.mode === 'challenge') {
     if (!challenge) throw new TypeError('Challenge save has no initial challenge definition');
@@ -65,7 +65,7 @@ function stateFromInitial(settings: Settings, challenge: ChallengeDefinition | n
   if (challenge !== null) throw new TypeError('Score-game save cannot contain a challenge definition');
   const options: CreateOptions = settings.mode === 'daily'
     ? { mode: 'daily', dailyDate: settings.dailyDate }
-    : { mode: settings.mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) };
+    : { mode: settings.mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) };
   const state = createGame(options);
   if (stable(state.settings) !== stable(settings)) throw new TypeError('Initial settings are not canonical');
   return state;
@@ -97,6 +97,26 @@ export function decodeGame(text: string): GameState {
       const committed = applyAction(selected.state, { kind: 'confirm' });
       if (!committed.accepted || committed.state.moves !== entry.move) throw new TypeError(`Illegal removal record ${index + 1}: ${committed.reason ?? 'wrong move number'}`);
       state = committed.state;
+    } else if (entry.kind === 'select-tool') {
+      if (Object.keys(entry).some(key => !['kind', 'tool'].includes(key)) || !['bomb', 'pick'].includes(entry.tool)) throw new TypeError(`Invalid tool selection record ${index + 1}`);
+      const result = applyAction(state, { kind: 'select-tool', tool: entry.tool });
+      if (!result.accepted) throw new TypeError(`Illegal tool selection record ${index + 1}: ${result.reason}`);
+      state = result.state;
+    } else if (entry.kind === 'target-tool') {
+      if (Object.keys(entry).some(key => !['kind', 'cell'].includes(key)) || !Number.isSafeInteger(entry.cell)) throw new TypeError(`Invalid tool target record ${index + 1}`);
+      const result = applyAction(state, { kind: 'target-tool', cell: entry.cell });
+      if (!result.accepted) throw new TypeError(`Illegal tool target record ${index + 1}: ${result.reason}`);
+      state = result.state;
+    } else if (entry.kind === 'confirm-tool') {
+      if (Object.keys(entry).some(key => !['kind', 'move'].includes(key)) || !Number.isSafeInteger(entry.move) || entry.move !== state.moves + 1) throw new TypeError(`Invalid tool-use record ${index + 1}`);
+      const result = applyAction(state, { kind: 'confirm-tool' });
+      if (!result.accepted || result.state.moves !== entry.move) throw new TypeError(`Illegal tool-use record ${index + 1}: ${result.reason ?? 'wrong move number'}`);
+      state = result.state;
+    } else if (entry.kind === 'cancel-tool') {
+      if (Object.keys(entry).some(key => key !== 'kind')) throw new TypeError(`Tool cancellation record ${index + 1} contains unsupported fields`);
+      const result = applyAction(state, { kind: 'cancel-tool' });
+      if (!result.accepted) throw new TypeError(`Illegal tool cancellation record ${index + 1}: ${result.reason}`);
+      state = result.state;
     } else if (entry.kind === 'undo') {
       if (Object.keys(entry).some(key => !['kind', 'move'].includes(key))) throw new TypeError(`Undo record ${index + 1} contains unsupported fields`);
       if (!Number.isSafeInteger(entry.move) || entry.move !== state.moves - 1) throw new TypeError(`Invalid undo record ${index + 1}`);
