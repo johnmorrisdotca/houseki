@@ -16,6 +16,16 @@ export interface PlannedSpecial { readonly cell: number; readonly kind: SpecialK
 export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall';
 export type BoardShape = 'heart' | 'star' | 'hexagon';
 export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'refill' | 'finished';
+export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type GameOutcome = 'won' | 'lost' | 'finished' | null;
+export type Goal =
+  | { readonly kind: 'score'; readonly target: number }
+  | { readonly kind: 'collect'; readonly colour: GemColour; readonly target: number }
+  | { readonly kind: 'chain'; readonly target: number }
+  | { readonly kind: 'seals' };
+export interface Seal { readonly cell: number; readonly layers: number }
+export interface ChallengeRules { readonly goals: readonly Goal[]; readonly moveLimit?: number; readonly seals?: readonly Seal[] }
+export type ReplayOperation = { readonly kind: 'action'; readonly action: Action } | { readonly kind: 'ticks'; readonly count: number } | { readonly kind: 'time'; readonly milliseconds: number };
 export interface Settings {
   readonly width: number;
   readonly height: number;
@@ -30,11 +40,23 @@ export interface GameState {
   readonly game: 'gem-swap';
   readonly rules: 'swap-1';
   readonly settings: Settings;
+  readonly initialOptions: CreateOptions;
+  readonly mode: GameMode;
+  readonly dailyDate: string | null;
+  readonly challenge: ChallengeRules | null;
+  readonly seals: readonly Seal[];
+  readonly sealsCleared: number;
+  readonly elapsedMs: number;
+  readonly outcome: GameOutcome;
+  readonly clearedByColour: Readonly<Record<GemColour, number>>;
+  readonly bestChain: number;
+  readonly history: readonly ReplayOperation[];
   /** Row-major. Mask gaps and the holes in clear phases contain null. */
   readonly board: readonly (Gem | null)[];
   readonly phase: GamePhase;
   readonly score: number;
   readonly moves: number;
+  readonly swapCount: number;
   readonly randomState: number;
   readonly nextId: number;
   readonly usedFallback: boolean;
@@ -65,7 +87,10 @@ export interface SelectToolAction { readonly kind: 'select-tool'; readonly tool:
 export interface TargetToolAction { readonly kind: 'target-tool'; readonly cell: number }
 export interface ConfirmToolAction { readonly kind: 'confirm-tool' }
 export interface CancelToolAction { readonly kind: 'cancel-tool' }
-export type Action = SwapAction | SelectToolAction | TargetToolAction | ConfirmToolAction | CancelToolAction;
+export interface UndoAction { readonly kind: 'undo' }
+export interface HintAction { readonly kind: 'hint' }
+export interface ReshuffleAction { readonly kind: 'reshuffle' }
+export type Action = SwapAction | SelectToolAction | TargetToolAction | ConfirmToolAction | CancelToolAction | UndoAction | HintAction | ReshuffleAction;
 export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
 export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
 export interface CreateOptions {
@@ -79,6 +104,11 @@ export interface CreateOptions {
   readonly shape?: BoardShape;
   /** Row-major active-cell mask. Requires explicit custom dimensions. */
   readonly mask?: readonly boolean[];
+  readonly mode?: GameMode;
+  /** Required for Daily; a UTC calendar date in YYYY-MM-DD form. */
+  readonly dailyDate?: string;
+  /** Challenge-only finite goals and optional legal-swap budget. */
+  readonly challenge?: ChallengeRules;
 }
 export interface GameStatus {
   readonly phase: GamePhase;
@@ -94,4 +124,12 @@ export interface GameStatus {
   readonly blackHoleCharges: 0 | 1;
   readonly blackHoleProgress: number;
   readonly blackHole: BlackHolePortal | null;
+  readonly mode: GameMode;
+  readonly outcome: GameOutcome;
+  readonly remainingMoves: number | null;
+  readonly elapsedMs: number;
+  readonly remainingMs: number | null;
+  readonly goals: readonly Goal[];
+  readonly goalProgress: readonly { readonly kind: Goal['kind']; readonly current: number; readonly target: number; readonly colour?: GemColour; readonly complete: boolean }[];
+  readonly bestChain: number;
 }

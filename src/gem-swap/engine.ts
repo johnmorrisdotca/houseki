@@ -3,7 +3,8 @@ import { drawColour, nextInt, seedState } from './random.js';
 import { isValidSpecialSwap, materializeSpecials, planWave } from './specials.js';
 import { previewTool } from './tools.js';
 import { consumePortal, contactCells, placementCells } from './black-hole.js';
-import type { Action, BoardPreset, BoardShape, CreateOptions, GameEvent, GameState, GameStatus, Gem, GemColour, OrdinaryToolKind, Settings, ToolKind, Transition } from './types.js';
+import { hintTransition, reshuffleTransition, undoTransition } from './practice.js';
+import type { Action, BoardPreset, BoardShape, ChallengeRules, CreateOptions, GameEvent, GameMode, GameState, GameStatus, Gem, GemColour, Goal, OrdinaryToolKind, ReplayOperation, Seal, Settings, ToolKind, Transition } from './types.js';
 
 /** Typed error for invalid settings or a board that cannot be generated safely. */
 export class GemSwapOptionsError extends RangeError {
@@ -38,10 +39,48 @@ function validateDimensions(width: number, height: number): void {
     throw new GemSwapOptionsError('invalid-board-size', 'Dimensions must each be 4–12 with at most 144 cells');
   }
 }
-function optionsFor(options: CreateOptions): Settings {
+function validateChallenge(value: unknown): ChallengeRules {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new GemSwapOptionsError('invalid-challenge', 'Challenge rules must be an object');
+  const input = value as Record<string, unknown>;
+  if (Object.keys(input).some(key => !['goals', 'moveLimit', 'seals'].includes(key)) || !Array.isArray(input.goals) || input.goals.length < 1 || input.goals.length > 8) throw new GemSwapOptionsError('invalid-challenge', 'A challenge requires one to eight supported goals');
+  if (input.moveLimit !== undefined && (!Number.isInteger(input.moveLimit) || (input.moveLimit as number) < 1 || (input.moveLimit as number) > 1000)) throw new GemSwapOptionsError('invalid-challenge', 'Challenge move limit must be from 1 to 1000');
+  const goals: Goal[] = input.goals.map((raw: unknown) => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new GemSwapOptionsError('invalid-challenge-goal', 'Challenge goals must be objects');
+    const goal = raw as Record<string, unknown>;
+    if (goal.kind === 'score' && Object.keys(goal).every(key => ['kind', 'target'].includes(key)) && Number.isSafeInteger(goal.target) && (goal.target as number) > 0) return Object.freeze({ kind: 'score', target: goal.target as number });
+    if (goal.kind === 'collect' && Object.keys(goal).every(key => ['kind', 'colour', 'target'].includes(key)) && COLOURS.includes(goal.colour as GemColour) && Number.isSafeInteger(goal.target) && (goal.target as number) > 0) return Object.freeze({ kind: 'collect', colour: goal.colour as GemColour, target: goal.target as number });
+    if (goal.kind === 'chain' && Object.keys(goal).every(key => ['kind', 'target'].includes(key)) && Number.isInteger(goal.target) && (goal.target as number) >= 2 && (goal.target as number) <= 100) return Object.freeze({ kind: 'chain', target: goal.target as number });
+    if (goal.kind === 'seals' && Object.keys(goal).length === 1) return Object.freeze({ kind: 'seals' });
+    throw new GemSwapOptionsError('invalid-challenge-goal', 'Challenge goal is malformed or unsupported');
+  });
+  let seals: readonly Seal[] | undefined;
+  if (input.seals !== undefined) {
+    if (!Array.isArray(input.seals) || input.seals.length > 144) throw new GemSwapOptionsError('invalid-challenge-seals', 'Challenge seals must be a bounded list');
+    const seen = new Set<number>();
+    seals = Object.freeze(input.seals.map((raw: unknown) => {
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new GemSwapOptionsError('invalid-challenge-seal', 'Seal entries must be objects');
+      const seal = raw as Record<string, unknown>;
+      if (Object.keys(seal).some(key => !['cell', 'layers'].includes(key)) || !Number.isInteger(seal.cell) || (seal.cell as number) < 0 || !Number.isInteger(seal.layers) || (seal.layers as number) < 1 || (seal.layers as number) > 3 || seen.has(seal.cell as number)) throw new GemSwapOptionsError('invalid-challenge-seal', 'Seal cell or layers are invalid or duplicated');
+      seen.add(seal.cell as number); return Object.freeze({ cell: seal.cell as number, layers: seal.layers as number });
+    }));
+  }
+  if (goals.some(goal => goal.kind === 'seals') && !seals?.length) throw new GemSwapOptionsError('invalid-challenge-seals', 'A seal goal requires at least one seal');
+  return Object.freeze({ goals: Object.freeze(goals), ...(input.moveLimit === undefined ? {} : { moveLimit: input.moveLimit as number }), ...(seals ? { seals } : {}) });
+}
+function optionsFor(options: CreateOptions): { readonly settings: Settings; readonly mode: GameMode; readonly dailyDate: string | null; readonly challenge: ChallengeRules | null; readonly initialOptions: CreateOptions } {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new GemSwapOptionsError('invalid-options', 'Options must be an object');
-  const allowed = ['preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'tools', 'advancedTools'];
+  const allowed = ['preset', 'width', 'height', 'colourCount', 'seed', 'shape', 'mask', 'tools', 'advancedTools', 'mode', 'dailyDate', 'challenge'];
   if (Object.keys(options).some(key => !allowed.includes(key))) throw new GemSwapOptionsError('unknown-option', 'Options contain an unsupported field');
+  const mode = options.mode ?? 'relaxed';
+  if (!['relaxed', 'arcade', 'daily', 'challenge'].includes(mode)) throw new GemSwapOptionsError('invalid-mode', 'Unknown game mode');
+  const dailyDate = options.dailyDate ?? null;
+  if (mode === 'daily') {
+    const parsedDate = typeof dailyDate === 'string' ? Date.parse(`${dailyDate}T00:00:00.000Z`) : Number.NaN;
+    if (typeof dailyDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dailyDate) || !Number.isFinite(parsedDate) || new Date(parsedDate).toISOString().slice(0, 10) !== dailyDate) throw new GemSwapOptionsError('invalid-daily-date', 'Daily mode requires a valid UTC date in YYYY-MM-DD form');
+    if (options.preset !== undefined || options.width !== undefined || options.height !== undefined || options.colourCount !== undefined || options.seed !== undefined || options.tools !== undefined || options.advancedTools !== undefined || options.shape !== undefined || options.mask !== undefined || options.challenge !== undefined) throw new GemSwapOptionsError('daily-settings-fixed', 'Daily uses canonical board settings and a date-derived seed');
+  } else if (dailyDate !== null) throw new GemSwapOptionsError('unexpected-daily-date', 'A UTC date is only valid in Daily mode');
+  const challenge = mode === 'challenge' ? validateChallenge(options.challenge) : null;
+  if (mode !== 'challenge' && options.challenge !== undefined) throw new GemSwapOptionsError('unexpected-challenge', 'Challenge rules require Challenge mode');
   if (options.tools !== undefined && typeof options.tools !== 'boolean') throw new GemSwapOptionsError('invalid-tools-option', 'Tools must be enabled or disabled with a boolean');
   if (options.advancedTools !== undefined && typeof options.advancedTools !== 'boolean') throw new GemSwapOptionsError('invalid-advanced-tools-option', 'Advanced tools must be enabled or disabled with a boolean');
   if (options.advancedTools && !options.tools) throw new GemSwapOptionsError('advanced-tools-require-tools', 'Advanced tools require the stored-tool tray');
@@ -62,11 +101,20 @@ function optionsFor(options: CreateOptions): Settings {
   validateDimensions(width!, height!);
   if (mask === undefined) mask = Array(width! * height!).fill(true);
   if (!validMask(mask, width!, height!)) throw new GemSwapOptionsError('invalid-mask', 'The active mask must be connected, contain 16–144 cells and have no isolated cell');
+  if (challenge?.seals?.some(seal => seal.cell >= mask!.length || !mask![seal.cell])) throw new GemSwapOptionsError('invalid-challenge-seal', 'Every seal must occupy an active board cell');
   const colourCount = options.colourCount ?? 5;
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new GemSwapOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');
-  const seed = options.seed ?? 'houseki-gem-swap';
+  if (mode === 'daily' && (options.tools || options.advancedTools)) throw new GemSwapOptionsError('daily-tools-disabled', 'Daily mode does not use stored tools');
+  const seed = mode === 'daily' ? `gem-swap:daily-1:${dailyDate}` : options.seed ?? 'houseki-gem-swap';
   if (typeof seed === 'string' ? seed.length > 256 : (!Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff)) throw new GemSwapOptionsError('invalid-seed', 'Seed must be a string of at most 256 characters or an unsigned 32-bit integer');
-  return Object.freeze({ width: width!, height: height!, colourCount, seed, tools: options.tools ?? false, advancedTools: options.advancedTools ?? false, ...(shape ? { shape } : {}), mask: Object.freeze([...mask]) });
+  const settings = Object.freeze({ width: width!, height: height!, colourCount, seed, tools: options.tools ?? false, advancedTools: options.advancedTools ?? false, ...(shape ? { shape } : {}), mask: Object.freeze([...mask]) });
+  const initialOptions: CreateOptions = Object.freeze(mode === 'daily' ? { mode, dailyDate: dailyDate! } : {
+    ...(mode === 'relaxed' ? {} : { mode }),
+    ...(options.preset !== undefined ? { preset: options.preset } : shape ? { shape } : { width: width!, height: height!, mask: Object.freeze([...mask]) }),
+    colourCount, seed, tools: options.tools ?? false, advancedTools: options.advancedTools ?? false,
+    ...(challenge ? { challenge } : {}),
+  });
+  return Object.freeze({ settings, mode, dailyDate, challenge, initialOptions });
 }
 
 function gem(id: number, colour: GemColour): Gem { return Object.freeze({ id, colour }); }
@@ -86,7 +134,7 @@ export function fallbackBoardForTest(settings: Settings): readonly (Gem | null)[
 
 /** Creates a deterministic stable board with at least one legal normal swap. */
 export function createGame(options: CreateOptions = {}): GameState {
-  const settings = optionsFor(options); let randomState = seedState(settings.seed); let board: (Gem | null)[] = []; let nextId = 1; let found = false;
+  const config = optionsFor(options); const { settings } = config; let randomState = seedState(settings.seed); let board: (Gem | null)[] = []; let nextId = 1; let found = false;
   for (let attempt = 0; attempt < 128 && !found; attempt++) {
     const candidate: (Gem | null)[] = []; let id = 1; let viable = true;
     for (let index = 0; index < settings.mask.length; index++) {
@@ -103,22 +151,22 @@ export function createGame(options: CreateOptions = {}): GameState {
     }
     if (viable) {
       board = candidate; nextId = id;
-      const trial: GameState = { ...initialState(settings, board, randomState, id, false), usedFallback: false };
+      const trial: GameState = { ...initialState(settings, board, randomState, id, false, config), usedFallback: false };
       found = !findMatches(board, settings).length && listLegalSwaps(trial).length > 0;
     }
   }
   let usedFallback = false;
   if (!found) {
     board = [...fallbackBoardForTest(settings)]; nextId = board.filter(Boolean).length + 1; usedFallback = true;
-    const fallbackState: GameState = { ...initialState(settings, board, randomState, nextId, true), usedFallback: true };
+    const fallbackState: GameState = { ...initialState(settings, board, randomState, nextId, true, config), usedFallback: true };
     if (findMatches(board, settings).length || listLegalSwaps(fallbackState).length === 0) throw new GemSwapOptionsError('invalid-fallback', 'The validated standard fallback failed its stability or legal-move check');
   }
-  return Object.freeze({ ...initialState(settings, Object.freeze(board), randomState, nextId, usedFallback) });
+  return Object.freeze({ ...initialState(settings, Object.freeze(board), randomState, nextId, usedFallback, config) });
 }
 
-function initialState(settings: Settings, board: readonly (Gem | null)[], randomState: number, nextId: number, usedFallback: boolean): GameState {
+function initialState(settings: Settings, board: readonly (Gem | null)[], randomState: number, nextId: number, usedFallback: boolean, config: ReturnType<typeof optionsFor>): GameState {
   const start = settings.tools ? 1 : 0;
-  return { game: 'gem-swap', rules: 'swap-1', settings, board, phase: 'ready', score: 0, moves: 0, randomState, nextId, usedFallback, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), gravityBoard: null,
+  return { game: 'gem-swap', rules: 'swap-1', settings, initialOptions: config.initialOptions, mode: config.mode, dailyDate: config.dailyDate, challenge: config.challenge, seals: config.challenge?.seals ?? Object.freeze([]), sealsCleared: 0, elapsedMs: 0, outcome: null, clearedByColour: Object.freeze({ red: 0, blue: 0, green: 0, gold: 0, purple: 0, teal: 0 }), bestChain: 0, history: Object.freeze([]), board, phase: 'ready', score: 0, moves: 0, swapCount: 0, randomState, nextId, usedFallback, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), gravityBoard: null,
     inventory: Object.freeze({ bomb: start, 'row-clear': start, 'colour-clear': start }), selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolProgress: 0, toolAwardCursor: 0, assisted: false, toolWaveActive: false,
     blackHoleCharges: 0, blackHoleProgress: 0, blackHole: null, blackHoleMovePending: false, blackHoleContactPending: false, pendingBlackHole: false };
 }
@@ -127,8 +175,11 @@ function rejected(state: GameState, reason: string): Transition { return { state
 function adjacent(state: GameState, from: number, to: number): boolean { return neighbors(from, state.settings.width, state.settings.height, state.settings.mask).includes(to); }
 
 /** Accepts a legal orthogonal normal-gem swap, leaving invalid state identity unchanged. */
-export function applyAction(state: GameState, action: Action): Transition {
+function applyActionBase(state: GameState, action: Action): Transition {
   if (!action || typeof action !== 'object') return rejected(state, 'invalid-action');
+  if (action.kind === 'undo') return Object.keys(action).length === 1 ? undoTransition(state, replayOperations) : rejected(state, 'invalid-action');
+  if (action.kind === 'hint') return Object.keys(action).length === 1 ? hintTransition(state) : rejected(state, 'invalid-action');
+  if (action.kind === 'reshuffle') return Object.keys(action).length === 1 ? reshuffleTransition(state) : rejected(state, 'invalid-action');
   if (action.kind !== 'swap') return applyToolAction(state, action);
   if (!Number.isInteger(action.from) || !Number.isInteger(action.to) || Object.keys(action).some(key => !['kind', 'from', 'to'].includes(key))) return rejected(state, 'invalid-action');
   if (state.phase !== 'ready') return rejected(state, 'resolution-in-progress');
@@ -140,8 +191,22 @@ export function applyAction(state: GameState, action: Action): Transition {
   if (!isValidSpecialSwap(board[from]!, board[to]!, matched.length > 0)) return rejected(state, board[from]!.colour === board[to]!.colour && !board[from]!.kind && !board[to]!.kind ? 'identical-gems' : 'swap-makes-no-match');
   const swapped = Object.freeze({ ...state, board: Object.freeze(board) });
   const plan = planWave(swapped, matched, from, to);
-  const next = Object.freeze({ ...swapped, phase: 'clear-mark' as const, moves: state.moves + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials, gravityBoard: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolWaveActive: false, blackHoleMovePending: state.blackHole !== null, blackHoleContactPending: state.blackHole !== null });
+  const next = Object.freeze({ ...swapped, phase: 'clear-mark' as const, moves: state.moves + 1, swapCount: state.swapCount + 1, wave: 1, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials, gravityBoard: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]), toolWaveActive: false, blackHoleMovePending: state.blackHole !== null, blackHoleContactPending: state.blackHole !== null });
   return { state: next, events: Object.freeze([{ type: 'swap-accepted', from, to, ids: [state.board[from]!.id, state.board[to]!.id] }, ...(matched.length ? [{ type: 'match-marked', cells: matched, wave: 1 }] : []), ...plan.events]), accepted: true };
+}
+
+function appendHistory(state: GameState, operation: ReplayOperation): GameState {
+  const previous = state.history.at(-1);
+  if (operation.kind === 'ticks' && previous?.kind === 'ticks' && previous.count + operation.count <= 3600) return Object.freeze({ ...state, history: Object.freeze([...state.history.slice(0, -1), Object.freeze({ kind: 'ticks', count: previous.count + operation.count })]) });
+  if (operation.kind === 'time' && previous?.kind === 'time') return Object.freeze({ ...state, history: Object.freeze([...state.history.slice(0, -1), Object.freeze({ kind: 'time', milliseconds: previous.milliseconds + operation.milliseconds })]) });
+  return Object.freeze({ ...state, history: Object.freeze([...state.history, Object.freeze(operation)]) });
+}
+/** Applies one recorded player action. Rejected actions preserve state identity and are not recorded. */
+export function applyAction(state: GameState, action: Action): Transition {
+  const explicitPracticeReshuffle = action?.kind === 'reshuffle' && state.mode === 'relaxed' && state.outcome === 'finished';
+  if ((state.outcome && !explicitPracticeReshuffle) || (state.mode === 'arcade' && state.elapsedMs >= 180_000)) return rejected(state, 'run-ended');
+  const result = applyActionBase(state, action);
+  return result.accepted ? { ...result, state: appendHistory(result.state, { kind: 'action', action: Object.freeze({ ...action }) }) } : result;
 }
 
 const TOOL_ORDER: readonly OrdinaryToolKind[] = ['bomb', 'row-clear', 'colour-clear'];
@@ -256,9 +321,16 @@ function scheduleContact(state: GameState, board: readonly (Gem | null)[]): { re
   const closed = portal ? [] : [{ type: 'black-hole-closed', reason: 'capacity' } satisfies GameEvent];
   return { state: next, events: Object.freeze([{ type: 'black-hole-consumed', cells, ids }, ...closed]) };
 }
+function goalValue(state: GameState, goal: Goal): number {
+  if (goal.kind === 'score') return state.score;
+  if (goal.kind === 'collect') return state.clearedByColour[goal.colour];
+  if (goal.kind === 'seals') return state.sealsCleared;
+  return state.bestChain;
+}
+function goalTarget(state: GameState, goal: Goal): number { return goal.kind === 'seals' ? (state.challenge?.seals ?? []).reduce((sum, seal) => sum + seal.layers, 0) : goal.target; }
 
 /** Advances marked-clear, removal, gravity and refill phases in bounded deterministic ticks. */
-export function advanceTicks(state: GameState, ticks: number): Transition {
+function advanceTicksBase(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   let current = state; const events: GameEvent[] = [];
   for (let tick = 0; tick < ticks; tick++) {
@@ -268,11 +340,20 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
       if (elapsed < 7) { current = Object.freeze({ ...current, resolutionTick: elapsed }); continue; }
       const removed = new Set(current.pendingCells); const holes = current.board.map((item, index) => removed.has(index) ? null : item);
       const removedCount = current.pendingCells.filter(index => current.board[index]).length;
+      const clearedByColour = { ...current.clearedByColour };
+      for (const cell of current.pendingCells) { const removedGem = current.board[cell]; if (removedGem) clearedByColour[removedGem.colour]++; }
+      const clearedCells = new Set(current.pendingCells);
+      let sealsCleared = current.sealsCleared;
+      const seals = current.seals.flatMap(seal => {
+        if (!clearedCells.has(seal.cell)) return [seal];
+        sealsCleared++;
+        return seal.layers > 1 ? [Object.freeze({ ...seal, layers: seal.layers - 1 })] : [];
+      });
       const blackHoleRemoval = current.pendingBlackHole; const points = removedCount * 10 * (blackHoleRemoval ? 1 : current.wave);
       const earning = awardTools(current, removedCount); const rareEarning = awardBlackHole(current, removedCount);
       const createdEvents = current.pendingSpecials.map(planned => ({ type: 'special-created', cell: planned.cell, kind: planned.kind, id: current.board[planned.cell]!.id }));
       const board = materializeSpecials(Object.freeze(holes), current.pendingSpecials);
-      current = Object.freeze({ ...current, board, phase: 'clear-remove', resolutionTick: 0, score: current.score + points, pendingSpecials: Object.freeze([]), pendingBlackHole: false, inventory: earning.inventory, toolProgress: earning.progress, toolAwardCursor: earning.cursor, blackHoleCharges: rareEarning.charges, blackHoleProgress: rareEarning.progress });
+      current = Object.freeze({ ...current, board, phase: 'clear-remove', resolutionTick: 0, score: current.score + points, clearedByColour: Object.freeze(clearedByColour), seals: Object.freeze(seals), sealsCleared, pendingSpecials: Object.freeze([]), pendingBlackHole: false, inventory: earning.inventory, toolProgress: earning.progress, toolAwardCursor: earning.cursor, blackHoleCharges: rareEarning.charges, blackHoleProgress: rareEarning.progress });
       events.push({ type: 'cells-removed', cells: current.pendingCells, wave: current.wave, points, board, source: blackHoleRemoval ? 'black-hole' : 'match' }, ...createdEvents, ...earning.events, ...rareEarning.events);
       continue;
     }
@@ -297,7 +378,7 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
       current = Object.freeze({ ...current, board, randomState, nextId, phase: 'clear-mark', wave: nextWave, resolutionTick: 0, pendingCells: plan.cells, pendingSpecials: plan.specials });
       events.push(...refillEvents, { type: 'match-marked', cells: matches, wave: current.wave }, ...plan.events);
     } else {
-      let stable: GameState = Object.freeze({ ...current, board, randomState, nextId, phase: 'ready' as const, wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), toolWaveActive: false });
+      let stable: GameState = Object.freeze({ ...current, board, randomState, nextId, phase: 'ready' as const, bestChain: Math.max(current.bestChain, current.wave), wave: 0, resolutionTick: 0, pendingCells: Object.freeze([]), pendingSpecials: Object.freeze([]), toolWaveActive: false });
       if (stable.blackHole && stable.blackHoleContactPending) {
         const contact = scheduleContact(stable, stable.board);
         if (contact) {
@@ -317,16 +398,66 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
         stable = Object.freeze({ ...stable, blackHole: Object.freeze({ ...stable.blackHole, movesRemaining: stable.blackHole.movesRemaining - 1 }), blackHoleMovePending: false });
       }
       const legal = listLegalSwaps(stable);
-      if (legal.length || hasUsableTool(stable)) current = stable;
-      else current = Object.freeze({ ...stable, phase: 'finished' as const });
-      events.push(...refillEvents, ...(legal.length || hasUsableTool(stable) ? [] : [{ type: 'run-ended', result: 'no-legal-actions' } satisfies GameEvent]));
+      const goalWon = stable.mode === 'challenge' && (stable.challenge?.goals.every(goal => goalValue(stable, goal) >= goalTarget(stable, goal)) ?? false);
+      const timedOut = stable.mode === 'arcade' && stable.elapsedMs >= 180_000;
+      const moveExpired = (stable.mode === 'daily' && stable.swapCount >= 30) || (stable.mode === 'challenge' && stable.challenge?.moveLimit !== undefined && stable.swapCount >= stable.challenge.moveLimit);
+      const noActions = legal.length === 0 && !hasUsableTool(stable);
+      if (goalWon) current = Object.freeze({ ...stable, phase: 'finished' as const, outcome: 'won' as const });
+      else if (timedOut || moveExpired || noActions) current = Object.freeze({ ...stable, phase: 'finished' as const, outcome: stable.mode === 'challenge' && (moveExpired || noActions) ? 'lost' as const : 'finished' as const });
+      else current = stable;
+      if (current.phase === 'finished') events.push({ type: 'run-ended', result: current.outcome, reason: goalWon ? 'goals-complete' : timedOut ? 'time-limit' : moveExpired ? 'move-limit' : 'no-legal-actions' });
+      events.push(...refillEvents);
     }
   }
   return { state: current, events: Object.freeze(events), accepted: true };
 }
 
+/** Advances deterministic resolution ticks; wall-clock time is supplied separately by the host. */
+export function advanceTicks(state: GameState, ticks: number): Transition {
+  if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
+  let current = state; let consumed = 0; const events: GameEvent[] = [];
+  while (consumed < ticks && current.phase !== 'ready' && current.phase !== 'finished') {
+    const result = advanceTicksBase(current, 1); current = result.state; events.push(...result.events); consumed++;
+  }
+  if (consumed) current = appendHistory(current, { kind: 'ticks', count: consumed });
+  return { state: current, events: Object.freeze(events), accepted: true };
+}
+
+/** Adds explicit host-measured elapsed time. Arcade runs end at 180 seconds; no clock is read here. */
+export function advanceTime(state: GameState, milliseconds: number): Transition {
+  if (!Number.isInteger(milliseconds) || milliseconds < 0 || milliseconds > 180_000) throw new RangeError('milliseconds must be an integer from 0 to 180000');
+  if (state.mode !== 'arcade' || state.outcome || milliseconds === 0) return { state, events: Object.freeze([]), accepted: true };
+  const elapsedMs = Math.min(180_000, state.elapsedMs + milliseconds);
+  let next: GameState = Object.freeze({ ...state, elapsedMs });
+  const events: GameEvent[] = [{ type: 'time-advanced', elapsedMs }];
+  if (elapsedMs >= 180_000 && state.phase === 'ready') {
+    next = Object.freeze({ ...next, phase: 'finished', outcome: 'finished' });
+    events.push({ type: 'run-ended', result: 'finished', reason: 'time-limit' });
+  }
+  next = appendHistory(next, { kind: 'time', milliseconds: elapsedMs - state.elapsedMs });
+  return { state: next, events: Object.freeze(events), accepted: true };
+}
+
+function replayOperations(initial: CreateOptions, operations: readonly ReplayOperation[]): GameState {
+  let state = createGame(initial);
+  for (const operation of operations) {
+    if (operation.kind === 'action') {
+      const result = applyAction(state, operation.action); if (!result.accepted) throw new Error('Recorded action cannot be replayed'); state = result.state;
+    } else if (operation.kind === 'ticks') state = advanceTicks(state, operation.count).state;
+    else if (operation.kind === 'time') state = advanceTime(state, operation.milliseconds).state;
+  }
+  return state;
+}
+/** Returns a deterministic legal swap hint and permanently marks the run assisted. */
+export function hintGame(state: GameState): Transition { return applyAction(state, { kind: 'hint' }); }
+/** Shuffles existing gem records in Relaxed play, preserving their colour and special counts. */
+export function reshuffleGame(state: GameState): Transition { return applyAction(state, { kind: 'reshuffle' }); }
+/** Restores the last committed swap in Relaxed or Challenge play and marks assistance. */
+export function undoGame(state: GameState): Transition { return applyAction(state, { kind: 'undo' }); }
+
 /** Lists all legal swaps that would be accepted from the current stable state. */
 export function legalActions(state: GameState): readonly Action[] {
+  if (state.phase === 'finished') return state.mode === 'relaxed' && state.outcome === 'finished' ? Object.freeze([{ kind: 'reshuffle' }]) : Object.freeze([]);
   if (state.phase !== 'ready' || findMatches(state.board, state.settings).length) return [];
   const actions: Action[] = [];
   for (let from = 0; from < state.board.length; from++) {
@@ -347,9 +478,17 @@ export function legalActions(state: GameState): readonly Action[] {
       actions.push({ kind: 'cancel-tool' });
     }
   }
+  if (listLegalSwaps(state).length && !state.selectedTool) actions.push({ kind: 'hint' });
+  if (state.mode === 'relaxed' && !state.selectedTool) actions.push({ kind: 'reshuffle' });
+  if (['relaxed', 'challenge'].includes(state.mode) && !state.selectedTool && state.history.some(operation => operation.kind === 'action' && operation.action.kind === 'swap')) actions.push({ kind: 'undo' });
   return Object.freeze(actions);
 }
 /** Returns the current score, move count and accurately enumerated legal move count. */
 function availableToolCount(state: GameState): number { return TOOL_ORDER.reduce<number>((count, tool) => count + state.inventory[tool], state.blackHoleCharges); }
 function hasUsableTool(state: GameState): boolean { return TOOL_ORDER.some(tool => state.inventory[tool] > 0) || (state.settings.advancedTools && state.blackHoleCharges > 0 && state.blackHole === null); }
-export function statusOf(state: GameState): GameStatus { return { phase: state.phase, score: state.score, moves: state.moves, legalMoveCount: legalActions(state).filter(action => action.kind === 'swap').length, usedFallback: state.usedFallback, availableToolCount: availableToolCount(state), inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, assisted: state.assisted, blackHoleCharges: state.blackHoleCharges, blackHoleProgress: state.blackHoleProgress, blackHole: state.blackHole }; }
+export function statusOf(state: GameState): GameStatus {
+  const goals = state.challenge?.goals ?? Object.freeze([]);
+  const goalProgress = goals.map(goal => ({ kind: goal.kind, ...(goal.kind === 'collect' ? { colour: goal.colour } : {}), current: goalValue(state, goal), target: goalTarget(state, goal), complete: goalValue(state, goal) >= goalTarget(state, goal) }));
+  const remainingMoves = state.mode === 'daily' ? Math.max(0, 30 - state.swapCount) : state.mode === 'challenge' && state.challenge?.moveLimit !== undefined ? Math.max(0, state.challenge.moveLimit - state.swapCount) : null;
+  return { phase: state.phase, score: state.score, moves: state.moves, legalMoveCount: legalActions(state).filter(action => action.kind === 'swap').length, usedFallback: state.usedFallback, availableToolCount: availableToolCount(state), inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, assisted: state.assisted, blackHoleCharges: state.blackHoleCharges, blackHoleProgress: state.blackHoleProgress, blackHole: state.blackHole, mode: state.mode, outcome: state.outcome, remainingMoves, elapsedMs: state.elapsedMs, remainingMs: state.mode === 'arcade' ? Math.max(0, 180_000 - state.elapsedMs) : null, goals: Object.freeze([...goals]), goalProgress: Object.freeze(goalProgress), bestChain: state.bestChain };
+}

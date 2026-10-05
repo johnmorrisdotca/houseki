@@ -204,7 +204,7 @@ test('500 seeded starts satisfy an independent matcher and legal-action oracle',
       });
       if (match) oracle.push({ kind: 'swap', from, to });
     }
-    assert.deepEqual(legalActions(state), oracle, `seed ${seed}`);
+    assert.deepEqual(legalActions(state).filter(action => action.kind === 'swap'), oracle, `seed ${seed}`);
     assert.equal(statusOf(state).legalMoveCount, oracle.length);
   }
 });
