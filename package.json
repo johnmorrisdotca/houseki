@@ -5,16 +5,37 @@
   "type": "module",
   "author": "John Morris",
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/johnmorrisdotca/houseki.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnmorrisdotca/houseki.git"
+  },
   "homepage": "https://johnmorrisdotca.github.io/houseki/",
-  "bugs": { "url": "https://github.com/johnmorrisdotca/houseki/issues" },
+  "bugs": {
+    "url": "https://github.com/johnmorrisdotca/houseki/issues"
+  },
   "main": "./dist/falling-triplets.js",
   "types": "./dist/falling-triplets.d.ts",
   "exports": {
-    "./falling-triplets": { "types": "./dist/falling-triplets.d.ts", "import": "./dist/falling-triplets.js", "default": "./dist/falling-triplets.js" }
+    "./falling-triplets": {
+      "types": "./dist/falling-triplets.d.ts",
+      "import": "./dist/falling-triplets.js",
+      "default": "./dist/falling-triplets.js"
+    },
+    "./colour-chains": {
+      "types": "./dist/colour-chains.d.ts",
+      "import": "./dist/colour-chains.js",
+      "default": "./dist/colour-chains.js"
+    }
   },
-  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
-  "engines": { "node": ">=22" },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -22,7 +43,21 @@
     "site": "npm run build && node scripts/site.mjs",
     "demo": "npm run site && node scripts/serve.mjs"
   },
-  "devDependencies": { "typescript": "^5.9.3", "@playwright/test": "^1.58.2" },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@playwright/test": "^1.58.2"
+  },
   "packageManager": "pnpm@10.11.0",
-  "keywords": ["falling-triplets", "match-three", "puzzle-game", "immutable", "typescript", "zero-dependencies", "accessible", "touch", "keyboard", "japanese"]
+  "keywords": [
+    "falling-triplets",
+    "match-three",
+    "puzzle-game",
+    "immutable",
+    "typescript",
+    "zero-dependencies",
+    "accessible",
+    "touch",
+    "keyboard",
+    "japanese"
+  ]
 }
