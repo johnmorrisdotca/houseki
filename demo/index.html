@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2f5d4a">
+  <title>Houseki 宝石 · Falling Triplets</title>
+  <link rel="stylesheet" href="family.css">
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+<main>
+  <header>
+    <div class="intro"><h1>Houseki<span lang="ja">宝石</span></h1><p>Small games with careful rules and tactile materials.</p><p class="name">Falling Triplets · 三つの宝石</p><p class="fam-fine">Development demo · Campaign and phone layout refinement are in progress.</p></div>
+    <nav><div class="lang" aria-label="Language / 言語"><button data-lang="en" aria-pressed="true">English</button><button data-lang="ja" lang="ja" aria-pressed="false">日本語</button></div><a class="fam-button" href="api.html">API reference</a><button class="fam-button" id="theme" type="button">Theme</button></nav>
+  </header>
+  <div class="layout">
+    <aside>
+      <h2 data-i="settings">Settings</h2>
+      <label class="field"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option><option value="daily">Daily</option></select></label>
+      <label class="field"><span data-i="board">Board</span><select id="preset"><option value="standard">Standard · 6 × 13</option><option value="narrow">Narrow · 5 × 13</option><option value="wide">Wide · 8 × 13</option><option value="tall">Tall · 6 × 17</option></select></label>
+      <label class="field"><span data-i="colours">Colours</span><select id="colours"><option value="4">Four</option><option value="5" selected>Five</option><option value="6">Six</option></select></label>
+      <div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
+      <p data-i="help">Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.</p>
+      <p id="pending" class="micro" hidden>Settings changed. Select New game to apply.</p>
+      <p class="micro" data-i="keys">Keyboard: ← → move · Z / X cycle · Space place</p>
+      <label class="field"><span data-i="material">Board material</span><select id="material"><option value="ivory">Ivory</option><option value="slate">Slate</option><option value="wood">Wood</option></select></label>
+      <label class="check"><input id="motion" type="checkbox"><span data-i="reduced">Reduce motion</span></label>
+      <label class="check"><input id="sound" type="checkbox"><span data-i="sound">Sound effects</span></label>
+    </aside>
+    <section class="fam-felt game-screen" tabindex="0" aria-label="Falling Triplets game">
+      <div class="panel-head"><h2 data-i="title">Falling Triplets</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="chain">Best chain</b> <output id="chain">0</output></span></div></div>
+      <div class="play-area">
+        <div class="well-wrap"><div id="well" class="well" role="img" aria-label="Gem board"></div><div class="loss-line"></div></div>
+        <section class="next-wrap"><h3 data-i="next">Next</h3><div id="next" class="next"></div><p id="status" aria-live="polite">Place the triplet</p></section>
+      </div>
+      <div class="controls">
+        <button data-action="left" class="fam-button" aria-label="Left">←</button>
+        <button data-action="cycle-backward" class="fam-button" data-i="reverse">Reverse cycle</button>
+        <button data-action="cycle-forward" class="fam-button" data-i="cycle">Cycle</button>
+        <button data-action="right" class="fam-button" aria-label="Right">→</button>
+        <button data-action="soft-drop" class="fam-button soft">Down</button>
+        <button data-action="hard-drop" class="fam-button drop">Drop</button>
+        <button data-action="place" class="fam-button place" data-accent="true">Place</button>
+        <button data-action="pause" class="fam-button pause">Pause</button>
+        <button data-action="resume" class="fam-button resume" hidden>Continue</button>
+      </div>
+      <p class="unreviewed" lang="ja">この日本語は、まだ日本語を母語とする方の確認を受けていません。</p>
+    </section>
+  </div>
+  <footer><span>Relaxed planning · Arcade timing · Daily and witnessed challenges</span><span><code>@johnmorrisdotca/houseki</code> · MIT · © John Morris</span></footer>
+</main>
+<script type="module" src="demo.js"></script>
+</body>
+</html>

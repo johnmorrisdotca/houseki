@@ -1,0 +1,12 @@
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { API_CSS, apiOf, apiPage } from './api.mjs';
+import { packagePage } from './package-family.mjs';
+await mkdir('site/demo', { recursive: true });
+for (const file of ['index.html', 'family.css', 'game.css', 'demo.js']) await cp(`demo/${file}`, `site/${file}`);
+await cp('dist', 'site/dist', { recursive: true });
+const html = await readFile('site/index.html', 'utf8');
+await writeFile('site/index.html', html.replace('src="demo.js"', 'src="demo.js"'));
+await writeFile('site/api.css', API_CSS);
+await writeFile('site/api.json', JSON.stringify(apiOf(), null, 2));
+await writeFile('site/api.html', packagePage(apiPage({ id: 'kazu', name: 'Houseki', icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y="26" font-size="27">◆</text></svg>' })));
+console.log('Built the local Falling Triplets site in site/.');
