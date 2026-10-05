@@ -87,7 +87,7 @@ Copy this section into a work assignment, setting only the bracketed fields. Rea
 >
 > Use the family shell/styles and permanent colour symbols. Support keyboard, touch, English/Japanese, both page themes and reduced motion. Keep settings out of the player's main action flow. Treat measured responsiveness and human playtesting as required evidence; do not describe an unreviewed prototype as commercial-quality.
 >
-> Keep project prose, code comments, authorship and release metadata owner-authored in presentation, without provider/tool/session acknowledgements. Preserve legitimate source/asset licences and notices. Never invent an asset licence or reviewed translation status.
+> Use John Morris as the project author in documentation and release metadata. Preserve legitimate source/asset licences and notices. Never invent an asset licence or reviewed translation status.
 >
 > Finish the requested milestone in reviewable commits. Give a concise completion report: implemented scope, decisive test results, playable URL or local start instruction, screenshots, commit ID, known defects and any unresolved design decisions. Do not publish or integrate into the site unless that step has been assigned.
 
@@ -123,3 +123,7 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Stored tools
+
+Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.

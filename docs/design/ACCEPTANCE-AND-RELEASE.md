@@ -67,7 +67,7 @@ For level budgets, record completion and retry observations across reviewers. Ea
 - [ ] `LICENSE`, `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, changelog and asset ledger exist. Shared community text is byte-identical to the canonical owner copies, with drift tests.
 - [ ] Demo family CSS/template are shared canonical files with pinned hashes. New family registration is coordinated rather than a divergent header/footer. Theme and language changes preserve the game.
 - [ ] Presentation gate runs in standard `check` and release CI; deliberately omitting an API description/image/license field fails it. Ensure CI badge points to a real active workflow.
-- [ ] Source, comments, tests, docs, demo, commits and release metadata use owner authorship without provider/tool/session acknowledgements. Preserve legitimate third-party asset/shared-file copyright notices.
+- [ ] Documentation and release metadata correctly identify John Morris as the project author. Preserve legitimate third-party asset/shared-file copyright notices.
 
 ## Release procedure
 
@@ -116,3 +116,11 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Portable verification gate
+
+Keep every required test fixture inside the repository. Verify an archive of the committed revision, not only the development workspace: tests, type checking and site generation must succeed without sibling projects, personal paths or uncommitted files. The installed tarball check separately verifies all declared entry points. A local pass that depends on external fixture files is incomplete.
+
+### Play surface interaction
+
+Pieces, glyphs, pebbles, board labels, previews and game controls must disable text selection (including Safari) and native dragging. Documentation and API prose remain selectable. Verify pointer dragging cannot highlight symbols or labels. Falling games support one-hand arrows (Up cycles/rotates clockwise) and physical keypad codes: 4/6 move, 7/9 reverse/forward rotation, 5 soft drop, 2 hard drop or Relaxed placement. Keypad controls work with Num Lock on or off; form fields retain native keyboard behavior. New/restarted games focus the play surface without scrolling. Native key repeat cannot multiply rotation or hard-drop actions.

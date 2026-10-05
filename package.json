@@ -1,0 +1,98 @@
+{
+  "name": "@johnmorrisdotca/houseki",
+  "version": "0.1.0",
+  "description": "Original immutable gem-matching game engines and accessible English/Japanese play.",
+  "type": "module",
+  "author": "John Morris",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnmorrisdotca/houseki.git"
+  },
+  "homepage": "https://johnmorrisdotca.github.io/houseki/",
+  "bugs": {
+    "url": "https://github.com/johnmorrisdotca/houseki/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./falling-triplets": {
+      "types": "./dist/falling-triplets.d.ts",
+      "import": "./dist/falling-triplets.js",
+      "default": "./dist/falling-triplets.js"
+    },
+    "./colour-chains": {
+      "types": "./dist/colour-chains.d.ts",
+      "import": "./dist/colour-chains.js",
+      "default": "./dist/colour-chains.js"
+    },
+    "./stone-collapse": {
+      "types": "./dist/stone-collapse.d.ts",
+      "import": "./dist/stone-collapse.js",
+      "default": "./dist/stone-collapse.js"
+    },
+    "./gem-swap": {
+      "types": "./dist/gem-swap.d.ts",
+      "import": "./dist/gem-swap.js",
+      "default": "./dist/gem-swap.js"
+    },
+    "./nature": {
+      "types": "./dist/nature.d.ts",
+      "import": "./dist/nature.js",
+      "default": "./dist/nature.js"
+    },
+    "./magnetic-blocks": {
+      "types": "./dist/magnetic-blocks.d.ts",
+      "import": "./dist/magnetic-blocks.js",
+      "default": "./dist/magnetic-blocks.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "site": "npm run build && node scripts/site.mjs",
+    "demo": "npm run site && node scripts/serve.mjs",
+    "test:browser": "npm run site && node test/browser/tools.mjs",
+    "check:package": "npm run build && node scripts/check-package.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@playwright/test": "^1.58.2"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "keywords": [
+    "falling-triplets",
+    "match-three",
+    "puzzle-game",
+    "immutable",
+    "typescript",
+    "zero-dependencies",
+    "accessible",
+    "touch",
+    "keyboard",
+    "japanese",
+    "stone-collapse",
+    "colour-chains",
+    "gem-swap",
+    "match-3",
+    "gravity",
+    "cascade",
+    "puzzle",
+    "game-engine"
+  ]
+}

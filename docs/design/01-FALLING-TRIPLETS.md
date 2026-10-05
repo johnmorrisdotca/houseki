@@ -10,7 +10,7 @@ Genre reference: [SEGA's Columns family](https://segaages.sega.com/project/colum
 
 ## Board, pieces and setup
 
-Standard well: **6 columns × 13 visible rows**, plus three hidden rows. Presets: narrow 5×13, standard 6×13, wide 8×13 and tall 6×17. Custom dimensions follow the shared validation. Default five colours; optional four or six colours are separate score categories. No masks, obstacles or decorative well shapes in v1.
+Standard well: **8 columns × 13 visible rows**, plus three hidden rows. Presets: compact 5×13, narrow 6×13, standard 8×13, wide 10×13, extra wide 12×13 and tall 8×17. Daily retains a fixed 6×13 well. Custom dimensions follow the shared validation. Default five colours; optional four or six colours are separate score categories. No masks, obstacles or decorative well shapes in v1.
 
 Empty start. A piece is three separately identified coloured gems ordered top/middle/bottom, initially occupying `(spawnX,-3)`, `(spawnX,-2)`, `(spawnX,-1)`, where `spawnX=floor((width-1)/2)`. The active piece is not part of the settled board. The shuffled bag and three-piece preview follow the shared architecture; preview consumption is deterministic. No hold-piece mechanic or wildcard in v1.
 
@@ -132,3 +132,11 @@ Removal snapshots contain holes. Compaction happens at the gravity boundary and 
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Portable verification gate
+
+Keep every required test fixture inside the repository. Verify an archive of the committed revision, not only the development workspace: tests, type checking and site generation must succeed without sibling projects, personal paths or uncommitted files. The installed tarball check separately verifies all declared entry points. A local pass that depends on external fixture files is incomplete.
+
+### Reviewed preset widths
+
+Compact is 5×13; Narrow is 6×13; Standard and the casual default are 8×13; Wide is 10×13; Extra wide is 12×13; Tall is 8×17. The Daily challenge retains its fixed 6×13 well for reproducibility and is independent of the casual default. Authored campaign levels retain their own declared dimensions.

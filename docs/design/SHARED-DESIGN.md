@@ -126,3 +126,43 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Play surface interaction
+
+Pieces, glyphs, pebbles, board labels, previews and game controls must disable text selection (including Safari) and native dragging. Documentation and API prose remain selectable. Verify pointer dragging cannot highlight symbols or labels. Falling games support one-hand arrows (Up cycles/rotates clockwise) and physical keypad codes: 4/6 move, 7/9 reverse/forward rotation, 5 soft drop, 2 hard drop or Relaxed placement. Keypad controls work with Num Lock on or off; form fields retain native keyboard behavior. New/restarted games focus the play surface without scrolling. Native key repeat cannot multiply rotation or hard-drop actions.
+
+
+## Material settling requirement
+
+Ordinary falling and gravity resolution should use subtle accelerating descent and a tiny contact recovery, without changing logical rules or delaying input. Follow the material-settling section of [Bounce and nature modes](BOUNCE-AND-NATURE.md), including reduced-motion behaviour. This polish applies independently of optional nature modes.
+
+
+## Shared animation setting
+
+Owner-approved requirement, 2026-10-05: material settling applies to all four games—Falling Triplets, Stone Collapse, Colour Chains and Gem Swap. Enable it by default and expose a shared player-facing Animation On/Off control. For full-board games, apply it to gravity and refill movement; for falling games, also apply it to falling and landing movement.
+
+Use one presentation option, `animations: boolean`, default `true`, shared by the demo adapters. Persist the user's preference locally across games and reloads. It is not an engine rule, campaign difficulty parameter, replay action or assistance flag. Explicit Off renders authoritative final cells immediately and removes movement, bounce, squash and decorative transition effects without changing input or resolution timing. Respect system reduced-motion preferences even when the setting is On; render final positions with a brief static contact indicator. Provide equivalent English/Japanese labels and keyboard-accessible controls.
+
+Verify default On, explicit Off, cross-game preference persistence, reload, reduced-motion suppression and identical engine outcomes in both settings. This is an implementation requirement; documented support must not be described as shipped until the actual players expose and honour the control.
+
+
+## Ending variety and visible objective progress
+
+Owner-approved requirement, 2026-10-05: offer a variety of finite objectives and open-ended play where the rules support them. Authored challenges can use score targets, clear counts, chain goals or clearing the board within move/piece limits. Relaxed play is untimed; Arcade offers continuous score play where meaningful. Time-limited variants are optional separately labelled rulesets, not an implicit timer on every numbered level. Advertise only modes implemented by that game. Unsupported objective types require an explicit engine extension and tests before appearing in the menu.
+
+Every measurable finite goal must display its exact target, current value and a labelled progress bar, for example “420 / 1,000 points” or “18 / 30 gems cleared.” Clamp the visual fill to 0–100%, but retain the real numeric value when a score exceeds its goal. Derive progress from authoritative engine state and update it after committed resolution; never substitute cosmetic progress. A chain-depth goal reports best qualifying chain rather than adding unrelated chains together. A clear-board goal reports remaining stones and clears since the authored initial state; replenishing games must use another meaningful goal unless refill is explicitly disabled. Multi-part objectives show separate labelled progress indicators and explain whether all goals are required.
+
+Show remaining moves, pieces or time separately from achievement progress. Time-limited play uses a clearly labelled countdown and remaining-time bar rather than presenting elapsed time as success. Endless play shows score and best chain without a fabricated completion bar. Explain victory and failure conditions before starting, then show a clear result when the engine ends the run.
+
+The progress bar is an indicator, not a draggable slider. Include an accessible name and numeric minimum, maximum and current value, visible text, sufficient contrast and non-colour status cues. Avoid noisy screen-reader announcements every animation frame; announce meaningful thresholds and final results. Provide English/Japanese wording, a compact phone layout, and reduced-motion/static updates.
+
+Verification: initial zero progress, partial progress, exact completion, overshoot, exhaustion before goal, win on the final permitted action, undo/restart restoration where available, saves, multiple goals and endless-mode absence of a completion bar. Status: shared requirement; per-game support is tracked during implementation.
+
+
+## Oversized board access
+
+Owner-approved requirement, 2026-10-05: offer unusually tall or large boards as an optional bonus feature wherever the game supports them. The standalone package and demos unlock these by default. Hosts can optionally lock the feature through a presentation-level availability setting and their own unlock policy; do not require progression, payment, login or a network service in the library. A locked choice explains its host-supplied unlock requirement. Keep existing saves playable or exportable if the host later changes access policy.
+
+Distinguish extra-wide boards from deep boards and genuinely large two-dimensional maps. Large presets require explicit per-game engine bounds, resource checks and tested rules; do not bypass current validation or claim every game already supports them. Deep boards intentionally scroll, retain position during updates and provide a board overview, keyboard navigation and visible score/objective/tool controls. Wide boards can scale within usable targets or offer navigation when necessary; do not shrink phone controls into unusable targets. Clearly label oversized presets as bonus variants before starting.
+
+Host access configuration does not alter board rules, deterministic generation, difficulty or replay. Store actual dimensions and rules in the run, independently of display labels. Test default access, host-locked access, unlock transitions, existing-save recovery, large-board input/scrolling and whole-board effects outside the current viewport. Implement an initial bounded preset before extending maximum sizes further. Status: specified; availability and playable oversized presets must be implemented and verified per game.

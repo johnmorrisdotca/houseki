@@ -43,7 +43,7 @@ Use the current owner-maintained [Kyuubu contribution rules](https://github.com/
 
 At release, use the same API documentation, screenshots, badges, MIT licensing, keywords and community-file checks as the established packages. Original source, original layouts and owner-approved original or verified CC0/public-domain assets only. Do not port another game's source or reuse its artwork, music, characters or level collections.
 
-Project text and authorship metadata belong to John Morris. Keep provider names, tool names, session references and automated authorship acknowledgements out of project artifacts and release metadata.
+Project text and authorship metadata belong to John Morris.
 
 ## Design verification record
 
@@ -69,3 +69,9 @@ A correction assignment contains the concrete defect, expected behaviour and reg
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md), [Magnetic Blocks and Floor Switch](MAGNETIC-BLOCKS.md), and [Earthquake, Lightning and deep boards](ENVIRONMENTAL-MODES.md). These documents describe proposed rules; they do not imply released support.
+
+[Magnetic Pieces](MAGNETIC-PIECES.md) defines rare queue/layout distribution, clear marking and bounded grid attraction separately from the floor mechanic.
+
+[Bounce and nature modes](BOUNCE-AND-NATURE.md) specifies controlled placement versus rebound and proposes naming choices. Working, tested development checkpoints should be committed frequently; unfinished feel review remains explicitly recorded.

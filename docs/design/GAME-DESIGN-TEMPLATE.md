@@ -137,3 +137,15 @@ Removal snapshots contain holes. Compaction happens at the gravity boundary and 
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Portable verification gate
+
+Keep every required test fixture inside the repository. Verify an archive of the committed revision, not only the development workspace: tests, type checking and site generation must succeed without sibling projects, personal paths or uncommitted files. The installed tarball check separately verifies all declared entry points. A local pass that depends on external fixture files is incomplete.
+
+### Play surface interaction
+
+Pieces, glyphs, pebbles, board labels, previews and game controls must disable text selection (including Safari) and native dragging. Documentation and API prose remain selectable. Verify pointer dragging cannot highlight symbols or labels. Falling games support one-hand arrows (Up cycles/rotates clockwise) and physical keypad codes: 4/6 move, 7/9 reverse/forward rotation, 5 soft drop, 2 hard drop or Relaxed placement. Keypad controls work with Num Lock on or off; form fields retain native keyboard behavior. New/restarted games focus the play surface without scrolling. Native key repeat cannot multiply rotation or hard-drop actions.
+
+### Stored tools
+
+Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.

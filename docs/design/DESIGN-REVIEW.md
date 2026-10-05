@@ -53,3 +53,13 @@ The corrected Falling Triplets foundation passes 14 package tests and TypeScript
 ### Campaign policy correction
 
 The owner clarified that campaigns need intentional complete counts, including existing 200/256 patterns, rather than a mandatory 100. The initial 30-board specification was chosen without examining the existing grader. Revision 1.3 now documents original generation, independent witnesses, deduplication, player-facing measures, deterministic grading before numbering, stable IDs and tested easy-to-hard order. Existing Tsunagi and Mahjong patterns were read directly from the active site's source without modifying it.
+
+### Incremental PR and portable CI verification
+
+The owner requested a first playable increment. Draft PR #1 contains reviewed Falling Triplets, Colour Chains core and Stone Collapse modes/persistence. The first hosted checks exposed a test fixture referenced from the development workspace instead of the repository. That reference was corrected to the committed design fixtures. A clean archive of commit 88edffd now passes all 50 tests and site generation. All four designs and the reusable template include a clean-checkout portability gate. Live Chromium also passed the first demo's cycle/place/restart and API page smoke check. Campaigns, refined players and remaining modes are still pending.
+
+## Stored-tool addition
+
+The tray specification separates run-local inventory from on-board special gems. Preview/cancel is free; explicit confirmation consumes one move and one charge, and marks assistance. Ordinary clear rewards have a fixed threshold, rotation and cap; tool cascades cannot reward themselves. Two independent mechanics milestones and a shared player/browser check precede approval. Daily and existing authored tool-free challenges keep their original rules.
+
+The one-hand and physical-keypad controls, non-selectable play surface, and 5/6/8/10/12-column presets were verified in the live Triplets player. Extra-wide saves replay canonically; board bounds and preset tests pass. Full commercial feel and physical-device review remain pending.
