@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createGame, createChallenge, restartGame, applyAction, advanceTicks, decodeGame, encodeGame, findMatches, landingY, legalActions, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions, nextUint32 } from '../dist/falling-triplets.js';
 
-const fixtureDoc = JSON.parse(await readFile(new URL('../../../../outputs/gem-games-design/reference/rules-fixtures.json', import.meta.url), 'utf8'));
+const fixtureDoc = JSON.parse(await readFile(new URL('../docs/design/reference/rules-fixtures.json', import.meta.url), 'utf8'));
 const tripletFixtures = fixtureDoc.cases.filter(item => item.id.startsWith('triplets-'));
 const code = { R: 'red', B: 'blue', G: 'green', Y: 'gold', P: 'purple', T: 'teal', '.': null };
 function fixtureBoard(rows) { return rows.flatMap(row => [...row].map(char => char === '.' ? null : { id: row.length * 0 + 1, colour: code[char] })); }

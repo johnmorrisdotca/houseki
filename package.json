@@ -25,6 +25,11 @@
       "types": "./dist/colour-chains.d.ts",
       "import": "./dist/colour-chains.js",
       "default": "./dist/colour-chains.js"
+    },
+    "./stone-collapse": {
+      "types": "./dist/stone-collapse.d.ts",
+      "import": "./dist/stone-collapse.js",
+      "default": "./dist/stone-collapse.js"
     }
   },
   "files": [
