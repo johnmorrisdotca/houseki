@@ -39,7 +39,7 @@ Owner-approved on 2026-10-05: Houseki remains the package and gem collection nam
 
 ## Material settling for ordinary play
 
-Owner-requested presentation requirement, 2026-10-05: all falling and gravity-settling pieces should convey a small amount of weight, even with Shizen and Arashi disabled. This is presentation polish, separate from the optional gameplay rebound.
+Owner-requested presentation requirement, 2026-10-05: all four games use material-settling animation, enabled by default and configurable Off through the shared Animation setting. All falling and gravity-settling pieces should convey a small amount of weight when animation is enabled, even with Shizen and Arashi disabled. This is presentation polish, separate from the optional gameplay rebound.
 
 Animate displacement from the last observed cell to the next observed cell. Use gentle acceleration on descent, then a short deceleration/compression on contact. Start tuning with a 100–180 ms ordinary settlement and a 40–70 ms recovery, within the existing logical resolution window; scale travel duration within a cap rather than making tall drops wait indefinitely. A tiny rebound of approximately 1–2 px, capped at 4% of cell size, and subtle vertical squash are sufficient. Do not add sideways drift or rotation to ordinary settling. Hard drops can use a stronger contact accent while remaining immediate and responsive to input.
 

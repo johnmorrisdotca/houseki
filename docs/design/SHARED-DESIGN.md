@@ -135,3 +135,12 @@ Pieces, glyphs, pebbles, board labels, previews and game controls must disable t
 ## Material settling requirement
 
 Ordinary falling and gravity resolution should use subtle accelerating descent and a tiny contact recovery, without changing logical rules or delaying input. Follow the material-settling section of [Bounce and nature modes](BOUNCE-AND-NATURE.md), including reduced-motion behaviour. This polish applies independently of optional nature modes.
+
+
+## Shared animation setting
+
+Owner-approved requirement, 2026-10-05: material settling applies to all four games—Falling Triplets, Stone Collapse, Colour Chains and Gem Swap. Enable it by default and expose a shared player-facing Animation On/Off control. For full-board games, apply it to gravity and refill movement; for falling games, also apply it to falling and landing movement.
+
+Use one presentation option, `animations: boolean`, default `true`, shared by the demo adapters. Persist the user's preference locally across games and reloads. It is not an engine rule, campaign difficulty parameter, replay action or assistance flag. Explicit Off renders authoritative final cells immediately and removes movement, bounce, squash and decorative transition effects without changing input or resolution timing. Respect system reduced-motion preferences even when the setting is On; render final positions with a brief static contact indicator. Provide equivalent English/Japanese labels and keyboard-accessible controls.
+
+Verify default On, explicit Off, cross-game preference persistence, reload, reduced-motion suppression and identical engine outcomes in both settings. This is an implementation requirement; documented support must not be described as shipped until the actual players expose and honour the control.
