@@ -1,7 +1,7 @@
 import { compactBoard, findMatches } from './match.js';
 import { drawBag, nextInt, seedState } from './random.js';
 import type { Action, ChallengeOptions, Colour, CreateOptions, GameEvent, GameState, Gem, Mode, Piece, Settings, Transition, Triplet } from './types.js';
-const PRESETS = { narrow: [5, 13], standard: [6, 13], wide: [8, 13], tall: [6, 17] } as const;
+const PRESETS = { compact: [5, 13], extraWide: [12, 13], narrow: [6, 13], standard: [8, 13], wide: [10, 13], tall: [8, 17] } as const;
 const RULES = 'triplets-1' as const;
 const HIDDEN = 3;
 const emptyTransition = (state: GameState, reason: string): Transition => ({ state, events: [], accepted: false, reason });
@@ -33,8 +33,8 @@ function advanceBag(state: GameState): readonly [readonly Colour[], number, read
 /** Creates a deterministic empty game with an active piece and three-piece preview. */
 export function createGame(options: CreateOptions = {}): GameState {
   if (options.preset !== undefined && !Object.hasOwn(PRESETS, options.preset)) throw new RangeError('Unsupported board preset');
-  const preset = PRESETS[options.preset ?? 'standard']; const width = options.width ?? preset[0]; const height = options.height ?? preset[1];
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 10 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–10 columns by 12–20 visible rows, with at most 240 cells');
+  const preset = PRESETS[options.preset ?? (options.mode === 'daily' ? 'narrow' : 'standard')]; const width = options.width ?? preset[0]; const height = options.height ?? preset[1];
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 12 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–12 columns by 12–20 visible rows, with at most 240 cells');
   const requestedMode = (options as { mode?: string }).mode ?? 'relaxed'; if (!['relaxed', 'arcade', 'daily', 'challenge'].includes(requestedMode)) throw new RangeError('Unsupported mode');
   if (requestedMode === 'challenge') throw new RangeError('Use createChallenge with a validated starting board and finite queue');
   const mode = requestedMode as Exclude<Mode, 'challenge'>;
@@ -44,7 +44,7 @@ export function createGame(options: CreateOptions = {}): GameState {
     const timestamp = /^\d{4}-\d{2}-\d{2}$/.test(seed) ? Date.parse(`${seed}T00:00:00Z`) : Number.NaN;
     if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString().slice(0, 10) !== seed) throw new RangeError('Daily seed must be a UTC YYYY-MM-DD date supplied by the host');
   }
-  if (mode === 'daily' && (width !== 6 || height !== 13 || (options.colourCount ?? 5) !== 5 || (options.pieceLimit !== undefined && options.pieceLimit !== 60))) throw new RangeError('Daily uses the standard 6×13 well, five colours, and 60 pieces');
+  if (mode === 'daily' && (width !== 6 || height !== 13 || (options.colourCount ?? 5) !== 5 || (options.pieceLimit !== undefined && options.pieceLimit !== 60))) throw new RangeError('Daily uses the fixed 6×13 well, five colours, and 60 pieces');
   const colourCount = options.colourCount ?? 5; const pieceLimit = mode === 'daily' ? 60 : options.pieceLimit;
   if (pieceLimit !== undefined && (!Number.isInteger(pieceLimit) || pieceLimit < 1 || pieceLimit > 60)) throw new RangeError('Piece limit must be an integer from 1 to 60');
   const settings: Settings = { mode, width, height, colourCount, seed, ...(pieceLimit === undefined ? {} : { pieceLimit }) };
@@ -58,7 +58,7 @@ const VALID_COLOURS = new Set(['red', 'blue', 'green', 'gold', 'purple', 'teal']
 /** Creates a challenge after validating its authored board, finite queue, goal, and witness. */
 export function createChallenge(options: ChallengeOptions): GameState {
   const width = options.width ?? 6; const height = options.height ?? 13; const colourCount = options.colourCount ?? 5;
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 10 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–10 columns by 12–20 visible rows, with at most 240 cells');
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 12 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–12 columns by 12–20 visible rows, with at most 240 cells');
   if (![4, 5, 6].includes(colourCount)) throw new RangeError('Colour count must be 4, 5, or 6');
   const seed = options.seed ?? 'houseki-challenge'; if (typeof seed !== 'string' || seed.length < 1 || seed.length > 128) throw new RangeError('Challenge seed must contain 1–128 characters');
   if (!Array.isArray(options.board) || options.board.length !== width * height) throw new RangeError('Challenge board must contain exactly width × height visible cells');

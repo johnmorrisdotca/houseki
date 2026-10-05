@@ -2,12 +2,15 @@ import { createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
-  en: { settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · Z / X cycle · ↓ soft drop · Space place/drop · Escape pause', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
-  ja: { settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · Z / X 色を入れ替え · ↓ 落下 · Space 置く/落とす · Escape 一時停止', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
+  en: { settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · ↑ cycle · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
+  ja: { settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-falling-triplets-save'; const preferenceKey = 'houseki-ui';
 let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
+const pendingReleases = new Set();
+function beginHold(action) { pendingReleases.delete(action); input = setHeldAction(input, action, true); }
+function endHold(action) { if (input.held[action] === 0) pendingReleases.add(action); else input = setHeldAction(input, action, false); }
 function readPreferences() {
   try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); lang = pref.lang === 'ja' ? 'ja' : 'en'; if (pref.theme) document.documentElement.dataset.theme = pref.theme; if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
   catch { /* Play starts normally when preferences are unavailable. */ }
@@ -16,12 +19,12 @@ function writePreferences() {
   try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, theme: document.documentElement.dataset.theme, material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Preferences are optional. */ }
 }
-function getOptions() { return { mode: $('#mode').value, preset: $('#preset').value, colourCount: Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
+function getOptions() { return { mode: $('#mode').value, preset: $('#mode').value === 'daily' ? 'narrow' : $('#preset').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
 function newGame(restart = false) {
   if (!restart || !startOptions.seed) startOptions = getOptions();
   game = createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
-  render(); save();
+  heldKeys.clear(); pendingReleases.clear(); render(); save(); $('.game-screen').focus({ preventScroll: true });
 }
 function gemMarkup(gem, extra = '') { return `<span class="gem ${gem.colour} ${extra}" aria-label="${gem.colour}">${symbols[gem.colour]}</span>`; }
 function render() {
@@ -68,6 +71,8 @@ function blip(chain) { try { const context = new AudioContext(); const oscillato
 function simulationTick() {
   let endedPiece = false;
   let actions; [actions, input] = actionsForTick(input);
+  for (const action of pendingReleases) input = setHeldAction(input, action, false);
+  pendingReleases.clear();
   for (const item of actions) {
     const wasFalling = game.phase === 'falling'; const oldPieces = game.completedPieces; playAction(item.kind);
     if ((wasFalling && game.phase !== 'falling') || game.completedPieces > oldPieces) endedPiece = true;
@@ -83,8 +88,8 @@ function animate(timestamp) {
   requestAnimationFrame(animate);
 }
 function bindHeld(button, action) {
-  button.addEventListener('pointerdown', event => { event.preventDefault(); button.setPointerCapture?.(event.pointerId); input = setHeldAction(input, action, true); button.focus(); });
-  const release = () => { input = setHeldAction(input, action, false); };
+  button.addEventListener('pointerdown', event => { event.preventDefault(); button.setPointerCapture?.(event.pointerId); beginHold(action); button.focus(); });
+  const release = () => endHold(action);
   button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release); button.addEventListener('lostpointercapture', release);
 }
 document.querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]').forEach(button => bindHeld(button, button.dataset.action));
@@ -96,20 +101,28 @@ $('#theme').addEventListener('click', () => { document.documentElement.dataset.t
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
 $('#sound').addEventListener('change', () => writePreferences());
 document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang; render(); writePreferences(); }));
+const keypadKeys = { Numpad4: 'arrowleft', Numpad6: 'arrowright', Numpad7: 'z', Numpad9: 'x', Numpad5: 'arrowdown', Numpad2: 'drop' };
 document.addEventListener('keydown', event => {
   const target = event.target instanceof HTMLElement ? event.target : null;
   const withinGame = target?.closest('.game-screen') || document.activeElement === document.body;
-  if (!withinGame || target?.closest('input,select,textarea')) return;
-  const key = event.key.toLowerCase(); const holds = { arrowleft: 'left', arrowright: 'right', arrowdown: 'soft-drop' };
-  if (holds[key]) { if (!heldKeys.has(key)) { event.preventDefault(); heldKeys.set(key, holds[key]); input = setHeldAction(input, holds[key], true); } return; }
-  if (event.repeat) return;
+  if (!withinGame || target?.closest('input,select,textarea,[contenteditable]:not([contenteditable="false"])')) return;
+  const key = keypadKeys[event.code] ?? event.key.toLowerCase();
+  const holds = { arrowleft: 'left', arrowright: 'right', arrowdown: 'soft-drop' };
+  if (holds[key]) { event.preventDefault(); if (!heldKeys.has(event.code)) { heldKeys.set(event.code, holds[key]); beginHold(holds[key]); } return; }
   if (key === ' ' && target?.closest('button')) return;
-  if (key === 'escape') { event.preventDefault(); if (game.phase === 'paused') resumeCountdown(); else input = queueInputEdge(input, { kind: 'pause' }); return; }
-  const map = { x: 'cycle-forward', arrowup: 'cycle-forward', z: 'cycle-backward', ' ': game.settings.mode === 'relaxed' ? 'place' : 'hard-drop' };
-  if (map[key]) { event.preventDefault(); input = queueInputEdge(input, { kind: map[key] }); }
+  const map = { x: 'cycle-forward', arrowup: 'cycle-forward', z: 'cycle-backward', drop: game.settings.mode === 'relaxed' ? 'place' : 'hard-drop', ' ': game.settings.mode === 'relaxed' ? 'place' : 'hard-drop' };
+  if (key !== 'escape' && !map[key]) return;
+  event.preventDefault();
+  if (event.repeat) return;
+  if (key === 'escape') { if (game.phase === 'paused') resumeCountdown(); else input = queueInputEdge(input, { kind: 'pause' }); return; }
+  input = queueInputEdge(input, { kind: map[key] });
 });
-document.addEventListener('keyup', event => { const key = event.key.toLowerCase(); const action = heldKeys.get(key); if (action) { input = setHeldAction(input, action, false); heldKeys.delete(key); } });
-function releaseInputs() { input = releaseAllActions(input); heldKeys.clear(); }
+document.addEventListener('keyup', event => {
+  const action = heldKeys.get(event.code);
+  if (action) { heldKeys.delete(event.code); if (![...heldKeys.values()].includes(action)) endHold(action); }
+});
+$('.game-screen').addEventListener('dragstart', event => event.preventDefault());
+function releaseInputs() { input = releaseAllActions(input); heldKeys.clear(); pendingReleases.clear(); }
 window.addEventListener('blur', () => { releaseInputs(); if (game?.settings.mode !== 'relaxed' && game?.phase !== 'paused') playAction('pause'); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) { releaseInputs(); if (game?.settings.mode !== 'relaxed' && game?.phase !== 'paused') playAction('pause'); } });
 $('.resume').addEventListener('click', resumeCountdown);

@@ -132,3 +132,11 @@ Removal snapshots contain holes. Compaction happens at the gravity boundary and 
 ## Campaign generation and ordering policy
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts such as 100/200 or structured 128/256, not arbitrary unfinished totals; independently witnessed original boards; deterministic player-facing grading before numbering; simple openings and hardest endings; stable content IDs; deduplication and reproducible progression tests. Houseki targets 100 per game, with a reviewed smaller or larger complete count allowed when justified. Three separate tutorials do not pad the campaign count.
+
+### Portable verification gate
+
+Keep every required test fixture inside the repository. Verify an archive of the committed revision, not only the development workspace: tests, type checking and site generation must succeed without sibling projects, personal paths or uncommitted files. The installed tarball check separately verifies all declared entry points. A local pass that depends on external fixture files is incomplete.
+
+### Reviewed preset widths
+
+Compact is 5×13; Narrow is 6×13; Standard and the casual default are 8×13; Wide is 10×13; Extra wide is 12×13; Tall is 8×17. The Daily challenge retains its fixed 6×13 well for reproducibility and is independent of the casual default. Authored campaign levels retain their own declared dimensions.
