@@ -67,7 +67,7 @@ For level budgets, record completion and retry observations across reviewers. Ea
 - [ ] `LICENSE`, `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, changelog and asset ledger exist. Shared community text is byte-identical to the canonical owner copies, with drift tests.
 - [ ] Demo family CSS/template are shared canonical files with pinned hashes. New family registration is coordinated rather than a divergent header/footer. Theme and language changes preserve the game.
 - [ ] Presentation gate runs in standard `check` and release CI; deliberately omitting an API description/image/license field fails it. Ensure CI badge points to a real active workflow.
-- [ ] Source, comments, tests, docs, demo, commits and release metadata use owner authorship without provider/tool/session acknowledgements. Preserve legitimate third-party asset/shared-file copyright notices.
+- [ ] Documentation and release metadata correctly identify John Morris as the project author. Preserve legitimate third-party asset/shared-file copyright notices.
 
 ## Release procedure
 

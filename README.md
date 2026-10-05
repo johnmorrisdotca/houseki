@@ -13,6 +13,8 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 | Colour Chains | Rotate falling pairs; build connected groups and cascading chains |
 | Gem Swap | Swap neighbours; create and combine specials to complete objectives |
 
+An optional experimental `magnetic-blocks` entry point provides bonded 2×2 squares, magnetic floor schedules, a one-use Floor Switch and impact drops. It has no graded campaign yet. The `nature` entry point exposes deterministic attraction, rebound and environment utilities.
+
 ![Falling Triplets demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/falling-triplets-desktop.png)
 
 ![Colour Chains demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/colour-chains-desktop.png)
@@ -25,7 +27,7 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 
 ## Design and progression
 
-The [design pack](docs/design/README.md) specifies rules, controls, materials, accessibility, generation, grading, persistence and acceptance checks. [Level generation](docs/design/LEVEL-GENERATION.md) follows a deliberate complete count and measured progression: generate and prove original boards, remove duplicates, grade player-facing decisions, then sort and number from easy to hard. Stable content IDs preserve saved progress across future ordering changes.
+The [design pack](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/README.md) specifies rules, controls, materials, accessibility, generation, grading, persistence and acceptance checks. [Level generation](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/LEVEL-GENERATION.md) follows a deliberate complete count and measured progression: generate and prove original boards, remove duplicates, grade player-facing decisions, then sort and number from easy to hard. Stable content IDs preserve saved progress across future ordering changes.
 
 The shared player uses the family's ivory, brass and felt palette, permanent colour symbols and configurable boards. Each set of three interactive lessons is separate from the graded campaign. Physical-device feel testing and fluent Japanese copy review are recorded independently from automated checks.
 
@@ -40,7 +42,7 @@ pnpm test
 pnpm demo
 ```
 
-The local demo instructions print its address. The first page plays Falling Triplets; `chains.html` plays Colour Chains; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. The campaigns contain 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty. Finite goals show progress and remaining pieces or moves. All players share the persisted default-on Animation setting and respect reduced motion. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions and [the implementation plan](docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
+The local demo instructions print its address. The first page plays Falling Triplets; `chains.html` plays Colour Chains; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. The campaigns contain 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty. Finite goals show progress and remaining pieces or moves. All players share the persisted default-on Animation setting and respect reduced motion. See [CONTRIBUTING.md](https://github.com/johnmorrisdotca/houseki/blob/main/CONTRIBUTING.md) for contribution conventions and [the implementation plan](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
 
 ## Engine example
 
@@ -59,11 +61,11 @@ The package exposes an entry point for each game. The generated API reference li
 
 ## Licence
 
-[MIT](LICENSE), copyright John Morris. Original game content and presentation are maintained in this repository. Shared family files preserve their existing copyright notices. Report vulnerabilities through [SECURITY.md](SECURITY.md).
+[MIT](LICENSE), copyright John Morris. Original game content and presentation are maintained in this repository. Shared family files preserve their existing copyright notices. Report vulnerabilities through [SECURITY.md](https://github.com/johnmorrisdotca/houseki/blob/main/SECURITY.md).
 
 ## Stored tools
 
-[Stored-tool rules](docs/design/STORED-TOOLS.md) distinguish inventory from special gems on the board. Gem Swap offers Bomb, Row clear and Colour clear; Stone Collapse offers Bomb and Pick. Select a tool and an occupied square, inspect the highlighted effect, then confirm or cancel. Ordinary clears earn capped inventory; using tools marks the run assisted. Daily and existing authored challenges keep their declared tool-free rules. Gem Swap also offers an optional earned [Black Hole](docs/design/BLACK-HOLE.md): consume nearby gems with a visibly shrinking capacity and bounded lifetime. Enable it before starting a casual board.
+[Stored-tool rules](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/STORED-TOOLS.md) distinguish inventory from special gems on the board. Gem Swap offers Bomb, Row clear and Colour clear; Stone Collapse offers Bomb and Pick. Select a tool and an occupied square, inspect the highlighted effect, then confirm or cancel. Ordinary clears earn capped inventory; using tools marks the run assisted. Daily and existing authored challenges keep their declared tool-free rules. Gem Swap also offers an optional earned [Black Hole](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/BLACK-HOLE.md): consume nearby gems with a visibly shrinking capacity and bounded lifetime. Enable it before starting a casual board.
 
 ## Package entry points
 

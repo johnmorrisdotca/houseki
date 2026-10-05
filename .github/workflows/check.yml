@@ -22,6 +22,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm check:package
       - run: pnpm site
       - run: pnpm exec playwright install --with-deps chromium
         if: matrix.node == 22

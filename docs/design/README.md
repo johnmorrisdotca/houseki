@@ -43,7 +43,7 @@ Use the current owner-maintained [Kyuubu contribution rules](https://github.com/
 
 At release, use the same API documentation, screenshots, badges, MIT licensing, keywords and community-file checks as the established packages. Original source, original layouts and owner-approved original or verified CC0/public-domain assets only. Do not port another game's source or reuse its artwork, music, characters or level collections.
 
-Project text and authorship metadata belong to John Morris. Keep provider names, tool names, session references and automated authorship acknowledgements out of project artifacts and release metadata.
+Project text and authorship metadata belong to John Morris.
 
 ## Design verification record
 

@@ -40,6 +40,16 @@
       "types": "./dist/gem-swap.d.ts",
       "import": "./dist/gem-swap.js",
       "default": "./dist/gem-swap.js"
+    },
+    "./nature": {
+      "types": "./dist/nature.d.ts",
+      "import": "./dist/nature.js",
+      "default": "./dist/nature.js"
+    },
+    "./magnetic-blocks": {
+      "types": "./dist/magnetic-blocks.d.ts",
+      "import": "./dist/magnetic-blocks.js",
+      "default": "./dist/magnetic-blocks.js"
     }
   },
   "files": [
