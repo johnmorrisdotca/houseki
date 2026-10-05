@@ -1,5 +1,7 @@
 import { compactBoard, findGroups } from './match.js';
 import { drawPair, seedState } from './random.js';
+import { applyMagneticPulse, createNatureState, markMagneticStones, previewPowerDrop } from '../nature.js';
+import type { PowerDropPreview } from '../nature/types.js';
 import { StoneChainsOptionsError, normalizeOptions } from './validation.js';
 import type { Action, Cell, Colour, CreateOptions, GameEvent, GameState, GameStatus, Gem, Landing, Orientation, Pair, Settings, Transition } from './types.js';
 
@@ -25,13 +27,41 @@ function grounded(state: GameState, pair: Pair): boolean { return !pairFits(stat
 function rigidLanding(state: GameState, initial: Pair): Pair {
   let pair = initial; while (pairFits(state, { ...pair, pivot: { x: pair.pivot.x, y: pair.pivot.y + 1 } })) pair = { ...pair, pivot: { x: pair.pivot.x, y: pair.pivot.y + 1 } }; return pair;
 }
-function makePair(state: Pick<GameState, 'settings' | 'completedPairs' | 'nextId'>, colours: readonly [Colour, Colour]): Pair {
+function makePair(state: Pick<GameState, 'settings' | 'completedPairs' | 'nextId'>, colours: readonly [Colour, Colour], magnets?: readonly [boolean, boolean]): Pair {
   const level = state.settings.mode === 'arcade' || state.settings.mode === 'daily' ? 1 + Math.floor(state.completedPairs / 30) : 1;
-  return { pivot: { x: Math.floor((state.settings.width - 1) / 2), y: -2 }, orientation: 'up', gems: [{ id: state.nextId, colour: colours[0] }, { id: state.nextId + 1, colour: colours[1] }], level, gravityTicks: 0, groundedTicks: 0, resetCount: 0, groundedStarted: false };
+  const gems: [Gem, Gem] = [{ id: state.nextId, colour: colours[0] }, { id: state.nextId + 1, colour: colours[1] }];
+  if (magnets?.[0]) gems[0] = { ...gems[0], magnetic: true };
+  if (magnets?.[1]) gems[1] = { ...gems[1], magnetic: true };
+  return { pivot: { x: Math.floor((state.settings.width - 1) / 2), y: -2 }, orientation: 'up', gems, level, gravityTicks: 0, groundedTicks: 0, resetCount: 0, groundedStarted: false };
+}
+function magneticFlags(seed: string, pairIndex: number, colours: readonly [Colour, Colour]): readonly [boolean, boolean] {
+  const board = createNatureState({ width: 2, height: 1, seed: `colour-chains|shizen|${seed}|pair-${pairIndex}`, cells: [{ id: 1, kind: 'stone', colour: colours[0] }, { id: 2, kind: 'stone', colour: colours[1] }] });
+  const marked = markMagneticStones(board, { probability: 0.08, maximum: 1 }).state;
+  return [marked.cells[0]?.magnetic === true, marked.cells[1]?.magnetic === true];
+}
+function natureBoard(state: GameState) {
+  const width = state.settings.width, height = state.settings.height;
+  const cells = state.board.slice(width * HIDDEN).map(gem => gem ? { id: gem.id, kind: 'stone' as const, colour: gem.colour, ...(gem.magnetic ? { magnetic: true } : {}) } : null);
+  return createNatureState({ width, height, seed: `colour-chains|shizen|${state.settings.seed}`, cells });
+}
+function naturePulse(state: GameState, board: readonly (Gem | null)[]): { board: readonly (Gem | null)[]; events: readonly GameEvent[] } {
+  const width = state.settings.width, height = state.settings.height;
+  const cells = board.slice(width * HIDDEN).map(gem => gem ? { id: gem.id, kind: 'stone' as const, colour: gem.colour, ...(gem.magnetic ? { magnetic: true } : {}) } : null);
+  const result = applyMagneticPulse(createNatureState({ width, height, seed: `colour-chains|shizen|${state.settings.seed}`, cells }));
+  if (!result.events.length) return { board, events: [] };
+  const updated = [...board];
+  for (let i = 0; i < result.state.cells.length; i++) {
+    const entity = result.state.cells[i];
+    updated[i + width * HIDDEN] = entity ? { id: entity.id, colour: entity.colour as Colour, ...(entity.magnetic ? { magnetic: true } : {}) } : null;
+  }
+  return { board: updated, events: result.events.map(event => ({ ...event })) };
 }
 function takeNextPair(state: GameState): readonly [GameState, readonly GameEvent[]] {
-  const colours = state.next[0]!; const draw = drawPair(state); const next = [...state.next.slice(1), draw[0]]; const active = makePair(state, colours);
-  let current: GameState = { ...state, active, next, bag: draw[1], randomState: draw[2], nextId: state.nextId + 2 };
+  const colours = state.next[0]!; const draw = drawPair(state); const next = [...state.next.slice(1), draw[0]];
+  const flags = state.settings.nature ? state.nextMagnetic?.[0] : undefined;
+  const active = makePair(state, colours, flags);
+  const nextMagnetic = state.settings.nature ? [...(state.nextMagnetic?.slice(1) ?? []), magneticFlags(state.settings.seed, state.completedPairs + 3, draw[0])] : undefined;
+  let current: GameState = { ...state, active, next, ...(nextMagnetic ? { nextMagnetic } : {}), bag: draw[1], randomState: draw[2], nextId: state.nextId + 2 };
   if (!pairFits(current, active)) current = { ...current, active: null, phase: 'lost', reason: 'spawn-collision' };
   return [current, [current.phase === 'lost' ? { type: 'run-ended', reason: 'spawn-collision' } : { type: 'pair-spawned', ids: active.gems.map(gem => gem.id), colours }]];
 }
@@ -79,15 +109,48 @@ function lock(state: GameState, pair: Pair, points = 0): Transition {
     if (occupied(state, cell.x, cell.y)) return { state: { ...state, phase: 'lost', active: null, reason: 'spawn-collision' }, events: [{ type: 'run-ended', reason: 'spawn-collision' }], accepted: true };
     board[indexOf(cell.x, cell.y, state.settings.width)] = pair.gems[i]!;
   }
-  const compacted = compactBoard(board, state.settings.width, state.settings.height + HIDDEN);
+  const compacted = state.settings.nature ? board : compactBoard(board, state.settings.width, state.settings.height + HIDDEN);
   const witness = state.settings.witness?.[state.completedPairs];
   const onPath = state.witnessIndex >= 0 && (!witness || witness.pivotX === pair.pivot.x && witness.orientation === pair.orientation);
   const witnessIndex = state.settings.mode === 'challenge' ? (onPath ? state.completedPairs + 1 : -1) : -1;
-  const next: GameState = { ...state, board: compacted, active: null, score: state.score + points, completedPairs: state.completedPairs + 1, waves: [], resolutionTick: 0, clearCells: [], gravityBoard: null, resolutionHadClear: false, resolutionLevel: pair.level, witnessIndex };
+  const next: GameState = { ...state, board: compacted, active: null, score: state.score + points, completedPairs: state.completedPairs + 1, waves: [], resolutionTick: 0, clearCells: [], gravityBoard: null, resolutionHadClear: false, resolutionLevel: pair.level, witnessIndex, ...(state.settings.nature ? { naturePulsePending: false } : {}) };
   const events: GameEvent[] = [{ type: 'pair-locked', cells: positions, ids: pair.gems.map(gem => gem.id), ...(points ? { points, score: next.score } : {}) }];
+  if (state.settings.nature) {
+    const groups = findGroups(board, state.settings.width, state.settings.height + HIDDEN);
+    if (groups.length) {
+      const cells = [...new Set(groups.flat())].sort((a, b) => a - b);
+      const marked: GameState = { ...next, naturePulsePending: true, phase: 'clear-mark', clearCells: cells };
+      return { state: marked, events: [...events, { type: 'match-marked', chain: 1, cells, ids: cells.map(index => board[index]!.id), groups }], accepted: true };
+    }
+    const pulse = naturePulse(next, board);
+    const afterPulse = pulse.board;
+    const pulseGroups = findGroups(afterPulse, state.settings.width, state.settings.height + HIDDEN);
+    if (pulseGroups.length) {
+      const cells = [...new Set(pulseGroups.flat())].sort((a, b) => a - b);
+      const marked: GameState = { ...next, board: afterPulse, phase: 'clear-mark', clearCells: cells };
+      return { state: marked, events: [...events, ...pulse.events, { type: 'match-marked', chain: 1, cells, ids: cells.map(index => afterPulse[index]!.id), groups: pulseGroups }], accepted: true };
+    }
+    const settled = compactBoard(afterPulse, state.settings.width, state.settings.height + HIDDEN);
+    const movement = movedEntries(afterPulse, settled, state.settings.width);
+    if (movement.length) return { state: { ...next, board: afterPulse, phase: 'gravity', gravityBoard: settled }, events: [...events, ...pulse.events, { type: 'cells-fell', cells: movement, before: afterPulse, after: settled }], accepted: true };
+    const [resolved, waveEvents] = startWave({ ...next, board: settled }, 1);
+    return { state: resolved, events: [...events, ...pulse.events, ...waveEvents], accepted: true };
+  }
   const movement = movedEntries(board, compacted, state.settings.width);
   if (movement.length) return { state: { ...next, board, phase: 'gravity', gravityBoard: compacted }, events: [...events, { type: 'cells-fell', cells: movement, before: board, after: compacted }], accepted: true };
   const [resolved, waveEvents] = startWave({ ...next, board: compacted }, 1); return { state: resolved, events: [...events, ...waveEvents], accepted: true };
+}
+function rebound(state: GameState, pair: Pair) {
+  const landing = rigidLanding(state, pair); const nature = natureBoard(state);
+  const piece = [cellFor(landing, false), cellFor(landing, true)].map((cell, index) => ({
+    id: landing.gems[index]!.id, kind: 'stone' as const, colour: landing.gems[index]!.colour,
+    ...(landing.gems[index]!.magnetic ? { magnetic: true } : {}), x: cell.x, y: cell.y,
+  }));
+  if (piece.some(cell => cell.y < 0 || cell.y >= state.settings.height)) return null;
+  const direction = state.lastHorizontalDirection ?? (state.completedPairs % 2 === 0 ? 'left' : 'right');
+  const preview = previewPowerDrop(nature, { piece, pivotId: landing.gems[0].id, power: true, lastHorizontalDirection: direction });
+  const pivot = preview.finalCells.find(cell => cell.id === landing.gems[0].id)!;
+  return { pair: { ...landing, pivot: { x: pivot.x, y: pivot.y } }, preview };
 }
 function moved(state: GameState, action: 'left' | 'right' | 'down'): Transition {
   const pair = state.active!; const dx = action === 'left' ? -1 : action === 'right' ? 1 : 0; const dy = action === 'down' ? 1 : 0;
@@ -97,7 +160,7 @@ function moved(state: GameState, action: 'left' | 'right' | 'down'): Transition 
   const resetCount = pair.resetCount + (canReset ? 1 : 0);
   const groundedTicks = canReset ? 0 : pair.groundedTicks;
   const groundedStarted = canReset ? isGrounded : pair.groundedStarted;
-  return { state: { ...state, active: { ...nextPair, resetCount, groundedTicks, groundedStarted } }, events: [{ type: action === 'down' ? 'pair-soft-dropped' : 'pair-moved', action, from: pair.pivot, to: nextPair.pivot }], accepted: true };
+  return { state: { ...state, active: { ...nextPair, resetCount, groundedTicks, groundedStarted }, ...(state.settings.nature && (action === 'left' || action === 'right') ? { lastHorizontalDirection: action } : {}) }, events: [{ type: action === 'down' ? 'pair-soft-dropped' : 'pair-moved', action, from: pair.pivot, to: nextPair.pivot }], accepted: true };
 }
 function rotate(state: GameState, clockwise: boolean): Transition {
   const pair = state.active!; const oldIndex = ORIENTATIONS.indexOf(pair.orientation); const orientation = ORIENTATIONS[(oldIndex + (clockwise ? 1 : 3)) % 4]!;
@@ -138,8 +201,9 @@ function applyCore(state: GameState, action: Action): Transition {
       return lock(state, pair);
     case 'hard-drop': {
       if (state.settings.mode === 'relaxed') return emptyTransition(state, 'hard-drop-disabled');
-      const landing = rigidLanding(state, pair); const points = state.settings.mode === 'arcade' || state.settings.mode === 'daily' ? (landing.pivot.y - pair.pivot.y) * 2 : 0; const result = lock(state, landing, points);
-      return { ...result, events: [{ type: 'pair-dropped', from: pair.pivot, to: landing.pivot, points, score: state.score + points }, ...result.events] };
+      const normal = rigidLanding(state, pair); const reboundResult = state.settings.nature ? rebound(state, normal) : null;
+      const landing = reboundResult?.pair ?? normal; const points = state.settings.mode === 'arcade' || state.settings.mode === 'daily' ? (normal.pivot.y - pair.pivot.y) * 2 : 0; const result = lock(state, landing, points);
+      return { ...result, events: [{ type: 'pair-dropped', from: pair.pivot, to: landing.pivot, points, score: state.score + points }, ...(reboundResult ? [{ type: 'power-drop-landed', power: true, rebound: reboundResult.preview.rebound, ...(reboundResult.preview.selectedDirection ? { direction: reboundResult.preview.selectedDirection } : {}), quarterTurn: reboundResult.preview.quarterTurn, moves: reboundResult.preview.moves, cells: reboundResult.preview.finalCells.map(cell => ({ id: cell.id, x: cell.x, y: cell.y })), ids: pair.gems.map(gem => gem.id) }] : []), ...result.events] };
     }
   }
 }
@@ -154,10 +218,23 @@ function advanceResolution(state: GameState): Transition {
   if (next.phase === 'clear-mark' && next.resolutionTick >= 7) { next = { ...next, phase: 'clear-remove', resolutionTick: 0 }; events.push({ type: 'clear-removal-started', chain: next.waves.length + 1, cells: next.clearCells }); }
   else if (next.phase === 'clear-remove' && next.resolutionTick >= 6) {
     const clear = new Set(next.clearCells); const ids = [...clear].map(index => next.board[index]!.id); const chain = next.waves.length + 1; const level = next.resolutionLevel ?? 1; const points = 10 * clear.size * level * chain;
-    const board = next.board.map((gem, index) => clear.has(index) ? null : gem); const gravityBoard = compactBoard(board, next.settings.width, next.settings.height + HIDDEN);
+    const board = next.board.map((gem, index) => clear.has(index) ? null : gem);
     const wave = { chain, cells: [...clear], ids, points }; const score = next.score + points;
-    next = { ...next, board, gravityBoard, score, waves: [...next.waves, wave], maxChain: Math.max(next.maxChain, chain), phase: 'gravity', resolutionTick: 0, clearCells: [], resolutionHadClear: true };
+    next = { ...next, board, score, waves: [...next.waves, wave], maxChain: Math.max(next.maxChain, chain), phase: 'gravity', resolutionTick: 0, clearCells: [], resolutionHadClear: true };
     events.push({ type: 'cells-cleared', chain, cells: [...clear], ids, points, score });
+    if (next.settings.nature && next.naturePulsePending) {
+      const pulse = naturePulse(next, board); const afterPulse = pulse.board; events.push(...pulse.events);
+      const groups = findGroups(afterPulse, next.settings.width, next.settings.height + HIDDEN);
+      next = { ...next, board: afterPulse, naturePulsePending: false, phase: 'falling' };
+      if (groups.length) {
+        const cells = [...new Set(groups.flat())].sort((a, b) => a - b);
+        next = { ...next, phase: 'clear-mark', clearCells: cells, gravityBoard: null, resolutionTick: 0 };
+        events.push({ type: 'match-marked', chain: next.waves.length + 1, cells, ids: cells.map(index => afterPulse[index]!.id), groups });
+        return { state: next, events, accepted: true };
+      }
+      const gravityBoard = compactBoard(afterPulse, next.settings.width, next.settings.height + HIDDEN);
+      next = { ...next, gravityBoard, phase: 'gravity' };
+    } else next = { ...next, gravityBoard: compactBoard(board, next.settings.width, next.settings.height + HIDDEN) };
   } else if (next.phase === 'gravity' && next.resolutionTick >= 9) {
     const before = next.board; const after = next.gravityBoard ?? next.board; const falling = movedEntries(before, after, next.settings.width);
     next = { ...next, board: after, gravityBoard: null, resolutionTick: 0, phase: 'falling' };
@@ -218,6 +295,11 @@ export function landingCells(state: GameState): Landing | null {
   const settled = compactBoard(board, state.settings.width, state.settings.height + HIDDEN);
   return pair.gems.map(gem => { const index = settled.findIndex(cell => cell?.id === gem.id); return { x: index % state.settings.width, y: Math.floor(index / state.settings.width) - HIDDEN }; }) as unknown as Landing;
 }
+/** Returns the Shizen hard-drop landing and one-step rebound preview without changing state. */
+export function powerDropPreview(state: GameState): PowerDropPreview | null {
+  if (!state.settings.nature || state.settings.mode === 'relaxed' || !state.active) return null;
+  return rebound(state, state.active)?.preview ?? null;
+}
 /** Returns score, mode, chain and completion fields derived from state. */
 export function statusOf(state: GameState): GameStatus { return { mode: state.settings.mode, phase: state.phase, score: state.score, maxChain: state.maxChain, allClears: state.allClears, completedPairs: state.completedPairs, assisted: state.assisted, ...(state.reason ? { reason: state.reason } : {}) }; }
 /** Creates a base challenge state with a previously validated visible board and pair queue. @internal */
@@ -231,8 +313,9 @@ export function initialChallengeState(settings: Settings, visibleBoard: readonly
 /** Creates a deterministic seeded game with one active pair and three previews. */
 export function createGame(options: CreateOptions = {}): GameState {
   const valid = normalizeOptions(options); let state: GameState = { game: 'colour-chains', rules: RULES, settings: valid, board: Array(valid.width * (valid.height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState: seedState(`colour-chains|${RULES}|${valid.seed}`), nextId: 1, score: 0, maxChain: 0, allClears: 0, completedPairs: 0, resolutionTick: 0, waves: [], clearCells: [], gravityBoard: null, resolutionHadClear: false, elapsedTicks: 0, assisted: false, witnessIndex: -1, recording: [] };
-  const first = drawPair(state); state = { ...state, bag: first[1], randomState: first[2] }; const active = makePair(state, first[0]); state = { ...state, active, nextId: 3 };
+  const first = drawPair(state); state = { ...state, bag: first[1], randomState: first[2] }; const active = makePair(state, first[0], valid.nature ? magneticFlags(valid.seed, 0, first[0]) : undefined); state = { ...state, active, nextId: 3 };
   const next: (readonly [Colour, Colour])[] = [];
-  for (let i = 0; i < 3; i++) { const drawn = drawPair(state); next.push(drawn[0]); state = { ...state, bag: drawn[1], randomState: drawn[2] }; }
-  return { ...state, next };
+  const nextMagnetic: (readonly [boolean, boolean])[] = [];
+  for (let i = 0; i < 3; i++) { const drawn = drawPair(state); next.push(drawn[0]); if (valid.nature) nextMagnetic.push(magneticFlags(valid.seed, i + 1, drawn[0])); state = { ...state, bag: drawn[1], randomState: drawn[2] }; }
+  return { ...state, next, ...(valid.nature ? { nextMagnetic } : {}) };
 }
