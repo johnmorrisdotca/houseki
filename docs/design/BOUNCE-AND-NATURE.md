@@ -26,12 +26,12 @@ Resolve input and impact first, rebound second, landing/bond breaking third, att
 
 Verify both directions, walls, occupied cells, rotation bounds, gentle versus slammed placement, deterministic replay, immutable IDs, disabled-mode parity and reduced motion. Add a small playable checkpoint before expanding materials or combinations. Commit compilable, tested increments with honest development status; visual tuning and human difficulty review can follow without holding back working progress.
 
-## Naming options
+## Approved naming
 
 | Name | Japanese | Meaning | Fit |
 | --- | --- | --- | --- |
-| Shizen | 自然 | Nature | Recommended umbrella for magnets, earthquakes, weather and bouncing materials |
+| Shizen | 自然 | Nature | Approved umbrella for nature mechanics, including magnetic attraction, bounce and floor conditions |
 | Tenki | 天気 | Weather | Clear fit for rain, lightning and storm modes |
-| Arashi | 嵐 | Storm | Energetic name for disruptive challenge modes |
+| Arashi | 嵐 | Storm | Approved intense storm mode: earthquakes, lightning and more frequent disruptions |
 
-Houseki remains the approved gem collection name. Shizen could name its nature-mode collection now, with a separate package considered only if the mechanics grow beyond gem games. These are naming suggestions; no repository or registry availability is claimed. Renaming display text must preserve stable game IDs and existing saves.
+Owner-approved on 2026-10-05: Houseki remains the package and gem collection name. Shizen names the broader nature-mode collection; Arashi names its more intense storm mode. Tenki remains an unused alternative. These display names do not create another package or imply implemented support. Preserve stable game IDs and existing saves.
