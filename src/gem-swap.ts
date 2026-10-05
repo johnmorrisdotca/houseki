@@ -1,3 +1,5 @@
 export type { Action, BlackHolePortal, BoardPreset, BoardShape, CancelToolAction, ChallengeRules, ConfirmToolAction, CreateOptions, GameEvent, GameMode, GameOutcome, GamePhase, GameState, GameStatus, Gem, GemColour, Goal, HintAction, OrdinaryToolKind, PlannedSpecial, ReplayOperation, ReshuffleAction, Seal, SelectToolAction, Settings, SpecialKind, SwapAction, TargetToolAction, ToolInventory, ToolKind, Transition, UndoAction } from './gem-swap/types.js';
 export { GemSwapOptionsError, createGame, applyAction, advanceTicks, advanceTime, legalActions, statusOf, hintGame, reshuffleGame, undoGame } from './gem-swap/engine.js';
 export { ReplayError, encodeGame, decodeGame, restartGame, validateChallengeWitness } from './gem-swap/persistence.js';
+export { CAMPAIGN_CHECKSUM, CAMPAIGN_COUNT, GENERATION_REVISION, GRADING_VERSION, GRADING_WEIGHTS, SAMPLE_BUDGET, GEM_SWAP_CAMPAIGN, GEM_SWAP_LESSONS } from './gem-swap/content.js';
+export type { GemSwapCampaignLevel, GemSwapLesson, GemSwapLessonStep, GemSwapReviewStatus } from './gem-swap/content.js';
