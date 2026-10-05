@@ -30,6 +30,11 @@
       "types": "./dist/stone-collapse.d.ts",
       "import": "./dist/stone-collapse.js",
       "default": "./dist/stone-collapse.js"
+    },
+    "./gem-swap": {
+      "types": "./dist/gem-swap.d.ts",
+      "import": "./dist/gem-swap.js",
+      "default": "./dist/gem-swap.js"
     }
   },
   "files": [
