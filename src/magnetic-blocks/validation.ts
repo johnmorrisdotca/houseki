@@ -36,13 +36,13 @@ export function validateOptions(options: CreateOptions = {}): ValidatedOptions {
   const mode = options.mode ?? 'relaxed';
   if (mode !== 'relaxed' && mode !== 'arcade') throw new MagneticBlocksOptionsError('invalid-mode', 'Mode must be relaxed or arcade');
   const width = options.width ?? 10, height = options.height ?? 20;
-  if (!Number.isInteger(width) || width < 4 || width > 12 || !Number.isInteger(height) || height < 4 || height > 20 || width * height > 240) throw new MagneticBlocksOptionsError('invalid-board-size', 'Board width must be 4–12, height 4–20, with at most 240 cells');
+  if (!Number.isInteger(width) || width < 4 || width > 16 || !Number.isInteger(height) || height < 4 || height > 32 || width * height > 512) throw new MagneticBlocksOptionsError('invalid-board-size', 'Board width must be 4–16, height 4–32, with at most 512 cells');
   const colourCount = options.colourCount ?? 4;
   if (![4, 5, 6].includes(colourCount)) throw new MagneticBlocksOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');
   const seed = options.seed ?? 'houseki-magnetic-blocks';
   if (typeof seed !== 'string' && (!Number.isInteger(seed) || seed < 0 || seed > 0xffff_ffff)) throw new MagneticBlocksOptionsError('invalid-seed', 'Numeric seed must be an unsigned 32-bit integer');
   const mask = options.mask === undefined ? Array(width * height).fill(true) : options.mask;
-  if (!Array.isArray(mask) || mask.length !== width * height || mask.some(value => typeof value !== 'boolean') || mask.filter(Boolean).length < 16 || mask.filter(Boolean).length > 240) throw new MagneticBlocksOptionsError('invalid-mask', 'Mask must contain 16–240 active cells');
+  if (!Array.isArray(mask) || mask.length !== width * height || mask.some(value => typeof value !== 'boolean') || mask.filter(Boolean).length < 16 || mask.filter(Boolean).length > 512) throw new MagneticBlocksOptionsError('invalid-mask', 'Mask must contain 16–512 active cells');
   const active = mask.flatMap((on, i) => on ? [i] : []), connected = new Set([active[0]!]), pending = [active[0]!];
   while (pending.length) { const at = pending.pop()!, x = at % width, y = Math.floor(at / width); for (const next of [x ? at - 1 : -1, x + 1 < width ? at + 1 : -1, y ? at - width : -1, y + 1 < height ? at + width : -1]) if (next >= 0 && mask[next] && !connected.has(next)) { connected.add(next); pending.push(next); } }
   if (connected.size !== active.length) throw new MagneticBlocksOptionsError('disconnected-mask', 'Mask active cells must be connected');
