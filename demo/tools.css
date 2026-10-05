@@ -20,3 +20,6 @@
 #assisted { color: var(--felt-ink); font-size: .8rem; }
 @media(max-width:1050px) { .full-play { flex-wrap: wrap; } .tool-tray { width: min(100%,420px); } #inventory { grid-template-columns: repeat(3,minmax(0,1fr)); } #inventory button { padding: 8px; font-size: .82rem; text-align: center; } }
 @media(max-width:760px) { .full-play { gap: 12px; } .full-board { --size: min(42px,calc((100vw - 76px - var(--cols) * 2px) / var(--cols))); } }
+:root { --intro-room: 4rem; --intro-room-wide: 4rem; }
+@media(max-width:760px) { header { gap: 8px; margin-bottom: 10px; } nav { gap: 6px; } nav .fam-button { padding-left: 10px; padding-right: 10px; } }
+@media(max-width:760px) { nav .api-link { display: none; } .full-board { --size: min(42px,calc((100vw - 76px - var(--cols) * 2px) / var(--cols)),max(28px,calc((100dvh - 540px) / var(--rows)))); } }

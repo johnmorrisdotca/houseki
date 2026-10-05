@@ -51,7 +51,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
     "site": "npm run build && node scripts/site.mjs",
-    "demo": "npm run site && node scripts/serve.mjs"
+    "demo": "npm run site && node scripts/serve.mjs",
+    "test:browser": "npm run site && node test/browser/tools.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
