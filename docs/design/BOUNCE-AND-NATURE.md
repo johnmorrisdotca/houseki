@@ -1,6 +1,6 @@
 # Bounce and nature modes
 
-Status: proposed optional rules, not implemented or released. Owner: John Morris. Updated 2026-10-05.
+Status: optional Shizen rebound is implemented in Colour Chains; ordinary landing animation is shared across the four primary players. Owner: John Morris. Updated 2026-10-05.
 
 ## Player promise
 

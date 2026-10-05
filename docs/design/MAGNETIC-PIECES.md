@@ -1,6 +1,6 @@
 # Magnetic Pieces: proposed special-stone mode
 
-Design status: proposed physics variant, not a current demo feature. Keep it distinct from Magnetic Blocks' floor and Floor Switch. Combining either mechanic requires an explicit interaction gate, not an assumption that all environmental options compose safely.
+Implementation status: optional Shizen play in Colour Chains includes seeded queued magnetic stones and one bounded attraction pulse per pair. Keep it distinct from Magnetic Blocks' floor and Floor Switch. Combining either mechanic requires an explicit interaction gate, not an assumption that all environmental options compose safely.
 
 ## Pieces and distribution
 

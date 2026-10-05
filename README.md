@@ -4,7 +4,7 @@
 
 Original gem and stone puzzle games with immutable TypeScript rules and a shared English/Japanese player.
 
-**Development status:** implementation and review are in progress. This repository is not yet an npm release or a claim of completed commercial polish. The website integration is maintained separately.
+**Initial release:** four playable games with tested rules, campaigns and demos. Physical-device feel, fluent Japanese copy and human difficulty review remain ongoing. Magnetic Blocks and nature variants are experimental. Website integration is maintained separately.
 
 | Game | Distinctive mechanic |
 | --- | --- |
@@ -13,7 +13,7 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 | Colour Chains | Rotate falling pairs; build connected groups and cascading chains |
 | Gem Swap | Swap neighbours; create and combine specials to complete objectives |
 
-An optional experimental `magnetic-blocks` entry point provides bonded 2×2 squares, magnetic floor schedules, a one-use Floor Switch and impact drops. It has no graded campaign yet. The `nature` entry point exposes deterministic attraction, rebound and environment utilities.
+An optional experimental `magnetic-blocks` entry point provides bonded 2×2 squares, magnetic floor schedules, a one-use Floor Switch and impact drops. [Play its demo](https://johnmorrisdotca.github.io/houseki/blocks.html). It has no graded campaign yet. The `nature` entry point exposes deterministic attraction, rebound and environment utilities.
 
 ![Falling Triplets demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/falling-triplets-desktop.png)
 

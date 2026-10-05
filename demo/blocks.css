@@ -1,0 +1,81 @@
+:root { --blocks-board: #fbf8f1; --blocks-frame: #a98954; }
+.blocks-layout { grid-template-columns: minmax(240px, 310px) minmax(0, 1fr); }
+.settings-fold > summary { margin: -2px 0 8px; font-size: 1.05rem; font-weight: 700; }
+.settings-fields { display: grid; gap: 12px; }
+.dimension-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.dimension-row input { width: 100%; min-height: 44px; }
+.experimental { margin: 8px 0 2px; padding: 7px 10px; border: 1px solid #e0b43b80; border-radius: 10px; color: var(--felt-ink); font-size: .8rem; text-align: center; background: #0002; }
+.blocks-play-area { display: grid; grid-template-columns: minmax(0, auto) minmax(120px, 170px); justify-content: center; align-items: start; gap: 12px 18px; padding: 10px 0; }
+.preview-strip { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; min-height: 46px; color: var(--felt-ink); }
+.preview-strip > div { display: flex; align-items: center; gap: 8px; }
+.preview-strip b, .current-floor > span { font-size: .78rem; font-weight: 600; opacity: .85; }
+.next { display: flex; flex-wrap: wrap; gap: 6px; }
+.next-piece { display: grid; grid-template-columns: repeat(2, 17px); grid-template-rows: repeat(2, 17px); gap: 1px; padding: 3px; border-radius: 7px; background: #10201955; }
+.next-piece .gem { width: 17px; height: 17px; font-size: 9px; border-width: 1px; }
+.next-piece .gem.mini { width: 17px; height: 17px; }
+.floor-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border: 1px solid #fff7; border-radius: 999px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.floor-chip.calm { background: #d9c18b; color: #29261d; }
+.floor-chip.magnetic { background: #37596b; color: #fff; border-color: #c4d8e2; }
+.game-info { min-width: 0; display: grid; gap: 8px; color: var(--felt-ink); }
+.current-floor { display: grid; gap: 5px; justify-items: start; }
+.game-info #status { min-height: 2.3em; margin: 4px 0; }
+.game-info .micro { min-height: 2em; margin: 0; }
+.lock-meter { display: grid; gap: 4px; font-size: .78rem; }
+.lock-meter progress { width: 100%; height: 12px; accent-color: var(--gold); }
+.well-wrap { border-color: var(--blocks-frame); background: var(--blocks-frame); }
+.well { --cell: min(40px, calc((100vw - 86px) / var(--cols)), calc((100dvh - 385px) / var(--rows))); gap: 2px; padding: 5px; background: var(--blocks-board); touch-action: none; }
+.well[data-width="16"] { --cell: min(30px, calc((100vw - 88px) / var(--cols)), calc((100dvh - 385px) / var(--rows))); }
+.cell { border-radius: 6px; overflow: visible; }
+.cell.masked { background: transparent; }
+.gem { position: relative; width: 88%; height: 88%; border: 2px solid #1b2721; border-radius: 8px; font-size: clamp(9px, calc(var(--cell) * .42), 18px); line-height: 1; }
+.gem.ghost { opacity: .22; border-style: dashed; }
+.gem.active { outline: 2px solid #fff5cc; outline-offset: -3px; }
+.gem.marked { filter: brightness(1.3); outline: 2px solid #ffe39a; outline-offset: -2px; animation: marked-pulse .45s ease-in-out infinite alternate; }
+.gem.impact-hit { outline: 3px solid #fff; outline-offset: -3px; filter: brightness(1.4); }
+.cell.bond-left::after, .cell.bond-right::after, .cell.bond-up::after, .cell.bond-down::after { content: ""; position: absolute; z-index: 5; background: #ffe7a6; opacity: .9; box-shadow: 0 0 3px #493413; pointer-events: none; }
+.cell.bond-left::after, .cell.bond-right::after { top: 48%; width: 18%; height: 4px; }
+.cell.bond-left::after { left: -7%; } .cell.bond-right::after { right: -7%; }
+.cell.bond-up::after, .cell.bond-down::after { left: 48%; width: 4px; height: 18%; }
+.cell.bond-up::after { top: -7%; } .cell.bond-down::after { bottom: -7%; }
+.floor-line { position: absolute; height: 5px; bottom: 7px; left: 9px; right: 9px; border-radius: 99px; z-index: 6; pointer-events: none; }
+.floor-line.calm { background: #e0b43b; box-shadow: 0 0 8px #fff1b5; }
+.floor-line.magnetic { background: repeating-linear-gradient(90deg, #a8cad6 0 8px, #456c7d 8px 14px); box-shadow: 0 0 8px #bdeaff; }
+.controls { gap: 7px; padding-top: 8px; }
+.controls button { min-width: 48px; touch-action: manipulation; }
+.controls .drop, .controls .place { min-width: 94px; }
+.switch-tray { max-width: 700px; margin: 4px auto 10px; padding: 10px 12px; border: 1px solid #fff5; border-radius: 14px; background: #10201935; color: var(--felt-ink); }
+.tray-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tray-head h3 { margin: 0; font-size: .9rem; }
+.switch-tray > p { margin: 5px 0 8px; font-size: .8rem; line-height: 1.4; }
+.tray-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.tray-options .fam-button { min-height: 40px; }
+.tray-options [aria-pressed="true"] { outline: 2px solid var(--gold); outline-offset: 1px; }
+.tray-options .apply-floor { margin-left: auto; }
+.keys { text-align: center; color: var(--felt-ink); padding: 4px 4px 0; }
+.well-scroll[data-oversized="true"] { max-height: min(65dvh, 680px); overflow: auto; overscroll-behavior: contain; }
+.well-scroll[data-oversized="true"] .well { --cell: max(25px,min(34px,calc((100vw - 90px)/var(--cols)))); }
+.material-slate { --blocks-board: #d8e0dc; }
+.material-wood { --blocks-board: #d7b680; }
+@keyframes marked-pulse { to { filter: brightness(1.65); } }
+@media(max-width:760px) {
+  .blocks-layout { grid-template-columns: minmax(0,1fr); }
+  .blocks-layout aside { order: 2; }
+  .blocks-layout .game-screen { order: 1; padding: 12px 8px; }
+  .blocks-play-area { grid-template-columns: minmax(0,auto); gap: 8px; }
+  .preview-strip { grid-column: 1; justify-content: space-between; padding: 0 6px; }
+  .game-info { grid-template-columns: minmax(0,1fr) minmax(0,1.3fr); align-items: center; padding: 0 5px; }
+  .current-floor { grid-column: 1; }
+  .game-info #status { grid-column: 2; grid-row: 1; }
+  .lock-meter, #hits { grid-column: 1 / -1; }
+  .well { --cell: min(40px, calc((100vw - 40px) / var(--cols)), calc((100dvh - 380px) / var(--rows))); }
+  .well[data-width="16"] { --cell: min(30px, calc((100vw - 42px) / var(--cols)), calc((100dvh - 380px) / var(--rows))); }
+  .controls { position: sticky; bottom: 0; z-index: 8; padding: 8px 2px max(8px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--felt-deep) 16%); }
+  .tray-options .apply-floor { margin-left: 0; }
+}
+@media(max-width:380px) {
+  .well { --cell: min(34px, calc((100vw - 40px) / var(--cols)), calc((100dvh - 360px) / var(--rows))); }
+  .well[data-width="16"] { --cell: min(25px, calc((100vw - 40px) / var(--cols)), calc((100dvh - 360px) / var(--rows))); }
+  .stats { gap: 8px; font-size: .8rem; }
+  .controls .fam-button { min-width: 42px; padding: 0 9px; }
+}
+@media(prefers-reduced-motion:reduce) { .gem.marked { animation:none; } }

@@ -1,6 +1,6 @@
 # Environmental modes and deep boards
 
-Design status: proposed optional rulesets, not current demo features. Preserve ordinary play and the four existing engines' authored witnesses. Start with Gem Swap and Stone Collapse; Magnetic Blocks can reuse the concepts only after its own prototype gate.
+Implementation status: Colour Chains offers optional Arashi Jumble/Lightning schedules after settled pairs. Deep and oversized boards are available in all four primary games. Fault/Combined remain utility-level previews and future player variants. Ordinary play and authored witnesses retain their original rules.
 
 ## Earthquake
 

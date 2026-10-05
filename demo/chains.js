@@ -4,10 +4,11 @@ import { restartGame, createChallenge, tutorialManifest, createLevel, levelManif
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
-  en: { nature:'Shizen · magnetic stones and rebound', lessonLabel:'Learn to play',challengeLabel:'Challenge level',animations:'Animation', settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Rotate the pair and connect four of one colour. The two stones settle independently after landing.', keys: 'Keyboard: ← → move · ↑ rotate · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Colour Chains', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Rotate left', cycle: 'Rotate right', new: 'New game', restart: 'Restart', place: 'Place the pair', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
-  ja: { nature:'自然 · 磁石の石と跳ね返り', lessonLabel:'遊び方',challengeLabel:'チャレンジ',animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '二つの石を回転して、同じ色を四つ以上つなげましょう。着地すると、それぞれの石が落ちます。', keys: 'キー操作：← → 移動 · ↑ 回転 · Z / X 左回転/右回転 · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 左回転/右回転 · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '色の連鎖', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '回転', new: '新しいゲーム', restart: 'やり直す', place: '二つの石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
+  en: { weather:'Arashi weather', nature:'Shizen · magnetic stones and rebound', lessonLabel:'Learn to play',challengeLabel:'Challenge level',animations:'Animation', settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Rotate the pair and connect four of one colour. The two stones settle independently after landing.', keys: 'Keyboard: ← → move · ↑ rotate · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Colour Chains', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Rotate left', cycle: 'Rotate right', new: 'New game', restart: 'Restart', place: 'Place the pair', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
+  ja: { weather:'嵐の天気', nature:'自然 · 磁石の石と跳ね返り', lessonLabel:'遊び方',challengeLabel:'チャレンジ',animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '二つの石を回転して、同じ色を四つ以上つなげましょう。着地すると、それぞれの石が落ちます。', keys: 'キー操作：← → 移動 · ↑ 回転 · Z / X 左回転/右回転 · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 左回転/右回転 · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '色の連鎖', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '回転', new: '新しいゲーム', restart: 'やり直す', place: '二つの石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-colour-chains-save'; const preferenceKey = 'houseki-ui';
+let weatherNotice=null;function rememberWeather(events){const event=events.find(event=>event.type==='weather-triggered');if(event)weatherNotice={kind:event.kind,until:performance.now()+2500};}
 let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
 const pendingReleases = new Set();
@@ -21,18 +22,18 @@ function writePreferences() {
   try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, theme: document.documentElement.dataset.theme, material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Preferences are optional. */ }
 }
-function getOptions() {return $('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{mode:$('#mode').value,preset:$('#preset').value,colourCount:Number($('#colours').value),nature:$('#nature').checked,seed:crypto.randomUUID()};}
+function getOptions() {return $('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{mode:$('#mode').value,preset:$('#preset').value,colourCount:Number($('#colours').value),nature:$('#nature').checked||Boolean($('#weather').value),...($('#weather').value?{weather:$('#weather').value}:{}),seed:crypto.randomUUID()};}
 function newGame(restart = false) {
   if (!restart || !startOptions.seed) startOptions = getOptions();
   if(!restart){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);selectedLevel=lesson?{...lesson,...lesson.setup,seed:`lesson:${lesson.id}`,lesson:true}:levelManifest.find(level=>level.id===$('#level').value)??null;}
   game = restart&&game?restartGame(game):selectedLevel?selectedLevel.lesson?createChallenge({id:selectedLevel.id,...selectedLevel.setup,seed:selectedLevel.seed}):createLevel(selectedLevel.id):createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
-  heldKeys.clear(); pendingReleases.clear(); $('#nature').checked=game.settings.nature===true;render(); save(); $('.game-screen').focus({ preventScroll: true });
+  heldKeys.clear(); pendingReleases.clear(); $('#nature').checked=game.settings.nature===true;$('#weather').value=game.settings.weather??'';render(); save(); $('.game-screen').focus({ preventScroll: true });
 }
 function gemMarkup(gem, extra = '') { return `<span ${gem.id!==undefined?`data-id="${gem.id}"`:""} class="gem ${gem.colour} ${gem.magnetic?'magnetic':''} ${extra}" aria-label="${gem.colour}">${symbols[gem.colour]}${gem.magnetic?'<small aria-label="magnetic">✧</small>':''}</span>`; }
 function render() {
   if (!game) return;
-  $('#nature').disabled=game.settings.mode==='daily'||game.settings.mode==='challenge';const previous=positions($('#well'));
+  $('#nature').disabled=game.settings.mode==='daily'||game.settings.mode==='challenge';$('#weather').disabled=$('#nature').disabled;const previous=positions($('#well'));
   const w = game.settings.width; const h = game.settings.height; const totalH = h + 3; const cells = Array(w * totalH).fill('');
   game.board.forEach((gem, idx) => { if (gem) cells[idx] = gemMarkup(gem); });
   const landing=landingCells(game);
@@ -51,10 +52,10 @@ function render() {
    const placed=game.completedPieces??game.completedPairs;$('#budget').textContent=`${lang==='en'?'Pieces left':'残り'}: ${Math.max(0,selectedLevel.queue.length-placed)}`;
   }
   $('#score').textContent = String(game.score); $('#chain').textContent = String(game.maxChain);
-  $('#next').innerHTML = game.next.map(piece => `<div class="next-piece" aria-label="Next: ${piece.join(', ')}">${piece.map(colour => gemMarkup({ colour })).join('')}</div>`).join('');
+  $('#next').innerHTML = game.next.map((piece,pieceIndex) => `<div class="next-piece" aria-label="Next: ${piece.join(', ')}">${piece.map((colour,index) => gemMarkup({ colour, magnetic:game.nextMagnetic?.[pieceIndex]?.[index] })).join('')}</div>`).join('');
   const t = words[lang]; let status = game.phase === 'lost' ? (selectedLevel?(lang==='en'?'Challenge ended before the goal was reached':'目標を達成できませんでした'):t.lost) : game.phase === 'won' || game.phase === 'finished' ? t.won : game.phase === 'paused' ? t.paused : game.phase === 'clear-mark' ? ((game.waves.at(-1)?.chain??1) > 1 ? `Chain ${(game.waves.at(-1)?.chain??1)}` : `Clear · ${game.clearCells?.length ?? 0}`) : t.place;
   const lastWave = game.waves.at(-1); if (lastWave && ['clear-mark', 'clear-remove', 'gravity'].includes(game.phase)) status = lastWave.chain > 1 ? `Chain ${lastWave.chain}` : `Clear · ${lastWave.ids.length}`;
-  $('#status').textContent = status;
+  if(weatherNotice?.until>performance.now()&&game.phase==='falling')status=weatherNotice.kind==='jumble'?(lang==='en'?'Earthquake · stones shifted':'地震 · 石が移動しました'):(lang==='en'?'Lightning · exposed stones removed':'雷 · 上の石が消えました');$('#status').textContent = status;
   document.documentElement.lang = lang;$('#lesson').options[0].textContent=lang==='en'?'No lesson':'レッスンなし';for(const option of [...$('#lesson').options].slice(1)){option.textContent=tutorialManifest.find(item=>item.id===option.value).title[lang];}$('#level').options[0].textContent=lang==='en'?'Free play':'自由に遊ぶ';for(const option of [...$('#level').options].slice(1)){const level=levelManifest.find(item=>item.id===option.value);option.textContent=`${level.number} · ${level.marks}/5 · ${level.title[lang]}`;}
   document.querySelectorAll('[data-i]').forEach(el => { const key = el.dataset.i; if (t[key]) el.textContent = t[key]; });
   $('[data-action="place"]').textContent = t.placeButton; $('[data-action="hard-drop"]').textContent = t.drop; $('[data-action="soft-drop"]').textContent = t.down;
@@ -70,7 +71,7 @@ function save() { try { localStorage.setItem(saveKey, encodeGame(game)); } catch
 function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 350); }
 function playAction(kind) {
   const result = applyAction(game, { kind:kind==='soft-drop'?'down':kind }); if (!result.accepted) return false;
-  game = result.state; render(); queueSave();
+  game = result.state;rememberWeather(result.events); render(); queueSave();
   if(result.events.some(event=>['piece-locked','pair-locked'].includes(event.type)))playTone(1,true);
   if (result.events.some(event => event.type === 'cells-cleared') && $('#sound').checked) playTone(Math.max(1, game.maxChain));
   if (['clear-mark', 'clear-remove', 'gravity', 'won', 'lost', 'finished'].includes(game.phase)) input = releaseAllActions(input);
@@ -94,7 +95,7 @@ function simulationTick() {
   }
   if (endedPiece || game.phase !== 'falling') input = releaseAllActions(input);
   const beforeTick = game; const result = advanceTicks(game, 1); game = result.state;
-  if (game !== beforeTick) {for(const event of result.events)if(event.type==='cells-cleared')playTone(event.chain??1); render(); queueSave(); }
+  if (game !== beforeTick) {rememberWeather(result.events);for(const event of result.events)if(event.type==='cells-cleared')playTone(event.chain??1); render(); queueSave(); }
 }
 function animate(timestamp) {
   if (!lastFrame) lastFrame = timestamp; const elapsed = Math.min(timestamp - lastFrame, 100); lastFrame = timestamp; accumulator += elapsed;
@@ -110,7 +111,7 @@ function bindHeld(button, action) {
 document.querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]').forEach(button => bindHeld(button, button.dataset.action));
 document.querySelectorAll('[data-action]').forEach(button => { if (['left', 'right', 'soft-drop', 'resume'].includes(button.dataset.action)) return; button.addEventListener('click', () => { input = queueInputEdge(input, { kind: button.dataset.action }); }); });
 $('#new').addEventListener('click', () => newGame()); $('#restart').addEventListener('click', () => newGame(true));
-for (const selector of ['#mode', '#preset', '#colours', '#nature']) $(selector).addEventListener('change', () => { $('#pending').hidden = false; });
+for (const selector of ['#mode', '#preset', '#colours', '#nature', '#weather']) $(selector).addEventListener('change', () => { $('#pending').hidden = false; });
 $('#material').addEventListener('change', () => { render(); writePreferences(); });
 $('#theme').addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
