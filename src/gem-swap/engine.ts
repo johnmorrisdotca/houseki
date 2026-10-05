@@ -29,14 +29,14 @@ function shapeMask(shape: BoardShape): readonly [number, number, readonly boolea
 function validMask(mask: readonly boolean[], width: number, height: number): boolean {
   if (!Array.isArray(mask) || mask.length !== width * height || mask.some(v => typeof v !== 'boolean')) return false;
   const active = mask.flatMap((on, i) => on ? [i] : []);
-  if (active.length < 16 || active.length > 144 || active.some(i => neighbors(i, width, height, mask).length === 0)) return false;
+  if (active.length < 16 || active.length > 512 || active.some(i => neighbors(i, width, height, mask).length === 0)) return false;
   const visited = new Set([active[0]!]); const queue = [active[0]!];
   while (queue.length) for (const next of neighbors(queue.pop()!, width, height, mask)) if (!visited.has(next)) { visited.add(next); queue.push(next); }
   return visited.size === active.length;
 }
 function validateDimensions(width: number, height: number): void {
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 4 || width > 12 || height < 4 || height > 12 || width * height > 144) {
-    throw new GemSwapOptionsError('invalid-board-size', 'Dimensions must each be 4–12 with at most 144 cells');
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 4 || width > 16 || height < 4 || height > 32 || width * height > 512) {
+    throw new GemSwapOptionsError('invalid-board-size', 'Dimensions must be width 4–16, height 4–32, and at most 512 cells');
   }
 }
 function validateChallenge(value: unknown): ChallengeRules {
@@ -55,7 +55,7 @@ function validateChallenge(value: unknown): ChallengeRules {
   });
   let seals: readonly Seal[] | undefined;
   if (input.seals !== undefined) {
-    if (!Array.isArray(input.seals) || input.seals.length > 144) throw new GemSwapOptionsError('invalid-challenge-seals', 'Challenge seals must be a bounded list');
+    if (!Array.isArray(input.seals) || input.seals.length > 512) throw new GemSwapOptionsError('invalid-challenge-seals', 'Challenge seals must be a bounded list');
     const seen = new Set<number>();
     seals = Object.freeze(input.seals.map((raw: unknown) => {
       if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new GemSwapOptionsError('invalid-challenge-seal', 'Seal entries must be objects');
@@ -100,7 +100,7 @@ function optionsFor(options: CreateOptions): { readonly settings: Settings; read
   }
   validateDimensions(width!, height!);
   if (mask === undefined) mask = Array(width! * height!).fill(true);
-  if (!validMask(mask, width!, height!)) throw new GemSwapOptionsError('invalid-mask', 'The active mask must be connected, contain 16–144 cells and have no isolated cell');
+  if (!validMask(mask, width!, height!)) throw new GemSwapOptionsError('invalid-mask', 'The active mask must be connected, contain 16–512 cells and have no isolated cell');
   if (challenge?.seals?.some(seal => seal.cell >= mask!.length || !mask![seal.cell])) throw new GemSwapOptionsError('invalid-challenge-seal', 'Every seal must occupy an active board cell');
   const colourCount = options.colourCount ?? 5;
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new GemSwapOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');

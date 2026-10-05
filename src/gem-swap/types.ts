@@ -13,7 +13,7 @@ export interface BlackHolePortal {
 /** A gem has a stable identity and stored colour until it is cleared. Missing kind means normal. */
 export interface Gem { readonly id: number; readonly colour: GemColour; readonly kind?: SpecialKind }
 export interface PlannedSpecial { readonly cell: number; readonly kind: SpecialKind }
-export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall';
+export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
 export type BoardShape = 'heart' | 'star' | 'hexagon';
 export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'refill' | 'finished';
 export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';

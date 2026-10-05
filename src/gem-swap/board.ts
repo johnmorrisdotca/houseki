@@ -1,7 +1,7 @@
 import type { Gem, GemColour, GameState, Settings } from './types.js';
 
 export const COLOURS: readonly GemColour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
-export const PRESETS = { compact: [6, 6], standard: [8, 8], wide: [10, 6], tall: [6, 10] } as const;
+export const PRESETS = { compact: [6, 6], standard: [8, 8], wide: [10, 6], tall: [6, 10], extraWide: [16, 10], deep: [8, 32], large: [12, 32] } as const;
 
 /** Returns active orthogonal neighbours in row-major order. */
 export function neighbors(index: number, width: number, height: number, mask: readonly boolean[]): number[] {
