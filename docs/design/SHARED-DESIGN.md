@@ -157,3 +157,12 @@ Show remaining moves, pieces or time separately from achievement progress. Time-
 The progress bar is an indicator, not a draggable slider. Include an accessible name and numeric minimum, maximum and current value, visible text, sufficient contrast and non-colour status cues. Avoid noisy screen-reader announcements every animation frame; announce meaningful thresholds and final results. Provide English/Japanese wording, a compact phone layout, and reduced-motion/static updates.
 
 Verification: initial zero progress, partial progress, exact completion, overshoot, exhaustion before goal, win on the final permitted action, undo/restart restoration where available, saves, multiple goals and endless-mode absence of a completion bar. Status: shared requirement; per-game support is tracked during implementation.
+
+
+## Oversized board access
+
+Owner-approved requirement, 2026-10-05: offer unusually tall or large boards as an optional bonus feature wherever the game supports them. The standalone package and demos unlock these by default. Hosts can optionally lock the feature through a presentation-level availability setting and their own unlock policy; do not require progression, payment, login or a network service in the library. A locked choice explains its host-supplied unlock requirement. Keep existing saves playable or exportable if the host later changes access policy.
+
+Distinguish extra-wide boards from deep boards and genuinely large two-dimensional maps. Large presets require explicit per-game engine bounds, resource checks and tested rules; do not bypass current validation or claim every game already supports them. Deep boards intentionally scroll, retain position during updates and provide a board overview, keyboard navigation and visible score/objective/tool controls. Wide boards can scale within usable targets or offer navigation when necessary; do not shrink phone controls into unusable targets. Clearly label oversized presets as bonus variants before starting.
+
+Host access configuration does not alter board rules, deterministic generation, difficulty or replay. Store actual dimensions and rules in the run, independently of display labels. Test default access, host-locked access, unlock transitions, existing-save recovery, large-board input/scrolling and whole-board effects outside the current viewport. Implement an initial bounded preset before extending maximum sizes further. Status: specified; availability and playable oversized presets must be implemented and verified per game.

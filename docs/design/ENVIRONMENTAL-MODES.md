@@ -31,3 +31,6 @@ Do not enable the option by bypassing existing bounds in the player. Define sepa
 Implement one effect at a time: deterministic patch shuffle, then fault mask and settling, then limited lightning, then deep-board dimensions/navigation. Each has its own pure engine oracle and full-state replay checks before player integration. Cover stable IDs, masks, edge clipping, changed previews, no reward loops, goal/end priority, target survival, combined-event order, tool/portal interactions and batched tick parity. The generator must replay the declared environment sequence and measure decisions under that ruleset. Surprise casual play can be optional; an authored puzzle is not claimed solvable under every arbitrary random quake.
 
 Browser gates cover 390/1280 sizes, non-selectable stones, focus, explicit confirmation, keyboard scrolling, offscreen affected cells, reduced motion and a long session on a deep board. None of these future modes changes current Daily or published level rules implicitly.
+
+
+Oversized boards are unlocked bonus options by default. A hosting site may apply its own optional lock/unlock policy, as specified in the shared design; the library itself requires no account or progression gate.
