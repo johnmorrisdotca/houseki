@@ -1,0 +1,462 @@
+{
+  "revision": 1,
+  "scope": "Independent rule examples, not a complete implementation test suite. Small boards exercise kernels; public settings retain the documented size limits.",
+  "coordinates": "Zero-based x/y; rows top to bottom. R red, B blue, G green; dot empty.",
+  "cases": [
+    {
+      "id": "triplets-cascade",
+      "kernel": "line-resolution",
+      "board": [
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "..R...",
+        "..B...",
+        "..B...",
+        "RRB..."
+      ],
+      "minimumRun": 3,
+      "directions": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ],
+      "pieceLevel": 1,
+      "expectedWaves": [
+        {
+          "cleared": [
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              2,
+              11
+            ]
+          ],
+          "points": 30
+        },
+        {
+          "cleared": [
+            [
+              0,
+              11
+            ],
+            [
+              1,
+              11
+            ],
+            [
+              2,
+              11
+            ]
+          ],
+          "points": 60
+        }
+      ],
+      "expectedBoard": [
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......"
+      ],
+      "expectedScore": 90
+    },
+    {
+      "id": "triplets-crossing",
+      "kernel": "line-match",
+      "board": [
+        ".R.",
+        "RRR",
+        ".R."
+      ],
+      "minimumRun": 3,
+      "expectedCleared": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "expectedPoints": 50
+    },
+    {
+      "id": "triplets-cycle",
+      "kernel": "cycle",
+      "piece": [
+        "R",
+        "B",
+        "G"
+      ],
+      "forward": [
+        "G",
+        "R",
+        "B"
+      ],
+      "backward": [
+        "B",
+        "G",
+        "R"
+      ]
+    },
+    {
+      "id": "collapse-compression",
+      "kernel": "group-remove-compress",
+      "board": [
+        "....",
+        "....",
+        "RB.G",
+        "RBGG"
+      ],
+      "select": [
+        1,
+        2
+      ],
+      "expectedGroup": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "expectedBoard": [
+        "....",
+        "....",
+        "R.G.",
+        "RGG."
+      ],
+      "expectedPoints": 10
+    },
+    {
+      "id": "collapse-diagonal",
+      "kernel": "component",
+      "board": [
+        "R.",
+        ".R"
+      ],
+      "select": [
+        0,
+        0
+      ],
+      "expectedGroup": [
+        [
+          0,
+          0
+        ]
+      ],
+      "expectedLegal": false
+    },
+    {
+      "id": "collapse-all-clear",
+      "kernel": "group-remove-compress",
+      "board": [
+        "RR"
+      ],
+      "select": [
+        0,
+        0
+      ],
+      "expectedGroup": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "expectedBoard": [
+        ".."
+      ],
+      "expectedPoints": 10,
+      "expectedBonus": 1000,
+      "expectedScore": 1010
+    },
+    {
+      "id": "chains-cascade",
+      "kernel": "component-resolution",
+      "board": [
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "..R...",
+        "..B...",
+        "..B...",
+        ".RB...",
+        "RRB..."
+      ],
+      "minimumGroup": 4,
+      "pieceLevel": 1,
+      "expectedWaves": [
+        {
+          "cleared": [
+            [
+              2,
+              8
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              2,
+              11
+            ]
+          ],
+          "points": 40
+        },
+        {
+          "cleared": [
+            [
+              1,
+              10
+            ],
+            [
+              0,
+              11
+            ],
+            [
+              1,
+              11
+            ],
+            [
+              2,
+              11
+            ]
+          ],
+          "points": 80
+        }
+      ],
+      "expectedBoard": [
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......",
+        "......"
+      ],
+      "expectedAllClearBonus": 500,
+      "expectedScore": 620
+    },
+    {
+      "id": "chains-split",
+      "kernel": "pair-landing",
+      "width": 6,
+      "height": 12,
+      "columnTops": {
+        "2": 8,
+        "3": 11
+      },
+      "rigidCells": [
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ]
+      ],
+      "expectedSettled": [
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          10
+        ]
+      ]
+    },
+    {
+      "id": "chains-wall-kick",
+      "kernel": "rotation",
+      "width": 6,
+      "height": 12,
+      "occupied": [],
+      "pivot": [
+        0,
+        5
+      ],
+      "orientation": "up",
+      "action": "anticlockwise",
+      "expectedPivot": [
+        1,
+        5
+      ],
+      "expectedSatellite": [
+        0,
+        5
+      ],
+      "expectedOrientation": "left"
+    },
+    {
+      "id": "swap-basic",
+      "kernel": "swap-before-refill",
+      "board": [
+        "RGR",
+        "BRB",
+        "GBG"
+      ],
+      "source": [
+        1,
+        1
+      ],
+      "target": [
+        1,
+        0
+      ],
+      "expectedLegal": true,
+      "expectedCleared": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "expectedPoints": 30
+    },
+    {
+      "id": "swap-invalid",
+      "kernel": "swap-before-refill",
+      "board": [
+        "RGR",
+        "BRB",
+        "GBG"
+      ],
+      "source": [
+        0,
+        0
+      ],
+      "target": [
+        1,
+        0
+      ],
+      "expectedLegal": false,
+      "expectedCleared": [],
+      "expectedPoints": 0,
+      "expectedBoardUnchanged": true
+    },
+    {
+      "id": "swap-beam-beam",
+      "kernel": "combo-geometry",
+      "width": 8,
+      "height": 8,
+      "centre": [
+        3,
+        3
+      ],
+      "combo": "beam+beam",
+      "expectedUniqueCleared": 15,
+      "expectedPoints": 150
+    },
+    {
+      "id": "swap-bomb-bomb",
+      "kernel": "combo-geometry",
+      "width": 8,
+      "height": 8,
+      "centre": [
+        3,
+        3
+      ],
+      "combo": "bomb+bomb",
+      "expectedUniqueCleared": 25,
+      "expectedPoints": 250
+    },
+    {
+      "id": "swap-bomb-edge",
+      "kernel": "combo-geometry",
+      "width": 8,
+      "height": 8,
+      "centre": [
+        0,
+        0
+      ],
+      "combo": "bomb+bomb",
+      "expectedUniqueCleared": 9,
+      "expectedPoints": 90
+    },
+    {
+      "id": "random-uint32-seed-1",
+      "kernel": "random-vector",
+      "initialState": 1,
+      "expectedNextStates": [
+        270369,
+        67634689,
+        2647435461,
+        307599695,
+        2398689233
+      ]
+    }
+  ]
+}
