@@ -73,3 +73,5 @@ Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts su
 Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md), [Magnetic Blocks and Floor Switch](MAGNETIC-BLOCKS.md), and [Earthquake, Lightning and deep boards](ENVIRONMENTAL-MODES.md). These documents describe proposed rules; they do not imply released support.
 
 [Magnetic Pieces](MAGNETIC-PIECES.md) defines rare queue/layout distribution, clear marking and bounded grid attraction separately from the floor mechanic.
+
+[Bounce and nature modes](BOUNCE-AND-NATURE.md) specifies controlled placement versus rebound and proposes naming choices. Working, tested development checkpoints should be committed frequently; unfinished feel review remains explicitly recorded.
