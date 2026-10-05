@@ -11,21 +11,22 @@
 <body>
 <main>
   <header>
-    <div class="intro"><h1>Houseki<span lang="ja">宝石</span></h1><p>Small games with careful rules and tactile materials.</p><p class="name">Colour Chains · 三つの宝石</p><p class="fam-fine">Development demo · Campaign and phone layout refinement are in progress.</p></div>
+    <div class="intro"><h1>Houseki<span lang="ja">宝石</span></h1><p>Small games with careful rules and tactile materials.</p><p class="name">Colour Chains · 色の連鎖</p><p class="fam-fine">Development demo · Campaign and phone layout refinement are in progress.</p></div>
     <nav><div class="lang" aria-label="Language / 言語"><button data-lang="en" aria-pressed="true">English</button><button data-lang="ja" lang="ja" aria-pressed="false">日本語</button></div><a class="fam-button" href="tools.html">Gem Swap &amp; Stone Collapse</a><a class="fam-button" href="api.html">API reference</a><button class="fam-button" id="theme" type="button">Theme</button><a class="fam-button" href="index.html">Falling Triplets</a></nav>
   </header>
   <div class="layout">
     <aside>
       <h2 data-i="settings">Settings</h2>
       <label class="field"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option><option value="daily">Daily</option></select></label>
-      <label class="field"><span>Challenge level</span><select id="level"></select></label>
-      <label class="field"><span data-i="board">Board</span><select id="preset"><option value="narrow">Narrow</option><option value="standard" selected>Standard</option><option value="wide">Wide</option><option value="tall">Tall</option></select></label>
+      <label class="field"><span data-i="lessonLabel">Learn to play</span><select id="lesson"></select></label><label class="field"><span data-i="challengeLabel">Challenge level</span><select id="level"></select></label>
+      <label class="field"><span data-i="board">Board</span><select id="preset"><option value="narrow">Narrow</option><option value="standard" selected>Standard</option><option value="wide">Wide</option><option value="tall">Tall</option><option value="deep">Deep · bonus</option><option value="large">Large · bonus</option><option value="extraWide">Extra wide · bonus</option></select></label>
       <label class="field"><span data-i="colours">Colours</span><select id="colours"><option value="4">Four</option><option value="5" selected>Five</option><option value="6">Six</option></select></label>
       <div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
-      <p data-i="help">Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.</p>
+      <p data-i="help">Rotate the pair and connect four of one colour. The two stones settle independently after landing.</p>
       <p id="pending" class="micro" hidden>Settings changed. Select New game to apply.</p>
       <p class="micro" data-i="keys">Keyboard: ← → move · Z / X cycle · Space place</p>
       <label class="field"><span data-i="material">Board material</span><select id="material"><option value="ivory">Ivory</option><option value="slate">Slate</option><option value="wood">Wood</option></select></label>
+      <label class="check"><input type="checkbox" id="nature"><span data-i="nature">Shizen · magnetic stones and rebound</span></label>
       <label class="check"><input type="checkbox" id="animations" checked><span data-i="animations">Animation</span></label>
       <label class="check"><input id="motion" type="checkbox"><span data-i="reduced">Reduce motion</span></label>
       <label class="check"><input id="sound" type="checkbox"><span data-i="sound">Sound effects</span></label>
@@ -33,8 +34,8 @@
     <section class="fam-felt game-screen" tabindex="0" aria-label="Colour Chains game">
       <div class="panel-head"><h2 data-i="title">Colour Chains</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="chain">Best chain</b> <output id="chain">0</output></span></div></div>
       <div class="play-area">
-        <section id="objective" hidden><p id="goal-text"></p><progress id="goal-progress" max="1" value="0"></progress><p id="budget"></p></section><div class="well-wrap"><div id="well" class="well" role="img" aria-label="Gem board"></div><div class="loss-line"></div></div>
-        <section class="next-wrap"><h3 data-i="next">Next</h3><div id="next" class="next"></div><p id="status" aria-live="polite">Place the triplet</p></section>
+        <section id="objective" hidden><p id="lesson-guide" hidden></p><p id="goal-text"></p><progress id="goal-progress" max="1" value="0"></progress><p id="budget"></p></section><div class="well-scroll"><div class="well-wrap"><div id="well" class="well" role="img" aria-label="Gem board"></div><div class="loss-line"></div></div></div><div class="board-nav" hidden><button class="fam-button" data-scroll="top">Top</button><button class="fam-button" data-scroll="bottom">Bottom</button><output class="scroll-position"></output></div>
+        <section class="next-wrap"><h3 data-i="next">Next</h3><div id="next" class="next"></div><p id="status" aria-live="polite">Place the pair</p></section>
       </div>
       <div class="controls">
         <button data-action="left" class="fam-button" aria-label="Left">←</button>

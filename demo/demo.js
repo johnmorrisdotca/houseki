@@ -1,10 +1,11 @@
+import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
-import { createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from '../dist/falling-triplets.js';
+import { createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from '../dist/falling-triplets.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
-  en: { animations:'Animation', settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · ↑ cycle · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
-  ja: { animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
+  en: { lessonLabel:'Learn to play',challengeLabel:'Challenge level',animations:'Animation', settings: 'Settings', mode: 'Mode', board: 'Board', colours: 'Colours', help: 'Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.', keys: 'Keyboard: ← → move · ↑ cycle · Z / X reverse/forward · ↓ soft drop · Space place/drop · Escape pause. Keypad: 4 / 6 move · 7 / 9 reverse/forward · 5 soft drop · 2 place/drop', material: 'Board material', reduced: 'Reduce motion', sound: 'Sound effects', title: 'Falling Triplets', score: 'Score', chain: 'Best chain', next: 'Next', reverse: 'Reverse cycle', cycle: 'Cycle', new: 'New game', restart: 'Restart', place: 'Place the triplet', paused: 'Paused', won: 'Challenge complete', lost: 'The well is full', placeButton: 'Place', drop: 'Drop', down: 'Down', theme: 'Theme', continue: 'Continue', countdown: 'Ready in', left: 'Left', right: 'Right', pause: 'Pause', resume: 'Continue' },
+  ja: { lessonLabel:'遊び方',challengeLabel:'チャレンジ',animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-falling-triplets-save'; const preferenceKey = 'houseki-ui';
 let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
@@ -23,8 +24,8 @@ function writePreferences() {
 function getOptions() { return { mode: $('#mode').value, preset: $('#mode').value === 'daily' ? 'narrow' : $('#preset').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
 function newGame(restart = false) {
   if (!restart || !startOptions.seed) startOptions = getOptions();
-  if(!restart)selectedLevel=levelManifest.find(level=>level.id===$('#level').value)??null;
-  game = selectedLevel?createLevel(selectedLevel.id):createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
+  if(!restart){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);selectedLevel=lesson?{...lesson,...lesson.setup,seed:`lesson:${lesson.id}`,lesson:true}:levelManifest.find(level=>level.id===$('#level').value)??null;}
+  game = selectedLevel?selectedLevel.lesson?createChallenge({...selectedLevel.setup,seed:selectedLevel.seed}):createLevel(selectedLevel.id):createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
   heldKeys.clear(); pendingReleases.clear(); render(); save(); $('.game-screen').focus({ preventScroll: true });
 }
@@ -37,10 +38,10 @@ function render() {
   const ghostY = landingY(game); if (game.active && ghostY !== null) game.active.gems.forEach((gem, i) => { const at = (ghostY + i + 3) * w + game.active.x; if (!cells[at]) cells[at] = gemMarkup(gem, 'ghost'); });
   if (game.active) game.active.gems.forEach((gem, i) => { const y = game.active.y + i; const at = (y + 3) * w + game.active.x; if (at >= 0 && at < cells.length) cells[at] = gemMarkup(gem, 'active'); });
   const well = $('#well'); well.style.setProperty('--cols', String(w)); well.style.setProperty('--rows', String(h));
-  well.style.gridTemplateRows = `repeat(3, calc(var(--cell) * .42)) repeat(${h}, var(--cell))`; well.dataset.width = String(w);well.dataset.phase=game.phase;
-  const markup = cells.map((content, index) => `<div class="cell" aria-label="${cellLabel(index, w, content)}">${content}</div>`).join('');
+  well.style.gridTemplateRows = `repeat(3, calc(var(--cell) * .42)) repeat(${h}, var(--cell))`; well.dataset.width = String(w);well.dataset.phase=game.phase;const oversized=h>20||w>12;$('.well-scroll').dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;
+  const markup = cells.map((content, index) => `<div class="cell${index<w*3?' hidden-row':''}" aria-label="${cellLabel(index, w, content)}">${content}</div>`).join('');
   if(well.dataset.markup!==markup){well.innerHTML=markup;well.dataset.markup=markup;settle(well,previous);}
-  const objective=$('#objective');objective.hidden=!selectedLevel;
+  const objective=$('#objective');objective.hidden=!selectedLevel;$('#lesson-guide').hidden=!selectedLevel?.lesson;if(selectedLevel?.lesson)$('#lesson-guide').textContent=selectedLevel.steps.map(step=>step.instruction[lang]).join(' ');
   if(selectedLevel){const goal=selectedLevel.goal;const ids=goal.targetIds;const chain=goal.minimumChain??goal.chain;let target,current,label;
    if(ids){target=ids.length;const remaining=new Set(game.board.filter(Boolean).map(gem=>gem.id));current=ids.filter(id=>!remaining.has(id)).length;label=lang==='en'?'Target gems cleared':'目標の石';}
    else if(chain){target=chain;current=game.maxChain;label=lang==='en'?'Best chain':'最大連鎖';}
@@ -53,7 +54,7 @@ function render() {
   const t = words[lang]; let status = game.phase === 'lost' ? (selectedLevel?(lang==='en'?'Challenge ended before the goal was reached':'目標を達成できませんでした'):t.lost) : game.phase === 'won' || game.phase === 'finished' ? t.won : game.phase === 'paused' ? t.paused : game.phase === 'clear-mark' ? (game.resolutionChain > 1 ? `Chain ${game.resolutionChain}` : `Clear · ${game.pendingClear?.length ?? 0}`) : t.place;
   const lastWave = game.waves.at(-1); if (lastWave && ['clear-mark', 'clear-remove', 'gravity'].includes(game.phase)) status = lastWave.chain > 1 ? `Chain ${lastWave.chain}` : `Clear · ${lastWave.clearedIds.length}`;
   $('#status').textContent = status;
-  document.documentElement.lang = lang;$('#level').options[0].textContent=lang==='en'?'Free play':'自由に遊ぶ';for(const option of [...$('#level').options].slice(1)){const level=levelManifest.find(item=>item.id===option.value);option.textContent=`${level.number} · ${level.marks}/5 · ${level.title[lang]}`;}
+  document.documentElement.lang = lang;$('#lesson').options[0].textContent=lang==='en'?'No lesson':'レッスンなし';for(const option of [...$('#lesson').options].slice(1)){option.textContent=tutorialManifest.find(item=>item.id===option.value).title[lang];}$('#level').options[0].textContent=lang==='en'?'Free play':'自由に遊ぶ';for(const option of [...$('#level').options].slice(1)){const level=levelManifest.find(item=>item.id===option.value);option.textContent=`${level.number} · ${level.marks}/5 · ${level.title[lang]}`;}
   document.querySelectorAll('[data-i]').forEach(el => { const key = el.dataset.i; if (t[key]) el.textContent = t[key]; });
   $('[data-action="place"]').textContent = t.placeButton; $('[data-action="hard-drop"]').textContent = t.drop; $('[data-action="soft-drop"]').textContent = t.down;
   $('[data-action="left"]').setAttribute('aria-label', t.left); $('[data-action="right"]').setAttribute('aria-label', t.right); $('[data-action="pause"]').textContent = t.pause; $('[data-action="resume"]').textContent = t.resume;
@@ -69,7 +70,8 @@ function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 350
 function playAction(kind) {
   const result = applyAction(game, { kind }); if (!result.accepted) return false;
   game = result.state; render(); queueSave();
-  if (result.events.some(event => event.type === 'cells-cleared') && $('#sound').checked) blip(Math.max(1, game.maxChain));
+  if(result.events.some(event=>['piece-locked','pair-locked'].includes(event.type)))playTone(1,true);
+  if (result.events.some(event => event.type === 'cells-cleared') && $('#sound').checked) playTone(Math.max(1, game.maxChain));
   if (['clear-mark', 'clear-remove', 'gravity', 'won', 'lost', 'finished'].includes(game.phase)) input = releaseAllActions(input);
   return true;
 }
@@ -79,7 +81,7 @@ async function resumeCountdown() {
   for (let n = 3; n > 0; n--) { $('#status').textContent = `${words[lang].countdown} ${n}`; await new Promise(resolve => setTimeout(resolve, 1000)); }
   resumeRequired = false; playAction('resume');
 }
-function blip(chain) { try { const context = new AudioContext(); const oscillator = context.createOscillator(); const gain = context.createGain(); oscillator.frequency.value = 520 + Math.min(chain, 6) * 70; gain.gain.setValueAtTime(.045, context.currentTime); gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + .16); oscillator.connect(gain).connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + .17); oscillator.onended = () => context.close(); } catch { /* Audio is optional. */ } }
+
 function simulationTick() {
   let endedPiece = false;
   let actions; [actions, input] = actionsForTick(input);
@@ -91,7 +93,7 @@ function simulationTick() {
   }
   if (endedPiece || game.phase !== 'falling') input = releaseAllActions(input);
   const beforeTick = game; const result = advanceTicks(game, 1); game = result.state;
-  if (game !== beforeTick) { render(); queueSave(); }
+  if (game !== beforeTick) {for(const event of result.events)if(event.type==='cells-cleared')playTone(event.chain??1); render(); queueSave(); }
 }
 function animate(timestamp) {
   if (!lastFrame) lastFrame = timestamp; const elapsed = Math.min(timestamp - lastFrame, 100); lastFrame = timestamp; accumulator += elapsed;
@@ -111,7 +113,7 @@ for (const selector of ['#mode', '#preset', '#colours']) $(selector).addEventLis
 $('#material').addEventListener('change', () => { render(); writePreferences(); });
 $('#theme').addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
-$('#sound').addEventListener('change', () => writePreferences());
+$('#sound').addEventListener('change',event=>{setSound(event.target.checked);writePreferences();});
 document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang; render(); writePreferences(); }));
 const keypadKeys = { Numpad4: 'arrowleft', Numpad6: 'arrowright', Numpad7: 'z', Numpad9: 'x', Numpad5: 'arrowdown', Numpad2: 'drop' };
 document.addEventListener('keydown', event => {
@@ -140,11 +142,19 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) { rel
 $('.resume').addEventListener('click', resumeCountdown);
 window.addEventListener('pagehide', () => { clearTimeout(saveTimer); if (game && game.settings.mode !== 'relaxed' && game.phase === 'falling') game = applyAction(game, { kind: 'pause' }).state; save(); });
 
+$('#lesson').innerHTML='<option value="">No lesson</option>'+tutorialManifest.map(lesson=>`<option value="${lesson.id}">${lesson.title.en}</option>`).join('');
+$('#level').addEventListener('change',()=>{$('#lesson').value='';});$('#lesson').addEventListener('change',()=>{$('#level').value='';});
 $('#level').innerHTML='<option value="">Free play</option>'+levelManifest.map(level=>`<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title.en}</option>`).join('');
 readPreferences();
 let recovered = false;
-try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;if(selectedLevel)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
+try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
 if (!game) newGame(); else { resumeRequired = false; render(); $('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
 
 $('#animations').checked=animationEnabled();$('#animations').addEventListener('change',event=>setAnimations(event.target.checked));
+
+for(const option of $('#preset').options){if(['deep','large','extraWide'].includes(option.value)&&globalThis.housekiConfig?.oversizedUnlocked===false){option.disabled=true;option.textContent+=' · Locked';}}
+for(const button of document.querySelectorAll('[data-scroll]'))button.addEventListener('click',()=>{const area=$('.well-scroll');area.scrollTop=button.dataset.scroll==='top'?0:area.scrollHeight;});
+$('.well-scroll').addEventListener('scroll',event=>{const area=event.target;$('.scroll-position').textContent=`${Math.round(area.scrollTop/Math.max(1,area.scrollHeight-area.clientHeight)*100)}%`;});
+
+$('#sound').checked=soundEnabled();document.addEventListener('pointerdown',unlockSound);document.addEventListener('keydown',unlockSound);

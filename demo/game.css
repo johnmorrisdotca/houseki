@@ -50,3 +50,11 @@ aside .micro { font-size: .78rem; color: var(--muted); }
 :root[data-animations="off"] .game-screen *, :root[data-motion="reduced"] .game-screen * { transition: none !important; animation: none !important; }
 
 #objective { margin: 8px 0; } #objective p { margin: 4px 0; } #goal-progress { width: min(100%,320px); accent-color: var(--frame); }
+
+.hidden-row .gem { width: calc(var(--cell)*.36); height: calc(var(--cell)*.36); font-size: calc(var(--cell)*.2); }
+
+.well-scroll { max-width: 100%; } .well-scroll[data-oversized="true"] { overflow: auto; max-height: min(65dvh,600px); border-radius: 13px; overscroll-behavior: contain; } .well-scroll[data-oversized="true"] .well { --cell: max(32px,min(42px,calc((100vw - 84px)/var(--cols)))); } .board-nav { display: flex; gap: 8px; align-items: center; } .board-nav[hidden] { display:none; }
+
+@media(max-width:760px) { .well-scroll[data-oversized="true"] { max-height: 50dvh; } }
+
+.gem.magnetic{box-shadow:inset 0 0 0 2px #b9c2c9,0 2px 4px #0006}.gem.magnetic small{position:absolute;right:1px;top:0;font-size:.45em;color:#fff;text-shadow:0 1px 2px #000}

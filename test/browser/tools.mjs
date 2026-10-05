@@ -42,6 +42,7 @@ try{
    assert.equal(await page.locator('#well').getAttribute('data-phase'),'won');
    assert.equal(await page.locator('#goal-progress').evaluate(p=>p.value===p.max),true);
    await page.locator('#restart').click();assert.equal(await page.locator('#goal-progress').evaluate(p=>p.value),0);
+   for(let lesson=1;lesson<=3;lesson++){await page.locator('#lesson').selectOption({index:lesson});await page.locator('#new').click();assert.equal(await page.locator('#lesson-guide').isVisible(),true);assert.ok((await page.locator('#lesson-guide').textContent()).length>10);assert.equal(await page.locator('#well').getAttribute('data-phase'),'falling');}
   }
   await page.goto(`${url}/tools.html`);await page.waitForSelector('[data-cell] .gem');
   for(const mode of ['gem-swap','stone-collapse']){
@@ -72,7 +73,7 @@ try{
   await page.locator('#animations').uncheck();await page.reload();assert.equal(await page.locator('#animations').isChecked(),false);
   await page.goto(`${url}/`);assert.equal(await page.locator('#animations').isChecked(),false);
   await page.locator('#animations').check();await page.goto(`${url}/tools.html`);assert.equal(await page.locator('#animations').isChecked(),true);
-  await page.locator('#code').fill('black-hole-browser');await page.locator('#advanced').check();await page.locator('#new').click();
+  await page.locator('#game').selectOption('gem-swap');await page.locator('#code').fill('black-hole-browser');await page.locator('#advanced').check();await page.locator('#new').click();
   async function ordinarySwap(){
    const move=await page.evaluate(async()=>{
     const module=await import('./dist/gem-swap.js');const grid=document.querySelector('#grid');
@@ -94,10 +95,37 @@ try{
   await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#restart').click();await ordinarySwap();
   assert.equal(await page.evaluate(()=>document.querySelector('#grid').getAnimations({subtree:true}).length),0);
   await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#advanced').uncheck();
+  await page.locator('#sound').check();await page.goto(`${url}/chains.html`);assert.equal(await page.locator('#sound').isChecked(),true);await page.locator('#sound').uncheck();await page.goto(`${url}/tools.html`);assert.equal(await page.locator('#sound').isChecked(),false);
+  await page.locator('#game').selectOption('gem-swap');assert.equal(await page.locator('#level option').count(),51);await page.locator('#level').selectOption({index:1});await page.locator('#new').click();
+  const firstSwap=await page.evaluate(async()=>{const m=await import('./dist/gem-swap.js');return m.GEM_SWAP_CAMPAIGN[0].witness.find(op=>op.kind==='action').action;});
+  await page.locator(`[data-cell="${firstSwap.from}"]`).click();await page.locator(`[data-cell="${firstSwap.to}"]`).click();await page.waitForFunction(()=>document.querySelector('#grid').dataset.phase==='finished');assert.match(await page.locator('#status').textContent(),/Goal complete/);assert.equal(await page.locator('#objectives progress').evaluate(p=>p.value===p.max),true);
+  for(let lesson=1;lesson<=3;lesson++){await page.locator('#lesson').selectOption({index:lesson});await page.locator('#new').click();assert.equal(await page.locator('#lesson-guide').isVisible(),true);}
+  await page.locator('#game').selectOption('stone-collapse');assert.equal(await page.locator('#level option').count(),101);
+  await page.locator('#level').selectOption({index:1});await page.locator('#new').click();
+  const groups=await page.evaluate(async()=>{const m=await import('./dist/stone-collapse.js');return m.levelManifest[0].witness;});
+  for(const ids of groups){await page.locator(`[data-gem-id="${ids[0]}"]`).click();await page.locator('#confirm').click();await page.waitForFunction(()=>['ready','won','lost','finished'].includes(document.querySelector('#grid').dataset.phase));}
+  assert.equal(await page.locator('#grid').getAttribute('data-phase'),'won');assert.equal(await page.locator('#objectives progress').evaluate(p=>p.value===p.max),true);
+  await page.locator('#restart').click();assert.equal(await page.locator('#objectives progress').evaluate(p=>p.value),0);
+  for(let lesson=1;lesson<=3;lesson++){await page.locator('#lesson').selectOption({index:lesson});await page.locator('#new').click();assert.equal(await page.locator('#lesson-guide').isVisible(),true);}
+  await page.locator('#lesson').selectOption('');await page.locator('#level').selectOption('');
+  for(const mode of ['gem-swap','stone-collapse'])for(const run of ['arcade','daily']){await page.locator('#game').selectOption(mode);await page.locator('#mode').selectOption(run);await page.locator('#new').click();assert.equal(await page.locator('#grid').getAttribute('data-phase'),'ready');if(run==='daily')assert.equal(await page.locator('[data-tool="bomb"]').isDisabled(),true);}
+  await page.locator('#mode').selectOption('relaxed');
   for(const mode of ['gem-swap','stone-collapse']) for(const shape of ['heart','star','hexagon']) {
    await page.locator('#game').selectOption(mode);await page.locator('#shape').selectOption(shape);await page.locator('#new').click();
    await page.locator('[data-cell] .gem').first().waitFor();const box=await page.locator('#grid').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width);
   }
+  for(const path of ['index.html','chains.html']){
+   await page.goto(`${url}/${path}`);await page.locator('#lesson').selectOption('');await page.locator('#level').selectOption('');await page.locator('#preset').selectOption('deep');await page.locator('#new').click();
+   assert.equal(await page.locator('.well-scroll').evaluate(area=>area.scrollHeight>area.clientHeight),true);
+   await page.locator('[data-scroll="bottom"]').click();assert.ok(await page.locator('.well-scroll').evaluate(area=>area.scrollTop)>0);await page.locator('[data-scroll="top"]').click();assert.equal(await page.locator('.well-scroll').evaluate(area=>area.scrollTop),0);
+  }
+  await page.goto(`${url}/tools.html`);await page.locator('#game').selectOption('stone-collapse');await page.locator('#level').selectOption('');await page.locator('#lesson').selectOption('');await page.locator('#mode').selectOption('relaxed');await page.locator('#shape').selectOption('');await page.locator('#preset').selectOption('deep');await page.locator('#new').click();
+  assert.equal(await page.locator('.board-scroll').evaluate(area=>area.scrollHeight>area.clientHeight),true);
+  await page.locator('[data-cell="255"]').focus();assert.ok(await page.locator('.board-scroll').evaluate(area=>area.scrollTop)>0,'deep board keyboard focus reveals the bottom row');
+  await page.locator('#game').selectOption('gem-swap');assert.equal(await page.locator('#grid').getAttribute('data-phase'),'ready');assert.equal(await page.locator('#preset').inputValue(),'deep');assert.equal(await page.locator('#grid').getAttribute('aria-rowcount'),'32');
+  await page.goto(`${url}/chains.html`);await page.locator('#mode').selectOption('relaxed');await page.locator('#level').selectOption('');await page.locator('#lesson').selectOption('');await page.locator('#nature').check();await page.locator('#new').click();assert.equal(await page.locator('#nature').isChecked(),true);
+  await page.locator('#mode').selectOption('daily');await page.locator('#new').click();assert.equal(await page.locator('#nature').isDisabled(),true);assert.equal(await page.locator('#nature').isChecked(),false);
+  await page.addInitScript(()=>{globalThis.housekiConfig={oversizedUnlocked:false};});await page.goto(`${url}/chains.html`);assert.equal(await page.locator('#preset option[value="deep"]').evaluate(option=>option.disabled),true);
   assert.deepEqual(errors,[]);await page.close();
  }
  console.log('PASS both game trays desktop/phone: corner preview, cancel without cost, confirmed spend/effect, sticky assistance, undo/restart, keyboard target/cancel, translations, bounds and non-selectable gems');

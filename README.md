@@ -13,11 +13,13 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 | Colour Chains | Rotate falling pairs; build connected groups and cascading chains |
 | Gem Swap | Swap neighbours; create and combine specials to complete objectives |
 
-![Falling Triplets development demo](docs/images/falling-triplets-desktop.png)
+![Falling Triplets demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/falling-triplets-desktop.png)
 
-![Gem Swap stored-tool tray on desktop](docs/images/tool-tray-desktop.png)
+![Colour Chains demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/colour-chains-desktop.png)
 
-[Phone layout](docs/images/tool-tray-phone.png)
+![Gem Swap demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/gem-swap-desktop.png)
+
+![Stone Collapse demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/stone-collapse-desktop.png)
 
 [API reference](https://johnmorrisdotca.github.io/houseki/api.html) is generated locally by `pnpm site`; the hosted page becomes available after deployment. [Incremental draft PR](https://github.com/johnmorrisdotca/houseki/pull/1).
 
@@ -25,7 +27,7 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 
 The [design pack](docs/design/README.md) specifies rules, controls, materials, accessibility, generation, grading, persistence and acceptance checks. [Level generation](docs/design/LEVEL-GENERATION.md) follows a deliberate complete count and measured progression: generate and prove original boards, remove duplicates, grade player-facing decisions, then sort and number from easy to hard. Stable content IDs preserve saved progress across future ordering changes.
 
-The shared player uses the family's ivory, brass and felt palette, permanent colour symbols and configurable boards. Each planned set of three interactive lessons is separate from the graded campaign. Physical-device feel testing and fluent Japanese copy review are recorded independently from automated checks.
+The shared player uses the family's ivory, brass and felt palette, permanent colour symbols and configurable boards. Each set of three interactive lessons is separate from the graded campaign. Physical-device feel testing and fluent Japanese copy review are recorded independently from automated checks.
 
 ## Local development
 
@@ -38,7 +40,7 @@ pnpm test
 pnpm demo
 ```
 
-The local demo instructions print its address. The first page plays Falling Triplets; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions and [the implementation plan](docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
+The local demo instructions print its address. The first page plays Falling Triplets; `chains.html` plays Colour Chains; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. The campaigns contain 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty. Finite goals show progress and remaining pieces or moves. All players share the persisted default-on Animation setting and respect reduced motion. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions and [the implementation plan](docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
 
 ## Engine example
 
@@ -53,7 +55,7 @@ game = applyAction(game, { kind: 'place' }).state;
 game = advanceTicks(game, 22).state;
 ```
 
-This example describes the planned installed package; use the local build while release checks are pending. Each completed game will have its own documented entry point, supported settings and complete API reference before publishing.
+The package exposes an entry point for each game. The generated API reference lists every exported function, type and setting.
 
 ## Licence
 
@@ -61,4 +63,16 @@ This example describes the planned installed package; use the local build while 
 
 ## Stored tools
 
-[Stored-tool rules](docs/design/STORED-TOOLS.md) distinguish inventory from special gems on the board. Gem Swap offers Bomb, Row clear and Colour clear; Stone Collapse offers Bomb and Pick. Select a tool and an occupied square, inspect the highlighted effect, then confirm or cancel. Ordinary clears earn capped inventory; using tools marks the run assisted. Daily and existing authored challenges keep their declared tool-free rules. A rare [Black Hole](docs/design/BLACK-HOLE.md) is a separate advanced milestone under development.
+[Stored-tool rules](docs/design/STORED-TOOLS.md) distinguish inventory from special gems on the board. Gem Swap offers Bomb, Row clear and Colour clear; Stone Collapse offers Bomb and Pick. Select a tool and an occupied square, inspect the highlighted effect, then confirm or cancel. Ordinary clears earn capped inventory; using tools marks the run assisted. Daily and existing authored challenges keep their declared tool-free rules. Gem Swap also offers an optional earned [Black Hole](docs/design/BLACK-HOLE.md): consume nearby gems with a visibly shrinking capacity and bounded lifetime. Enable it before starting a casual board.
+
+## Package entry points
+
+Import a game directly from `@johnmorrisdotca/houseki/falling-triplets`, `/stone-collapse`, `/colour-chains` or `/gem-swap`. The root entry groups the same APIs as `fallingTriplets`, `stoneCollapse`, `colourChains` and `gemSwap` namespaces. Engines do not depend on the DOM or external services.
+
+```ts
+import { colourChains } from '@johnmorrisdotca/houseki';
+const firstChallenge = colourChains.createLevel(1);
+const objective = firstChallenge.settings.goal;
+```
+
+Run `npm run check:package` to build, pack and install the actual tarball into a temporary consumer and check every game entry point. `npm run test:browser` verifies desktop and phone player controls, witnessed campaign wins, progress, tool use, persistence of animation preferences and reduced motion.

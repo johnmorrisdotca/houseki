@@ -26,3 +26,9 @@
 .field input { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 10px; background: var(--page); }
 .full-cell.portal { background: #162019; }
 .portal-ring { color: #f2cf78; font-size: calc(var(--size)*.8); line-height: 1; opacity: calc(.3 + var(--strength)*.7); transform: scale(calc(.5 + var(--strength)*.5)); filter: drop-shadow(0 0 3px #efd277); }
+
+#objectives { padding-top: 8px; } #objectives p { margin: 4px 0; } #objectives progress { width: min(100%,320px); accent-color: var(--frame); }
+
+.board-scroll { max-width: 100%; } .board-scroll[data-oversized="true"] { max-height: min(65dvh,600px); overflow: auto; overscroll-behavior: contain; border-radius: 12px; } .board-scroll[data-oversized="true"] .full-board { --size: 36px; }
+
+@media(max-width:760px) { .board-scroll[data-oversized="true"] { max-height: 35dvh; } }

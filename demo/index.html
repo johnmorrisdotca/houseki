@@ -18,8 +18,8 @@
     <aside>
       <h2 data-i="settings">Settings</h2>
       <label class="field"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option><option value="daily">Daily</option></select></label>
-      <label class="field"><span>Challenge level</span><select id="level"></select></label>
-      <label class="field"><span data-i="board">Board</span><select id="preset"><option value="compact">Compact · 5 × 13</option><option value="standard" selected>Standard · 8 × 13</option><option value="narrow">Narrow · 6 × 13</option><option value="wide">Wide · 10 × 13</option><option value="extraWide">Extra wide · 12 × 13</option><option value="tall">Tall · 8 × 17</option></select></label>
+      <label class="field"><span data-i="lessonLabel">Learn to play</span><select id="lesson"></select></label><label class="field"><span data-i="challengeLabel">Challenge level</span><select id="level"></select></label>
+      <label class="field"><span data-i="board">Board</span><select id="preset"><option value="compact">Compact · 5 × 13</option><option value="standard" selected>Standard · 8 × 13</option><option value="narrow">Narrow · 6 × 13</option><option value="wide">Wide · 10 × 13</option><option value="extraWide">Extra wide · 12 × 13</option><option value="tall">Tall · 8 × 17</option><option value="deep">Deep · bonus</option><option value="large">Large · bonus</option></select></label>
       <label class="field"><span data-i="colours">Colours</span><select id="colours"><option value="4">Four</option><option value="5" selected>Five</option><option value="6">Six</option></select></label>
       <div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
       <p data-i="help">Cycle the colours, line up three, and watch the gems fall into new matches. Lines may run horizontally, vertically, or diagonally.</p>
@@ -33,7 +33,7 @@
     <section class="fam-felt game-screen" tabindex="0" aria-label="Falling Triplets game">
       <div class="panel-head"><h2 data-i="title">Falling Triplets</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="chain">Best chain</b> <output id="chain">0</output></span></div></div>
       <div class="play-area">
-        <section id="objective" hidden><p id="goal-text"></p><progress id="goal-progress" max="1" value="0"></progress><p id="budget"></p></section><div class="well-wrap"><div id="well" class="well" role="img" aria-label="Gem board"></div><div class="loss-line"></div></div>
+        <section id="objective" hidden><p id="lesson-guide" hidden></p><p id="goal-text"></p><progress id="goal-progress" max="1" value="0"></progress><p id="budget"></p></section><div class="well-scroll"><div class="well-wrap"><div id="well" class="well" role="img" aria-label="Gem board"></div><div class="loss-line"></div></div></div><div class="board-nav" hidden><button class="fam-button" data-scroll="top">Top</button><button class="fam-button" data-scroll="bottom">Bottom</button><output class="scroll-position"></output></div>
         <section class="next-wrap"><h3 data-i="next">Next</h3><div id="next" class="next"></div><p id="status" aria-live="polite">Place the triplet</p></section>
       </div>
       <div class="controls">
