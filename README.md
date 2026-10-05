@@ -1,5 +1,7 @@
 # Houseki · 宝石
 
+[![Checks](https://github.com/johnmorrisdotca/houseki/actions/workflows/check.yml/badge.svg)](https://github.com/johnmorrisdotca/houseki/actions/workflows/check.yml) [![MIT licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 Original gem and stone puzzle games with immutable TypeScript rules and a shared English/Japanese player.
 
 **Development status:** implementation and review are in progress. This repository is not yet an npm release or a claim of completed commercial polish. The website integration is maintained separately.
@@ -10,6 +12,10 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 | Stone Collapse | Select connected groups; plan removal order and column compression |
 | Colour Chains | Rotate falling pairs; build connected groups and cascading chains |
 | Gem Swap | Swap neighbours; create and combine specials to complete objectives |
+
+![Falling Triplets development demo](docs/images/falling-triplets-desktop.png)
+
+[API reference](https://johnmorrisdotca.github.io/houseki/api.html) is generated locally by `pnpm site`; the hosted page becomes available after deployment. [Incremental draft PR](https://github.com/johnmorrisdotca/houseki/pull/1).
 
 ## Design and progression
 
