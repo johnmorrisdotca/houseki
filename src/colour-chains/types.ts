@@ -9,7 +9,7 @@ export interface Cell { readonly x: number; readonly y: number }
 /** The active rigid pair. The pivot always retains its own gem identity. */
 export interface Pair { readonly pivot: Cell; readonly orientation: Orientation; readonly gems: readonly [Gem, Gem]; readonly level: number; readonly gravityTicks: number; readonly groundedTicks: number; readonly resetCount: number; readonly groundedStarted: boolean }
 /** Supported well presets. */
-export type Preset = 'narrow' | 'standard' | 'wide' | 'tall';
+export type Preset = 'narrow' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
 export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
 export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly dailyDate?: string; readonly preset?: Preset; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pairLimit?: number }
 /** Run settings fixed at game creation. */

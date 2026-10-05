@@ -32,7 +32,9 @@ export function restartGame(state: GameState): GameState {
 
 /** Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint. */
 export function encodeGame(state: GameState): string {
-  const encoded = JSON.stringify({ format: 1, game: state.game, rules: state.rules, settings: state.settings, challenge: state.challenge, actions: state.recording, checkpoint: state });
+  // Undo frames are derived by replaying committed actions; storing their full board snapshots scales poorly on deep boards.
+  const { history: _history, ...checkpoint } = state;
+  const encoded = JSON.stringify({ format: 1, game: state.game, rules: state.rules, settings: state.settings, challenge: state.challenge, actions: state.recording, checkpoint });
   if (new TextEncoder().encode(encoded).length > 2 * 1024 * 1024) throw new RangeError('Save exceeds 2 MiB');
   return encoded;
 }
@@ -145,7 +147,9 @@ export function decodeGame(text: string): GameState {
   const checkpoint = value.checkpoint as GameState;
   try {
     if (checkpoint.selectedId !== state.selectedId) state = applyUiSelection(state, checkpoint.selectedId ?? null);
-    if (stable(state) !== stable(checkpoint)) throw new TypeError('Save checkpoint does not match its action recording');
+    const checkpointHasHistory = Object.hasOwn(checkpoint, 'history');
+    const { history: _history, ...derivedCheckpoint } = state;
+    if (stable(checkpointHasHistory ? state : derivedCheckpoint) !== stable(checkpoint)) throw new TypeError('Save checkpoint does not match its action recording');
   } catch (error) {
     if (error instanceof TypeError && error.message.startsWith('Save checkpoint')) throw error;
     throw new TypeError('Save checkpoint is invalid or does not match its action recording');

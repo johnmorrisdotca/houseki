@@ -1,5 +1,5 @@
 import type { ChallengeGoal, Colour, CreateOptions, Mode, Preset, Settings } from './types.js';
-const PRESETS: Readonly<Record<Preset, readonly [number, number]>> = { narrow: [5, 12], standard: [6, 12], wide: [8, 12], tall: [6, 16] };
+const PRESETS: Readonly<Record<Preset, readonly [number, number]>> = { narrow: [5, 12], standard: [6, 12], wide: [8, 12], tall: [6, 16], extraWide: [12, 12], deep: [8, 32], large: [12, 32] };
 const COLOURS: readonly Colour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 /** Typed setup and authored challenge error. */
 export class StoneChainsOptionsError extends RangeError {
@@ -12,7 +12,7 @@ function validDate(value: string): boolean {
   const time = Date.parse(`${value}T00:00:00.000Z`); return Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === value;
 }
 function validateSize(width: number, height: number): void {
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 10 || height < 12 || height > 20 || width * height > 240) throw new StoneChainsOptionsError('invalid-board-size', 'Board must be 5–10 columns by 12–20 visible rows, with at most 240 cells');
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 16 || height < 12 || height > 32 || width * height > 512) throw new StoneChainsOptionsError('invalid-board-size', 'Board must be 5–16 columns by 12–32 visible rows, with at most 512 cells');
 }
 /** Validates public modes and canonical category dimensions before a random draw. */
 export function normalizeOptions(options: CreateOptions): NormalizedOptions {
@@ -41,7 +41,7 @@ export function normalizeOptions(options: CreateOptions): NormalizedOptions {
 export function validateChallengeGoal(goal: ChallengeGoal, ids: ReadonlySet<number>): ChallengeGoal {
   if (!goal || typeof goal !== 'object' || Array.isArray(goal)) throw new StoneChainsOptionsError('invalid-goal', 'Challenge goal must be an object');
   if (goal.kind === 'clear-targets') {
-    if (Object.keys(goal).some(key => key !== 'kind' && key !== 'targetIds') || !Array.isArray(goal.targetIds) || goal.targetIds.length < 1 || goal.targetIds.length > 240 || goal.targetIds.some(id => !Number.isSafeInteger(id) || !ids.has(id)) || new Set(goal.targetIds).size !== goal.targetIds.length) throw new StoneChainsOptionsError('invalid-target-ids', 'Target goal requires unique IDs from the starting board');
+    if (Object.keys(goal).some(key => key !== 'kind' && key !== 'targetIds') || !Array.isArray(goal.targetIds) || goal.targetIds.length < 1 || goal.targetIds.length > 512 || goal.targetIds.some(id => !Number.isSafeInteger(id) || !ids.has(id)) || new Set(goal.targetIds).size !== goal.targetIds.length) throw new StoneChainsOptionsError('invalid-target-ids', 'Target goal requires unique IDs from the starting board');
     return Object.freeze({ kind: 'clear-targets', targetIds: Object.freeze([...goal.targetIds].sort((a, b) => a - b)) });
   }
   if (goal.kind === 'minimum-chain') {

@@ -20,5 +20,5 @@ export interface Transition { readonly state: GameState; readonly events: readon
 /** One accepted canonical action and its logical tick position. */
 export interface RecordedAction { readonly tick: number; readonly ordinal: number; readonly action: Exclude<Action, { readonly kind: 'tick' }> }
 export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
-export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly preset?: 'compact' | 'narrow' | 'standard' | 'wide' | 'extraWide' | 'tall'; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pieceLimit?: number }
+export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly preset?: 'compact' | 'narrow' | 'standard' | 'wide' | 'extraWide' | 'tall' | 'deep' | 'large'; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pieceLimit?: number }
 export interface ChallengeOptions { readonly seed?: string; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly board: readonly (Gem | null)[]; readonly queue: readonly Triplet[]; readonly goal: ChallengeGoal; readonly witness?: readonly ChallengeHint[] }

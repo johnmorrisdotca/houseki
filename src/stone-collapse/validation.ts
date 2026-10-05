@@ -1,7 +1,7 @@
 import type { BoardPreset, BoardShape, CreateOptions, GameMode, StoneColour } from './types.js';
 
 const PRESETS: Readonly<Record<BoardPreset, readonly [number, number]>> = {
-  compact: [6, 8], standard: [8, 10], wide: [10, 8], tall: [6, 12],
+  compact: [6, 8], standard: [8, 10], wide: [10, 8], tall: [6, 12], extraWide: [16, 10], deep: [8, 32], large: [12, 32],
 };
 const COLOURS: readonly StoneColour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 
@@ -56,7 +56,7 @@ function validateMask(mask: readonly boolean[], width: number, height: number): 
   if (!Array.isArray(mask)) throw new StoneCollapseOptionsError('invalid-mask', 'Mask must be a boolean array');
   if (mask.length !== width * height || Array.from(mask).some(value => typeof value !== 'boolean')) throw new StoneCollapseOptionsError('invalid-mask-size', 'Mask must contain one boolean per board cell');
   const active = mask.flatMap((on, i) => on ? [i] : []);
-  if (active.length < 16 || active.length > 144) throw new StoneCollapseOptionsError('invalid-active-count', 'A board must have 16–144 active cells');
+  if (active.length < 16 || active.length > 512) throw new StoneCollapseOptionsError('invalid-active-count', 'A board must have 16–512 active cells');
   if (active.some(index => neighbors(index, width, height, mask).length === 0)) throw new StoneCollapseOptionsError('isolated-mask-cell', 'Mask cannot contain an isolated active cell');
   const visited = new Set<number>([active[0]!]); const pending = [active[0]!];
   while (pending.length) for (const next of neighbors(pending.pop()!, width, height, mask)) if (!visited.has(next)) { visited.add(next); pending.push(next); }
@@ -98,10 +98,10 @@ export function optionsFor(options: CreateOptions): NormalizedOptions {
     const preset = PRESETS[presetName];
     if (hasDimensions && options.preset !== undefined) throw new StoneCollapseOptionsError('conflicting-board-options', 'Choose a preset or custom dimensions');
     width = options.width ?? preset[0]; height = options.height ?? preset[1];
-    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 4 || width > 12 || height < 4 || height > 12 || width * height > 144) throw new StoneCollapseOptionsError('invalid-board-size', 'Board dimensions must each be 4–12 with at most 144 cells');
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 4 || width > 16 || height < 4 || height > 32 || width * height > 512) throw new StoneCollapseOptionsError('invalid-board-size', 'Board dimensions must be 4–16 columns by 4–32 rows, with at most 512 cells');
     mask = Array(width * height).fill(true);
   }
-  if (!Number.isInteger(width!) || !Number.isInteger(height!) || width! < 4 || width! > 12 || height! < 4 || height! > 12 || width! * height! > 144) throw new StoneCollapseOptionsError('invalid-board-size', 'Board dimensions must each be 4–12 with at most 144 cells');
+  if (!Number.isInteger(width!) || !Number.isInteger(height!) || width! < 4 || width! > 16 || height! < 4 || height! > 32 || width! * height! > 512) throw new StoneCollapseOptionsError('invalid-board-size', 'Board dimensions must be 4–16 columns by 4–32 rows, with at most 512 cells');
   validateMask(mask!, width!, height!);
   const colourCount = options.colourCount ?? 4;
   if (colourCount !== 4 && colourCount !== 5 && colourCount !== 6) throw new StoneCollapseOptionsError('invalid-colour-count', 'Colour count must be 4, 5, or 6');

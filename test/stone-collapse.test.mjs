@@ -75,7 +75,7 @@ test('public presets, dimensions, colours, connected silhouettes, and custom-mas
     assert.ok(game.settings.mask.every((active, i) => active === Boolean(game.board[i])));
   }
   assert.throws(() => createGame({ width: 3, height: 8 }), StoneCollapseOptionsError);
-  assert.throws(() => createGame({ width: 13, height: 8 }), StoneCollapseOptionsError);
+  assert.throws(() => createGame({ width: 17, height: 8 }), StoneCollapseOptionsError);
   assert.throws(() => createGame({ width: 12, height: 12, colourCount: 3 }), StoneCollapseOptionsError);
   assert.throws(() => createGame({ width: 4, height: 4, mask: Array(15).fill(true) }), StoneCollapseOptionsError);
   assert.throws(() => createGame({ width: 4, height: 4, mask: [true, false, true, true, ...Array(12).fill(true)] }), StoneCollapseOptionsError);

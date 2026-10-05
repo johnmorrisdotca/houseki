@@ -21,9 +21,9 @@ test('public setup validates dimensions, presets, colours and deterministic stab
   assert.deepEqual([createGame({ preset: 'narrow' }).settings.width, createGame({ preset: 'narrow' }).settings.height], [5, 12]);
   assert.deepEqual([createGame({ preset: 'wide' }).settings.width, createGame({ preset: 'wide' }).settings.height], [8, 12]);
   assert.deepEqual([createGame({ preset: 'tall' }).settings.width, createGame({ preset: 'tall' }).settings.height], [6, 16]);
-  assert.throws(() => createGame({ width: 4 }), /5–10 columns/);
-  assert.throws(() => createGame({ height: 11 }), /12–20 visible rows/);
-  assert.throws(() => createGame({ width: 10, height: 25 }), /12–20 visible rows/);
+  assert.throws(() => createGame({ width: 4 }), /5–16 columns/);
+  assert.throws(() => createGame({ height: 11 }), /12–32 visible rows/);
+  assert.throws(() => createGame({ width: 10, height: 33 }), /12–32 visible rows/);
   assert.throws(() => createGame({ preset: 'custom' }), /Unsupported board preset/);
   assert.throws(() => createGame({ colourCount: 7 }), /Colour count/);
   const a = createGame({ seed: 'same' }); const b = createGame({ seed: 'same' });
@@ -395,7 +395,7 @@ test('the canonical recording captures held timing and rejects malformed setup a
   const [saved, ] = processInputTick(start, held, applyAction, advanceTicks);
   assert.deepEqual(decodeGame(encodeGame(saved)), saved);
   assert.equal(saved.recording[0].tick, 0); assert.equal(saved.recording[0].ordinal, 0);
-  assert.throws(() => createGame({ mode: 'arcade', width: 11, height: 12 }), StoneChainsOptionsError);
+  assert.throws(() => createGame({ mode: 'arcade', width: 17, height: 12 }), StoneChainsOptionsError);
   assert.throws(() => createChallenge({ id: 'bad', width: W, height: H, board: Array(W * H).fill(null), queue: [['red', 'blue']], goal: { kind: 'empty-board' }, witness: [{ pivotX: 2, orientation: 'up' }] }), StoneChainsOptionsError);
   const board = Array(W * H).fill(null); board[0] = { id: 1, colour: 'red' }; board[1] = { id: 1, colour: 'blue' };
   assert.throws(() => createChallenge({ id: 'duplicate', width: W, height: H, board, queue: [['red', 'blue'], ['green', 'gold']], goal: { kind: 'empty-board' }, witness: [{ pivotX: 2, orientation: 'up' }] }), StoneChainsOptionsError);

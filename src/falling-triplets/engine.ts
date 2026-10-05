@@ -1,9 +1,13 @@
 import { compactBoard, findMatches } from './match.js';
 import { drawBag, nextInt, seedState } from './random.js';
 import type { Action, ChallengeOptions, Colour, CreateOptions, GameEvent, GameState, Gem, Mode, Piece, Settings, Transition, Triplet } from './types.js';
-const PRESETS = { compact: [5, 13], extraWide: [12, 13], narrow: [6, 13], standard: [8, 13], wide: [10, 13], tall: [8, 17] } as const;
+const PRESETS = { compact: [5, 13], extraWide: [12, 13], narrow: [6, 13], standard: [8, 13], wide: [10, 13], tall: [8, 17], deep: [8, 32], large: [12, 24] } as const;
 const RULES = 'triplets-1' as const;
 const HIDDEN = 3;
+const MAX_VISIBLE_CELLS = 512;
+function validateDimensions(width: number, height: number): void {
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 16 || height < 12 || height > 32 || width * height > MAX_VISIBLE_CELLS) throw new RangeError('Board must be 5–16 columns by 12–32 visible rows, with at most 512 cells');
+}
 const emptyTransition = (state: GameState, reason: string): Transition => ({ state, events: [], accepted: false, reason });
 const addr = (x: number, y: number, width: number): number => (y + HIDDEN) * width + x;
 interface Drawn { readonly colours: readonly [Colour, Colour, Colour]; readonly bag: readonly Colour[]; readonly randomState: number }
@@ -34,7 +38,7 @@ function advanceBag(state: GameState): readonly [readonly Colour[], number, read
 export function createGame(options: CreateOptions = {}): GameState {
   if (options.preset !== undefined && !Object.hasOwn(PRESETS, options.preset)) throw new RangeError('Unsupported board preset');
   const preset = PRESETS[options.preset ?? (options.mode === 'daily' ? 'narrow' : 'standard')]; const width = options.width ?? preset[0]; const height = options.height ?? preset[1];
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 12 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–12 columns by 12–20 visible rows, with at most 240 cells');
+  validateDimensions(width, height);
   const requestedMode = (options as { mode?: string }).mode ?? 'relaxed'; if (!['relaxed', 'arcade', 'daily', 'challenge'].includes(requestedMode)) throw new RangeError('Unsupported mode');
   if (requestedMode === 'challenge') throw new RangeError('Use createChallenge with a validated starting board and finite queue');
   const mode = requestedMode as Exclude<Mode, 'challenge'>;
@@ -58,7 +62,7 @@ const VALID_COLOURS = new Set(['red', 'blue', 'green', 'gold', 'purple', 'teal']
 /** Creates a challenge after validating its authored board, finite queue, goal, and witness. */
 export function createChallenge(options: ChallengeOptions): GameState {
   const width = options.width ?? 6; const height = options.height ?? 13; const colourCount = options.colourCount ?? 5;
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 5 || width > 12 || height < 12 || height > 20 || width * height > 240) throw new RangeError('Board must be 5–12 columns by 12–20 visible rows, with at most 240 cells');
+  validateDimensions(width, height);
   if (![4, 5, 6].includes(colourCount)) throw new RangeError('Colour count must be 4, 5, or 6');
   const seed = options.seed ?? 'houseki-challenge'; if (typeof seed !== 'string' || seed.length < 1 || seed.length > 128) throw new RangeError('Challenge seed must contain 1–128 characters');
   if (!Array.isArray(options.board) || options.board.length !== width * height) throw new RangeError('Challenge board must contain exactly width × height visible cells');

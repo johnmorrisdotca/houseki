@@ -2,7 +2,7 @@
 export type StoneColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
 /** A stone keeps its run-local identity as it falls or changes column. */
 export interface Stone { readonly id: number; readonly colour: StoneColour }
-export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall';
+export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
 export type BoardShape = 'heart' | 'star' | 'hexagon';
 export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
 export type StoredTool = 'bomb' | 'pick';

@@ -75,9 +75,9 @@ test('arcade gravity, hard drop, pause, and checkpoint round trip preserve deter
 });
 
 test('public board bounds reject invalid dimensions before seed consumption', () => {
-  assert.throws(() => createGame({ width: 4, height: 13, seed: 'bounds' }), /5–12 columns/);
-  assert.throws(() => createGame({ width: 6, height: 11, seed: 'bounds' }), /12–20 visible rows/);
-  assert.throws(() => createGame({ width: 10, height: 25, seed: 'bounds' }), /12–20 visible rows/);
+  assert.throws(() => createGame({ width: 4, height: 13, seed: 'bounds' }), /5–16 columns/);
+  assert.throws(() => createGame({ width: 6, height: 11, seed: 'bounds' }), /12–32 visible rows/);
+  assert.throws(() => createGame({ width: 10, height: 33, seed: 'bounds' }), /12–32 visible rows/);
   assert.equal(createGame({ width: 5, height: 12, seed: 'bounds' }).settings.width, 5);
   assert.equal(createGame({ width: 12, height: 20, seed: 'bounds' }).settings.height, 20);
 });
@@ -149,7 +149,7 @@ test('save decoding replays canonical input and rejects altered checkpoints and 
   const tampered = JSON.parse(encodeGame(game)); tampered.checkpoint.score += 1;
   assert.throws(() => decodeGame(JSON.stringify(tampered)), /checkpoint does not match/);
   const invalid = JSON.parse(encodeGame(game)); invalid.settings.width = 4;
-  assert.throws(() => decodeGame(JSON.stringify(invalid)), /5–12 columns/);
+  assert.throws(() => decodeGame(JSON.stringify(invalid)), /5–16 columns/);
   assert.throws(() => decodeGame('x'.repeat(2 * 1024 * 1024 + 1)), /2 MiB/);
 });
 
@@ -308,6 +308,6 @@ test("preset widths distinguish narrow, standard, wide and tall", () => {
   assert.equal(createGame({seed:"default-check"}).settings.width,8);
   const extra = applyAction(createGame({preset:"extraWide",mode:"arcade",seed:"wide-replay"}),{kind:"hard-drop"}).state;
   assert.deepEqual(decodeGame(encodeGame(extra)),extra);
-  assert.throws(()=>createGame({width:13,height:13}),/5–12/);
+  assert.throws(()=>createGame({width:17,height:13}),/5–16/);
   assert.equal(createGame({mode:"daily", seed:"2026-10-05"}).settings.width,6);
 });
