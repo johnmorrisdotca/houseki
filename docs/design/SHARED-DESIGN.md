@@ -130,3 +130,8 @@ Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md): deliberate complete counts su
 ### Play surface interaction
 
 Pieces, glyphs, pebbles, board labels, previews and game controls must disable text selection (including Safari) and native dragging. Documentation and API prose remain selectable. Verify pointer dragging cannot highlight symbols or labels. Falling games support one-hand arrows (Up cycles/rotates clockwise) and physical keypad codes: 4/6 move, 7/9 reverse/forward rotation, 5 soft drop, 2 hard drop or Relaxed placement. Keypad controls work with Num Lock on or off; form fields retain native keyboard behavior. New/restarted games focus the play surface without scrolling. Native key repeat cannot multiply rotation or hard-drop actions.
+
+
+## Material settling requirement
+
+Ordinary falling and gravity resolution should use subtle accelerating descent and a tiny contact recovery, without changing logical rules or delaying input. Follow the material-settling section of [Bounce and nature modes](BOUNCE-AND-NATURE.md), including reduced-motion behaviour. This polish applies independently of optional nature modes.

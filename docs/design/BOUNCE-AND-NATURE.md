@@ -35,3 +35,14 @@ Verify both directions, walls, occupied cells, rotation bounds, gentle versus sl
 | Arashi | 嵐 | Storm | Approved intense storm mode: earthquakes, lightning and more frequent disruptions |
 
 Owner-approved on 2026-10-05: Houseki remains the package and gem collection name. Shizen names the broader nature-mode collection; Arashi names its more intense storm mode. Tenki remains an unused alternative. These display names do not create another package or imply implemented support. Preserve stable game IDs and existing saves.
+
+
+## Material settling for ordinary play
+
+Owner-requested presentation requirement, 2026-10-05: all falling and gravity-settling pieces should convey a small amount of weight, even with Shizen and Arashi disabled. This is presentation polish, separate from the optional gameplay rebound.
+
+Animate displacement from the last observed cell to the next observed cell. Use gentle acceleration on descent, then a short deceleration/compression on contact. Start tuning with a 100–180 ms ordinary settlement and a 40–70 ms recovery, within the existing logical resolution window; scale travel duration within a cap rather than making tall drops wait indefinitely. A tiny rebound of approximately 1–2 px, capped at 4% of cell size, and subtle vertical squash are sufficient. Do not add sideways drift or rotation to ordinary settling. Hard drops can use a stronger contact accent while remaining immediate and responsive to input.
+
+Logical positions, collisions, match timing, lock timing, score and replay remain authoritative and unchanged. The rendering layer must not delay a new input or a logical phase to finish an effect. Reconcile interrupted animations to the current state; avoid queued animations lagging behind rapid play. Keep indicators and target previews stable. Animate transforms rather than changing cell layout, and preserve existing gem identity across movement.
+
+Reduced motion uses the final cell directly with a brief contact highlight, without bounce or squash. Verify gentle placement, hard drop, single-cell descent, long gravity falls, cascades, rapid repeated input, resizing and pause/resume. Confirm ordinary settling does not enable the Shizen gameplay rebound. Status: specified; implementation and visual tuning pending.
