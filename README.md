@@ -34,7 +34,7 @@ pnpm test
 pnpm demo
 ```
 
-The local demo instructions print its address. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions and [the implementation plan](docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
+The local demo instructions print its address. The first page plays Falling Triplets; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions and [the implementation plan](docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
 
 ## Engine example
 
@@ -54,3 +54,7 @@ This example describes the planned installed package; use the local build while 
 ## Licence
 
 [MIT](LICENSE), copyright John Morris. Original game content and presentation are maintained in this repository. Shared family files preserve their existing copyright notices. Report vulnerabilities through [SECURITY.md](SECURITY.md).
+
+## Stored tools
+
+[Stored-tool rules](docs/design/STORED-TOOLS.md) distinguish inventory from special gems on the board. Gem Swap offers Bomb, Row clear and Colour clear; Stone Collapse offers Bomb and Pick. Select a tool and an occupied square, inspect the highlighted effect, then confirm or cancel. Ordinary clears earn capped inventory; using tools marks the run assisted. Daily and existing authored challenges keep their declared tool-free rules. A rare [Black Hole](docs/design/BLACK-HOLE.md) is a separate advanced milestone under development.

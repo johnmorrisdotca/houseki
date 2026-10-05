@@ -155,3 +155,5 @@ Keep every required test fixture inside the repository. Verify an archive of the
 ### Stored tools
 
 Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.
+
+A rare advanced [Black Hole](BLACK-HOLE.md) is designed as a stored portal with bounded capacity and duration. Its engine and authored-level support require a separate review gate; it is not yet a shipped power.

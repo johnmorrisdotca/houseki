@@ -131,5 +131,5 @@ window.addEventListener('pagehide', () => { clearTimeout(saveTimer); if (game &&
 readPreferences();
 let recovered = false;
 try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved); startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
-if (!game) newGame(); else { resumeRequired = true; render(); $('.resume').hidden = false; $('#status').textContent = 'Continue your saved game'; }
+if (!game) newGame(); else { resumeRequired = false; render(); $('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);

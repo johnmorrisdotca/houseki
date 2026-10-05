@@ -10,7 +10,7 @@ Genre reference: [SEGA's Columns family](https://segaages.sega.com/project/colum
 
 ## Board, pieces and setup
 
-Standard well: **6 columns × 13 visible rows**, plus three hidden rows. Presets: narrow 5×13, standard 6×13, wide 8×13 and tall 6×17. Custom dimensions follow the shared validation. Default five colours; optional four or six colours are separate score categories. No masks, obstacles or decorative well shapes in v1.
+Standard well: **8 columns × 13 visible rows**, plus three hidden rows. Presets: compact 5×13, narrow 6×13, standard 8×13, wide 10×13, extra wide 12×13 and tall 8×17. Daily retains a fixed 6×13 well. Custom dimensions follow the shared validation. Default five colours; optional four or six colours are separate score categories. No masks, obstacles or decorative well shapes in v1.
 
 Empty start. A piece is three separately identified coloured gems ordered top/middle/bottom, initially occupying `(spawnX,-3)`, `(spawnX,-2)`, `(spawnX,-1)`, where `spawnX=floor((width-1)/2)`. The active piece is not part of the settled board. The shuffled bag and three-piece preview follow the shared architecture; preview consumption is deterministic. No hold-piece mechanic or wildcard in v1.
 
