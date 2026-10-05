@@ -464,3 +464,21 @@ test('tool configuration, target previews, mid-resolution replay, batched ticks,
   assert.deepEqual(restarted, start); assert.deepEqual(restarted.inventory, { bomb: 1, pick: 1 });
   assert.throws(() => decodeGame(JSON.stringify({ ...JSON.parse(encodeGame(start)), settings: { ...start.settings, tools: 'yes' } })));
 });
+
+test('shaped casual games restore and restart without conflicting custom dimensions', () => {
+  for (const shape of ['heart', 'star', 'hexagon']) for (const tools of [false, true]) {
+    const initial = createGame({ shape, tools, seed: 'shape-replay' });
+    assert.deepEqual(decodeGame(encodeGame(initial)), initial);
+    assert.deepEqual(restartGame(initial), initial);
+    if (!tools) continue;
+    const selected = applyAction(initial, { kind: 'select-tool', tool: 'bomb' }).state;
+    const target = initial.settings.mask.findIndex(Boolean);
+    const aimed = applyAction(selected, { kind: 'target-tool', cell: target }).state;
+    assert.deepEqual(decodeGame(encodeGame(aimed)), aimed);
+    const fired = applyAction(aimed, { kind: 'confirm-tool' }).state;
+    assert.deepEqual(decodeGame(encodeGame(fired)), fired);
+    const settled = advanceTicks(fired, 22).state;
+    assert.deepEqual(decodeGame(encodeGame(settled)), settled);
+    assert.deepEqual(restartGame(settled), initial);
+  }
+});

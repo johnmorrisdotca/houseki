@@ -27,7 +27,7 @@ export function restartGame(state: GameState): GameState {
   if (state.settings.mode === 'daily') return createGame({ mode: 'daily', dailyDate: state.settings.dailyDate });
   const { settings } = state;
   const mode: 'relaxed' | 'arcade' = settings.mode === 'arcade' ? 'arcade' : 'relaxed';
-  return createGame({ mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) });
+  return createGame({ mode, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : { width: settings.width, height: settings.height, ...(settings.mask.every(Boolean) ? {} : { mask: settings.mask }) }) });
 }
 
 /** Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint. */
@@ -65,7 +65,7 @@ function stateFromInitial(settings: Settings, challenge: ChallengeDefinition | n
   if (challenge !== null) throw new TypeError('Score-game save cannot contain a challenge definition');
   const options: CreateOptions = settings.mode === 'daily'
     ? { mode: 'daily', dailyDate: settings.dailyDate }
-    : { mode: settings.mode, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : settings.mask.every(Boolean) ? {} : { mask: settings.mask }) };
+    : { mode: settings.mode, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : { width: settings.width, height: settings.height, ...(settings.mask.every(Boolean) ? {} : { mask: settings.mask }) }) };
   const state = createGame(options);
   if (stable(state.settings) !== stable(settings)) throw new TypeError('Initial settings are not canonical');
   return state;
