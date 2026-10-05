@@ -15,13 +15,17 @@ Original gem and stone puzzle games with immutable TypeScript rules and a shared
 
 ![Falling Triplets development demo](docs/images/falling-triplets-desktop.png)
 
+![Gem Swap stored-tool tray on desktop](docs/images/tool-tray-desktop.png)
+
+[Phone layout](docs/images/tool-tray-phone.png)
+
 [API reference](https://johnmorrisdotca.github.io/houseki/api.html) is generated locally by `pnpm site`; the hosted page becomes available after deployment. [Incremental draft PR](https://github.com/johnmorrisdotca/houseki/pull/1).
 
 ## Design and progression
 
 The [design pack](docs/design/README.md) specifies rules, controls, materials, accessibility, generation, grading, persistence and acceptance checks. [Level generation](docs/design/LEVEL-GENERATION.md) follows a deliberate complete count and measured progression: generate and prove original boards, remove duplicates, grade player-facing decisions, then sort and number from easy to hard. Stable content IDs preserve saved progress across future ordering changes.
 
-The shared player uses the family's ivory, brass and felt palette, permanent colour symbols and configurable boards. Three interactive lessons are separate from the graded campaign. Physical-device feel testing and fluent Japanese copy review are recorded independently from automated checks.
+The shared player uses the family's ivory, brass and felt palette, permanent colour symbols and configurable boards. Each planned set of three interactive lessons is separate from the graded campaign. Physical-device feel testing and fluent Japanese copy review are recorded independently from automated checks.
 
 ## Local development
 
