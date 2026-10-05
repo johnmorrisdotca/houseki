@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGame, applyAction, advanceTicks, legalActions, statusOf, landingCells } from '../dist/colour-chains.js';
+import { createGame, createChallenge, applyAction, advanceTicks, legalActions, statusOf, landingCells, restartGame, encodeGame, decodeGame, createInputScheduler, setHeldInput, queueInputEdge, actionsForTick, applyScheduledActions, processInputTick, StoneChainsOptionsError } from '../dist/colour-chains.js';
 import { findGroups, compactBoard } from '../dist/colour-chains/match.js';
 
 const C = { R: 'red', B: 'blue', G: 'green', Y: 'gold', P: 'purple', T: 'teal', '.': null };
@@ -9,10 +9,10 @@ function blank() { return Array(W * FULL).fill(null); }
 function put(board, x, y, colour, id) { board[(y + 3) * W + x] = { id, colour }; }
 function stateWith(board, active = null, extra = {}) {
   const base = createGame({ width: W, height: H, seed: 'fixture' });
-  return { ...base, board, active, phase: 'falling', nextId: 10000, ...extra };
+  return { ...base, board, active, phase: 'falling', nextId: 10000, allClears: 0, elapsedTicks: 0, assisted: false, witnessIndex: -1, recording: [], ...extra };
 }
 function active(colours = ['red', 'green'], pivot = { x: 2, y: 10 }, orientation = 'up') {
-  return { pivot, orientation, gems: [{ id: 9001, colour: colours[0] }, { id: 9002, colour: colours[1] }], level: 1 };
+  return { pivot, orientation, gems: [{ id: 9001, colour: colours[0] }, { id: 9002, colour: colours[1] }], level: 1, gravityTicks: 0, groundedTicks: 0, resetCount: 0, groundedStarted: false };
 }
 function tick(state, n) { const result = advanceTicks(state, n); return result.state; }
 
@@ -84,7 +84,7 @@ test('620-point two-wave all-clear exposes mark, removal holes, gravity, and the
   put(cascadeBoard, 2, 7, 'red', 301); put(cascadeBoard, 2, 8, 'blue', 302); put(cascadeBoard, 2, 9, 'blue', 303); put(cascadeBoard, 2, 10, 'blue', 304);
   put(cascadeBoard, 2, 11, 'blue', 305); put(cascadeBoard, 0, 11, 'red', 306); put(cascadeBoard, 1, 11, 'red', 307); put(cascadeBoard, 1, 10, 'red', 308);
   // The first clear is the four B at y=8..11; R at x=2 falls to join the three bottom R.
-  let state = stateWith(cascadeBoard, null, { phase: 'clear-mark', clearCells: [(8 + 3) * W + 2, (9 + 3) * W + 2, (10 + 3) * W + 2, (11 + 3) * W + 2] });
+  let state = stateWith(cascadeBoard, null, { phase: 'clear-mark', settings: { ...createGame({ mode: 'arcade' }).settings, width: W, height: H }, resolutionLevel: 1, resolutionHadClear: true, clearCells: [(8 + 3) * W + 2, (9 + 3) * W + 2, (10 + 3) * W + 2, (11 + 3) * W + 2] });
   state = tick(state, 7); assert.equal(state.phase, 'clear-remove'); assert.equal(state.board.filter(Boolean).length, 8);
   state = tick(state, 6); assert.equal(state.phase, 'gravity'); assert.equal(state.board[(11 + 3) * W + 2], null);
   state = tick(state, 9); assert.equal(state.phase, 'clear-mark'); assert.equal(state.waves.length, 1); assert.equal(state.clearCells.length, 4);
@@ -104,19 +104,19 @@ test('split landing placement compacts stones independently, then matches from t
   assert.deepEqual([settled.board[(7 + 3) * W + 2]?.id, settled.board[(10 + 3) * W + 3]?.id], [9001, 9002]);
 });
 
-test('Place and hard drop share rigid ghost landing for uneven horizontal and rotated vertical pairs', () => {
+test('Relaxed Place and timed hard drop share the ghost while bonuses remain mode-specific', () => {
   const supports = blank();
   for (let y = 8; y <= 11; y++) put(supports, 2, y, 'gold', 800 + y);
   put(supports, 3, 11, 'purple', 812);
-  const horizontal = stateWith(supports, active(['red', 'blue'], { x: 2, y: 7 }, 'right'));
-  assert.deepEqual(landingCells(horizontal), [{ x: 2, y: 7 }, { x: 3, y: 10 }]);
-  const horizontalPlace = applyAction(horizontal, { kind: 'place' });
-  const horizontalDrop = applyAction(horizontal, { kind: 'hard-drop' });
-  assert.deepEqual(horizontalPlace.state.gravityBoard, horizontalDrop.state.gravityBoard);
-  assert.deepEqual(horizontalPlace.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 7 }, { x: 3, y: 7 }]);
-  assert.deepEqual(horizontalDrop.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 7 }, { x: 3, y: 7 }]);
-  assert.deepEqual([horizontalPlace.state.gravityBoard.findIndex(g => g?.id === 9001), horizontalPlace.state.gravityBoard.findIndex(g => g?.id === 9002)], [(7 + 3) * W + 2, (10 + 3) * W + 3]);
-  assert.equal(horizontalPlace.state.score, 0); assert.equal(horizontalDrop.state.score, 0);
+  const pair = active(['red', 'blue'], { x: 2, y: 7 }, 'right');
+  const relaxed = stateWith(supports, pair);
+  const arcade = stateWith(supports, pair, { settings: { ...createGame({ mode: 'arcade' }).settings, width: W, height: H } });
+  assert.deepEqual(landingCells(relaxed), [{ x: 2, y: 7 }, { x: 3, y: 10 }]);
+  const place = applyAction(relaxed, { kind: 'place' }); const drop = applyAction(arcade, { kind: 'hard-drop' });
+  assert.deepEqual(place.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 7 }, { x: 3, y: 7 }]);
+  assert.deepEqual(drop.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 7 }, { x: 3, y: 7 }]);
+  assert.deepEqual(place.state.gravityBoard, drop.state.gravityBoard);
+  assert.equal(place.state.score, 0); assert.equal(drop.state.score, 2 * (landingCells(arcade)[0].y - arcade.active.pivot.y));
 
   const verticalBoard = blank(); for (let y = 8; y <= 11; y++) put(verticalBoard, 2, y, 'gold', 900 + y);
   let vertical = stateWith(verticalBoard, active(['green', 'teal'], { x: 2, y: 3 }, 'up'));
@@ -124,14 +124,8 @@ test('Place and hard drop share rigid ghost landing for uneven horizontal and ro
   vertical = applyAction(vertical, { kind: 'rotate-clockwise' }).state;
   assert.equal(vertical.active.orientation, 'down');
   assert.deepEqual(landingCells(vertical), [{ x: 2, y: 6 }, { x: 2, y: 7 }]);
-  const verticalPlace = applyAction(vertical, { kind: 'place' });
-  const verticalDrop = applyAction(vertical, { kind: 'hard-drop' });
-  assert.deepEqual(verticalPlace.state.gravityBoard, verticalDrop.state.gravityBoard);
-  const verticalBoardAfterLock = verticalPlace.state.gravityBoard ?? verticalPlace.state.board;
-  assert.deepEqual(verticalPlace.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 6 }, { x: 2, y: 7 }]);
-  assert.deepEqual(verticalDrop.events.find(e => e.type === 'pair-locked').cells, [{ x: 2, y: 6 }, { x: 2, y: 7 }]);
-  assert.deepEqual([verticalBoardAfterLock.findIndex(g => g?.id === 9001), verticalBoardAfterLock.findIndex(g => g?.id === 9002)], [(6 + 3) * W + 2, (7 + 3) * W + 2]);
-  assert.equal(verticalPlace.state.score, 0); assert.equal(verticalDrop.state.score, 0);
+  const locked = applyAction(vertical, { kind: 'place' });
+  assert.equal(locked.accepted, true); assert.equal(locked.state.score, 0);
 });
 
 test('hidden rows are checked after the current cascade has had a chance to clear them', () => {
@@ -188,4 +182,234 @@ test('resolution batching preserves immutable snapshots and tick/event ordering'
   for (let i = 0; i < 40; i++) { const step = advanceTicks(sequential, 1); sequential = step.state; events.push(...step.events); }
   const batched = advanceTicks(start, 40); assert.deepEqual(batched.state, sequential); assert.deepEqual(batched.events, events); assert.deepEqual(start, original);
   assert.deepEqual(events.map(event => event.type).filter(type => type === 'clear-removal-started' || type === 'cells-cleared' || type === 'cells-fell' || type === 'run-ended' || type === 'pair-spawned'), ['clear-removal-started', 'cells-cleared', 'pair-spawned']);
+});
+
+test('modes enforce canonical Daily settings, distinct Place/drop controls, deterministic levels and scoring', () => {
+  assert.throws(() => createGame({ mode: 'daily' }), StoneChainsOptionsError);
+  const date = '2026-10-05'; const daily = createGame({ mode: 'daily', dailyDate: date });
+  assert.deepEqual([daily.settings.width, daily.settings.height, daily.settings.colourCount, daily.settings.pairLimit], [6, 12, 4, 60]);
+  assert.deepEqual(daily, createGame({ mode: 'daily', dailyDate: date }));
+  assert.throws(() => createGame({ mode: 'daily', dailyDate: date, width: 8 }), StoneChainsOptionsError);
+  assert.throws(() => createGame({ mode: 'daily', dailyDate: date, colourCount: 5 }), StoneChainsOptionsError);
+  assert.throws(() => createGame({ mode: 'daily', dailyDate: '2026-02-30' }), StoneChainsOptionsError);
+  assert.deepEqual(restartGame(daily), daily);
+
+  let relaxed = createGame({ seed: 'relaxed' }); const startY = relaxed.active.pivot.y;
+  for (let i = 0; i < 80; i++) relaxed = advanceTicks(relaxed, 1).state;
+  assert.equal(relaxed.active.pivot.y, startY); assert.equal(relaxed.score, 0);
+  assert.equal(applyAction(relaxed, { kind: 'hard-drop' }).accepted, false);
+  for (let i = 0; i < 13; i++) relaxed = applyAction(relaxed, { kind: 'down' }).state;
+  assert.equal(relaxed.active.pivot.y, 11);
+  const placed = applyAction(relaxed, { kind: 'place' }); assert.equal(placed.accepted, true);
+  assert.equal(placed.events.find(event => event.type === 'pair-locked').cells[0].y, 11);
+
+  const arcade = createGame({ mode: 'arcade', seed: 'score' });
+  const noPlace = applyAction(arcade, { kind: 'place' }); assert.equal(noPlace.accepted, false); assert.equal(noPlace.state, arcade);
+  const soft = applyAction(arcade, { kind: 'down' }); assert.equal(soft.state.score, 1);
+  const dropped = applyAction(arcade, { kind: 'hard-drop' });
+  assert.equal(dropped.state.score, 2 * (landingCells(arcade)[0].y - arcade.active.pivot.y));
+  assert.equal(dropped.accepted, true);
+  const threshold = stateWith(blank(), active(['red', 'blue'], { x: 2, y: 10 }, 'right'), { settings: { ...arcade.settings, width: W, height: H }, completedPairs: 29 });
+  const next = applyAction(threshold, { kind: 'hard-drop' }); assert.equal(next.state.active.level, 2); assert.equal(next.state.completedPairs, 30);
+});
+
+test('Daily ends cleanly at its resolved-pair cap and timed pause becomes assisted practice', () => {
+  const daily = createGame({ mode: 'daily', dailyDate: '2026-10-05' });
+  const atLimit = { ...daily, board: blank(), completedPairs: 59, active: { ...daily.active, pivot: { x: 2, y: 10 }, level: 2 } };
+  const final = applyAction(atLimit, { kind: 'hard-drop' }); assert.equal(final.state.phase, 'finished'); assert.equal(final.state.reason, 'pair-limit');
+  assert.equal(final.state.completedPairs, 60); assert.equal(final.state.score, 2);
+  const arcade = createGame({ mode: 'arcade' }); const paused = applyAction(arcade, { kind: 'pause' });
+  assert.equal(paused.state.phase, 'paused'); assert.equal(paused.state.assisted, true);
+  const frozen = advanceTicks(paused.state, 100); assert.equal(frozen.state.elapsedTicks, 0); assert.equal(frozen.state, paused.state);
+  const resumed = applyAction(frozen.state, { kind: 'resume' }); assert.equal(resumed.state.phase, 'falling');
+  assert.equal(resumed.state.assisted, true); assert.equal(advanceTicks(resumed.state, 1).state.elapsedTicks, 1);
+});
+
+function groundedArcade({ x = 2, orientation = 'right', support = [2, 3], resetCount = 0, groundedTicks = 0, groundedStarted = true } = {}) {
+  const board = blank(); for (const col of support) put(board, col, 11, 'teal', 5000 + col);
+  return stateWith(board, { ...active(['red', 'blue'], { x, y: 10 }, orientation), resetCount, groundedTicks, groundedStarted }, { settings: { ...createGame({ mode: 'arcade' }).settings, width: W, height: H } });
+}
+
+test('ground contact begins at zero and locks after 24 accumulated grounded ticks', () => {
+  let state = groundedArcade({ groundedStarted: false });
+  state = advanceTicks(state, 1).state; assert.equal(state.active.groundedStarted, true); assert.equal(state.active.groundedTicks, 0);
+  state = advanceTicks(state, 23).state; assert.equal(state.active.groundedTicks, 23); assert.equal(state.completedPairs, 0);
+  state = advanceTicks(state, 1).state; assert.equal(state.completedPairs, 1); assert.equal(state.active.level, 1);
+});
+
+test('eight successful grounded slides consume resets; the ninth keeps 23 ticks and locks on the next tick', () => {
+  const floor = Array.from({ length: W }, (_, x) => x);
+  let state = groundedArcade({ x: 1, support: floor });
+  for (const direction of ['right', 'right', 'right', 'left', 'left', 'left', 'right', 'right']) state = applyAction(state, { kind: direction }).state;
+  assert.equal(state.active.resetCount, 8); assert.equal(state.active.groundedTicks, 0);
+  state = groundedArcade({ x: 2, support: floor, resetCount: 8, groundedTicks: 23 });
+  const ninth = applyAction(state, { kind: 'right' }); assert.equal(ninth.accepted, true);
+  assert.equal(ninth.state.active.resetCount, 8); assert.equal(ninth.state.active.groundedTicks, 23);
+  assert.equal(advanceTicks(ninth.state, 1).state.completedPairs, 1);
+});
+
+test('blocked moves do not reset; exhausted airtime pauses and recontact resumes grounded time', () => {
+  const blocked = groundedArcade({ x: 0, orientation: 'right', support: [0, 1], resetCount: 3, groundedTicks: 23 });
+  const failed = applyAction(blocked, { kind: 'left' }); assert.equal(failed.accepted, false); assert.equal(failed.state, blocked);
+  assert.equal(blocked.active.resetCount, 3); assert.equal(blocked.active.groundedTicks, 23);
+
+  let state = groundedArcade({ x: 2, support: [2], resetCount: 7, groundedTicks: 19 });
+  const departure = applyAction(state, { kind: 'right' }); assert.equal(departure.accepted, true);
+  assert.equal(departure.state.active.resetCount, 8); assert.equal(departure.state.active.groundedTicks, 0);
+  assert.equal(departure.state.active.groundedStarted, false); // the eighth reset clears contact time
+
+  state = groundedArcade({ x: 2, support: [2], resetCount: 8, groundedTicks: 13 });
+  const leftSupport = applyAction(state, { kind: 'right' }); assert.equal(leftSupport.state.active.groundedTicks, 13);
+  state = advanceTicks(leftSupport.state, 10).state; assert.equal(state.active.groundedTicks, 13);
+  state = applyAction(state, { kind: 'left' }).state; assert.equal(state.active.groundedStarted, true); assert.equal(state.active.groundedTicks, 13);
+  state = advanceTicks(state, 11).state; assert.equal(state.completedPairs, 1);
+});
+
+test('rotation consumes reset only on accepted grounded turns and rejected kicks preserve identity', () => {
+  const floor = Array.from({ length: W }, (_, x) => x);
+  const grounded = groundedArcade({ x: 2, support: floor, groundedTicks: 9 });
+  const turned = applyAction(grounded, { kind: 'rotate-clockwise' }); assert.equal(turned.accepted, true);
+  assert.equal(turned.state.active.resetCount, 1); assert.equal(turned.state.active.groundedTicks, 0);
+  const obstacleBoard = blank(); [[2, 11], [3, 10], [1, 10], [4, 10], [3, 9]].forEach(([x, y], i) => put(obstacleBoard, x, y, 'gold', 6000 + i));
+  const blocked = stateWith(obstacleBoard, { ...active(['red', 'blue'], { x: 2, y: 10 }, 'up'), groundedStarted: true, groundedTicks: 22 }, { settings: { ...createGame({ mode: 'arcade' }).settings, width: W, height: H } });
+  const rejected = applyAction(blocked, { kind: 'rotate-clockwise' }); assert.equal(rejected.accepted, false); assert.equal(rejected.state, blocked);
+  const zeroContact = applyAction(groundedArcade({ groundedStarted: false }), { kind: 'rotate-clockwise' });
+  assert.equal(zeroContact.state.active.resetCount, 1); assert.equal(zeroContact.state.active.groundedTicks, 0);
+});
+
+test('input repeats at 10/3, soft drops every two ticks, orders edges, and releases on lock or resolution', () => {
+  const game = createGame({ mode: 'arcade', seed: 'input' });
+  let input = createInputScheduler(); input = setHeldInput(input, 'left', true); input = setHeldInput(input, 'soft-drop', true);
+  const observed = [];
+  for (let tick = 0; tick <= 10; tick++) { const [actions, next] = actionsForTick(game, input); observed.push([tick, actions.map(action => action.kind)]); input = next; }
+  assert.deepEqual(observed[0], [0, ['left', 'down']]);
+  assert.deepEqual(observed[2], [2, ['down']]); assert.deepEqual(observed[10], [10, ['left', 'down']]);
+  input = createInputScheduler(); input = setHeldInput(input, 'left', true);
+  input = queueInputEdge(input, { kind: 'rotate-clockwise' }); input = queueInputEdge(input, { kind: 'hard-drop' }); input = queueInputEdge(input, { kind: 'pause' });
+  const [ordered] = actionsForTick(game, input); assert.deepEqual(ordered.map(action => action.kind), ['left', 'rotate-clockwise', 'hard-drop', 'pause']);
+  const [scheduled, nextInput] = actionsForTick(game, input);
+  const [locked, released] = applyScheduledActions(game, nextInput, scheduled, applyAction);
+  assert.equal(locked.recording.at(-1).action.kind, 'hard-drop'); assert.deepEqual(released, createInputScheduler());
+  const [paused, pauseInput] = actionsForTick({ ...game, phase: 'clear-mark', active: null }, setHeldInput(input, 'right', true));
+  assert.deepEqual(paused, [{ kind: 'pause' }]); assert.deepEqual(pauseInput, createInputScheduler());
+  const [duringResolution, afterResolution] = actionsForTick({ ...game, phase: 'gravity', active: null }, setHeldInput(createInputScheduler(), 'left', true));
+  assert.deepEqual(duringResolution, []); assert.deepEqual(afterResolution, createInputScheduler());
+});
+
+test('challenge goals verify their witness, win on the final queue placement and make hints sticky-assisted', () => {
+  const board = blank(); for (const x of [0, 1, 3]) put(board, x, 11, 'red', 7000 + x);
+  const options = { id: 'chain-targets', width: W, height: H, colourCount: 4, board: board.slice(W * 3), queue: [['green', 'blue'], ['red', 'blue']], goal: { kind: 'clear-targets', targetIds: [7000, 7001, 7003] }, witness: [{ pivotX: 5, orientation: 'up' }, { pivotX: 2, orientation: 'up' }] };
+  const challenge = createChallenge(options); const hint = applyAction(challenge, { kind: 'hint' });
+  assert.equal(hint.accepted, true); assert.equal(hint.state.assisted, true); assert.equal(hint.events[0].pivotX, 5);
+  let state = hint.state; for (let i = 0; i < 3; i++) state = applyAction(state, { kind: 'right' }).state;
+  state = applyAction(state, { kind: 'hard-drop' }).state; assert.equal(state.completedPairs, 1); assert.equal(state.phase, 'falling');
+  const secondHint = applyAction(state, { kind: 'hint' }); assert.equal(secondHint.accepted, true);
+  state = secondHint.state; state = applyAction(state, { kind: 'hard-drop' }).state;
+  while (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase)) state = advanceTicks(state, 3600).state;
+  assert.equal(state.phase, 'won'); assert.equal(state.reason, 'goal-complete'); assert.equal(state.completedPairs, 2); assert.equal(state.assisted, true);
+  assert.equal(restartGame(state).phase, 'falling'); assert.equal(restartGame(state).settings.challengeId, 'chain-targets');
+  assert.throws(() => createChallenge({ ...options, witness: [{ pivotX: 5, orientation: 'up' }] }), StoneChainsOptionsError);
+});
+
+test('challenge hints disappear off the witnessed prefix and exhausted queues report an honest loss', () => {
+  const board = blank(); for (const x of [0, 1, 3]) put(board, x, 11, 'red', 8000 + x);
+  const options = { id: 'finite-targets', width: W, height: H, colourCount: 4, board: board.slice(W * 3), queue: [['green', 'blue'], ['red', 'blue']], goal: { kind: 'clear-targets', targetIds: [8000, 8001, 8003] }, witness: [{ pivotX: 5, orientation: 'up' }, { pivotX: 2, orientation: 'up' }] };
+  let state = createChallenge(options); state = applyAction(state, { kind: 'right' }).state;
+  state = applyAction(state, { kind: 'right' }).state; state = applyAction(state, { kind: 'hard-drop' }).state;
+  assert.equal(state.witnessIndex, -1); assert.equal(state.phase, 'falling');
+  const unavailable = applyAction(state, { kind: 'hint' }); assert.equal(unavailable.accepted, false); assert.equal(unavailable.state, state);
+  for (let i = 0; i < 3; i++) state = applyAction(state, { kind: 'right' }).state;
+  state = applyAction(state, { kind: 'hard-drop' }).state;
+  assert.equal(state.phase, 'lost'); assert.equal(state.reason, 'challenge-queue-exhausted');
+  assert.equal(applyAction(state, { kind: 'left' }).accepted, false);
+});
+
+test('canonical saves replay daily, paused, selected-tick and mid-resolution checkpoints; hostile data is rejected', () => {
+  let arcade = createGame({ mode: 'arcade', seed: 'recording' });
+  arcade = applyAction(arcade, { kind: 'left' }).state; arcade = advanceTicks(arcade, 20).state; arcade = applyAction(arcade, { kind: 'rotate-clockwise' }).state;
+  assert.deepEqual(decodeGame(encodeGame(arcade)), arcade);
+  const paused = applyAction(arcade, { kind: 'pause' }).state; assert.deepEqual(decodeGame(encodeGame(paused)), paused);
+  const resumed = applyAction(paused, { kind: 'resume' }).state; assert.deepEqual(decodeGame(encodeGame(resumed)), resumed);
+  const daily = createGame({ mode: 'daily', dailyDate: '2026-10-05' }); assert.deepEqual(decodeGame(encodeGame(daily)), daily);
+
+  const board = blank(); for (const x of [0, 1, 3]) put(board, x, 11, 'red', 9000 + x);
+  const challenge = createChallenge({ id: 'save-phase', width: W, height: H, colourCount: 4, board: board.slice(W * 3), queue: [['green', 'blue'], ['red', 'blue']], goal: { kind: 'clear-targets', targetIds: [9000, 9001, 9003] }, witness: [{ pivotX: 5, orientation: 'up' }, { pivotX: 2, orientation: 'up' }] });
+  let state = challenge; for (let i = 0; i < 3; i++) state = applyAction(state, { kind: 'right' }).state;
+  state = applyAction(state, { kind: 'hard-drop' }).state; // safe first placement
+  state = applyAction(state, { kind: 'hard-drop' }).state; assert.equal(state.phase, 'clear-mark');
+  assert.deepEqual(decodeGame(encodeGame(state)), state);
+  state = advanceTicks(state, 8).state; assert.equal(state.phase, 'clear-remove');
+  state = applyAction(state, { kind: 'pause' }).state; assert.equal(state.phase, 'paused');
+  assert.deepEqual(decodeGame(encodeGame(state)), state);
+  const elapsed = state.elapsedTicks; state = advanceTicks(state, 50).state; assert.equal(state.elapsedTicks, elapsed);
+  state = applyAction(state, { kind: 'resume' }).state; state = advanceTicks(state, 100).state; assert.equal(state.phase, 'won');
+  assert.deepEqual(decodeGame(encodeGame(state)), state);
+
+  const parsed = JSON.parse(encodeGame(arcade)); parsed.checkpoint.score++;
+  assert.throws(() => decodeGame(JSON.stringify(parsed)), /checkpoint/);
+  const extra = JSON.parse(encodeGame(arcade)); extra.actions[0].secret = true;
+  assert.throws(() => decodeGame(JSON.stringify(extra)), /record/);
+  assert.throws(() => decodeGame('{'), /JSON/);
+  assert.throws(() => decodeGame('x'.repeat(2 * 1024 * 1024 + 1)), RangeError);
+  assert.throws(() => encodeGame({ ...arcade, elapsedTicks: 10_000_001 }), RangeError);
+  assert.throws(() => encodeGame({ ...arcade, recording: Array(100_001).fill({ tick: 0, ordinal: 0, action: { kind: 'left' } }) }), RangeError);
+});
+
+test('gravity follows the level curve, soft drop prevents a duplicate gravity step, and ticks batch identically', () => {
+  let state = createGame({ mode: 'arcade', seed: 'gravity' });
+  const start = state.active.pivot.y; state = advanceTicks(state, 59).state; assert.equal(state.active.pivot.y, start);
+  state = advanceTicks(state, 1).state; assert.equal(state.active.pivot.y, start + 1);
+  const threshold = stateWith(blank(), active(['red', 'blue'], { x: 2, y: 10 }, 'right'), { settings: { ...createGame({ mode: 'arcade' }).settings, width: W, height: H }, completedPairs: 29 });
+  const secondLevel = applyAction(threshold, { kind: 'hard-drop' }).state; assert.equal(secondLevel.active.level, 2);
+  const atLevelTwo = { ...createGame({ mode: 'arcade', seed: 'level-two' }), active: { ...createGame({ mode: 'arcade', seed: 'level-two' }).active, level: 2 } };
+  const levelTwoY = atLevelTwo.active.pivot.y; const after50 = advanceTicks(atLevelTwo, 50).state; assert.equal(after50.active.pivot.y, levelTwoY);
+  assert.equal(advanceTicks(after50, 1).state.active.pivot.y, levelTwoY + 1);
+
+  const scheduler = setHeldInput(createInputScheduler(), 'soft-drop', true);
+  const [softGame, ,] = processInputTick(createGame({ mode: 'arcade', seed: 'soft' }), scheduler, applyAction, advanceTicks);
+  assert.equal(softGame.active.pivot.y, -1); assert.equal(softGame.score, 1); assert.equal(softGame.active.gravityTicks, 1);
+  const batchedStart = createGame({ mode: 'arcade', seed: 'batch-clock' });
+  let sequential = batchedStart; const events = [];
+  for (let i = 0; i < 120; i++) { const step = advanceTicks(sequential, 1); sequential = step.state; events.push(...step.events); }
+  const batched = advanceTicks(batchedStart, 120); assert.deepEqual(batched.state, sequential); assert.deepEqual(batched.events, events);
+});
+
+test('challenge minimum-chain and empty-board objectives are independently witnessed', () => {
+  const triple = Array(W * H).fill(null); triple[11 * W] = { id: 11001, colour: 'red' }; triple[11 * W + 1] = { id: 11002, colour: 'red' }; triple[11 * W + 3] = { id: 11003, colour: 'red' };
+  const chain = createChallenge({ id: 'minimum-chain', width: W, height: H, colourCount: 4, board: triple, queue: [['red', 'blue'], ['green', 'gold']], goal: { kind: 'minimum-chain', chain: 1 }, witness: [{ pivotX: 2, orientation: 'up' }] });
+  let win = applyAction(chain, { kind: 'hard-drop' }).state;
+  while (['clear-mark', 'clear-remove', 'gravity'].includes(win.phase)) win = advanceTicks(win, 3600).state;
+  assert.equal(win.phase, 'won'); assert.equal(win.maxChain, 1);
+
+  const two = Array(W * H).fill(null); two[11 * W] = { id: 12001, colour: 'gold' }; two[11 * W + 1] = { id: 12002, colour: 'gold' };
+  const empty = createChallenge({ id: 'empty-board', width: W, height: H, colourCount: 4, board: two, queue: [['gold', 'gold'], ['red', 'blue']], goal: { kind: 'empty-board' }, witness: [{ pivotX: 2, orientation: 'up' }] });
+  win = applyAction(empty, { kind: 'hard-drop' }).state;
+  while (['clear-mark', 'clear-remove', 'gravity'].includes(win.phase)) win = advanceTicks(win, 3600).state;
+  assert.equal(win.phase, 'won'); assert.equal(win.board.every(gem => gem === null), true);
+  assert.equal(win.allClears, 0); // Challenges do not receive the Arcade/Daily clear bonus.
+});
+
+test('the canonical recording captures held timing and rejects malformed setup and replay bounds', () => {
+  const start = createGame({ mode: 'arcade', seed: 'held-save' });
+  const held = setHeldInput(createInputScheduler(), 'left', true);
+  const [saved, ] = processInputTick(start, held, applyAction, advanceTicks);
+  assert.deepEqual(decodeGame(encodeGame(saved)), saved);
+  assert.equal(saved.recording[0].tick, 0); assert.equal(saved.recording[0].ordinal, 0);
+  assert.throws(() => createGame({ mode: 'arcade', width: 11, height: 12 }), StoneChainsOptionsError);
+  assert.throws(() => createChallenge({ id: 'bad', width: W, height: H, board: Array(W * H).fill(null), queue: [['red', 'blue']], goal: { kind: 'empty-board' }, witness: [{ pivotX: 2, orientation: 'up' }] }), StoneChainsOptionsError);
+  const board = Array(W * H).fill(null); board[0] = { id: 1, colour: 'red' }; board[1] = { id: 1, colour: 'blue' };
+  assert.throws(() => createChallenge({ id: 'duplicate', width: W, height: H, board, queue: [['red', 'blue'], ['green', 'gold']], goal: { kind: 'empty-board' }, witness: [{ pivotX: 2, orientation: 'up' }] }), StoneChainsOptionsError);
+});
+
+test('a witnessed objective wins before a simultaneous hidden-row top-out or exhausted queue', () => {
+  const board = Array(W * H).fill(null); let id = 13000;
+  for (let y = 0; y < H; y++) board[y * W + 2] = { id: id++, colour: y % 2 ? 'blue' : 'green' };
+  const targets = [];
+  for (let y = 8; y < 12; y++) { const gemId = id++; targets.push(gemId); board[y * W] = { id: gemId, colour: 'red' }; }
+  const challenge = createChallenge({ id: 'win-before-topout', width: W, height: H, colourCount: 4, board, queue: [['gold', 'blue'], ['red', 'green']], goal: { kind: 'clear-targets', targetIds: targets }, witness: [{ pivotX: 2, orientation: 'up' }] });
+  let state = applyAction(challenge, { kind: 'hard-drop' }).state;
+  assert.equal(state.board.slice(0, W * 3).some(Boolean), true);
+  while (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase)) state = advanceTicks(state, 3600).state;
+  assert.equal(state.phase, 'won'); assert.equal(state.reason, 'goal-complete');
+  assert.equal(state.board.slice(0, W * 3).some(Boolean), true);
 });
