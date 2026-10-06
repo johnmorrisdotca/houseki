@@ -62,7 +62,8 @@ for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "a
     const { over, wide } = await page.evaluate(() => {
       const width = document.documentElement.clientWidth;
       // What reaches past the right edge, so that a failure names the thing and not only the number of pixels.
-      const wide = [...document.querySelectorAll("body *")].filter((el) => el.getBoundingClientRect().right > width + 0.5).slice(0, 6).map((el) => `${el.tagName.toLowerCase()}.${el.className} right=${Math.round(el.getBoundingClientRect().right)} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
+      const reach = (el) => Math.max(el.getBoundingClientRect().right, el.getBoundingClientRect().left + el.scrollWidth);
+      const wide = [...document.querySelectorAll("html, body *")].filter((el) => reach(el) > width + 0.5).slice(0, 8).map((el) => `${el.tagName.toLowerCase()}.${el.className} reach=${reach(el).toFixed(1)} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
       return { over: document.documentElement.scrollWidth - width, wide };
     });
     expect(over, wide.join("; ")).toBeLessThanOrEqual(0);
