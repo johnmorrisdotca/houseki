@@ -2,7 +2,7 @@ import {refreshAppearanceLanguage} from './appearance.js';
 import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
-import { advanceTicks, applyAction, blockCells, createGame, decodeGame, encodeGame, restartGame } from './dist/magnetic-blocks.js';
+import { advanceTicks, applyAction, blockCells, createGame, createLesson, createLevel, decodeGame, encodeGame, lessonManifest, levelManifest, restartGame } from './dist/magnetic-blocks.js';
 import { pageWords } from './words.js';
 import { newSeed } from './seed.js';
 
@@ -12,7 +12,7 @@ const text = {
   en: {
     settings:'Settings', mode:'Mode', board:'Board preset', width:'Width', height:'Height', colours:'Colours', schedule:'Magnetic floor schedule', impact:'Magnetic Impact on hard drop',
     new:'New game', restart:'Restart', help:'Rotate the 2×2 block. Calm keeps bonded gems together; Pull separates them into columns.', material:'Board material', animations:'Animation', reduced:'Reduce motion', sound:'Sound effects',
-    title:'Magnetic Blocks', score:'Score', bestChain:'Best chain', placed:'Placed', experimental:'Experimental rules demo · no campaign yet', next:'Next', nextFloor:'Next floor', currentFloor:'Current floor',
+    title:'Magnetic Blocks', score:'Score', bestChain:'Best chain', placed:'Placed', campaign:'Campaign level', lessonLabel:'Lesson', freePlay:'Free play', noLesson:'No lesson', next:'Next', nextFloor:'Next floor', currentFloor:'Current floor',
     floorSwitch:'Floor Switch', switchHelp:'Choose the floor for this block. Review its preview, then apply by placing or dropping.', calm:'Calm', pull:'Pull', cancel:'Cancel', apply:'Apply with this floor', rotateLeft:'Rotate left', rotateRight:'Rotate right',
     keys:'← → move · ↑/Z/X rotate · Space drop/place · keypad 4/6/7/9/5/2 · Esc pause', lock:'Landing',
     ready:'Move, rotate, and place the block', paused:'Paused', won:'Goal complete', lost:'The block could not spawn', finished:'Queue complete', scrollTop:'Top', scrollBottom:'Bottom', scrollLabel:'Board scroll position',
@@ -24,7 +24,7 @@ const text = {
   ja: {
     settings:'設定', mode:'モード', board:'盤面プリセット', width:'幅', height:'高さ', colours:'色数', schedule:'床の磁気スケジュール', impact:'ハードドロップ時の磁気衝撃',
     new:'新しいゲーム', restart:'やり直す', help:'2×2ブロックを回転します。静穏では宝石が結合したまま落下し、引力では列ごとに分かれて落ちます。', material:'盤面の素材', animations:'アニメーション', reduced:'動きを減らす', sound:'効果音',
-    title:'磁石ブロック', score:'得点', bestChain:'最大連鎖', placed:'配置数', experimental:'実験的なルールのデモ · キャンペーンは未実装', next:'次のブロック', nextFloor:'次の床', currentFloor:'現在の床',
+    title:'磁石ブロック', score:'得点', bestChain:'最大連鎖', placed:'配置数', campaign:'キャンペーン', lessonLabel:'レッスン', freePlay:'フリープレイ', noLesson:'レッスンなし', next:'次のブロック', nextFloor:'次の床', currentFloor:'現在の床',
     floorSwitch:'床スイッチ', switchHelp:'このブロックの床を選びます。プレビューを確認して、配置または落下で適用します。', calm:'静穏', pull:'引力', cancel:'取消', apply:'この床で配置', rotateLeft:'↶ 回転', rotateRight:'↷ 回転',
     keys:'← → 移動 · ↑/Z/X 回転 · Space 落下/配置 · テンキー 4/6/7/9/5/2 · Esc 一時停止', lock:'着地',
     ready:'移動・回転してブロックを配置します', paused:'一時停止中', won:'目標達成', lost:'ブロックを配置できません', finished:'キュー終了', scrollTop:'上へ', scrollBottom:'下へ', scrollLabel:'盤面のスクロール位置',
@@ -38,12 +38,18 @@ const text = {
 const saveKey = 'houseki-magnetic-blocks-save';
 const preferenceKey = 'houseki-ui';
 const family=familyLanguage({id:'houseki',words:pageWords('blocks'),onChange:next=>setLanguage(next)});
-let lang = family.lang, game, startOptions = null, lastFrame = 0, accumulator = 0, saveTimer = 0;
+let lang = family.lang, game, startOptions = null, selectedLevel = null, selectedLesson = null, lastFrame = 0, accumulator = 0, saveTimer = 0;
 let boardKey = '', hudKey = '';
 const capOversized = globalThis.housekiConfig?.oversizedUnlocked === false;
 
 function t(key) { return text[lang][key] ?? text.en[key] ?? key; }
-function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; render(true); writePreferences(); }
+function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; populateCampaignSelectors(); render(true); writePreferences(); }
+function populateCampaignSelectors() {
+  const selectedLevelId = $('#level').value, selectedLessonId = $('#lesson').value;
+  $('#level').innerHTML = `<option value="">${t('freePlay')}</option>` + levelManifest.map(level => `<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title[lang]}</option>`).join('');
+  $('#lesson').innerHTML = `<option value="">${t('noLesson')}</option>` + lessonManifest.map(lesson => `<option value="${lesson.id}">${lesson.title[lang]}</option>`).join('');
+  $('#level').value = selectedLevelId; $('#lesson').value = selectedLessonId;
+}
 function readPreferences() {
   try {
     const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}');
@@ -84,18 +90,30 @@ function applySettingsToControls(settings) {
   $('#width').value = settings.width; $('#height').value = settings.height;
   $('#colours').value = settings.colourCount;
   const schedule = settings.schedule;
-  $('#schedule').value = schedule.kind === 'fixed' ? schedule.floor : schedule.kind === 'frequent' ? 'frequent' : 'rare';
+  $('#schedule').value = schedule.kind === 'fixed' ? schedule.floor : schedule.kind === 'frequent' ? 'frequent' : schedule.kind === 'infrequent' ? 'rare' : schedule.kind === 'occasional' ? 'rare' : schedule.kind === 'authored' && schedule.magneticPlacements.includes(1) ? 'magnetic' : 'calm';
   $('#impact').checked = settings.magneticImpact;
   const preset = Object.entries({ standard: [8,16], extraWide: [16,16], deep: [8,32], large: [16,32] }).find(([, size]) => size[0] === settings.width && size[1] === settings.height)?.[0] ?? 'custom';
   $('#preset').value = capOversized && (settings.width > 12 || settings.height > 20) ? 'custom' : preset;
   if (capOversized && (settings.width > 12 || settings.height > 20)) { $('#new').disabled = true; }
   validateSize();
 }
+function syncCampaignControls() {
+  const authored = Boolean(selectedLevel || selectedLesson);
+  for (const selector of ['#mode','#preset','#width','#height','#colours','#schedule','#impact']) $(selector).disabled = authored;
+  $('#objective').hidden = !authored;
+}
 function newGame(restart = false) {
   try {
-    if (!restart || !game) startOptions = optionsFromControls();
-    game = restart ? restartGame(game) : createGame(startOptions);
+    if (!restart || !game) {
+      selectedLesson = lessonManifest.find(lesson => lesson.id === $('#lesson').value) ?? null;
+      selectedLevel = selectedLesson ? null : levelManifest.find(level => level.id === $('#level').value) ?? null;
+      $('#level').value = selectedLevel?.id ?? '';
+      $('#lesson').value = selectedLesson?.id ?? '';
+      startOptions = selectedLesson?.options ?? selectedLevel?.options ?? optionsFromControls();
+    }
+    game = restart && game ? restartGame(game) : selectedLesson ? createLesson(selectedLesson.id) : selectedLevel ? createLevel(selectedLevel.id) : createGame(startOptions);
     applySettingsToControls(game.settings); $('#pending').hidden = true; $('#status').textContent = '';
+    syncCampaignControls();
     try { localStorage.removeItem(saveKey); } catch { /* Saving is optional. */ }
     render(true); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); queueSave();
   } catch (error) {
@@ -171,7 +189,7 @@ function renderBoard(force = false) {
 }
 function renderHud(force = false) {
   const floor = currentShownFloor();
-  const key = [game.score, game.maxChain, game.moves, game.placements, game.phase, game.floor, game.nextFloor, floor, game.floorSwitchCharges, game.pendingFloorOverride, game.active?.lockTicks, game.elapsedTicks, game.queue.length].join('|');
+  const key = [game.score, game.maxChain, game.moves, game.placements, game.phase, game.floor, game.nextFloor, floor, game.floorSwitchCharges, game.pendingFloorOverride, game.active?.lockTicks, game.elapsedTicks, game.queue.length, selectedLevel?.id, selectedLesson?.id].join('|');
   if (!force && key === hudKey) return;
   hudKey = key;
   $('#score').textContent = String(game.score); $('#chain').textContent = String(game.maxChain); $('#placed').textContent = String(game.placements);
@@ -193,9 +211,25 @@ function renderHud(force = false) {
   $('#lock-progress').setAttribute('aria-label', `${t('lock')} ${game.active?.lockTicks ?? 0}/24`);
   const nextPieces = game.queue.slice(0, 3);
   $('#next').innerHTML = nextPieces.map((piece, index) => `<div class="next-piece" aria-label="${t('next')} ${index + 1}: ${piece.join(', ')}">${piece.map(colour => gemMarkup({ colour }, 'mini')).join('')}</div>`).join('') || `<span class="micro">—</span>`;
-  const phaseText = game.phase === 'paused' ? t('paused') : game.phase === 'won' ? t('won') : game.phase === 'lost' ? t('lost') : game.phase === 'finished' ? t('finished') : game.phase === 'falling' ? t('ready') : `${game.phase === 'clear-mark' ? '✦' : '·'} ${game.chain > 1 ? `${game.chain}×` : ''}`;
+  const failedLevel = Boolean(selectedLevel && game.phase === 'finished');
+  const phaseText = failedLevel ? t('lost') : game.phase === 'paused' ? t('paused') : game.phase === 'won' ? t('won') : game.phase === 'lost' ? t('lost') : game.phase === 'finished' ? t('finished') : game.phase === 'falling' ? t('ready') : `${game.phase === 'clear-mark' ? '✦' : '·'} ${game.chain > 1 ? `${game.chain}×` : ''}`;
   $('#status').textContent = phaseText;
-  $('.place').hidden = game.settings.mode !== 'relaxed'; $('.drop').hidden = game.settings.mode !== 'arcade'; $('.soft').hidden = game.settings.mode !== 'arcade';
+  const campaignDrop = Boolean(selectedLevel || selectedLesson);
+  $('.place').hidden = game.settings.mode !== 'relaxed'; $('.drop').hidden = game.settings.mode !== 'arcade' && !campaignDrop; $('.soft').hidden = game.settings.mode !== 'arcade';
+  const level = selectedLevel, lesson = selectedLesson;
+  $('#objective-title').textContent = level ? `${level.number} · ${level.title[lang]}` : lesson?.title[lang] ?? '';
+  $('#objective-marks').hidden = !level; $('#objective-marks').textContent = level ? `${level.marks}/5` : '';
+  $('#objective-copy').textContent = level?.objective[lang] ?? lesson?.objective[lang] ?? '';
+  const goalHud = $('#goal-hud'); goalHud.hidden = !level;
+  if (level) {
+    const targets = level.options.goal?.kind === 'clear-targets' ? level.options.goal.targetIds : [];
+    const remaining = new Set(game.board.flatMap(gem => gem ? [gem.id] : []));
+    const cleared = targets.filter(id => !remaining.has(id)).length;
+    const total = targets.length;
+    $('#goal-progress').max = total; $('#goal-progress').value = cleared;
+    $('#goal-text').textContent = lang === 'en' ? `Marked gems ${cleared}/${total}` : `目標の石 ${cleared}/${total}`;
+    $('#goal-progress').setAttribute('aria-label', $('#goal-text').textContent);
+  }
   $('.pause').hidden = game.phase === 'paused' || ['won', 'lost', 'finished'].includes(game.phase);
   $('.resume').hidden = game.phase !== 'paused';
   document.querySelectorAll('.controls button[data-action]').forEach(button => { const action = button.dataset.action; button.disabled = !game.active && ['left','right','soft-drop','hard-drop','land','rotate-clockwise','rotate-anticlockwise'].includes(action) || !['falling','paused','clear-mark','clear-remove','gravity'].includes(game.phase); });
@@ -211,7 +245,18 @@ function renderHud(force = false) {
     option.dataset.base ??= option.textContent.replace(/ · Locked$/, '');
   }
 }
-function render(force = false) {refreshAppearanceLanguage(lang); if (!game) return; renderBoard(force); renderHud(force);updateEnding({phase:game.phase,score:game.score,lang,mode:game.settings.mode,onRestart:()=>newGame(true),detail:$('#status').textContent}); }
+function render(force = false) {
+  refreshAppearanceLanguage(lang); if (!game) return;
+  renderBoard(force); renderHud(force); syncCampaignControls();
+  const activeLevel = selectedLesson ? { ...selectedLesson, lesson: true } : selectedLevel;
+  const index = selectedLevel ? levelManifest.findIndex(level => level.id === selectedLevel.id) : -1;
+  const next = index >= 0 ? levelManifest[index + 1] ?? null : null;
+  const endingPhase = selectedLevel && game.phase === 'finished' ? 'lost' : game.phase;
+  updateEnding({ phase: endingPhase, score: game.score, lang, mode: game.settings.mode, level: activeLevel, next,
+    onRestart: () => newGame(true),
+    onNext: next ? () => { $('#level').value = next.id; $('#lesson').value = ''; newGame(); } : undefined,
+    detail: activeLevel?.objective?.[lang] ?? $('#status').textContent });
+}
 
 function updateBoardScroll() {
   const area=$('.well-scroll');if(!area)return;
@@ -256,6 +301,8 @@ for (const button of document.querySelectorAll('[data-floor]')) button.addEventL
 $('#cancel-floor').addEventListener('click', () => dispatch('cancel-floor-override'));
 $('#apply-floor').addEventListener('click', () => activateAction('apply-floor'));
 $('#new').addEventListener('click', () => newGame()); $('#restart').addEventListener('click', () => newGame(true));
+$('#level').addEventListener('change', () => { $('#lesson').value = ''; $('#pending').hidden = false; });
+$('#lesson').addEventListener('change', () => { $('#level').value = ''; $('#pending').hidden = false; });
 $('#preset').addEventListener('change', () => { const size = presetSize($('#preset').value); if (size) { $('#width').value = size[0]; $('#height').value = size[1]; } changedSettings(); });
 for (const selector of ['#mode','#colours','#schedule','#impact','#width','#height']) $(selector).addEventListener('change', () => { if (selector === '#width' || selector === '#height') $('#preset').value = 'custom'; changedSettings(); });
 $('#width').addEventListener('input', changedSettings); $('#height').addEventListener('input', changedSettings);
@@ -278,7 +325,7 @@ document.addEventListener('keydown', event => {
   else if (key === 'ArrowDown') action = game.settings.mode === 'arcade' ? 'soft-drop' : null;
   else if (key === 'ArrowUp' || key.toLowerCase?.() === 'x') action = 'rotate-clockwise';
   else if (key.toLowerCase?.() === 'z') action = 'rotate-anticlockwise';
-  else if (key === ' ' || key === 'Space') action = game.settings.mode === 'arcade' ? 'hard-drop' : 'land';
+  else if (key === ' ' || key === 'Space') action = (game.settings.mode === 'arcade' || selectedLevel || selectedLesson) ? 'hard-drop' : 'land';
   else if (key === 'Escape' || key.toLowerCase?.() === 'p') action = game.phase === 'paused' ? 'resume' : 'pause';
   if (!action) return;
   if ((key === ' ' || key === 'Space') && target?.closest('button')) return;
@@ -293,11 +340,17 @@ window.addEventListener('blur', () => { if (game?.settings.mode === 'arcade' && 
 document.addEventListener('visibilitychange', () => { if (document.hidden && game?.settings.mode === 'arcade' && !['paused','won','lost','finished'].includes(game.phase)) dispatch('pause'); });
 window.addEventListener('pagehide', () => { clearTimeout(saveTimer); save(); });
 
-readPreferences();
+populateCampaignSelectors(); readPreferences();
 for (const option of $('#preset').options) option.dataset.base = option.textContent;
 try {
   const saved = localStorage.getItem(saveKey);
-  if (saved) { game = decodeGame(saved); startOptions = null; applySettingsToControls(game.settings); }
+  if (saved) {
+    game = decodeGame(saved); startOptions = null;
+    selectedLevel = levelManifest.find(level => level.options.seed === game.settings.seed) ?? null;
+    selectedLesson = lessonManifest.find(lesson => lesson.options.seed === game.settings.seed) ?? null;
+    $('#level').value = selectedLevel?.id ?? ''; $('#lesson').value = selectedLesson?.id ?? '';
+    applySettingsToControls(game.settings); syncCampaignControls();
+  }
 } catch { game = null; }
 if (!game) newGame(); else { render(true); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); }
 validateSize(); requestAnimationFrame(animate);

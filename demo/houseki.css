@@ -86,3 +86,11 @@ p[data-say="status"]{line-height:20px;min-height:40px;margin:12px 0}
 header .intro p{line-height:20px}
 header .intro{min-height:200px}
 @media(min-width:700px){header .intro{min-height:124px}}
+
+/* Reserve the longer label's room so game navigation wraps identically in both languages. */
+.pages .fam-label{flex:0 0 52px}
+.pages .fam-actions{min-width:0;max-width:100%}
+.pages .fam-button{flex:none;white-space:nowrap}
+.pages .fam-button:nth-child(1),.pages .fam-button:nth-child(2){width:128px}
+.pages .fam-button:nth-child(3){width:252px}
+.pages .fam-button:nth-child(4){width:152px}
