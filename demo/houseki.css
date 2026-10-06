@@ -98,3 +98,5 @@ header .intro{min-height:200px}
 /* Goal counters reserve the same line boxes for Latin and Japanese fonts. */
 #objective p{line-height:24px}
 #objective progress{height:12px}
+/* A title takes the whole row on a phone, so that it is one line in any font and either language, and the board under it does not move when the language changes. */
+@media (max-width: 480px) { .panel-head h2 { flex-basis: 100%; white-space: nowrap; } }

@@ -13,6 +13,10 @@ Nothing that was exported has changed. The README is the family's one layout, in
 - The README has a picture of the demo on a desk and on a phone, in light and dark, taken from the demo by `pnpm screenshots:readme` (the pictures are in `docs/images/` and are not in the package), a picture of each game and campaign (Falling Triplets, Colour Chains, Gem Swap, Stone Collapse, Magnetic Blocks, Shizen and Arashi) and of the tool tray on a phone, an Examples section of nine examples that run, examples for React, Vue, Svelte and Angular, an Accessibility section, and tables of the entry points and the calls to learn first.
 - `pnpm test:readme` type-checks and runs every TypeScript and JavaScript example in the README against the built package, as a job of its own in CI; `src/readme.test.js` holds the README to the family's standard (sections in order, languages on code fences, pictures with alt text and a caption, no marketing words, version pins) in `pnpm check`; `pnpm test:package` fails if a picture or anything under `docs/` is in the packed package.
 
+### Fixed
+
+- On a phone the page's title, "Magnetic Blocks" in English, takes the whole row of its panel head and does not wrap, so that the board under it sits in the same place in English and in Japanese in any font. The browser check that holds this failed on GitHub's runners, whose fonts are wider than a Mac's; nothing the package exports has changed.
+
 ### Changed
 
 - `pnpm screenshots:readme` takes the README's pictures as WebP in light and dark under `docs/images/`, instead of five PNGs of 3 MB taken by hand.
