@@ -17,6 +17,7 @@ All notable changes to this package are written here, newest first, in the form 
 ### Fixed
 
 - A new game on a page served over plain http, from an address other than localhost, no longer fails: the seed falls back to random bytes where `crypto.randomUUID` does not exist.
+- The API reference no longer widens the page on a phone for a doc comment that names a long entry path.
 - Unused imports and variables are removed from the source; no public export, signature or behaviour changes.
 
 ## [0.1.0] - 2026-10-05
