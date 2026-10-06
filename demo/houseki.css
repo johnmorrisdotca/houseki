@@ -80,3 +80,9 @@ aside .micro { font-size: .78rem; color: var(--muted); }
 .checks{display:grid;gap:4px}.checks .check{margin:0}.pages{margin:4px 0 14px}.pages .fam-button[aria-current="page"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 
 p[data-say="status"]{line-height:20px;min-height:40px;margin:12px 0}
+
+.pages .fam-label{line-height:20px;min-height:20px}
+
+header .intro p{line-height:20px}
+header .intro{min-height:200px}
+@media(min-width:700px){header .intro{min-height:124px}}

@@ -85,3 +85,4 @@
 
 .experimental{line-height:20px;min-height:36px}
 @media(max-width:980px){.experimental{min-height:56px}}
+.preview-strip b,.current-floor > span,.floor-chip{line-height:20px}

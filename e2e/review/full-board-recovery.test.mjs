@@ -186,7 +186,7 @@ try {
   console.log('PASS full-board recovery: reused-seed levels, all six lessons, settings restore, mode clearing, terminal action controls, BASE_PATH=/houseki');
 } finally {
   await browser.close();
-  
+
 }
 
 async function assertTerminalControls(page, game) {
