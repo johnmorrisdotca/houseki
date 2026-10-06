@@ -36,7 +36,7 @@ For each representative fixture record:
 | Mistakes | Plausible wrong decisions, observed result and recovery/slack |
 | Review limits | Human calibration, translation and physical-device reviews still pending |
 
-Preserve fixtures for deceptively easy large boards, long forced sequences, repeated independent one-step tasks, visually simple traps, tied metrics and incomplete searches. Random full-plan success drops when several easy choices are multiplied together; this does not by itself establish expert planning. Require evidence that earlier decisions affect later access, support, timing or targets, rather than merely repeating the same obvious removal. When a score disagrees with visible decisions, fix the grader or construction and record the reason. Do not simply relabel the example.
+Preserve fixtures for deceptively easy large boards, long forced sequences, repeated independent one-step tasks, visually simple traps, tied metrics and incomplete searches. Random full-plan success drops when several easy choices are multiplied together; this does not by itself establish expert planning. Require evidence that earlier decisions affect later access, support, timing or targets, rather than merely repeating the same obvious removal. A short solution may be demanding when its consequences interact; the quota of eight expert levels is not a requirement for eight-step solutions. When a score disagrees with visible decisions, fix the grader or construction and record the reason. Do not simply relabel the example.
 
 ## Release gate
 
@@ -49,3 +49,15 @@ Document actual counts and test results. Package and demo must agree. Verify the
 After each review, append a short finding to the game's method document: the observed weakness, a concrete example, the corrected rule or measurement, and the regression that prevents recurrence. Update reusable guidance when the finding applies across games. Preserve measured evidence and historical grading revisions so later maintainers can understand why a rule changed.
 
 Changes to one game's content do not authorize changing every project or integrating its package into the host site. Reuse the process and relevant tests first; apply other repository changes under their own scope.
+
+## Findings from the 128-level expansion
+
+These are prototype measurements, not claims that the expanded campaigns are shipped or human-calibrated.
+
+- Repeating three independent target clears produced only 3 wins in 128 random full plans. It was rejected as expert evidence: multiplying easy independent choices lowers random success without adding interacting planning.
+- An eight-placement Arashi schedule prototype produced 2 wins in 64 full plans, versus 14 in 64 for a four-placement example. It still had no uniquely required setup step under its fixed-suffix probe. Waiting longer for lightning was rejected as evidence of expert planning.
+- A longer Shizen plan won 18 of 64 full plans, while a shorter two-placement plan won 15. Witness length therefore failed to order these examples reliably.
+- A layered Magnetic Blocks prototype cleared blue supports, then green supports, then red targets with a necessary final Pull-floor switch. Accepted-action replay verified each target-removal layer; the same final plan on Calm lost. One of 1,024 seeded full plans won. This supports developing an interacting expert construction, but does not prove a unique or optimal solution.
+- A Shizen attraction prototype failed when only magnetic flags were removed while rebound stayed enabled. This isolates attraction dependence more precisely than disabling the whole nature mode.
+
+Carry these distinctions into new graders and regression fixtures: independent repetition versus interaction, clock waiting versus consequential timing, witness length versus planning, bounded sampling versus proof, and broad modifier counterfactuals versus isolated mechanics.
