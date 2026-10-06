@@ -1,0 +1,6193 @@
+[
+  {
+    "campaign": "shizen",
+    "id": "shizen-07d7128bc203",
+    "number": 1,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "probe:shizen-b191e5fe6bfb:0:62:65",
+      "challengeId": "shizen-07d7128bc203",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "gold"
+        },
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "green"
+        },
+        {
+          "id": 12,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 4,
+          "colour": "blue",
+          "magnetic": true
+        },
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "blue",
+          "magnetic": true
+        },
+        {
+          "id": 13,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 7,
+          "colour": "teal"
+        }
+      ],
+      "queue": [
+        [
+          "blue",
+          "blue"
+        ],
+        [
+          "red",
+          "blue"
+        ],
+        [
+          "purple",
+          "blue"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "gold"
+      },
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "green"
+      },
+      {
+        "id": 12,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 4,
+        "colour": "blue",
+        "magnetic": true
+      },
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "blue",
+        "magnetic": true
+      },
+      {
+        "id": 13,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 7,
+        "colour": "teal"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"probe:shizen-b191e5fe6bfb:0:62:65\",\"challengeId\":\"shizen-07d7128bc203\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,{\"id\":10,\"colour\":\"gold\"},{\"id\":11,\"colour\":\"blue\"},null,{\"id\":5,\"colour\":\"green\"},null,null,{\"id\":9,\"colour\":\"green\"},{\"id\":12,\"colour\":\"blue\"},null,{\"id\":4,\"colour\":\"blue\",\"magnetic\":true},null,null,{\"id\":8,\"colour\":\"blue\",\"magnetic\":true},{\"id\":13,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":7,\"colour\":\"teal\"}],\"queue\":[[\"blue\",\"blue\"],[\"red\",\"blue\"],[\"purple\",\"blue\"]],\"magneticQueue\":[[false,false],[true,false],[false,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"probe:shizen-b191e5fe6bfb:0:62:65\",\"challengeId\":\"shizen-07d7128bc203\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,{\"id\":10,\"colour\":\"gold\"},{\"id\":11,\"colour\":\"blue\"},null,{\"id\":5,\"colour\":\"green\"},null,null,{\"id\":9,\"colour\":\"green\"},{\"id\":12,\"colour\":\"blue\"},null,{\"id\":4,\"colour\":\"blue\",\"magnetic\":true},null,null,{\"id\":8,\"colour\":\"blue\",\"magnetic\":true},{\"id\":13,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":7,\"colour\":\"teal\"}],\"queue\":[[\"blue\",\"blue\"],[\"red\",\"blue\"],[\"purple\",\"blue\"]],\"magneticQueue\":[[false,false],[true,false],[false,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,{\"id\":10,\"colour\":\"gold\"},{\"id\":11,\"colour\":\"blue\"},null,{\"id\":5,\"colour\":\"green\"},null,null,{\"id\":9,\"colour\":\"green\"},{\"id\":12,\"colour\":\"blue\"},null,{\"id\":4,\"colour\":\"blue\",\"magnetic\":true},null,null,{\"id\":8,\"colour\":\"blue\",\"magnetic\":true},{\"id\":13,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":7,\"colour\":\"teal\"}],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":14,\"colour\":\"blue\"},{\"id\":15,\"colour\":\"blue\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"red\",\"blue\"],[\"purple\",\"blue\"]],\"bag\":[],\"randomState\":2411066200,\"nextId\":16,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[true,false],[false,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "probe:shizen-b191e5fe6bfb:0:62:65",
+      "challengeId": "shizen-07d7128bc203",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "gold"
+        },
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "green"
+        },
+        {
+          "id": 12,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 4,
+          "colour": "blue",
+          "magnetic": true
+        },
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "blue",
+          "magnetic": true
+        },
+        {
+          "id": 13,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 7,
+          "colour": "teal"
+        }
+      ],
+      "queue": [
+        [
+          "blue",
+          "blue"
+        ],
+        [
+          "red",
+          "blue"
+        ],
+        [
+          "purple",
+          "blue"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "gold"
+      },
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "green"
+      },
+      {
+        "id": 12,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 4,
+        "colour": "blue",
+        "magnetic": true
+      },
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "blue",
+        "magnetic": true
+      },
+      {
+        "id": 13,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 7,
+        "colour": "teal"
+      }
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 14,
+          "colour": "blue"
+        },
+        {
+          "id": 15,
+          "colour": "blue"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "shizen",
+    "id": "shizen-a760e8c7a526",
+    "number": 25,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "shizen:colour-chains-nature-campaign-1.0.0:6",
+      "challengeId": "shizen-a760e8c7a526",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 11,
+          "colour": "teal"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "teal"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 5,
+          "colour": "purple"
+        }
+      ],
+      "queue": [
+        [
+          "red",
+          "blue"
+        ],
+        [
+          "green",
+          "purple"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 11,
+        "colour": "teal"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "teal"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 5,
+        "colour": "purple"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"shizen:colour-chains-nature-campaign-1.0.0:6\",\"challengeId\":\"shizen-a760e8c7a526\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":10,\"colour\":\"purple\"},null,null,null,null,null,{\"id\":9,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":8,\"colour\":\"green\"},null,null,null,null,null,{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"purple\"},null,null,{\"id\":6,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"purple\"}],\"queue\":[[\"red\",\"blue\"],[\"green\",\"purple\"]],\"magneticQueue\":[[true,false],[false,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"shizen:colour-chains-nature-campaign-1.0.0:6\",\"challengeId\":\"shizen-a760e8c7a526\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":10,\"colour\":\"purple\"},null,null,null,null,null,{\"id\":9,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":8,\"colour\":\"green\"},null,null,null,null,null,{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"purple\"},null,null,{\"id\":6,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"purple\"}],\"queue\":[[\"red\",\"blue\"],[\"green\",\"purple\"]],\"magneticQueue\":[[true,false],[false,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":10,\"colour\":\"purple\"},null,null,null,null,null,{\"id\":9,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":8,\"colour\":\"green\"},null,null,null,null,null,{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"purple\"},null,null,{\"id\":6,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"purple\"}],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":12,\"colour\":\"red\",\"magnetic\":true},{\"id\":13,\"colour\":\"blue\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"green\",\"purple\"]],\"bag\":[],\"randomState\":3240646252,\"nextId\":14,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[false,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "shizen:colour-chains-nature-campaign-1.0.0:6",
+      "challengeId": "shizen-a760e8c7a526",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 11,
+          "colour": "teal"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "teal"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 5,
+          "colour": "purple"
+        }
+      ],
+      "queue": [
+        [
+          "red",
+          "blue"
+        ],
+        [
+          "green",
+          "purple"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 11,
+        "colour": "teal"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "teal"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 5,
+        "colour": "purple"
+      }
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 12,
+          "colour": "red",
+          "magnetic": true
+        },
+        {
+          "id": 13,
+          "colour": "blue"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "shizen",
+    "id": "shizen-25ec1ad056df",
+    "number": 50,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "probe3:shizen-d93339c45bb6:0:1:61:65",
+      "challengeId": "shizen-25ec1ad056df",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 11,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "teal"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "purple"
+        },
+        {
+          "id": 12,
+          "colour": "blue"
+        },
+        {
+          "id": 15,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        {
+          "id": 13,
+          "colour": "blue"
+        },
+        {
+          "id": 16,
+          "colour": "green",
+          "magnetic": true
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "green",
+          "magnetic": true
+        },
+        {
+          "id": 14,
+          "colour": "blue"
+        },
+        {
+          "id": 17,
+          "colour": "green"
+        },
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 4,
+          "colour": "blue"
+        }
+      ],
+      "queue": [
+        [
+          "blue",
+          "blue"
+        ],
+        [
+          "green",
+          "green"
+        ],
+        [
+          "red",
+          "blue"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 11,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "teal"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "purple"
+      },
+      {
+        "id": 12,
+        "colour": "blue"
+      },
+      {
+        "id": 15,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      {
+        "id": 13,
+        "colour": "blue"
+      },
+      {
+        "id": 16,
+        "colour": "green",
+        "magnetic": true
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "green",
+        "magnetic": true
+      },
+      {
+        "id": 14,
+        "colour": "blue"
+      },
+      {
+        "id": 17,
+        "colour": "green"
+      },
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 4,
+        "colour": "blue"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"probe3:shizen-d93339c45bb6:0:1:61:65\",\"challengeId\":\"shizen-25ec1ad056df\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":10,\"colour\":\"green\"},null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":8,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"blue\"},{\"id\":15,\"colour\":\"green\"},null,null,null,{\"id\":6,\"colour\":\"gold\"},{\"id\":13,\"colour\":\"blue\"},{\"id\":16,\"colour\":\"green\",\"magnetic\":true},null,null,null,{\"id\":5,\"colour\":\"green\",\"magnetic\":true},{\"id\":14,\"colour\":\"blue\"},{\"id\":17,\"colour\":\"green\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":4,\"colour\":\"blue\"}],\"queue\":[[\"blue\",\"blue\"],[\"green\",\"green\"],[\"red\",\"blue\"]],\"magneticQueue\":[[false,false],[false,false],[true,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"probe3:shizen-d93339c45bb6:0:1:61:65\",\"challengeId\":\"shizen-25ec1ad056df\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":10,\"colour\":\"green\"},null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":8,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"blue\"},{\"id\":15,\"colour\":\"green\"},null,null,null,{\"id\":6,\"colour\":\"gold\"},{\"id\":13,\"colour\":\"blue\"},{\"id\":16,\"colour\":\"green\",\"magnetic\":true},null,null,null,{\"id\":5,\"colour\":\"green\",\"magnetic\":true},{\"id\":14,\"colour\":\"blue\"},{\"id\":17,\"colour\":\"green\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":4,\"colour\":\"blue\"}],\"queue\":[[\"blue\",\"blue\"],[\"green\",\"green\"],[\"red\",\"blue\"]],\"magneticQueue\":[[false,false],[false,false],[true,false]],\"nature\":true,\"witness\":[{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":11,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":10,\"colour\":\"green\"},null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":8,\"colour\":\"teal\"},null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"blue\"},{\"id\":15,\"colour\":\"green\"},null,null,null,{\"id\":6,\"colour\":\"gold\"},{\"id\":13,\"colour\":\"blue\"},{\"id\":16,\"colour\":\"green\",\"magnetic\":true},null,null,null,{\"id\":5,\"colour\":\"green\",\"magnetic\":true},{\"id\":14,\"colour\":\"blue\"},{\"id\":17,\"colour\":\"green\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":4,\"colour\":\"blue\"}],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":18,\"colour\":\"blue\"},{\"id\":19,\"colour\":\"blue\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"green\",\"green\"],[\"red\",\"blue\"]],\"bag\":[],\"randomState\":267652712,\"nextId\":20,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[false,false],[true,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "probe3:shizen-d93339c45bb6:0:1:61:65",
+      "challengeId": "shizen-25ec1ad056df",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 11,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 10,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "teal"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "purple"
+        },
+        {
+          "id": 12,
+          "colour": "blue"
+        },
+        {
+          "id": 15,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        {
+          "id": 13,
+          "colour": "blue"
+        },
+        {
+          "id": 16,
+          "colour": "green",
+          "magnetic": true
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "green",
+          "magnetic": true
+        },
+        {
+          "id": 14,
+          "colour": "blue"
+        },
+        {
+          "id": 17,
+          "colour": "green"
+        },
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 4,
+          "colour": "blue"
+        }
+      ],
+      "queue": [
+        [
+          "blue",
+          "blue"
+        ],
+        [
+          "green",
+          "green"
+        ],
+        [
+          "red",
+          "blue"
+        ]
+      ],
+      "magneticQueue": [
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "nature": true,
+      "witness": [
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 11,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 10,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "teal"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "purple"
+      },
+      {
+        "id": 12,
+        "colour": "blue"
+      },
+      {
+        "id": 15,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      {
+        "id": 13,
+        "colour": "blue"
+      },
+      {
+        "id": 16,
+        "colour": "green",
+        "magnetic": true
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "green",
+        "magnetic": true
+      },
+      {
+        "id": 14,
+        "colour": "blue"
+      },
+      {
+        "id": 17,
+        "colour": "green"
+      },
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 4,
+        "colour": "blue"
+      }
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 18,
+          "colour": "blue"
+        },
+        {
+          "id": 19,
+          "colour": "blue"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "arashi",
+    "id": "arashi-2750bf69166d",
+    "number": 1,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:758",
+      "challengeId": "arashi-2750bf69166d",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "green"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "blue"
+        },
+        null
+      ],
+      "queue": [
+        [
+          "purple",
+          "teal"
+        ],
+        [
+          "blue",
+          "green"
+        ],
+        [
+          "gold",
+          "purple"
+        ],
+        [
+          "teal",
+          "blue"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 3,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 5,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "green"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "blue"
+      },
+      null
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:758\",\"challengeId\":\"arashi-2750bf69166d\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":2,\"colour\":\"green\"},null,null,null,{\"id\":4,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"red\"},null,{\"id\":5,\"colour\":\"blue\"},null],\"queue\":[[\"purple\",\"teal\"],[\"blue\",\"green\"],[\"gold\",\"purple\"],[\"teal\",\"blue\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":3,\"orientation\":\"up\"},{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":5,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:758\",\"challengeId\":\"arashi-2750bf69166d\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":2,\"colour\":\"green\"},null,null,null,{\"id\":4,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"red\"},null,{\"id\":5,\"colour\":\"blue\"},null],\"queue\":[[\"purple\",\"teal\"],[\"blue\",\"green\"],[\"gold\",\"purple\"],[\"teal\",\"blue\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":3,\"orientation\":\"up\"},{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":5,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,null,null,{\"id\":2,\"colour\":\"green\"},null,null,null,{\"id\":4,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"red\"},null,{\"id\":5,\"colour\":\"blue\"},null],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":6,\"colour\":\"purple\"},{\"id\":7,\"colour\":\"teal\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"blue\",\"green\"],[\"gold\",\"purple\"],[\"teal\",\"blue\"]],\"bag\":[],\"randomState\":3279626657,\"nextId\":8,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[false,false],[false,false],[false,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:758",
+      "challengeId": "arashi-2750bf69166d",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "green"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "blue"
+        },
+        null
+      ],
+      "queue": [
+        [
+          "purple",
+          "teal"
+        ],
+        [
+          "blue",
+          "green"
+        ],
+        [
+          "gold",
+          "purple"
+        ],
+        [
+          "teal",
+          "blue"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 3,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 5,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "green"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "blue"
+      },
+      null
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 6,
+          "colour": "purple"
+        },
+        {
+          "id": 7,
+          "colour": "teal"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "arashi",
+    "id": "arashi-933c862279c0",
+    "number": 25,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:830",
+      "challengeId": "arashi-933c862279c0",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "teal"
+        },
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        {
+          "id": 7,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 6,
+          "colour": "blue"
+        },
+        null,
+        null
+      ],
+      "queue": [
+        [
+          "blue",
+          "green"
+        ],
+        [
+          "gold",
+          "purple"
+        ],
+        [
+          "teal",
+          "blue"
+        ],
+        [
+          "green",
+          "gold"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 5,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "teal"
+      },
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      {
+        "id": 7,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 6,
+        "colour": "blue"
+      },
+      null,
+      null
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:830\",\"challengeId\":\"arashi-933c862279c0\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,{\"id\":5,\"colour\":\"teal\"},null,{\"id\":2,\"colour\":\"green\"},{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":6,\"colour\":\"blue\"},null,null],\"queue\":[[\"blue\",\"green\"],[\"gold\",\"purple\"],[\"teal\",\"blue\"],[\"green\",\"gold\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":5,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:830\",\"challengeId\":\"arashi-933c862279c0\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,{\"id\":5,\"colour\":\"teal\"},null,{\"id\":2,\"colour\":\"green\"},{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":6,\"colour\":\"blue\"},null,null],\"queue\":[[\"blue\",\"green\"],[\"gold\",\"purple\"],[\"teal\",\"blue\"],[\"green\",\"gold\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":5,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,null,{\"id\":5,\"colour\":\"teal\"},null,{\"id\":2,\"colour\":\"green\"},{\"id\":7,\"colour\":\"blue\"},null,null,{\"id\":4,\"colour\":\"blue\"},null,{\"id\":1,\"colour\":\"red\"},{\"id\":6,\"colour\":\"blue\"},null,null],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":8,\"colour\":\"blue\"},{\"id\":9,\"colour\":\"green\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"gold\",\"purple\"],[\"teal\",\"blue\"],[\"green\",\"gold\"]],\"bag\":[],\"randomState\":4246260938,\"nextId\":10,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[false,false],[false,false],[false,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:830",
+      "challengeId": "arashi-933c862279c0",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "teal"
+        },
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        {
+          "id": 7,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 6,
+          "colour": "blue"
+        },
+        null,
+        null
+      ],
+      "queue": [
+        [
+          "blue",
+          "green"
+        ],
+        [
+          "gold",
+          "purple"
+        ],
+        [
+          "teal",
+          "blue"
+        ],
+        [
+          "green",
+          "gold"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 5,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "teal"
+      },
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      {
+        "id": 7,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 6,
+        "colour": "blue"
+      },
+      null,
+      null
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 8,
+          "colour": "blue"
+        },
+        {
+          "id": 9,
+          "colour": "green"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "arashi",
+    "id": "arashi-d901d88cb1dd",
+    "number": 50,
+    "initialSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:209",
+      "challengeId": "arashi-d901d88cb1dd",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        {
+          "id": 4,
+          "colour": "gold"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "teal"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        }
+      ],
+      "queue": [
+        [
+          "teal",
+          "blue"
+        ],
+        [
+          "green",
+          "gold"
+        ],
+        [
+          "purple",
+          "teal"
+        ],
+        [
+          "blue",
+          "green"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 2,
+          "orientation": "up"
+        }
+      ]
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      {
+        "id": 4,
+        "colour": "gold"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "teal"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:209\",\"challengeId\":\"arashi-d901d88cb1dd\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,{\"id\":6,\"colour\":\"purple\"},null,null,{\"id\":2,\"colour\":\"green\"},{\"id\":4,\"colour\":\"gold\"},null,{\"id\":5,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"}],\"queue\":[[\"teal\",\"blue\"],[\"green\",\"gold\"],[\"purple\",\"teal\"],[\"blue\",\"green\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":2,\"orientation\":\"up\"}]},\"elapsedTicks\":0,\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"checkpoint\":{\"game\":\"colour-chains\",\"rules\":\"chains-1\",\"settings\":{\"mode\":\"challenge\",\"width\":6,\"height\":12,\"colourCount\":6,\"seed\":\"arashi:colour-chains-nature-campaign-1.0.0:209\",\"challengeId\":\"arashi-d901d88cb1dd\",\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1]},\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,{\"id\":6,\"colour\":\"purple\"},null,null,{\"id\":2,\"colour\":\"green\"},{\"id\":4,\"colour\":\"gold\"},null,{\"id\":5,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"}],\"queue\":[[\"teal\",\"blue\"],[\"green\",\"gold\"],[\"purple\",\"teal\"],[\"blue\",\"green\"]],\"nature\":true,\"weather\":\"frequent\",\"witness\":[{\"pivotX\":4,\"orientation\":\"up\"},{\"pivotX\":0,\"orientation\":\"up\"},{\"pivotX\":1,\"orientation\":\"up\"},{\"pivotX\":2,\"orientation\":\"up\"}]},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"gold\"},null,null,{\"id\":6,\"colour\":\"purple\"},null,null,{\"id\":2,\"colour\":\"green\"},{\"id\":4,\"colour\":\"gold\"},null,{\"id\":5,\"colour\":\"teal\"},null,null,{\"id\":1,\"colour\":\"red\"}],\"phase\":\"falling\",\"active\":{\"pivot\":{\"x\":1,\"y\":-2},\"orientation\":\"up\",\"gems\":[{\"id\":7,\"colour\":\"teal\"},{\"id\":8,\"colour\":\"blue\"}],\"level\":1,\"gravityTicks\":0,\"groundedTicks\":0,\"resetCount\":0,\"groundedStarted\":false},\"next\":[[\"green\",\"gold\"],[\"purple\",\"teal\"],[\"blue\",\"green\"]],\"bag\":[],\"randomState\":2010019176,\"nextId\":9,\"score\":0,\"maxChain\":0,\"allClears\":0,\"completedPairs\":0,\"resolutionTick\":0,\"waves\":[],\"clearCells\":[],\"gravityBoard\":null,\"resolutionHadClear\":false,\"elapsedTicks\":0,\"assisted\":false,\"witnessIndex\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"nextMagnetic\":[[false,false],[false,false],[false,false]],\"lastHorizontalDirection\":\"left\"}}",
+    "expectedSettings": {
+      "mode": "challenge",
+      "width": 6,
+      "height": 12,
+      "colourCount": 6,
+      "seed": "arashi:colour-chains-nature-campaign-1.0.0:209",
+      "challengeId": "arashi-d901d88cb1dd",
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1
+        ]
+      },
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "green"
+        },
+        {
+          "id": 4,
+          "colour": "gold"
+        },
+        null,
+        {
+          "id": 5,
+          "colour": "teal"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "red"
+        }
+      ],
+      "queue": [
+        [
+          "teal",
+          "blue"
+        ],
+        [
+          "green",
+          "gold"
+        ],
+        [
+          "purple",
+          "teal"
+        ],
+        [
+          "blue",
+          "green"
+        ]
+      ],
+      "nature": true,
+      "weather": "frequent",
+      "witness": [
+        {
+          "pivotX": 4,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 0,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 1,
+          "orientation": "up"
+        },
+        {
+          "pivotX": 2,
+          "orientation": "up"
+        }
+      ]
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "green"
+      },
+      {
+        "id": 4,
+        "colour": "gold"
+      },
+      null,
+      {
+        "id": 5,
+        "colour": "teal"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "red"
+      }
+    ],
+    "expectedActive": {
+      "pivot": {
+        "x": 1,
+        "y": -2
+      },
+      "orientation": "up",
+      "gems": [
+        {
+          "id": 7,
+          "colour": "teal"
+        },
+        {
+          "id": 8,
+          "colour": "blue"
+        }
+      ],
+      "level": 1,
+      "gravityTicks": 0,
+      "groundedTicks": 0,
+      "resetCount": 0,
+      "groundedStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "blocks",
+    "id": "magnetic-e4e4b0cbb3bb72c2",
+    "number": 1,
+    "initialSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-25",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "fixed",
+        "floor": "calm"
+      },
+      "floorSwitch": false,
+      "magneticImpact": false,
+      "pieceLimit": 1,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        {
+          "id": 12,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "purple"
+        },
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 5,
+          "colour": "blue"
+        },
+        {
+          "id": 6,
+          "colour": "green"
+        },
+        {
+          "id": 7,
+          "colour": "gold"
+        },
+        {
+          "id": 10,
+          "colour": "purple"
+        }
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "green",
+          "gold",
+          "red"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      {
+        "id": 12,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "purple"
+      },
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 5,
+        "colour": "blue"
+      },
+      {
+        "id": 6,
+        "colour": "green"
+      },
+      {
+        "id": 7,
+        "colour": "gold"
+      },
+      {
+        "id": 10,
+        "colour": "purple"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-25\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"fixed\",\"floor\":\"calm\"},\"floorSwitch\":false,\"magneticImpact\":false,\"pieceLimit\":1,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},{\"id\":12,\"colour\":\"green\"},null,null,null,null,null,null,{\"id\":8,\"colour\":\"purple\"},{\"id\":11,\"colour\":\"blue\"},{\"id\":4,\"colour\":\"blue\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"blue\"},{\"id\":6,\"colour\":\"green\"},{\"id\":7,\"colour\":\"gold\"},{\"id\":10,\"colour\":\"purple\"}],\"bonds\":[],\"initialQueue\":[[\"blue\",\"green\",\"gold\",\"red\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]}},\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"elapsedTicks\":0,\"checkpoint\":{\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-25\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"fixed\",\"floor\":\"calm\"},\"floorSwitch\":false,\"magneticImpact\":false,\"pieceLimit\":1,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},{\"id\":12,\"colour\":\"green\"},null,null,null,null,null,null,{\"id\":8,\"colour\":\"purple\"},{\"id\":11,\"colour\":\"blue\"},{\"id\":4,\"colour\":\"blue\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"blue\"},{\"id\":6,\"colour\":\"green\"},{\"id\":7,\"colour\":\"gold\"},{\"id\":10,\"colour\":\"purple\"}],\"bonds\":[],\"initialQueue\":[[\"blue\",\"green\",\"gold\",\"red\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[1,2,3]}},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":9,\"colour\":\"blue\"},{\"id\":12,\"colour\":\"green\"},null,null,null,null,null,null,{\"id\":8,\"colour\":\"purple\"},{\"id\":11,\"colour\":\"blue\"},{\"id\":4,\"colour\":\"blue\"},{\"id\":1,\"colour\":\"red\"},{\"id\":2,\"colour\":\"red\"},{\"id\":3,\"colour\":\"red\"},{\"id\":5,\"colour\":\"blue\"},{\"id\":6,\"colour\":\"green\"},{\"id\":7,\"colour\":\"gold\"},{\"id\":10,\"colour\":\"purple\"}],\"bonds\":[],\"active\":{\"x\":2,\"y\":0,\"orientation\":0,\"gems\":[{\"id\":13,\"colour\":\"blue\"},{\"id\":14,\"colour\":\"green\"},{\"id\":15,\"colour\":\"gold\"},{\"id\":16,\"colour\":\"red\"}],\"descent\":0,\"lockTicks\":0,\"lockResets\":0,\"lockStarted\":false},\"queue\":[],\"randomState\":2853370028,\"nextId\":17,\"phase\":\"falling\",\"score\":0,\"moves\":0,\"placements\":0,\"chain\":0,\"maxChain\":0,\"floor\":\"calm\",\"nextFloor\":\"calm\",\"floorSwitchCharges\":0,\"pendingFloorOverride\":null,\"pendingClear\":[],\"gravityBoard\":null,\"resolutionTick\":0,\"impactRemovedIds\":[],\"elapsedTicks\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}]}}",
+    "expectedSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-25",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "fixed",
+        "floor": "calm"
+      },
+      "floorSwitch": false,
+      "magneticImpact": false,
+      "pieceLimit": 1,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        {
+          "id": 12,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 8,
+          "colour": "purple"
+        },
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        {
+          "id": 1,
+          "colour": "red"
+        },
+        {
+          "id": 2,
+          "colour": "red"
+        },
+        {
+          "id": 3,
+          "colour": "red"
+        },
+        {
+          "id": 5,
+          "colour": "blue"
+        },
+        {
+          "id": 6,
+          "colour": "green"
+        },
+        {
+          "id": 7,
+          "colour": "gold"
+        },
+        {
+          "id": 10,
+          "colour": "purple"
+        }
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "green",
+          "gold",
+          "red"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      {
+        "id": 12,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 8,
+        "colour": "purple"
+      },
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      {
+        "id": 1,
+        "colour": "red"
+      },
+      {
+        "id": 2,
+        "colour": "red"
+      },
+      {
+        "id": 3,
+        "colour": "red"
+      },
+      {
+        "id": 5,
+        "colour": "blue"
+      },
+      {
+        "id": 6,
+        "colour": "green"
+      },
+      {
+        "id": 7,
+        "colour": "gold"
+      },
+      {
+        "id": 10,
+        "colour": "purple"
+      }
+    ],
+    "expectedActive": {
+      "x": 2,
+      "y": 0,
+      "orientation": 0,
+      "gems": [
+        {
+          "id": 13,
+          "colour": "blue"
+        },
+        {
+          "id": 14,
+          "colour": "green"
+        },
+        {
+          "id": 15,
+          "colour": "gold"
+        },
+        {
+          "id": 16,
+          "colour": "red"
+        }
+      ],
+      "descent": 0,
+      "lockTicks": 0,
+      "lockResets": 0,
+      "lockStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "blocks",
+    "id": "magnetic-441a7dcdd7a17d13",
+    "number": 25,
+    "initialSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-34",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "fixed",
+        "floor": "magnetic"
+      },
+      "floorSwitch": false,
+      "magneticImpact": true,
+      "pieceLimit": 1,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "purple"
+        },
+        {
+          "id": 13,
+          "colour": "red"
+        },
+        {
+          "id": 10,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 15,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "gold"
+        },
+        {
+          "id": 12,
+          "colour": "red"
+        },
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 14,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "green"
+        },
+        {
+          "id": 11,
+          "colour": "red"
+        },
+        {
+          "id": 8,
+          "colour": "purple"
+        },
+        null,
+        null
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "gold",
+          "red",
+          "green"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          11,
+          12,
+          13
+        ]
+      }
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "purple"
+      },
+      {
+        "id": 13,
+        "colour": "red"
+      },
+      {
+        "id": 10,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 15,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "gold"
+      },
+      {
+        "id": 12,
+        "colour": "red"
+      },
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 14,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "green"
+      },
+      {
+        "id": 11,
+        "colour": "red"
+      },
+      {
+        "id": 8,
+        "colour": "purple"
+      },
+      null,
+      null
+    ],
+    "encoded": "{\"format\":1,\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-34\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"fixed\",\"floor\":\"magnetic\"},\"floorSwitch\":false,\"magneticImpact\":true,\"pieceLimit\":1,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"purple\"},{\"id\":13,\"colour\":\"red\"},{\"id\":10,\"colour\":\"green\"},null,null,{\"id\":15,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"gold\"},{\"id\":12,\"colour\":\"red\"},{\"id\":9,\"colour\":\"blue\"},null,null,{\"id\":14,\"colour\":\"gold\"},null,null,{\"id\":1,\"colour\":\"green\"},{\"id\":11,\"colour\":\"red\"},{\"id\":8,\"colour\":\"purple\"},null,null],\"bonds\":[],\"initialQueue\":[[\"blue\",\"gold\",\"red\",\"green\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[11,12,13]}},\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"elapsedTicks\":0,\"checkpoint\":{\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-34\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"fixed\",\"floor\":\"magnetic\"},\"floorSwitch\":false,\"magneticImpact\":true,\"pieceLimit\":1,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"purple\"},{\"id\":13,\"colour\":\"red\"},{\"id\":10,\"colour\":\"green\"},null,null,{\"id\":15,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"gold\"},{\"id\":12,\"colour\":\"red\"},{\"id\":9,\"colour\":\"blue\"},null,null,{\"id\":14,\"colour\":\"gold\"},null,null,{\"id\":1,\"colour\":\"green\"},{\"id\":11,\"colour\":\"red\"},{\"id\":8,\"colour\":\"purple\"},null,null],\"bonds\":[],\"initialQueue\":[[\"blue\",\"gold\",\"red\",\"green\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[11,12,13]}},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"gold\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":3,\"colour\":\"purple\"},{\"id\":13,\"colour\":\"red\"},{\"id\":10,\"colour\":\"green\"},null,null,{\"id\":15,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"gold\"},{\"id\":12,\"colour\":\"red\"},{\"id\":9,\"colour\":\"blue\"},null,null,{\"id\":14,\"colour\":\"gold\"},null,null,{\"id\":1,\"colour\":\"green\"},{\"id\":11,\"colour\":\"red\"},{\"id\":8,\"colour\":\"purple\"},null,null],\"bonds\":[],\"active\":{\"x\":2,\"y\":0,\"orientation\":0,\"gems\":[{\"id\":16,\"colour\":\"blue\"},{\"id\":17,\"colour\":\"gold\"},{\"id\":18,\"colour\":\"red\"},{\"id\":19,\"colour\":\"green\"}],\"descent\":0,\"lockTicks\":0,\"lockResets\":0,\"lockStarted\":false},\"queue\":[],\"randomState\":1024462462,\"nextId\":20,\"phase\":\"falling\",\"score\":0,\"moves\":0,\"placements\":0,\"chain\":0,\"maxChain\":0,\"floor\":\"magnetic\",\"nextFloor\":\"magnetic\",\"floorSwitchCharges\":0,\"pendingFloorOverride\":null,\"pendingClear\":[],\"gravityBoard\":null,\"resolutionTick\":0,\"impactRemovedIds\":[],\"elapsedTicks\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}]}}",
+    "expectedSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-34",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "fixed",
+        "floor": "magnetic"
+      },
+      "floorSwitch": false,
+      "magneticImpact": true,
+      "pieceLimit": 1,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "gold"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "purple"
+        },
+        {
+          "id": 13,
+          "colour": "red"
+        },
+        {
+          "id": 10,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 15,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "gold"
+        },
+        {
+          "id": 12,
+          "colour": "red"
+        },
+        {
+          "id": 9,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 14,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 1,
+          "colour": "green"
+        },
+        {
+          "id": 11,
+          "colour": "red"
+        },
+        {
+          "id": 8,
+          "colour": "purple"
+        },
+        null,
+        null
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "gold",
+          "red",
+          "green"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          11,
+          12,
+          13
+        ]
+      }
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "gold"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "purple"
+      },
+      {
+        "id": 13,
+        "colour": "red"
+      },
+      {
+        "id": 10,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 15,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "gold"
+      },
+      {
+        "id": 12,
+        "colour": "red"
+      },
+      {
+        "id": 9,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 14,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 1,
+        "colour": "green"
+      },
+      {
+        "id": 11,
+        "colour": "red"
+      },
+      {
+        "id": 8,
+        "colour": "purple"
+      },
+      null,
+      null
+    ],
+    "expectedActive": {
+      "x": 2,
+      "y": 0,
+      "orientation": 0,
+      "gems": [
+        {
+          "id": 16,
+          "colour": "blue"
+        },
+        {
+          "id": 17,
+          "colour": "gold"
+        },
+        {
+          "id": 18,
+          "colour": "red"
+        },
+        {
+          "id": 19,
+          "colour": "green"
+        }
+      ],
+      "descent": 0,
+      "lockTicks": 0,
+      "lockResets": 0,
+      "lockStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "blocks",
+    "id": "magnetic-cd140a1b7ed6c42c",
+    "number": 50,
+    "initialSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-37",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "frequent"
+      },
+      "floorSwitch": false,
+      "magneticImpact": false,
+      "pieceLimit": 2,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "gold"
+        },
+        null,
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "green"
+        },
+        {
+          "id": 14,
+          "colour": "red"
+        },
+        {
+          "id": 10,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 18,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "blue"
+        },
+        {
+          "id": 13,
+          "colour": "red"
+        },
+        {
+          "id": 9,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 17,
+          "colour": "gold"
+        },
+        {
+          "id": 15,
+          "colour": "green"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "purple"
+        },
+        {
+          "id": 12,
+          "colour": "red"
+        },
+        {
+          "id": 8,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 16,
+          "colour": "blue"
+        }
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "green",
+          "gold",
+          "purple"
+        ],
+        [
+          "blue",
+          "gold",
+          "red",
+          "green"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          12,
+          13,
+          14
+        ]
+      }
+    },
+    "initialBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "gold"
+      },
+      null,
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "green"
+      },
+      {
+        "id": 14,
+        "colour": "red"
+      },
+      {
+        "id": 10,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 18,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "blue"
+      },
+      {
+        "id": 13,
+        "colour": "red"
+      },
+      {
+        "id": 9,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 17,
+        "colour": "gold"
+      },
+      {
+        "id": 15,
+        "colour": "green"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "purple"
+      },
+      {
+        "id": 12,
+        "colour": "red"
+      },
+      {
+        "id": 8,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 16,
+        "colour": "blue"
+      }
+    ],
+    "encoded": "{\"format\":1,\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-37\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"frequent\"},\"floorSwitch\":false,\"magneticImpact\":false,\"pieceLimit\":2,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"gold\"},null,{\"id\":11,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":3,\"colour\":\"green\"},{\"id\":14,\"colour\":\"red\"},{\"id\":10,\"colour\":\"purple\"},null,null,{\"id\":18,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"blue\"},{\"id\":13,\"colour\":\"red\"},{\"id\":9,\"colour\":\"gold\"},null,null,{\"id\":17,\"colour\":\"gold\"},{\"id\":15,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"red\"},{\"id\":8,\"colour\":\"green\"},null,null,{\"id\":16,\"colour\":\"blue\"}],\"bonds\":[],\"initialQueue\":[[\"blue\",\"green\",\"gold\",\"purple\"],[\"blue\",\"gold\",\"red\",\"green\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[12,13,14]}},\"actions\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}],\"elapsedTicks\":0,\"checkpoint\":{\"game\":\"magnetic-blocks\",\"rules\":\"magnetic-blocks-1\",\"settings\":{\"mode\":\"relaxed\",\"width\":8,\"height\":12,\"colourCount\":5,\"seed\":\"magnetic-level-37\",\"mask\":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],\"schedule\":{\"kind\":\"frequent\"},\"floorSwitch\":false,\"magneticImpact\":false,\"pieceLimit\":2,\"initialBoard\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"gold\"},null,{\"id\":11,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":3,\"colour\":\"green\"},{\"id\":14,\"colour\":\"red\"},{\"id\":10,\"colour\":\"purple\"},null,null,{\"id\":18,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"blue\"},{\"id\":13,\"colour\":\"red\"},{\"id\":9,\"colour\":\"gold\"},null,null,{\"id\":17,\"colour\":\"gold\"},{\"id\":15,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"red\"},{\"id\":8,\"colour\":\"green\"},null,null,{\"id\":16,\"colour\":\"blue\"}],\"bonds\":[],\"initialQueue\":[[\"blue\",\"green\",\"gold\",\"purple\"],[\"blue\",\"gold\",\"red\",\"green\"]],\"goal\":{\"kind\":\"clear-targets\",\"targetIds\":[12,13,14]}},\"board\":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,{\"id\":7,\"colour\":\"green\"},null,null,null,null,null,null,null,{\"id\":6,\"colour\":\"blue\"},null,null,null,null,null,null,null,{\"id\":5,\"colour\":\"purple\"},null,null,null,null,null,null,null,{\"id\":4,\"colour\":\"gold\"},null,{\"id\":11,\"colour\":\"blue\"},null,null,null,null,null,{\"id\":3,\"colour\":\"green\"},{\"id\":14,\"colour\":\"red\"},{\"id\":10,\"colour\":\"purple\"},null,null,{\"id\":18,\"colour\":\"blue\"},null,null,{\"id\":2,\"colour\":\"blue\"},{\"id\":13,\"colour\":\"red\"},{\"id\":9,\"colour\":\"gold\"},null,null,{\"id\":17,\"colour\":\"gold\"},{\"id\":15,\"colour\":\"green\"},null,{\"id\":1,\"colour\":\"purple\"},{\"id\":12,\"colour\":\"red\"},{\"id\":8,\"colour\":\"green\"},null,null,{\"id\":16,\"colour\":\"blue\"}],\"bonds\":[],\"active\":{\"x\":2,\"y\":0,\"orientation\":0,\"gems\":[{\"id\":19,\"colour\":\"blue\"},{\"id\":20,\"colour\":\"green\"},{\"id\":21,\"colour\":\"gold\"},{\"id\":22,\"colour\":\"purple\"}],\"descent\":0,\"lockTicks\":0,\"lockResets\":0,\"lockStarted\":false},\"queue\":[[\"blue\",\"gold\",\"red\",\"green\"]],\"randomState\":1007684843,\"nextId\":23,\"phase\":\"falling\",\"score\":0,\"moves\":0,\"placements\":0,\"chain\":0,\"maxChain\":0,\"floor\":\"calm\",\"nextFloor\":\"magnetic\",\"floorSwitchCharges\":0,\"pendingFloorOverride\":null,\"pendingClear\":[],\"gravityBoard\":null,\"resolutionTick\":0,\"impactRemovedIds\":[],\"elapsedTicks\":0,\"recording\":[{\"tick\":0,\"ordinal\":0,\"action\":{\"kind\":\"left\"}}]}}",
+    "expectedSettings": {
+      "mode": "relaxed",
+      "width": 8,
+      "height": 12,
+      "colourCount": 5,
+      "seed": "magnetic-level-37",
+      "mask": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "schedule": {
+        "kind": "frequent"
+      },
+      "floorSwitch": false,
+      "magneticImpact": false,
+      "pieceLimit": 2,
+      "initialBoard": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 7,
+          "colour": "green"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 6,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 5,
+          "colour": "purple"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 4,
+          "colour": "gold"
+        },
+        null,
+        {
+          "id": 11,
+          "colour": "blue"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "id": 3,
+          "colour": "green"
+        },
+        {
+          "id": 14,
+          "colour": "red"
+        },
+        {
+          "id": 10,
+          "colour": "purple"
+        },
+        null,
+        null,
+        {
+          "id": 18,
+          "colour": "blue"
+        },
+        null,
+        null,
+        {
+          "id": 2,
+          "colour": "blue"
+        },
+        {
+          "id": 13,
+          "colour": "red"
+        },
+        {
+          "id": 9,
+          "colour": "gold"
+        },
+        null,
+        null,
+        {
+          "id": 17,
+          "colour": "gold"
+        },
+        {
+          "id": 15,
+          "colour": "green"
+        },
+        null,
+        {
+          "id": 1,
+          "colour": "purple"
+        },
+        {
+          "id": 12,
+          "colour": "red"
+        },
+        {
+          "id": 8,
+          "colour": "green"
+        },
+        null,
+        null,
+        {
+          "id": 16,
+          "colour": "blue"
+        }
+      ],
+      "bonds": [],
+      "initialQueue": [
+        [
+          "blue",
+          "green",
+          "gold",
+          "purple"
+        ],
+        [
+          "blue",
+          "gold",
+          "red",
+          "green"
+        ]
+      ],
+      "goal": {
+        "kind": "clear-targets",
+        "targetIds": [
+          12,
+          13,
+          14
+        ]
+      }
+    },
+    "expectedBoard": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 7,
+        "colour": "green"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 6,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 5,
+        "colour": "purple"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 4,
+        "colour": "gold"
+      },
+      null,
+      {
+        "id": 11,
+        "colour": "blue"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "id": 3,
+        "colour": "green"
+      },
+      {
+        "id": 14,
+        "colour": "red"
+      },
+      {
+        "id": 10,
+        "colour": "purple"
+      },
+      null,
+      null,
+      {
+        "id": 18,
+        "colour": "blue"
+      },
+      null,
+      null,
+      {
+        "id": 2,
+        "colour": "blue"
+      },
+      {
+        "id": 13,
+        "colour": "red"
+      },
+      {
+        "id": 9,
+        "colour": "gold"
+      },
+      null,
+      null,
+      {
+        "id": 17,
+        "colour": "gold"
+      },
+      {
+        "id": 15,
+        "colour": "green"
+      },
+      null,
+      {
+        "id": 1,
+        "colour": "purple"
+      },
+      {
+        "id": 12,
+        "colour": "red"
+      },
+      {
+        "id": 8,
+        "colour": "green"
+      },
+      null,
+      null,
+      {
+        "id": 16,
+        "colour": "blue"
+      }
+    ],
+    "expectedActive": {
+      "x": 2,
+      "y": 0,
+      "orientation": 0,
+      "gems": [
+        {
+          "id": 19,
+          "colour": "blue"
+        },
+        {
+          "id": 20,
+          "colour": "green"
+        },
+        {
+          "id": 21,
+          "colour": "gold"
+        },
+        {
+          "id": 22,
+          "colour": "purple"
+        }
+      ],
+      "descent": 0,
+      "lockTicks": 0,
+      "lockResets": 0,
+      "lockStarted": false
+    },
+    "expectedRecording": [
+      {
+        "tick": 0,
+        "ordinal": 0,
+        "action": {
+          "kind": "left"
+        }
+      }
+    ]
+  }
+]

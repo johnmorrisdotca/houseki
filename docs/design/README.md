@@ -79,4 +79,8 @@ Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md)
 
 ## Additional campaigns
 
-[Campaign extensions](CAMPAIGN-EXTENSIONS.md) specifies the fifty-level Magnetic Blocks, Shizen and Arashi sets, their fixed rules, verification, grading and player requirements.
+[Campaign extensions](CAMPAIGN-EXTENSIONS.md) specifies the published fifty-level Magnetic Blocks, Shizen and Arashi baseline and the approved 128-level expansion, with fixed rules, verification, grading and player requirements.
+
+## Campaign maintenance
+
+Read [Campaign review workflow](CAMPAIGN-REVIEW-WORKFLOW.md) before extending a campaign. It supplies a prototype-first process, an evidence worksheet and regression/release gates. [Family grading review](LEVEL-GRADING-REFERENCES.md) records the consulted predecessors. Keep engine-specific construction methods and review findings beside these documents so later revisions improve the process rather than repeat its mistakes.
