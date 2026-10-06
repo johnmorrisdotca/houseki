@@ -23,7 +23,7 @@ An optional experimental `magnetic-blocks` entry point provides bonded 2×2 squa
 
 ![Stone Collapse demo](https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/stone-collapse-desktop.png)
 
-[API reference](https://johnmorrisdotca.github.io/houseki/api.html) is generated locally by `pnpm site`; the hosted page becomes available after deployment. [Incremental draft PR](https://github.com/johnmorrisdotca/houseki/pull/1).
+[API reference](https://johnmorrisdotca.github.io/houseki/api.html) is generated locally by `pnpm site`; the hosted page is available alongside the demos. [Implementation PR](https://github.com/johnmorrisdotca/houseki/pull/1).
 
 ## Design and progression
 

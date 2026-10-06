@@ -1,6 +1,6 @@
 # Magnetic Blocks: experimental 2×2 variant
 
-Implementation status: an experimental public engine implements bonded blocks, floor schedules, Floor Switch, magnetic impact, Relaxed/Arcade timing and canonical replay. A standalone demo is in progress. It has no authored campaign or completed human feel review. The four primary games retain their rules and authored witnesses.
+Implementation status: an experimental public engine implements bonded blocks, floor schedules, Floor Switch, magnetic impact, Relaxed/Arcade timing and canonical replay. A standalone experimental demo is published. It has no authored campaign or completed human feel review. The four primary games retain their rules and authored witnesses.
 
 ## Core idea
 
