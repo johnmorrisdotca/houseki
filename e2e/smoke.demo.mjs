@@ -59,8 +59,13 @@ test("the language chooser speaks Japanese in the header, the footer and the pag
 for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "api.html"]) {
   test(`${file} does not scroll sideways at the width it is made for`, async ({ page }) => {
     await open(page, file);
-    const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(over).toBeLessThanOrEqual(0);
+    const { over, wide } = await page.evaluate(() => {
+      const width = document.documentElement.clientWidth;
+      // What reaches past the right edge, so that a failure names the thing and not only the number of pixels.
+      const wide = [...document.querySelectorAll("body *")].filter((el) => el.getBoundingClientRect().right > width + 0.5).slice(0, 6).map((el) => `${el.tagName.toLowerCase()}.${el.className} right=${Math.round(el.getBoundingClientRect().right)} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
+      return { over: document.documentElement.scrollWidth - width, wide };
+    });
+    expect(over, wide.join("; ")).toBeLessThanOrEqual(0);
   });
 }
 
