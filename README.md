@@ -111,7 +111,7 @@ Every export of every entry point is in the [API reference](https://johnmorrisdo
 
 ## Theming
 
-The engines draw nothing. The demo's players take their colours from the family's stylesheet, `demo/family.css`: custom properties for the page, ink, accent and the felt the board sits on, which follow `prefers-color-scheme`, and five table cloths (green, blue, red, black and wood) chosen in the header. The boards add their own `--board`, `--frame` and `--gem-edge` in `demo/game.css`, and a Board material choice (ivory, slate or wood). Gems are told apart by their symbol as well as their colour, so no choice of cloth hides a colour.
+The engines draw nothing. The demo's players take their colours from the family's stylesheet, `demo/family.css`: custom properties for the page, ink, accent and the felt the board sits on, which follow `prefers-color-scheme`, and five table cloths (green, blue, red, black and wood) chosen in the header. The boards add their own `--board`, `--frame` and `--gem-edge` in `demo/houseki.css`, and a Board material choice (ivory, slate or wood). Gems are told apart by their symbol as well as their colour, so no choice of cloth hides a colour.
 
 ## Limits
 
