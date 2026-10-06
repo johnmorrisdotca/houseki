@@ -1,12 +1,12 @@
 # Level generation, grading and progression
 
-Revision 1.3 · Applies to every game's curated campaign and every future design using this template.
+Revision 1.4 · Applies to every game's curated campaign and every future design using this template.
 
 ## Count and ordering policy
 
 Choose an intentional complete count before shipping. Round counts such as 50, 100 or 200 and structured counts such as 128 or 256 are appropriate. A count of 256 supports sixteen blocks of sixteen. Neither 100 nor any other single count is mandatory. Unplanned totals such as 97 or 113 are not a finished campaign. Generate surplus candidates and curate the selected count; never pad it with renamed seeds or colour permutations.
 
-For Houseki, target 100 independently witnessed challenges per game, plus three separate interactive tutorials. This is a planning target, not a fixed universal count. If the candidate pool cannot supply meaningful variety, propose a complete smaller campaign such as 50 with measured coverage evidence, or grow to 200/256 when there is enough content. Record the chosen count in a manifest and require exactly that count in tests.
+The approved next campaign revision for Magnetic Blocks, Shizen and Arashi has **128 independently witnessed challenges per campaign**, with separate tutorials. Its bands contain 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert challenges. The currently published fifty-level sets are the baseline, not evidence that this expanded progression is delivered. The four original campaigns retain their existing counts until separately revised. Expand to 256 only when distinct, verified content supports it. Record the chosen count and band boundaries in the manifest and require them in tests.
 
 Generate, prove, measure, deduplicate, curate, sort, then number. Level 1 must be among the simplest genuine boards, not merely the first generated seed. The final levels must have the strongest measured planning demands. Fix the order before release and keep persistent content IDs separate from display numbers, so later reordering does not reinterpret saved progress.
 
@@ -37,7 +37,7 @@ Reuse these principles, not Tsunagi's exact weights for unrelated mechanics. Sol
 
 For each game document a concrete weighted score before generation, including normalization across board sizes or separate declared size categories. At least one metric must assess choices/forgiveness, rather than only board size, colours or witness length. A valid starting option is a blended percentile score combining low sampled success rate, low forced share, objective dependencies and measured consequential choices; final weights are reviewed against representative boards. Use separate deterministic streams for grading samples so grading never changes game randomness.
 
-Display five difficulty marks computed from the stored 0–100 score, matching the family pattern: `min(5, 1 + floor(score/20))`. A measured score is a reproducible heuristic, with human calibration pending until reviewed. Check simple first examples and complex last examples manually and adjust the grader when the scores contradict those visible differences.
+For the three expanded campaigns display an integer **1–100** difficulty score, preserving a separately recorded raw measurement score and normalization category. If a normalized value is in 0–1, use `1 + round(99 * normalized)`; ties retain the same score. Display five difficulty marks from the displayed score: `min(5, 1 + floor((score - 1)/20))`. Existing campaign grades remain versioned and must not be silently reinterpreted. A measured score is a reproducible heuristic, with human calibration pending until reviewed. Check simple first examples and complex last examples manually and adjust the grader when the scores contradict those visible differences.
 
 ## Content manifest and release gate
 
@@ -48,3 +48,13 @@ Tests must regenerate scores and order, replay every selected witness, check all
 ### Stored tools
 
 Gem Swap and Stone Collapse optionally support the separately specified [stored-tool tray](STORED-TOOLS.md). Initial counts, deterministic earning, confirmation previews, assisted scoring, save/undo behavior and level proof requirements follow that contract. Ordinary tool-free play remains available; existing Daily and authored campaign levels retain their declared rules. Review the bounded engine gate before adding the player controls.
+
+## Expanded campaign grading gate
+
+Use [the reviewed family precedents](LEVEL-GRADING-REFERENCES.md). A winning witness is not a shortest-solution proof. Record verified minimum placements only when search completes; otherwise report the known bounds and `unknown`. Distinguish a long finite queue from consequential setup decisions. Sample complete legal plans with a separate deterministic stream; a first-placement probe followed by a fixed winning suffix must be described as such and cannot stand in for full-plan success rate.
+
+Measure planning, alternative branches and dead ends, forced-safe decisions, chain/target dependencies, budget slack, and occupied versus usable board cells. Occupancy or board area alone has no difficulty weight. For nature campaigns measure whether attraction, rebound or weather changes the outcome, and distinguish necessary timing from an event that happens automatically. For Blocks measure consequential floor choices, bonded/split dependencies and impact timing. Publish budgets, sample counts, bounds and the exact weighted formula before numbering.
+
+Scores are not assigned from level number or the requested band quota. Generate surplus candidates, prove and measure them, then select the band counts. Introduce mechanics before combining them. Eight hardest-in-pool boards do not automatically qualify as extremely hard: closing fixtures must show deeper consequential planning and lower forgiveness than introductory fixtures. If a band lacks evidence, improve the construction rather than stretching scores, adding filler or changing the band label.
+
+Regression fixtures must cover obvious one-move openings, deceptive larger-but-easier boards, longer-but-forced solutions, genuinely branching plans, mechanic-dependent outcomes, equal-metric ties, exhausted search and expert candidates. Check stable IDs and saved progress across regeneration; existing published IDs must remain available or have an explicit versioned recovery policy. Generation and grading run offline and are committed as reproducible data.

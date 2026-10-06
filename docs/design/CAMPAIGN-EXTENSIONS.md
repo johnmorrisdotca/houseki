@@ -1,6 +1,8 @@
 # Magnetic Blocks, Shizen and Arashi campaigns
 
-Each extension has a deliberate complete count of 50 challenges. Fifty leaves room for distinct introductory, intermediate and advanced techniques without padding the set with renamed seeds, recolours or reflections. Tutorials are separate from this count. The four original campaigns retain their 300 challenges.
+The published baseline has 50 challenges per extension. The approved next revision has **128 challenges each**: 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert. Tutorials remain separate. The four original campaigns retain their 300 challenges. The expanded total will be 684 only after all three 128-level sets pass their release gates; the published baseline remains 450 until then.
+
+Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md) and [the family grading review](LEVEL-GRADING-REFERENCES.md). Display measured integer difficulty from 1 to 100, retain raw metrics, and introduce concepts before testing combinations. These are expansion requirements, not claims about the current fifty-level content.
 
 ## Campaign rules
 
