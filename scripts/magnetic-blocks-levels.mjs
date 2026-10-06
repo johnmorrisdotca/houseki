@@ -367,7 +367,9 @@ export function generateContent() {
       : band === 'intermediate' ? ['Two marked columns', '2つの印の列', 'Use Pull to split one block across two marked red columns.', '引力でブロックを分け、2つの印の赤い列に届けます。']
       : ['Open landing', '自由な着地', 'Match the marked red line with a legal block placement.', '合法なブロック配置で印の赤い列をそろえます。'];
     const [titleEn, titleJa, objectiveEn, objectiveJa] = text;
-    const metrics = { legalPlacementChoices: item.legalPlacementChoices, setupPlacementChoices: item.setupPlacementChoices ?? 0,
+    const occupiedCells = item.options.initialBoard.filter(Boolean).length;
+    const usableCells = item.options.mask ? item.options.mask.filter(Boolean).length : item.options.width * item.options.height;
+    const metrics = { occupiedCells, usableCells, boardCoverage: Number((occupiedCells / usableCells).toFixed(6)), legalPlacementChoices: item.legalPlacementChoices, setupPlacementChoices: item.setupPlacementChoices ?? 0,
       winningPlacementChoices: item.winningPlacementChoices, availableFloorChoices: item.options.floorSwitch ? 3 : 1,
       witnessPlacements: item.witnessPlacements, witnessFloorDecisions: item.witnessFloorDecisions, difficultyScore: item.score,
       fullPlanTrials: item.trials, fullPlanWins: item.wins, fullPlanSuccessRate: item.fullRate,

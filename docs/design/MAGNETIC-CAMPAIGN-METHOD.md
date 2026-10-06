@@ -43,3 +43,5 @@ that gate.
 The earlier 50-level campaign remains in `campaignManifest.legacyArchive` with
 its original IDs and grading revision. Those records are compatibility data;
 the current 128-level manifest is graded independently.
+
+Occupied cells, usable cells and board coverage are stored as context alongside the strategic metrics. They are not independent score weights: an open obvious puzzle and a crowded forced puzzle can both be easy. Coverage affects the measured placement and failure behavior rather than granting difficulty for area alone.

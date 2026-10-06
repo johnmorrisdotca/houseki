@@ -61,3 +61,7 @@ These are prototype measurements, not claims that the expanded campaigns are shi
 - A Shizen attraction prototype failed when only magnetic flags were removed while rebound stayed enabled. This isolates attraction dependence more precisely than disabling the whole nature mode.
 
 Carry these distinctions into new graders and regression fixtures: independent repetition versus interaction, clock waiting versus consequential timing, witness length versus planning, bounded sampling versus proof, and broad modifier counterfactuals versus isolated mechanics.
+
+A later grading review separated three cascade facts: an explicit required chain in the goal, the chain achieved by the retained witness, and the largest chain seen in random play. A lucky cascade in a losing random plan is not required difficulty. Likewise, three single-wave clears on three turns are not a three-wave cascade. Store these observations separately and weight only the feature the formula actually declares.
+
+Save-identity review also found that different authored layouts reused the same construction seed. A player restored its board but selected another level after reload. New Magnetic Blocks seeds now derive from the canonical stable level ID, while published seeds remain unchanged. Keep a regression that restores both running and completed levels through the actual player.

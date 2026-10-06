@@ -154,6 +154,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 48,
+          "boardCoverage": 0.0625,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -309,6 +312,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 48,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -443,6 +449,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 36,
+          "boardCoverage": 0.083333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 20,
@@ -593,6 +602,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 40,
+          "boardCoverage": 0.2,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -720,6 +732,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 32,
+          "boardCoverage": 0.09375,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -839,6 +854,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 24,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -961,6 +979,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 24,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -1091,6 +1112,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 32,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -1210,6 +1234,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 24,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -1332,6 +1359,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 24,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -1454,6 +1484,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 24,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -1621,6 +1654,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 60,
+          "boardCoverage": 0.116667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 13,
@@ -1781,6 +1817,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 50,
+          "boardCoverage": 0.16,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -1911,6 +1950,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 3,
+          "usableCells": 32,
+          "boardCoverage": 0.09375,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -2105,6 +2147,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 12,
+          "usableCells": 72,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 16,
@@ -2269,6 +2314,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 60,
+          "boardCoverage": 0.1,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -2421,6 +2469,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 48,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 16,
@@ -2546,6 +2597,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 30,
+          "boardCoverage": 0.133333,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -2687,6 +2741,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 40,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -2834,6 +2891,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 9,
@@ -3001,6 +3061,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 60,
+          "boardCoverage": 0.133333,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -3145,6 +3208,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -3289,6 +3355,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 9,
@@ -3439,6 +3508,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 40,
+          "boardCoverage": 0.2,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 9,
@@ -3603,6 +3675,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 60,
+          "boardCoverage": 0.116667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -3744,6 +3819,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 40,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -3888,6 +3966,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 9,
@@ -4013,6 +4094,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 30,
+          "boardCoverage": 0.133333,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -4147,6 +4231,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 30,
+          "boardCoverage": 0.2,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -4314,6 +4401,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 60,
+          "boardCoverage": 0.116667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -4445,6 +4535,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 30,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -4579,6 +4672,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 30,
+          "boardCoverage": 0.2,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -4740,6 +4836,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 10,
+          "usableCells": 48,
+          "boardCoverage": 0.208333,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -4881,6 +4980,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5025,6 +5127,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 40,
+          "boardCoverage": 0.175,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5169,6 +5274,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 40,
+          "boardCoverage": 0.175,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5302,6 +5410,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 32,
+          "boardCoverage": 0.1875,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5424,6 +5535,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 24,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5563,6 +5677,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 32,
+          "boardCoverage": 0.21875,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5691,6 +5808,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 24,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5846,6 +5966,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 48,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -5993,6 +6116,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 11,
@@ -6131,6 +6257,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 40,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -6272,6 +6401,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 40,
+          "boardCoverage": 0.125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -6402,6 +6534,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 32,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -6533,6 +6668,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 24,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -6664,6 +6802,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 24,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -6852,6 +6993,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 11,
+          "usableCells": 72,
+          "boardCoverage": 0.152778,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -7016,6 +7160,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 60,
+          "boardCoverage": 0.1,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -7165,6 +7312,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 48,
+          "boardCoverage": 0.104167,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 7,
@@ -7293,6 +7443,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 5,
+          "usableCells": 30,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -7421,6 +7574,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 24,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 8,
@@ -7606,6 +7762,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 10,
+          "usableCells": 72,
+          "boardCoverage": 0.138889,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -7776,6 +7935,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 60,
+          "boardCoverage": 0.133333,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -7943,6 +8105,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 60,
+          "boardCoverage": 0.116667,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -8125,6 +8290,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 60,
+          "boardCoverage": 0.216667,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -8277,6 +8445,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 48,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 7,
@@ -8428,6 +8599,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 4,
+          "usableCells": 56,
+          "boardCoverage": 0.071429,
           "legalPlacementChoices": 24,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 14,
@@ -8601,6 +8775,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 8,
+          "usableCells": 60,
+          "boardCoverage": 0.133333,
           "legalPlacementChoices": 16,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 10,
@@ -8780,6 +8957,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 12,
+          "usableCells": 60,
+          "boardCoverage": 0.2,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -8969,6 +9149,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 64,
+          "boardCoverage": 0.21875,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 16,
@@ -9116,6 +9299,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 6,
+          "usableCells": 40,
+          "boardCoverage": 0.15,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 7,
@@ -9259,6 +9445,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 7,
+          "usableCells": 36,
+          "boardCoverage": 0.194444,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -9417,6 +9606,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 12,
+          "usableCells": 36,
+          "boardCoverage": 0.333333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 12,
@@ -9599,6 +9791,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 48,
+          "boardCoverage": 0.3125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -9772,6 +9967,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 40,
+          "boardCoverage": 0.325,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -9950,6 +10148,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 12,
+          "usableCells": 48,
+          "boardCoverage": 0.25,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -10134,6 +10335,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 48,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -10327,6 +10531,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 48,
+          "boardCoverage": 0.354167,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -10494,6 +10701,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 11,
+          "usableCells": 40,
+          "boardCoverage": 0.275,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -10667,6 +10877,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 40,
+          "boardCoverage": 0.325,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -10843,6 +11056,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 40,
+          "boardCoverage": 0.35,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11033,6 +11249,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 48,
+          "boardCoverage": 0.333333,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11203,6 +11422,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 12,
+          "usableCells": 40,
+          "boardCoverage": 0.3,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11379,6 +11601,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 40,
+          "boardCoverage": 0.35,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11555,6 +11780,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 40,
+          "boardCoverage": 0.35,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11737,6 +11965,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 40,
+          "boardCoverage": 0.4,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -11921,6 +12152,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 48,
+          "boardCoverage": 0.291667,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -12108,6 +12342,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 48,
+          "boardCoverage": 0.3125,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -12281,6 +12518,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 40,
+          "boardCoverage": 0.325,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -12460,6 +12700,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 40,
+          "boardCoverage": 0.375,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -12645,6 +12888,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 40,
+          "boardCoverage": 0.425,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -12826,6 +13072,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 48,
+          "boardCoverage": 0.270833,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -13002,6 +13251,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 40,
+          "boardCoverage": 0.35,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -13181,6 +13433,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 40,
+          "boardCoverage": 0.375,
           "legalPlacementChoices": 12,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -13407,6 +13662,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 19,
+          "usableCells": 72,
+          "boardCoverage": 0.263889,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -13612,6 +13870,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 60,
+          "boardCoverage": 0.266667,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -13826,6 +14087,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 19,
+          "usableCells": 60,
+          "boardCoverage": 0.316667,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -14046,6 +14310,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 72,
+          "boardCoverage": 0.236111,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -14266,6 +14533,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 72,
+          "boardCoverage": 0.236111,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -14486,6 +14756,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 21,
+          "usableCells": 60,
+          "boardCoverage": 0.35,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -14700,6 +14973,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 19,
+          "usableCells": 60,
+          "boardCoverage": 0.316667,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -14917,6 +15193,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 20,
+          "usableCells": 60,
+          "boardCoverage": 0.333333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -15116,6 +15395,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 60,
+          "boardCoverage": 0.233333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -15324,6 +15606,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 60,
+          "boardCoverage": 0.283333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -15532,6 +15817,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 60,
+          "boardCoverage": 0.283333,
           "legalPlacementChoices": 20,
           "setupPlacementChoices": 0,
           "winningPlacementChoices": 4,
@@ -15804,6 +16092,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -16111,6 +16402,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -16418,6 +16712,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -16716,6 +17013,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -17014,6 +17314,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -17312,6 +17615,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -17613,6 +17919,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -17914,6 +18223,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -18212,6 +18524,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -18516,6 +18831,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -18820,6 +19138,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -19127,6 +19448,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -19431,6 +19755,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -19732,6 +20059,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -20036,6 +20366,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -20340,6 +20673,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -20647,6 +20983,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -20951,6 +21290,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -21246,6 +21588,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -21544,6 +21889,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -21845,6 +22193,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -22140,6 +22491,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -22438,6 +22792,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -22739,6 +23096,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 28,
           "setupPlacementChoices": 28,
           "winningPlacementChoices": 6,
@@ -23039,6 +23399,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -23342,6 +23705,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -23645,6 +24011,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -23945,6 +24314,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 14,
+          "usableCells": 96,
+          "boardCoverage": 0.145833,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -24248,6 +24620,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -24554,6 +24929,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -24863,6 +25241,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -25166,6 +25547,9 @@ export const contentData: MagneticContentData = {
         ],
         "witnessResult": "won",
         "metrics": {
+          "occupiedCells": 15,
+          "usableCells": 96,
+          "boardCoverage": 0.15625,
           "legalPlacementChoices": 84,
           "setupPlacementChoices": 84,
           "winningPlacementChoices": 10,
@@ -36618,7 +37002,7 @@ export const contentData: MagneticContentData = {
         }
       }
     ],
-    "checksum": "a627ec68f9432a3439db00ec09fe7c8ad3218fdfdc443fb664d0a3845132c040"
+    "checksum": "905a7ad507a6bec00d0fbe0b8829ad7a8f4a69fee0d6d37ac497b03de5288cb6"
   },
   "lessons": [
     {

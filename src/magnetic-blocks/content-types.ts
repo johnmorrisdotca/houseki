@@ -9,6 +9,10 @@ export interface MagneticDifficultyMetrics {
   readonly witnessPlacements: number;
   readonly witnessFloorDecisions: number;
   readonly difficultyScore: number;
+  /** Board context, recorded separately from strategic difficulty weights. */
+  readonly occupiedCells?: number;
+  readonly usableCells?: number;
+  readonly boardCoverage?: number;
   readonly fullPlanTrials?: number;
   readonly fullPlanWins?: number;
   readonly fullPlanSuccessRate?: number;
