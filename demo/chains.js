@@ -1,6 +1,8 @@
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { restartGame, createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingCells, createInputScheduler, setHeldInput as setHeldAction, queueInputEdge, actionsForTick, releaseAllInput as releaseAllActions } from './dist/colour-chains.js';
+import { pageWords } from './words.js';
+import { newSeed } from './seed.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
@@ -9,20 +11,21 @@ const words = {
 };
 const saveKey = 'houseki-colour-chains-save'; const preferenceKey = 'houseki-ui';
 let weatherNotice=null;function rememberWeather(events){const event=events.find(event=>event.type==='weather-triggered');if(event)weatherNotice={kind:event.kind,until:performance.now()+2500};}
-let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
+let selectedLevel=null; const family = familyLanguage({ id: 'houseki', words: pageWords('chains'), onChange: next => { lang = next; render(); } });
+let lang = family.lang; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
 const pendingReleases = new Set();
 function beginHold(action) { pendingReleases.delete(action); input = setHeldAction(input, action, true); }
 function endHold(action) { if (input.held[action] === 0) pendingReleases.add(action); else input = setHeldAction(input, action, false); }
 function readPreferences() {
-  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); lang = pref.lang === 'ja' ? 'ja' : 'en'; if (pref.theme) document.documentElement.dataset.theme = pref.theme; if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
+  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
   catch { /* Play starts normally when preferences are unavailable. */ }
 }
 function writePreferences() {
-  try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, theme: document.documentElement.dataset.theme, material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
+  try { localStorage.setItem(preferenceKey, JSON.stringify({ material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Preferences are optional. */ }
 }
-function getOptions() {return $('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{mode:$('#mode').value,preset:$('#preset').value,colourCount:Number($('#colours').value),nature:$('#nature').checked||Boolean($('#weather').value),...($('#weather').value?{weather:$('#weather').value}:{}),seed:crypto.randomUUID()};}
+function getOptions() {return $('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{mode:$('#mode').value,preset:$('#preset').value,colourCount:Number($('#colours').value),nature:$('#nature').checked||Boolean($('#weather').value),...($('#weather').value?{weather:$('#weather').value}:{}),seed:newSeed()};}
 function newGame(restart = false) {
   if (!restart || !startOptions.seed) startOptions = getOptions();
   if(!restart){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);selectedLevel=lesson?{...lesson,...lesson.setup,seed:`lesson:${lesson.id}`,lesson:true}:levelManifest.find(level=>level.id===$('#level').value)??null;}
@@ -64,7 +67,6 @@ function render() {
   $('.pause').hidden = game.phase === 'paused' || ['won', 'lost', 'finished'].includes(game.phase);
   $('.resume').hidden = game.phase !== 'paused'; $('.resume').disabled = false;
   $('#well').parentElement.className = `well-wrap material-${$('#material').value}`;
-  document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === lang)));
 }
 function cellLabel(index, width, markup) { const y = Math.floor(index / width) - 3; const x = index % width; const gem = markup.match(/aria-label="([a-z]+)"/); return gem ? `${gem[1]} gem, column ${x + 1}, row ${y + 1}` : `Empty, column ${x + 1}, row ${y + 1}`; }
 function save() { try { localStorage.setItem(saveKey, encodeGame(game)); } catch { /* Storage failure never interrupts play. */ } }
@@ -113,10 +115,8 @@ document.querySelectorAll('[data-action]').forEach(button => { if (['left', 'rig
 $('#new').addEventListener('click', () => newGame()); $('#restart').addEventListener('click', () => newGame(true));
 for (const selector of ['#mode', '#preset', '#colours', '#nature', '#weather']) $(selector).addEventListener('change', () => { $('#pending').hidden = false; });
 $('#material').addEventListener('change', () => { render(); writePreferences(); });
-$('#theme').addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
 $('#sound').addEventListener('change',event=>{setSound(event.target.checked);writePreferences();});
-document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang; render(); writePreferences(); }));
 const keypadKeys = { Numpad4: 'arrowleft', Numpad6: 'arrowright', Numpad7: 'z', Numpad9: 'x', Numpad5: 'arrowdown', Numpad2: 'drop' };
 document.addEventListener('keydown', event => {
   const target = event.target instanceof HTMLElement ? event.target : null;
@@ -148,8 +148,7 @@ $('#lesson').innerHTML='<option value="">No lesson</option>'+tutorialManifest.ma
 $('#level').addEventListener('change',()=>{$('#lesson').value='';});$('#lesson').addEventListener('change',()=>{$('#level').value='';});
 $('#level').innerHTML='<option value="">Free play</option>'+levelManifest.map(level=>`<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title.en}</option>`).join('');
 readPreferences();
-let recovered = false;
-try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pairLimit ? { pairLimit: game.settings.pairLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
+try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pairLimit ? { pairLimit: game.settings.pairLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; } } catch { game = null; }
 if (!game) newGame(); else { resumeRequired = false; render(); $('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
 

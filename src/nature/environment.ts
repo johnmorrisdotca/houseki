@@ -70,8 +70,7 @@ function validateLightningOptions(options: LightningOptions, width: number): voi
 
 function faultPath(state: NatureState): readonly [readonly number[], number] {
   if (state.width < 3) throw new NatureOptionsError('invalid-grid-size', 'A fault needs at least three columns to preserve playable space on both sides');
-  let randomState = state.randomState; let draw: number;
-  [randomState, draw] = drawBelow(randomState, state.width - 2);
+  const [firstState, draw] = drawBelow(state.randomState, state.width - 2); let randomState = firstState;
   let x = draw + 1;
   const path: number[] = [at(x, 0, state.width)];
   for (let y = 1; y < state.height; y++) {
@@ -126,8 +125,7 @@ export function previewJumble(state: NatureState): JumblePreview {
   validateState(state);
   const candidates = candidatePatches(state);
   if (candidates.length === 0) return deepFreeze({ patchCells: [], moves: [], changed: false, reason: 'no-eligible-patch', cells: state.cells, randomStateAfter: state.randomState });
-  let randomState: number, selectedIndex: number;
-  [randomState, selectedIndex] = drawBelow(state.randomState, candidates.length);
+  const [firstState, selectedIndex] = drawBelow(state.randomState, candidates.length); let randomState = firstState;
   const patch = candidates[selectedIndex]!; const shuffled = [...patch.stones];
   for (let index = shuffled.length - 1; index > 0; index--) {
     let chosen: number; [randomState, chosen] = drawBelow(randomState, index + 1);

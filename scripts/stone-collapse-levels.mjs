@@ -141,11 +141,11 @@ function gradeAndOrder(candidates) {
 function campaign(count = COUNT) {
   if (!Number.isInteger(count) || count < 50 || count > 100) throw new RangeError('Campaign count must be 50 or 100');
   const poolCount = count + SURPLUS, shapedPool = Math.round(poolCount * 0.2), rectanglePool = poolCount - shapedPool, selectedShapeCount = Math.round(count * 0.2), selectedRectCount = count - selectedShapeCount;
-  const keys = new Set(), candidates = []; let serial = 0, attempts = 0;
+  const keys = new Set(), candidates = []; let serial = 0;
   for (const [shaped, quota] of [[false, rectanglePool], [true, shapedPool]]) {
     let found = 0, categoryAttempts = 0;
     while (found < quota && categoryAttempts++ < 50_000) {
-      const candidate = generateCandidate(serial++, shaped); attempts++;
+      const candidate = generateCandidate(serial++, shaped);
       if (!candidate || keys.has(candidate.key)) continue;
       keys.add(candidate.key); candidates.push(candidate); found++;
     }
@@ -160,7 +160,7 @@ function campaign(count = COUNT) {
   return { count, candidatePoolCount: ranked.length, generationRevision: GENERATION_REVISION, gradingVersion: GRADING_VERSION, category: '6×6 four-colour rectangles (36 cells) and fixed-column silhouettes (28 cells); percentiles within each shape category', curationPolicy: `Generate ${SURPLUS} surplus boards with an 80/20 rectangle/silhouette balance; curate score quantiles within each category, then regrade, merge and number.`, orderingPolicy: 'single-category/nondecreasing-measured-score/stable-id-tie-break', grading: { weights: { lowSeededLegalPlaySuccess: 0.4, sampledOrderFailureShare: 0.25, forcedSafeGroupShare: 0.15, legalGroupChoiceBreadth: 0.1, witnessedPlanningLength: 0.1 }, seededPlayouts: `64 uniform legal group-removal runs, each bounded by the witnessed move limit`, orderProbe: `${PROBE_BUDGET} deterministic completion samples for every legal group choice at each witnessed decision; witnessed route itself is counted as proven-safe`, search: `depth-first all-clear witness search bounded at ${SEARCH_LIMIT} states per candidate`, scoreRule: 'round(100 × weighted empirical percentile blend within the same mask category); marks=min(5,1+floor(score/20))', claims: 'Scores are deterministic progression heuristics; no uniqueness, minimum-move or optimality claims.' }, sampleBudget: SAMPLE_BUDGET, checksum, levels };
 }
 function tutorials() {
-  const board = (colors, width, height) => colors.map((colour, index) => colour === null ? null : { id: index + 1, colour });
+  const board = (colors) => colors.map((colour, index) => colour === null ? null : { id: index + 1, colour });
   const pair = board(['red', 'red', 'blue', 'gold', 'green', 'blue', 'gold', 'green', 'blue', 'green', 'green', 'gold', 'green', 'gold', 'gold', 'blue'], 4, 4);
   const pairIds = [1, 2];
   const compression = board(['red', 'blue', 'green', 'gold', 'red', 'blue', 'green', 'gold', 'red', 'blue', 'green', 'gold', 'red', 'blue', 'blue', 'gold'], 4, 4);

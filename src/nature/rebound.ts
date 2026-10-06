@@ -55,7 +55,7 @@ export function previewPowerDrop(state: NatureState, request: PowerDropRequest):
   }
   const eligible = request.power && state.rules.reboundEnabled;
   let randomStateAfter = state.randomState;
-  let attempts: ReboundAttemptPreview[] = [];
+  const attempts: ReboundAttemptPreview[] = [];
   let finalCells = normal;
   let selectedDirection: HorizontalDirection | undefined;
   let selectedTurn: QuarterTurn = 0;

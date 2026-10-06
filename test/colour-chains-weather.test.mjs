@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createGame, createChallenge, applyAction, advanceTicks, encodeGame, decodeGame, restartGame, StoneChainsOptionsError } from '../dist/colour-chains.js';
 

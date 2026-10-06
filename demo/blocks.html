@@ -1,39 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#2f5d4a">
-  <title>Houseki 宝石 · Magnetic Blocks</title>
+  <!--family:head-->
   <link rel="stylesheet" href="family.css">
   <link rel="stylesheet" href="game.css">
   <link rel="stylesheet" href="blocks.css">
 </head>
 <body>
 <main>
-  <header>
-    <div class="intro"><h1>Houseki<span lang="ja">宝石</span></h1><p>Small games with careful rules and tactile materials.</p><p class="name">Magnetic Blocks · 磁石ブロック</p><p class="fam-fine">Experimental playable demo · Campaign and rules review are still in progress.</p></div>
-    <nav><div class="lang" aria-label="Language / 言語"><button data-lang="en" aria-pressed="true">English</button><button data-lang="ja" lang="ja" aria-pressed="false">日本語</button></div><a class="fam-button" href="index.html">Falling Triplets</a><a class="fam-button" href="chains.html">Colour Chains</a><a class="fam-button" href="tools.html">Gem Swap &amp; Stone Collapse</a><button class="fam-button" id="theme" type="button">Theme</button></nav>
-  </header>
+  <!--family:header-->
+  <!--family:pages-->
   <div class="layout blocks-layout">
     <aside>
       <details class="settings-fold" open>
         <summary><span data-i="settings">Settings</span></summary>
         <div class="settings-fields">
-          <label class="field"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option></select></label>
-          <label class="field"><span data-i="board">Board preset</span><select id="preset"><option value="standard" selected>Standard · 8 × 16</option><option value="extraWide">Extra wide · 16 × 16</option><option value="deep">Deep · 8 × 32</option><option value="large">Large · 16 × 32</option><option value="custom">Custom size</option></select></label>
+          <label class="field" data-help-en="Relaxed has no clock, so you can plan each move. Arcade drops pieces on a timer. Daily is today's board, the same for everyone." data-help-ja="リラックスは時間制限がなく、じっくり考えられます。アーケードは一定の間隔で石が落ちます。デイリーは今日の盤面で、全員が同じです。"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option></select></label>
+          <label class="field" data-help-en="The size of the board. Bonus sizes are larger and scroll inside the play area." data-help-ja="盤面の大きさです。ボーナスの大きさは広く、遊ぶ場所の中でスクロールします。"><span data-i="board">Board preset</span><select id="preset"><option value="standard" selected>Standard · 8 × 16</option><option value="extraWide">Extra wide · 16 × 16</option><option value="deep">Deep · 8 × 32</option><option value="large">Large · 16 × 32</option><option value="custom">Custom size</option></select></label>
           <div class="dimension-row"><label class="field"><span data-i="width">Width</span><input class="fam-field" id="width" type="number" min="4" max="16" value="8" inputmode="numeric"></label><label class="field"><span data-i="height">Height</span><input class="fam-field" id="height" type="number" min="4" max="32" value="16" inputmode="numeric"></label></div>
-          <label class="field"><span data-i="colours">Colours</span><select id="colours"><option value="4">Four</option><option value="5" selected>Five</option><option value="6">Six</option></select></label>
-          <label class="field"><span data-i="schedule">Magnetic floor schedule</span><select id="schedule"><option value="calm">Fixed Calm</option><option value="magnetic">Fixed Pull</option><option value="frequent">Frequent</option><option value="rare">Rare</option></select></label>
+          <label class="field" data-help-en="How many gem colours are in play. Fewer colours make matches easier." data-help-ja="使う宝石の色数です。色が少ないほど、そろえやすくなります。"><span data-i="colours">Colours</span><select id="colours"><option value="4">Four</option><option value="5" selected>Five</option><option value="6">Six</option></select></label>
+          <label class="field" data-help-en="How the magnetic floor changes: fixed Calm or Pull, or on a schedule, often or rarely." data-help-ja="磁力の床の変わり方です。「穏やか」か「引き寄せ」に固定するか、頻繁に、またはまれに切り替えます。"><span data-i="schedule">Magnetic floor schedule</span><select id="schedule"><option value="calm">Fixed Calm</option><option value="magnetic">Fixed Pull</option><option value="frequent">Frequent</option><option value="rare">Rare</option></select></label>
           <label class="check"><input type="checkbox" id="impact"><span data-i="impact">Magnetic Impact on hard drop</span></label>
           <div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
           <p id="pending" class="micro" hidden>Settings changed. Select New game to apply.</p>
           <p id="size-error" class="fam-error" hidden></p>
           <p class="micro" data-i="help">Rotate the 2×2 block. Calm keeps bonded gems together; Pull separates them into columns.</p>
-          <label class="field"><span data-i="material">Board material</span><select id="material"><option value="ivory">Ivory</option><option value="slate">Slate</option><option value="wood">Wood</option></select></label>
+          <label class="field" data-help-en="The look of the board's surface. It changes nothing in the rules." data-help-ja="盤面の素材の見た目です。ルールは変わりません。"><span data-i="material">Board material</span><select id="material"><option value="ivory">Ivory</option><option value="slate">Slate</option><option value="wood">Wood</option></select></label>
+          <div class="checks" data-help-en="Animation, reduced motion and sound are kept on this device." data-help-ja="アニメーション、動きの軽減、効果音の設定は、この端末に保存されます。">
           <label class="check"><input type="checkbox" id="animations" checked><span data-i="animations">Animation</span></label>
           <label class="check"><input id="motion" type="checkbox"><span data-i="reduced">Reduce motion</span></label>
           <label class="check"><input id="sound" type="checkbox"><span data-i="sound">Sound effects</span></label>
+          </div>
         </div>
       </details>
     </aside>
@@ -58,11 +55,11 @@
         <button data-action="resume" class="fam-button resume" hidden>Continue</button>
       </div>
       <p class="micro keys" data-i="keys">← → move · ↑/Z/X rotate · Space drop/place · keypad 4/6/7/9/5/2 · Esc pause</p>
-      <p class="unreviewed" lang="ja">この日本語は、まだ日本語を母語とする方の確認を受けていません。</p>
     </section>
   </div>
-  <footer><span>Relaxed planning · Arcade timing · Calm and Pull floor rules</span><span><code>@johnmorrisdotca/houseki</code> · MIT · © John Morris</span></footer>
+  <!--family:unreviewed-->
+  <!--family:footer-->
 </main>
-<script type="module" src="blocks.js"></script>
+<!--family:scripts blocks.js-->
 </body>
 </html>

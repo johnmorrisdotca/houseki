@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { applyAction, advanceTicks, campaignManifest, createChallenge, createLevel, getLevel, getTutorial, levelManifest, tutorialManifest } from '../dist/stone-collapse.js';
@@ -43,7 +43,6 @@ function oracleSettle(board, removeIds, width, height, mask = Array(board.length
   for (let x = 0; x < width; x++) { const column = Array.from({ length: height }, (_, y) => gravity[y * width + x]); if (column.some(Boolean)) columns.push(column); }
   return Array.from({ length: width * height }, (_, index) => columns[index % width]?.[Math.floor(index / width)] ?? null);
 }
-function sameIds(a, b) { return a.length === b.length && a.every((id, index) => id === b[index]); }
 function settleCommitted(state, expectedIds, width, height) {
   const before = state.board;
   assert.deepEqual(oracleGroup(before, width, height, state.settings.mask, expectedIds[0]), expectedIds, 'witness names the complete current connected component');

@@ -1,10 +1,9 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { advanceTicks, applyAction, blockCells, calmGravity, createGame, decodeGame, encodeGame, impactSupportIds, legalActions, magneticGravity, removeIds, restartGame, statusOf } from '../dist/magnetic-blocks.js';
 
 const queue = Object.freeze([Object.freeze(['red', 'red', 'red', 'red'])]);
 const nullBoard = (width, height) => Array(width * height).fill(null);
-const ids = board => board.map(gem => gem?.id ?? null);
 function independentColourComponent(board, start, width, height, mask) {
   const gem = board[start]; if (!gem) return [];
   const pending = [start], found = new Set(pending);
@@ -35,7 +34,7 @@ test('seeded games, frozen public values, strict options, stable gem identity un
   assert.ok(Object.isFrozen(a) && Object.isFrozen(a.board) && Object.isFrozen(a.queue) && Object.isFrozen(a.active.gems));
   const positions = n => blockCells({ ...a.active, orientation: n }, 6).map(item => [item.gem.id, item.index]).sort((x, y) => x[0] - y[0]);
   assert.deepEqual(positions(0), positions(4));
-  assert.deepEqual(positions(0).map(([id, index]) => id), positions(1).map(([id]) => id));
+  assert.deepEqual(positions(0).map(([id]) => id), positions(1).map(([id]) => id));
   assert.notDeepEqual(positions(0).map(([, index]) => index), positions(1).map(([, index]) => index));
   assert.throws(() => createGame({ width: 6, height: 8, mask: [true, ...Array(47).fill(false)] }), /Mask|mask/);
   assert.throws(() => createGame({ width: 6, height: 8, queue: [['red', 'red', 'red', 'red']], pieceLimit: 2 }), /queue|Queue/);

@@ -1,4 +1,4 @@
-import type { Action, ChallengeDefinition, CreateOptions, GameState, RecordedAction, Settings, Stone, Transition } from './types.js';
+import type { ChallengeDefinition, CreateOptions, GameState, RecordedAction, Settings, Stone, Transition } from './types.js';
 import { advanceTicks, applyAction, createChallenge, createGame, requestHint, undo } from './engine.js';
 
 const RULES = 'collapse-2' as const;

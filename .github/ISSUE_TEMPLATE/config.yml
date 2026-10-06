@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security problem
+    url: https://github.com/johnmorrisdotca/houseki/blob/main/SECURITY.md
+    about: A saved game or option that makes an engine run for long or use a great deal of memory: please write privately, as the policy says.

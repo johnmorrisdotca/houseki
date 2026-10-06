@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createGame, createChallenge, restartGame, applyAction, advanceTicks, decodeGame, encodeGame, findMatches, landingY, legalActions, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions, nextUint32 } from '../dist/falling-triplets.js';

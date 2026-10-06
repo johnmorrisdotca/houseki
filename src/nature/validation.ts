@@ -1,4 +1,4 @@
-import type { MarkingOptions, NatureEntity, NatureErrorCode, NatureOptions, NaturePieceCell, NatureState, PowerDropRequest, QuarterTurn } from './types.js';
+import type { MarkingOptions, NatureEntity, NatureErrorCode, NatureOptions, NatureState, PowerDropRequest, QuarterTurn } from './types.js';
 
 export class NatureOptionsError extends RangeError {
   readonly code: NatureErrorCode;

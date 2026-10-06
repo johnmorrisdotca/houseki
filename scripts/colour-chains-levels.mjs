@@ -182,7 +182,6 @@ function candidate(serial) {
   return { level, key: canonicalKey(level) };
 }
 function splitCandidate(serial) {
-  const random = rng(`${GENERATION_REVISION}|split|${serial}`);
   const boardColours = Array(WIDTH * HEIGHT).fill(null); const row = 5 + (serial % 5); const shift = serial % 2;
   const targetIdsPositions = [];
   for (let x = shift; x < shift + 3; x++) { const at = cell(x, row); boardColours[at] = 'red'; targetIdsPositions.push(at); }
@@ -246,7 +245,6 @@ function chainCandidate(serial) {
   const random = rng(`${GENERATION_REVISION}|chain-samples|${serial}`); let successes = 0;
   for (let i = 0; i < SAMPLE_BUDGET; i++) if (legal[Math.floor(random() * legal.length)]?.state.phase === 'won') successes++;
   const metrics = { placementProbes: WIDTH * 4, legalPlacements: legal.length, goalPreservingPlacements: wins.length, forcedPlacementShare: wins.length === 1 ? 1 : 0, seededPlayoutSamples: SAMPLE_BUDGET, seededPlayoutQueueDepth: 1, seededPlayoutSuccesses: successes, seededPlayoutSuccessRate: Number((successes / SAMPLE_BUDGET).toFixed(6)), setupPairsBeforePayoff: 0, requiredSetupPairs: 0, verifiedSetupDependencies: 0, requiredChainDepth: 2, requiredRotations: 0, requiredWallKicks: 0, splitLandingDependencies: 0, planningLength: 1 };
-  const targetIds = reds.map(([rx, ry]) => board[cell(rx, ry)].id);
   const level = { id: `chains-${hash(JSON.stringify([colours, pattern, 'chain'])).slice(0, 12)}`, number: 0, title: { en: `Two-wave chain: ${pattern + 1}`, ja: `2段連鎖：${pattern + 1}` }, canonicalKeyHash: '', width: WIDTH, height: HEIGHT, colourCount: 4, seed: base.seed, board, queue, goal, witness: [witness], tags: ['two-wave-chain', 'gravity-setup'], rawMetrics: metrics, score: scoreFor(metrics), marks: 1, gradingVersion: GRADING_VERSION, proofStatus: 'engine-witness-verified', reviewStatus: 'human-review-pending' };
   level.canonicalKeyHash = hash(canonicalKey(level)); level.marks = Math.min(5, 1 + Math.floor(level.score / 20));
   return { level, key: canonicalKey(level) };

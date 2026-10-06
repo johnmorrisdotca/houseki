@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { applyAction, advanceTicks, createGame, validateChallengeWitness, CAMPAIGN_CHECKSUM, CAMPAIGN_COUNT, GENERATION_REVISION, GEM_SWAP_CAMPAIGN, GEM_SWAP_LESSONS, GRADING_VERSION, GRADING_WEIGHTS, SAMPLE_BUDGET } from '../dist/gem-swap.js';

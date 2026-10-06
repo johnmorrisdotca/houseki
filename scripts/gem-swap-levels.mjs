@@ -44,7 +44,6 @@ function settle(state, action) {
   const result = advanceTicks(first.state, 3600);
   return { state: result.state, events: [...first.events, ...result.events] };
 }
-function colorCounts(state) { return state.clearedByColour; }
 function chooseAction(state, rng) {
   const moves = legalActions(state).filter(action => action.kind === 'swap');
   return moves.length ? moves[Math.floor(rng() * moves.length)] : null;
@@ -225,7 +224,7 @@ function generateLessons() {
 }
 function invalidNeighbor(state) {
   const legal = new Set(legalActions(state).filter(action => action.kind === 'swap').map(action => `${action.from}:${action.to}`));
-  const width = state.settings.width, height = state.settings.height;
+  const width = state.settings.width;
   for (let from = 0; from < state.board.length; from++) for (const to of [from + 1, from + width]) {
     if (to >= state.board.length || (to === from + 1 && Math.floor(from / width) !== Math.floor(to / width)) || !state.board[from] || !state.board[to]) continue;
     if (!legal.has(`${from}:${to}`)) return { kind: 'swap', from, to };

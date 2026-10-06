@@ -1,6 +1,6 @@
 import { applyAction, advanceTicks, initialChallengeState } from './engine.js';
 import { StoneChainsOptionsError, validateChallengeGoal, validateSize } from './validation.js';
-import type { ChallengeOptions, Colour, GameState, Gem, Orientation, Settings, Transition, WitnessStep } from './types.js';
+import type { ChallengeOptions, Colour, GameState, Gem, Orientation, Settings, WitnessStep } from './types.js';
 const COLOUR_NAMES: readonly Colour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 const ORIENTATIONS: readonly Orientation[] = ['up', 'right', 'down', 'left'];
 function stable(value: unknown): string {
