@@ -2,8 +2,8 @@
 export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
 /** A settled or active stone with a stable run-local identity. */
 export interface Gem { readonly id: number; readonly colour: Colour; readonly magnetic?: true }
-/** Authored Challenge layouts do not permit Shizen-marked stones. */
-export type ChallengeGem = Omit<Gem, 'magnetic'>;
+/** Authored challenge layouts can include explicit Shizen-marked stones. */
+export type ChallengeGem = Gem;
 /** The pivot-to-satellite direction, in clockwise order. */
 export type Orientation = 'up' | 'right' | 'down' | 'left';
 /** A visible or hidden board coordinate. */
@@ -16,11 +16,11 @@ export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
 export type WeatherSchedule = 'frequent' | 'rare';
 export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly dailyDate?: string; readonly preset?: Preset; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pairLimit?: number; readonly nature?: boolean; readonly weather?: WeatherSchedule }
 /** Run settings fixed at game creation. */
-export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly date?: string; readonly pairLimit?: number; readonly nature?: true; readonly weather?: WeatherSchedule; readonly challengeId?: string; readonly goal?: ChallengeGoal; readonly initialBoard?: readonly (ChallengeGem | null)[]; readonly queue?: readonly (readonly [Colour, Colour])[]; readonly witness?: readonly WitnessStep[] }
+export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly date?: string; readonly pairLimit?: number; readonly nature?: true; readonly weather?: WeatherSchedule; readonly challengeId?: string; readonly goal?: ChallengeGoal; readonly initialBoard?: readonly (ChallengeGem | null)[]; readonly queue?: readonly (readonly [Colour, Colour])[]; readonly magneticQueue?: readonly (readonly [boolean, boolean])[]; readonly witness?: readonly WitnessStep[] }
 /** Challenge objective; target IDs refer to the visible starting board. */
 export type ChallengeGoal = { readonly kind: 'clear-targets'; readonly targetIds: readonly number[] } | { readonly kind: 'minimum-chain'; readonly chain: number } | { readonly kind: 'empty-board' };
 export interface WitnessStep { readonly pivotX: number; readonly orientation: Orientation }
-export interface ChallengeOptions { readonly id: string; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly seed?: string; readonly board: readonly (ChallengeGem | null)[]; readonly queue: readonly (readonly [Colour, Colour])[]; readonly goal: ChallengeGoal; readonly witness?: readonly WitnessStep[] }
+export interface ChallengeOptions { readonly id: string; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly seed?: string; readonly board: readonly (ChallengeGem | null)[]; readonly queue: readonly (readonly [Colour, Colour])[]; readonly magneticQueue?: readonly (readonly [boolean, boolean])[]; readonly nature?: boolean; readonly weather?: WeatherSchedule; readonly goal: ChallengeGoal; readonly witness?: readonly WitnessStep[] }
 /** Observable game phases. */
 export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'paused' | 'won' | 'lost' | 'finished';
 /** A scored simultaneous match wave. */

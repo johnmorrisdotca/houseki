@@ -94,3 +94,7 @@ header .intro{min-height:200px}
 .pages .fam-button:nth-child(1),.pages .fam-button:nth-child(2){width:128px}
 .pages .fam-button:nth-child(3){width:252px}
 .pages .fam-button:nth-child(4){width:152px}
+
+/* Goal counters reserve the same line boxes for Latin and Japanese fonts. */
+#objective p{line-height:24px}
+#objective progress{height:12px}

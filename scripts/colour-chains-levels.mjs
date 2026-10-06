@@ -2,9 +2,12 @@ import { createHash } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { applyAction, advanceTicks, createChallenge } from '../dist/colour-chains.js';
+import { initialChallengeState } from '../dist/colour-chains/engine.js';
+import { advancedShizenPrototypes } from './nature-campaign-levels.mjs';
 
 export const GENERATION_REVISION = 'colour-chains-campaign-1.3.1';
 export const GRADING_VERSION = 'chains-placement-forgiveness-1';
+export const NATURE_GENERATION_REVISION = 'colour-chains-nature-campaign-1.0.0';
 export const SAMPLE_BUDGET = 64;
 const WIDTH = 6, HEIGHT = 12, COLOURS = ['red', 'blue', 'green', 'gold'];
 const SHAPES = [
@@ -33,6 +36,122 @@ function scoreFor(metrics) {
     + 12 * Math.min(1, metrics.requiredSetupPairs / 2)
     + 5 * Math.min(1, Math.max(0, (metrics.planningLength - 1) / 2));
   return Math.round(Math.max(0, Math.min(100, score)) * 100) / 100;
+}
+const placementDirections = ['up', 'right', 'down', 'left'];
+function placePair(start, placement) {
+  let state = start; const events = [];
+  const act = kind => { const result = applyAction(state, { kind }); if (!result.accepted) return false; state = result.state; events.push(...result.events); return true; };
+  for (let safety = 0; state.active && state.active.pivot.x !== placement.pivotX && safety < 20; safety++) if (!act(state.active.pivot.x < placement.pivotX ? 'right' : 'left')) return null;
+  for (let turns = 0; state.active?.orientation !== placement.orientation && turns < 4; turns++) if (!act('rotate-clockwise')) return null;
+  if (!state.active || state.active.orientation !== placement.orientation || !act('hard-drop')) return null;
+  let work = 0;
+  while (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase) && work < 100_000) {
+    const tick = advanceTicks(state, 3600); state = tick.state; events.push(...tick.events); work += 3600;
+  }
+  return { state, events };
+}
+function playPlan(start, plan) {
+  let state = start; const events = [];
+  for (const placement of plan) {
+    if (state.phase !== 'falling') break;
+    const outcome = placePair(state, placement); if (!outcome) return null;
+    state = outcome.state; events.push(...outcome.events);
+  }
+  return { state, events };
+}
+function canonicalNatureKey(level) {
+  const variants = [];
+  for (const mirror of [false, true]) {
+    const labels = new Map(); const label = colour => { if (!labels.has(colour)) labels.set(colour, labels.size); return labels.get(colour); };
+    const board = [];
+    for (let y = 0; y < level.height; y++) for (let px = 0; px < level.width; px++) {
+      const x = mirror ? level.width - 1 - px : px; const gem = level.board[cell(x, y)];
+      board.push(gem ? [label(gem.colour), Boolean(gem.magnetic), level.goal.kind === 'clear-targets' && level.goal.targetIds.includes(gem.id)] : null);
+    }
+    const queue = level.queue.map(pair => pair.map(label));
+    const goal = level.goal.kind === 'clear-targets' ? { kind: 'clear-targets', targets: level.goal.targetIds.map(id => {
+      const at = level.board.findIndex(gem => gem?.id === id), x = at % level.width; return Math.floor(at / level.width) * level.width + (mirror ? level.width - 1 - x : x);
+    }).sort((a, b) => a - b) } : level.goal;
+    // A puzzle is identified by its normalized board, queue, goal and mechanics.
+    // A second witness for the same puzzle is not a second authored level.
+    variants.push(JSON.stringify([level.width, level.height, level.colourCount, level.weather ?? '', goal, board, queue, level.magneticQueue ?? []]));
+  }
+  return variants.sort()[0];
+}
+function natureMetrics(source, options, witness, events, scoreData) {
+  const placements = [];
+  for (let pivotX = 0; pivotX < source.width; pivotX++) for (const orientation of placementDirections) placements.push({ pivotX, orientation });
+  const initial = (() => { try { return createChallenge({ id: `probe-${source.id}`, seed: options.seed, width: source.width, height: source.height, colourCount: source.colourCount, board: options.board, queue: source.queue, goal: source.goal, witness, nature: options.nature, ...(options.weather ? { weather: options.weather } : {}), ...(options.magneticQueue ? { magneticQueue: options.magneticQueue } : {}) }); } catch { return null; } })();
+  let legalPlacements = 0, wins = 0;
+  if (initial) for (const first of placements) {
+    const outcome = placePair(initial, first); if (!outcome) continue; legalPlacements++;
+    const suffix = outcome.state.phase === 'falling' ? playPlan(outcome.state, witness.slice(1)) : { state: outcome.state, events: [] };
+    if (suffix?.state.phase === 'won') wins++;
+  }
+  const random = rng(`${NATURE_GENERATION_REVISION}|samples|${source.id}|${options.seed}`); let successes = 0;
+  if (initial) for (let i = 0; i < SAMPLE_BUDGET; i++) {
+    const first = placements[Math.floor(random() * placements.length)]; const outcome = placePair(initial, first); if (!outcome) continue;
+    const suffix = outcome.state.phase === 'falling' ? playPlan(outcome.state, witness.slice(1)) : { state: outcome.state, events: [] };
+    if (suffix?.state.phase === 'won') successes++;
+  }
+  // For each pre-payoff placement, replace just that pair's placement with
+  // every other legal placement, then replay the witnessed suffix unchanged.
+  // This records single-step counterfactual dependencies instead of claims
+  // supplied by a template or by the level author.
+  let requiredSetupPairs = 0, setupDependencyProbes = 0, setupDependencyFails = 0;
+  if (initial && witness.length > 1) for (let index = 0; index < witness.length - 1; index++) {
+    let prefix = initial;
+    for (const step of witness.slice(0, index)) {
+      const placed = placePair(prefix, step);
+      if (!placed) { prefix = null; break; }
+      prefix = placed.state;
+    }
+    if (!prefix || prefix.phase !== 'falling') continue;
+    let alternatives = 0, alternativeWins = 0;
+    for (const placement of placements) {
+      if (placement.pivotX === witness[index].pivotX && placement.orientation === witness[index].orientation) continue;
+      const placed = placePair(prefix, placement); if (!placed) continue;
+      alternatives++;
+      const suffix = placed.state.phase === 'falling' ? playPlan(placed.state, witness.slice(index + 1)) : { state: placed.state, events: [] };
+      if (suffix?.state.phase === 'won') alternativeWins++;
+    }
+    if (alternatives) {
+      setupDependencyProbes++;
+      if (alternativeWins === 0) { setupDependencyFails++; requiredSetupPairs++; }
+    }
+  }
+  const featureEvent = events.find(event => event.type === 'power-drop-landed' && event.rebound) ?? events.find(event => event.type === 'magnetic-pulse' && event.moves?.length);
+  const setupPairs = Math.max(0, witness.length - 1);
+  const rawMetrics = {
+    placementProbes: placements.length, legalPlacements, goalPreservingPlacements: wins,
+    forcedPlacementShare: legalPlacements > 0 && wins === 1 ? 1 : 0,
+    seededPlayoutSamples: SAMPLE_BUDGET, seededPlayoutQueueDepth: 1,
+    seededPlayoutVariablePrefixLength: 1, seededPlayoutFixedSuffixLength: Math.max(0, witness.length - 1),
+    seededPlayoutSuccesses: successes, seededPlayoutSuccessRate: Number((successes / SAMPLE_BUDGET).toFixed(6)),
+    setupPairsBeforePayoff: setupPairs, requiredSetupPairs,
+    verifiedSetupDependencies: setupDependencyFails,
+    setupDependencyProbeSteps: setupDependencyProbes,
+    requiredChainDepth: scoreData.requiredChainDepth ?? 1,
+    requiredRotations: witness.filter(step => step.orientation !== 'up' && step.orientation !== 'down').length + 2 * witness.filter(step => step.orientation === 'down').length,
+    requiredWallKicks: events.filter(event => event.type === 'pair-rotated' && (event.kick?.x || event.kick?.y)).length,
+    splitLandingDependencies: scoreData.splitLandingDependencies ?? 0, planningLength: witness.length
+  };
+  return { rawMetrics, score: scoreFor(rawMetrics), featureEvent };
+}
+function authoredLevel(source, prefix, number, options, witness, events, scoreData = {}) {
+  const measured = natureMetrics(source, options, witness, events, scoreData);
+  const featureTag = events.some(event => event.type === 'magnetic-pulse' && event.moves?.length) ? 'magnetic-attraction' : 'rebound';
+  const level = {
+    id: '', number, title: options.title, objective: options.objective,
+    canonicalKeyHash: '', width: source.width, height: source.height, colourCount: source.colourCount,
+    seed: options.seed, board: options.board, queue: source.queue, goal: source.goal, witness,
+    tags: [...new Set([...source.tags.filter(tag => ['rotation', 'split-landing', 'two-wave-chain', 'setup-dependency', 'gravity-setup'].includes(tag)), featureTag, ...(options.weather ? ['jumble', 'lightning'] : [])])],
+    rawMetrics: measured.rawMetrics, score: measured.score, marks: Math.min(5, 1 + Math.floor(measured.score / 20)),
+    gradingVersion: GRADING_VERSION, proofStatus: 'engine-witness-verified', reviewStatus: 'human-review-pending', nature: true,
+    ...(options.weather ? { weather: options.weather } : {}), ...(options.magneticQueue ? { magneticQueue: options.magneticQueue } : {})
+  };
+  const key = canonicalNatureKey(level); level.canonicalKeyHash = hash(key); level.id = `${prefix}-${hash(key).slice(0, 12)}`;
+  return { level, key };
 }
 function initialBoard(serial) {
   const random = rng(`${GENERATION_REVISION}|board|${serial}`);
@@ -352,7 +471,7 @@ function tutorials() {
   return [rotation, split, chain];
 }
 
-export function generateContent() {
+export function generatedLevelPool() {
   const pools = { easy: new Map(), chain: new Map(), split: new Map(), multi: new Map() };
   for (let serial = 1; serial <= 5000 && pools.easy.size < 25; serial++) {
     const item = candidate(serial); if (item && !pools.easy.has(item.key)) pools.easy.set(item.key, item.level);
@@ -367,6 +486,140 @@ export function generateContent() {
     const item = multiPairCandidate(serial); if (item && !pools.multi.has(item.key)) pools.multi.set(item.key, item.level);
   }
   if (pools.easy.size < 20 || pools.chain.size < 10 || pools.split.size < 10 || pools.multi.size < 10) throw new Error(`Insufficient variety: ${pools.easy.size} easy, ${pools.chain.size} chain, ${pools.split.size} split, ${pools.multi.size} multi-pair candidates`);
+  return pools;
+}
+
+function playAuthored(options, source, witness) {
+  try {
+    const start = createChallenge({ id: `proof-${source.id}`, seed: options.seed, width: source.width, height: source.height, colourCount: source.colourCount, board: options.board, queue: source.queue, goal: source.goal, witness, nature: true, ...(options.weather ? { weather: options.weather } : {}), ...(options.magneticQueue ? { magneticQueue: options.magneticQueue } : {}) });
+    return playPlan(start, witness);
+  } catch { return null; }
+}
+
+function playCounterfactual(options, source, witness, disable) {
+  const settings = { mode: 'challenge', width: source.width, height: source.height, colourCount: source.colourCount, seed: options.seed, challengeId: `counterfactual-${source.id}`, goal: source.goal, initialBoard: options.board, queue: source.queue, witness, ...(disable === 'weather' ? { nature: true } : {}) };
+  const start = initialChallengeState(settings, options.board, source.queue);
+  return playPlan(start, witness);
+}
+
+function generateShizenCampaign() {
+  const unique = new Map(); const width = 6, height = 12, colourCount = 6;
+  for (let index = 0; index < advancedShizenPrototypes.length; index++) {
+    const prototype = advancedShizenPrototypes[index];
+    const board = Array(width * height).fill(null);
+    for (const [at, id, colour, magnetic] of prototype.board) board[at] = { id, colour, ...(magnetic ? { magnetic: true } : {}) };
+    const source = { id: `magnetic-setup-${index + 1}`, width, height, colourCount, board, queue: prototype.queue, goal: { kind: 'clear-targets', targetIds: [1, 2, 3] }, tags: [] };
+    const options = { seed: prototype.seed, board, nature: true, magneticQueue: prototype.magneticQueue };
+    const outcome = playAuthored(options, source, prototype.witness);
+    if (!outcome || outcome.state.phase !== 'won') continue;
+    const pulseMoves = outcome.events.filter(event => event.type === 'magnetic-pulse').flatMap(event => event.moves ?? []);
+    const rebound = outcome.events.some(event => event.type === 'power-drop-landed' && event.rebound);
+    if (!pulseMoves.length || !rebound) continue;
+    const plain = playCounterfactual(options, source, prototype.witness, 'nature');
+    if (plain?.state.phase === 'won') continue;
+    const isThreeStep = prototype.witness.length >= 3;
+    const levelOptions = {
+      ...options,
+      title: isThreeStep
+        ? { en: 'Build two clearings', ja: '2つの連鎖を準備' }
+        : { en: 'Pulse, then rebound', ja: '磁力の後にリバウンド' },
+      objective: isThreeStep
+        ? { en: 'Clear both setup colours first. Watch the magnetic pulse pull the gap closed, then place the marked red pair for the rebound finish.', ja: '先に2色の準備を消しましょう。磁力の移動で隙間が埋まったら、磁石付きの赤いペアを置いてリバウンドで仕上げます。' }
+        : { en: 'Clear the blue setup stack first. The magnetic pulse pulls the gap closed; then place the marked red pair for the rebound finish.', ja: '先に青い準備の列を消しましょう。磁力の移動で隙間が埋まったら、磁石付きの赤いペアを置いてリバウンドで仕上げます。' }
+    };
+    const authored = authoredLevel(source, 'shizen', 0, levelOptions, prototype.witness, outcome.events);
+    authored.level.tags.push('setup-dependency', 'magnetic-attraction', 'rebound-dependency', 'counterfactual-fail-without-nature');
+    if (!unique.has(authored.key)) unique.set(authored.key, authored.level);
+  }
+  const safeColours = ['blue', 'green', 'gold', 'purple', 'teal'];
+  for (let serial = 1; serial <= 4000 && unique.size < 50; serial++) {
+    const board = Array(width * height).fill(null); const targetIds = [1, 2, 3];
+    for (const [index, x] of [[0, 2], [1, 3], [2, 4]]) board[(height - 1) * width + x] = { id: index + 1, colour: 'red' };
+    let id = 4;
+    // A changing skyline above the red link alters safe landings without changing the proof pattern.
+    for (const x of [2, 3, 4]) {
+      const heightAbove = Math.floor(serial / (x === 2 ? 1 : x === 3 ? 7 : 49)) % 5;
+      for (let depth = 0; depth < heightAbove; depth++) board[(height - 2 - depth) * width + x] = { id: id++, colour: safeColours[(serial + x + depth) % safeColours.length] };
+    }
+    const outsideHeight = 1 + (serial % 11);
+    for (let depth = 0; depth < outsideHeight; depth++) board[(height - 1 - depth) * width + 5] = { id: id++, colour: safeColours[(serial * 3 + depth) % safeColours.length] };
+    const queue = [['red', 'blue'], [safeColours[serial % safeColours.length], safeColours[(serial + 2) % safeColours.length]]];
+    const witness = [{ pivotX: 0, orientation: 'up' }];
+    const source = { id: `magnetic-template-${serial}`, width, height, colourCount, board, queue, goal: { kind: 'clear-targets', targetIds }, tags: [] };
+    const magneticQueue = [[true, false], [false, false]];
+    const options = { seed: `shizen:${NATURE_GENERATION_REVISION}:${serial}`, board, nature: true, magneticQueue };
+    const outcome = playAuthored(options, source, witness);
+    if (!outcome || outcome.state.phase !== 'won') continue;
+    const rebound = outcome.events.find(event => event.type === 'power-drop-landed' && event.rebound && event.ids?.includes(outcome.events.find(item => item.type === 'pair-locked')?.ids?.[0]));
+    if (!rebound) continue;
+    const plain = playCounterfactual(options, source, witness, 'nature');
+    if (plain?.state.phase === 'won') continue;
+    const levelOptions = { ...options, title: { en: 'Rebound the red link', ja: '赤い列へリバウンド' }, objective: { en: 'Guide the marked red pivot into the open end of the link. Its rebound must complete the target match.', ja: '磁石付きの赤いピボットを列の空きへ導きましょう。リバウンドで目標の組が完成します。' } };
+    const authored = authoredLevel(source, 'shizen', 0, levelOptions, witness, outcome.events);
+    authored.level.tags.push('rebound-dependency', 'counterfactual-fail-without-nature');
+    const key = canonicalNatureKey(authored.level);
+    authored.level.canonicalKeyHash = hash(key); authored.level.id = `shizen-${hash(key).slice(0, 12)}`;
+    if (!unique.has(key)) unique.set(key, authored.level);
+  }
+  if (unique.size < 50) throw new Error(`Shizen generation found only ${unique.size} unique engine-witnessed rebound-dependent levels`);
+  return makeVariantManifest([...unique.values()].slice(0, 50), 'shizen', 'Every witness uses an observed magnetic pulse and rebound or a rebound-only introduction; 26 setup levels use exact two- or three-pair plans and fail their Shizen-off counterfactual. Remaining levels teach one-pair rebound. Canonical uniqueness ignores seed and witness.', 'Sort measured placement-forgiveness score ascending, then stable canonical ID.');
+}
+
+function makeVariantManifest(levels, category, curationPolicy, orderingPolicy) {
+  levels.sort((a, b) => a.score - b.score || a.id.localeCompare(b.id));
+  levels.forEach((level, index) => { level.number = index + 1; });
+  const checksum = hash(JSON.stringify(levels));
+  return deepFreeze({ count: levels.length, candidatePoolCount: levels.length, generationRevision: NATURE_GENERATION_REVISION, gradingVersion: GRADING_VERSION, category, curationPolicy, orderingPolicy, grading: { formula: 'measured placement-forgiveness score from engine-probed legal placements and seeded full-plan playouts', sampleBudget: SAMPLE_BUDGET }, sampleBudget: SAMPLE_BUDGET, checksum, levels });
+}
+
+function generateArashiCampaign() {
+  const candidates = new Map(); const width = 6, height = 12, colourCount = 6;
+  const safeColours = ['blue', 'green', 'gold', 'purple', 'teal'];
+  for (let serial = 1; serial <= 30_000 && candidates.size < 100; serial++) {
+    const targetX = serial % width; const dropXs = [0, 1, 2, 3, 4, 5].filter(x => x !== targetX);
+    const planOffset = Math.floor(serial / width) % dropXs.length;
+    const witness = Array.from({ length: 4 }, (_, index) => ({ pivotX: dropXs[(planOffset + index) % dropXs.length], orientation: 'up' }));
+    const board = Array(width * height).fill(null); board[(height - 1) * width + targetX] = { id: 1, colour: 'red' };
+    // Keep the target exposed above two supports. The four placements must leave its strike column open.
+    board[(height - 2) * width + targetX] = { id: 2, colour: 'green' }; board[(height - 3) * width + targetX] = { id: 3, colour: 'gold' };
+    let nextId = 4; const decorationCount = serial % 3;
+    const random = rng(`${NATURE_GENERATION_REVISION}|arashi-board|${serial}`);
+    const usedColumns = new Set([targetX]);
+    for (let i = 0; i < decorationCount; i++) {
+      let column = Math.floor(random() * width); let attempts = 0;
+      while (usedColumns.has(column) && attempts++ < width) column = (column + 1) % width;
+      if (usedColumns.has(column)) break;
+      usedColumns.add(column); const stack = 1 + Math.floor(random() * 3);
+      for (let depth = 0; depth < stack; depth++) board[(height - 1 - depth) * width + column] = { id: nextId++, colour: safeColours[Math.floor(random() * safeColours.length)] };
+    }
+    const palette = [...safeColours.slice(serial % safeColours.length), ...safeColours.slice(0, serial % safeColours.length)];
+    const queue = Array.from({ length: 4 }, (_, index) => [palette[(index * 2) % palette.length], palette[(index * 2 + 1) % palette.length]]);
+    const source = { id: `arashi-${serial}`, width, height, colourCount, board, queue, goal: { kind: 'clear-targets', targetIds: [1] }, tags: [] };
+    const seed = `arashi:${NATURE_GENERATION_REVISION}:${serial}`;
+    const options = { seed, board, nature: true, weather: 'frequent' };
+    const outcome = playAuthored(options, source, witness);
+    if (!outcome || outcome.state.phase !== 'won') continue;
+    const weather = outcome.events.filter(event => event.type === 'weather-triggered');
+    if (!weather.some(event => event.kind === 'jumble' && event.turn === 2) || !weather.some(event => event.kind === 'lightning' && event.turn === 4)) continue;
+    if (!outcome.events.some(event => event.type === 'jumble-completed' && event.changed === true) || !outcome.events.some(event => event.type === 'lightning-struck' && event.removedIds?.includes(1))) continue;
+    const withoutWeather = playCounterfactual(options, source, witness, 'weather');
+    if (!withoutWeather || withoutWeather.state.phase === 'won') continue;
+    const names = [
+      [{ en: 'Keep the target exposed', ja: '目標を露出させる' }, { en: 'Leave the target clear through the jumble, then let turn-four lightning remove it.', ja: '目標の列を地震の後まで空けておき、4手目の雷で消しましょう。' }],
+      [{ en: 'Save a path for lightning', ja: '雷への道を残す' }, { en: 'Place the setup pairs away from the marked target so lightning can reach it on turn four.', ja: '準備のペアを目標から離して置き、4手目の雷が届くようにしましょう。' }],
+      [{ en: 'After the jumble', ja: '地震の後に' }, { en: 'The board will jumble on turn two. Keep the marked target alive until the turn-four lightning strike.', ja: '2手目に盤面が入れ替わります。磁石付きの目標を4手目の雷まで残しましょう。' }]
+    ];
+    const [title, objective] = names[(targetX + decorationCount) % names.length];
+    const variantOptions = { ...options, title, objective };
+    const authored = authoredLevel(source, 'arashi', 0, variantOptions, witness, outcome.events);
+    if (!candidates.has(authored.key)) candidates.set(authored.key, authored.level);
+  }
+  if (candidates.size < 50) throw new Error(`Arashi generation found only ${candidates.size} unique engine-witnessed jumble-and-lightning levels`);
+  return makeVariantManifest([...candidates.values()].slice(0, 50), 'arashi', 'Every four-pair witness records a changed jumble on turn two and lightning removal of its target on turn four; placement alternatives and deterministic full-plan samples grade the route.', 'Sort measured placement-forgiveness score ascending, then stable canonical ID.');
+}
+
+export function generateContent() {
+  const pools = generatedLevelPool();
   const curate = (pool, count) => [...pool.values()].sort((a, b) => a.score - b.score || a.id.localeCompare(b.id)).slice(0, count);
   const poolCount = Object.values(pools).reduce((total, pool) => total + pool.size, 0);
   const levels = [...curate(pools.easy, 20), ...curate(pools.chain, 10), ...curate(pools.split, 10), ...curate(pools.multi, 10)].sort((a, b) => a.score - b.score || a.id.localeCompare(b.id));
@@ -377,10 +630,10 @@ export function generateContent() {
     gradingVersion: GRADING_VERSION, category: 'linear',
     curationPolicy: 'Select fifty canonically unique stable boards with 20 one-placement links, 10 two-wave chains, 10 split landings and 10 coupled multi-pair plans; validate required setup placements by perturbing each setup step and retaining only dependencies that break the finish path.',
     orderingPolicy: 'Sort by stored player-facing placement-forgiveness score ascending, then stable content ID; number only after ordering.',
-    grading: { formula: '35*(1-seededPlayoutSuccessRate)+10*forcedPlacementShare+10*min(1,(requiredChainDepth-1)/2)+10*min(1,splitLandingDependencies)+8*min(1,requiredRotations)+12*min(1,requiredSetupPairs/2)+5*min(1,(planningLength-1)/2)', sampleBudget: SAMPLE_BUDGET, planningLength: 'committed pair placements in the witnessed winning plan; horizontal input distance is not counted' },
+    grading: { formula: '35*(1-seededPlayoutSuccessRate)+10*forcedPlacementShare+10*min(1,(requiredChainDepth-1)/2)+10*min(1,splitLandingDependencies)+8*min(1,requiredRotations)+12*min(1,requiredSetupPairs/2)+5*min(1,(planningLength-1)/2)', sampleBudget: SAMPLE_BUDGET, planningLength: 'committed pair placements in the witnessed winning plan; horizontal input distance is not counted', seededPlayoutScope: '64 seeded samples vary the first placement and replay the remaining witnessed suffix unchanged', setupDependencyScope: 'For each pre-payoff placement, enumerate all other legal single-step placements, replaying the unchanged witnessed suffix; a step counts only when every tested alternative fails.' },
     sampleBudget: SAMPLE_BUDGET, checksum, levels
   };
-  return deepFreeze({ campaign, tutorials: tutorials() });
+  return deepFreeze({ campaign, tutorials: tutorials(), shizen: generateShizenCampaign(), arashi: generateArashiCampaign() });
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {

@@ -1,8 +1,9 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { applyAction, advanceTicks, campaignManifest, createChallenge, createLevel, getLevel, getTutorial, levelManifest, tutorialManifest } from '../dist/colour-chains.js';
+import { applyAction, advanceTicks, campaignManifest, shizenCampaignManifest, arashiCampaignManifest, createChallenge, createLevel, getLevel, getTutorial, levelManifest, tutorialManifest } from '../dist/colour-chains.js';
 
 const WIDTH = 6, HEIGHT = 12;
 function goalReached(state, goal) {
@@ -177,4 +178,8 @@ test('three bilingual tutorials prove rotation with a wall kick, split landing a
 test('generation script reproduces the immutable manifest checksum', () => {
   const result = spawnSync(process.execPath, ['scripts/colour-chains-levels.mjs'], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr); assert.match(result.stdout, new RegExp(campaignManifest.checksum));
-});
+  const generated = readFileSync('src/colour-chains/content-data.ts', 'utf8');
+  const data = JSON.parse(generated.slice(generated.indexOf('=') + 1).trim().replace(/;$/, ''));
+  assert.deepEqual(data.shizen, shizenCampaignManifest);
+  assert.deepEqual(data.arashi, arashiCampaignManifest);
+}, 180_000);

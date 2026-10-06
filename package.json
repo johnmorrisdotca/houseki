@@ -1,7 +1,7 @@
 {
   "name": "@johnmorrisdotca/houseki",
-  "version": "0.1.1",
-  "description": "Houseki \u5b9d\u77f3: four original gem and stone puzzle games, Falling Triplets, Colour Chains, Stone Collapse and Gem Swap, as immutable seeded engines with 300 graded levels, plus experimental Magnetic Blocks. English and Japanese. Zero dependencies.",
+  "version": "0.2.0",
+  "description": "Houseki 宝石: five original gem and stone puzzle engines, 450 graded challenges, bilingual lessons, deterministic saves, magnetic floors, Shizen and Arashi campaigns. TypeScript. Zero dependencies.",
   "keywords": [
     "puzzle",
     "puzzle-game",
@@ -28,7 +28,10 @@
     "zero-dependencies",
     "browser",
     "node",
-    "itsutsu"
+    "itsutsu",
+    "shizen",
+    "arashi",
+    "campaign"
   ],
   "homepage": "https://johnmorrisdotca.github.io/houseki/",
   "repository": {

@@ -4,9 +4,22 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-06
+
+### Added
+
+- Three dedicated fifty-level campaigns: Magnetic Blocks, Shizen and Arashi, bringing the package to 450 original graded challenges. Exact boards, finite queues, stable IDs, measured difficulty, winning witnesses and deterministic generation are published with the engines.
+- Campaign selectors, fixed rule displays, goal progress, replay and next-level recovery in the players.
+
+### Fixed
+
+- Clear game-over results and disabled play controls; fixed challenge settings; exact save recovery; responsive goal text; shared cloth and piece appearance; generated API imports and markup.
+- Stable board geometry when switching English and Japanese at phone, tablet and desktop widths.
+
+
 ### Changed
 
-- Repository only: the package and everything it exports are unchanged. `CONTRIBUTING.md` is the family's one text with a section of its own for Houseki, held to the master in johnmorrisdotca/.github by `src/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
+- `CONTRIBUTING.md` is the family's one text with a section of its own for Houseki, held to the master in johnmorrisdotca/.github by `src/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
 - The demo's shared stylesheet is `demo/houseki.css` (it was `game.css`), named for the package like the family's.
 
 ## [0.1.1] - 2026-10-05
@@ -36,6 +49,7 @@ All notable changes to this package are written here, newest first, in the form 
 - An experimental Magnetic Blocks engine with bonded squares, magnetic floor schedules, a Floor Switch and impact drops.
 - Typed entry points, a generated API reference, an MIT licence and reproducible package checks.
 
-[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/johnmorrisdotca/houseki/releases/tag/v0.1.0

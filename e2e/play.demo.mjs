@@ -1,6 +1,6 @@
 // Playing the demo's pages in a real browser, at a phone's width and a desk's: the keyboard and keypad, every
 // campaign's first challenge won by its recorded witness, the lessons, both full-board games with their stored
-// tools, the saved preferences and the experimental Magnetic Blocks page.
+// tools, the saved preferences and the Magnetic Blocks page.
 import assert from "node:assert/strict";
 import { test } from "@playwright/test";
 

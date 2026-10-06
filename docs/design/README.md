@@ -1,10 +1,10 @@
 # Matching games: design pack
 
-Design revision: 1.0 · 2026-10-05 · Owner: John Morris
+Design revision: 1.1 · 2026-10-06 · Owner: John Morris
 
-This pack specifies four original matching games for a standalone open-source library. It is a design and implementation contract, not a claim that the games have been built or their feel has been approved. Itsutsu integration is deferred to the site's maintainer. Do not edit Itsutsu while implementing this pack.
+This pack specifies five original matching games for a standalone open-source library. It is a design and implementation contract, not a claim that the games have been built or their feel has been approved. Itsutsu integration is deferred to the site's maintainer. Do not edit Itsutsu while implementing this pack.
 
-## The four games
+## The games
 
 | Game | Player action | Match rule | Main pleasure |
 | --- | --- | --- | --- |
@@ -12,8 +12,9 @@ This pack specifies four original matching games for a standalone open-source li
 | [Stone Collapse](02-STONE-COLLAPSE.md) | Select and confirm a connected group | Orthogonal groups of two or more | Plan which groups to remove first |
 | [Colour Chains](03-COLOUR-CHAINS.md) | Move and rotate a falling pair | Orthogonal groups of four or more | Build a deliberate multi-stage chain |
 | [Gem Swap](04-GEM-SWAP.md) | Swap adjacent gems | Horizontal/vertical runs of three or more | Discover cascades and combine special gems |
+| [Magnetic Blocks](CAMPAIGN-EXTENSIONS.md) | Rotate bonded squares; plan the floor | Orthogonal groups of four or more | Choose bonded versus split settling |
 
-These are separate games sharing a visual language and library infrastructure. A colour count or board size is a setting, not a fifth game.
+These are separate games sharing a visual language and library infrastructure. Shizen and Arashi are Colour Chains variants with dedicated campaigns. A colour count or board size is a setting.
 
 ## Read and implement in this order
 
@@ -27,9 +28,9 @@ The [reusable template](GAME-DESIGN-TEMPLATE.md) is for future games. The [visua
 
 ## Scope and naming
 
-Owner-approved library name: **Houseki / 宝石**, with package identifier `@johnmorrisdotca/houseki` (confirmed 2026-10-05). The owner created [johnmorrisdotca/houseki](https://github.com/johnmorrisdotca/houseki) on 2026-10-05. The isolated implementation checkout is linked to this repository. The npm package has not been published; registry availability will be checked before the first release. Changing the package name must not change game IDs or save semantics.
+Owner-approved library name: **Houseki / 宝石**, with package identifier `@johnmorrisdotca/houseki` (confirmed 2026-10-05). The owner created [johnmorrisdotca/houseki](https://github.com/johnmorrisdotca/houseki) on 2026-10-05. The isolated implementation checkout is linked to this repository. The npm package is published; released versions and changes are recorded in the changelog. Changing the package name must not change game IDs or save semantics.
 
-Game IDs: `falling-triplets`, `stone-collapse`, `colour-chains`, `gem-swap`. Public game names are the English names above, with Japanese copy supplied in the shared design. Release one finished game first; expose the others only after each independently passes its release gates. Keep incomplete entry points out of published exports.
+Game IDs: `falling-triplets`, `stone-collapse`, `colour-chains`, `gem-swap`, `magnetic-blocks`. Public game names are the English names above, with Japanese copy supplied in the shared design. Release one finished game first; expose the others only after each independently passes its release gates. Keep incomplete entry points out of published exports.
 
 ## What is fixed and what may be tuned
 
@@ -75,3 +76,7 @@ Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md)
 [Magnetic Pieces](MAGNETIC-PIECES.md) defines rare queue/layout distribution, clear marking and bounded grid attraction separately from the floor mechanic.
 
 [Bounce and nature modes](BOUNCE-AND-NATURE.md) specifies controlled placement versus rebound and proposes naming choices. Working, tested development checkpoints should be committed frequently; unfinished feel review remains explicitly recorded.
+
+## Additional campaigns
+
+[Campaign extensions](CAMPAIGN-EXTENSIONS.md) specifies the fifty-level Magnetic Blocks, Shizen and Arashi sets, their fixed rules, verification, grading and player requirements.

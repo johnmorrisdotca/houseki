@@ -14,7 +14,7 @@ function stable(value: unknown, depth = 0): string {
 }
 function challengeOptions(settings: Settings): ChallengeOptions {
   if (settings.mode !== 'challenge' || !settings.challengeId || !settings.goal || !settings.initialBoard || !settings.queue || !settings.witness) throw new TypeError('Challenge settings are incomplete');
-  return { id: settings.challengeId, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, board: settings.initialBoard, queue: settings.queue, goal: settings.goal, witness: settings.witness };
+  return { id: settings.challengeId, width: settings.width, height: settings.height, colourCount: settings.colourCount, seed: settings.seed, board: settings.initialBoard, queue: settings.queue, ...(settings.magneticQueue ? { magneticQueue: settings.magneticQueue } : {}), ...(settings.nature ? { nature: true } : {}), ...(settings.weather ? { weather: settings.weather } : {}), goal: settings.goal, witness: settings.witness };
 }
 function createFromSettings(settings: Settings): GameState {
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw new TypeError('Save has invalid settings');

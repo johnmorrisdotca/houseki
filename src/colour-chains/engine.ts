@@ -114,13 +114,15 @@ function terminalAfterResolution(state: GameState): readonly [GameState, readonl
       const movement = movedEntries(current.board, settled, current.settings.width);
       if (movement.length) return [{ ...current, phase: 'gravity', active: null, gravityBoard: settled, resolutionTick: 0 }, [...weatherEvents, { type: 'cells-fell', cells: movement, before: current.board, after: settled }]];
       current = { ...current, board: settled };
+      if (current.settings.mode === 'challenge' && satisfied(current)) return [{ ...current, phase: 'won', active: null, reason: 'goal-complete' }, [...weatherEvents, { type: 'run-ended', reason: 'goal-complete', score: current.score }]];
     }
   }
   if (current.settings.mode === 'challenge') {
     const nextIndex = current.completedPairs;
     if (nextIndex >= (current.settings.queue?.length ?? 0)) return [{ ...current, phase: 'lost', active: null, reason: 'challenge-queue-exhausted' }, [...weatherEvents, { type: 'run-ended', reason: 'challenge-queue-exhausted' }]];
-    const queue = current.settings.queue!; const colours = queue[nextIndex]!; const pair = makePair(current, colours);
-    const next = { ...current, active: pair, next: queue.slice(nextIndex + 1, nextIndex + 4), nextId: current.nextId + 2 };
+    const queue = current.settings.queue!; const colours = queue[nextIndex]!; const pair = makePair(current, colours, current.settings.magneticQueue?.[nextIndex]);
+    const nextMagnetic = current.settings.nature ? queue.slice(nextIndex + 1, nextIndex + 4).map((_, index) => current.settings.magneticQueue?.[nextIndex + index + 1] ?? [false, false] as const) : undefined;
+    const next = { ...current, active: pair, next: queue.slice(nextIndex + 1, nextIndex + 4), ...(nextMagnetic ? { nextMagnetic: Object.freeze(nextMagnetic) } : {}), nextId: current.nextId + 2 };
     if (!pairFits(next, pair)) return [{ ...next, active: null, phase: 'lost', reason: 'spawn-collision' }, [...weatherEvents, { type: 'run-ended', reason: 'spawn-collision' }]];
     return [next, [...weatherEvents, { type: 'pair-spawned', ids: pair.gems.map(gem => gem.id), colours }]];
   }
@@ -346,7 +348,9 @@ export function initialChallengeState(settings: Settings, visibleBoard: readonly
   for (let i = 0; i < visibleBoard.length; i++) board[i + settings.width * HIDDEN] = visibleBoard[i]!;
   const maxId = Math.max(0, ...visibleBoard.flatMap(gem => gem ? [gem.id] : []));
   const base: GameState = { game: 'colour-chains', rules: RULES, settings, board: Object.freeze(board), phase: 'falling', active: null, next: Object.freeze(queue.slice(1, 4)), bag: [], randomState: seedState(`colour-chains|${RULES}|${settings.seed}`), nextId: maxId + 1, score: 0, maxChain: 0, allClears: 0, completedPairs: 0, resolutionTick: 0, waves: [], clearCells: [], gravityBoard: null, resolutionHadClear: false, elapsedTicks: 0, assisted: false, witnessIndex: 0, recording: [] };
-  const active = makePair(base, queue[0]!); return { ...base, active, nextId: maxId + 3 };
+  const active = makePair(base, queue[0]!, settings.magneticQueue?.[0]);
+  const nextMagnetic = settings.nature ? queue.slice(1, 4).map((_, index) => settings.magneticQueue?.[index + 1] ?? [false, false] as const) : undefined;
+  return { ...base, active, ...(nextMagnetic ? { nextMagnetic: Object.freeze(nextMagnetic) } : {}), nextId: maxId + 3 };
 }
 /** Creates a deterministic seeded game with one active pair and three previews. */
 export function createGame(options: CreateOptions = {}): GameState {

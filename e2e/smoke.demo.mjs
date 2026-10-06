@@ -6,7 +6,7 @@ const PAGES = [
   { file: "index.html", title: "Houseki · gem and stone puzzle games", current: "Falling Triplets", play: "#well" },
   { file: "chains.html", title: "Houseki · Colour Chains", current: "Colour Chains", play: "#well" },
   { file: "tools.html", title: "Houseki · Gem Swap and Stone Collapse", current: "Gem Swap & Stone Collapse", play: "#grid" },
-  { file: "blocks.html", title: "Houseki · Magnetic Blocks", current: "Magnetic Blocks · Beta", play: "#well" },
+  { file: "blocks.html", title: "Houseki · Magnetic Blocks", current: "Magnetic Blocks", play: "#well" },
 ];
 
 for (const { file, title, current, play } of PAGES) {

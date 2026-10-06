@@ -77,6 +77,17 @@ for (const [entry, name] of [["falling-triplets", "fallingTriplets"], ["stone-co
   assert.equal(typeof engine.applyAction, "function");
   assert.equal(typeof engine.advanceTicks, "function");
 }
+const chains = collection.colourChains;
+const blocks = collection.magneticBlocks;
+for (const [levels, create] of [[chains.shizenLevelManifest, chains.createShizenLevel], [chains.arashiLevelManifest, chains.createArashiLevel], [blocks.levelManifest, blocks.createLevel]]) {
+  assert.equal(levels.length, 50);
+  for (const number of [1, 25, 50]) {
+    const state = create(number);
+    assert.equal(state.phase, "falling");
+    assert.ok(state.settings.goal);
+    assert.ok(state.board.length > 0);
+  }
+}
 const nature = await import(${JSON.stringify(`${pkg.name}/nature`)});
 assert.equal(collection.nature.createNatureState, nature.createNatureState);
 console.log(names.join(" "));

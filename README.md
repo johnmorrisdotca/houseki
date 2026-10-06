@@ -1,7 +1,7 @@
 <h1 align="center">Houseki <sub>宝石</sub></h1>
 
-<p align="center"><strong>Four original gem and stone puzzle games for JavaScript and TypeScript.</strong><br>
-Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable, seeded rules engine that runs anywhere, with graded challenges and lessons, saves that replay to the same board, and a keyboard, keypad and touch player in the demo. Magnetic Blocks, with bonded squares and a magnetic floor, is an experiment beside them. In English and Japanese. No dependencies.</p>
+<p align="center"><strong>Five original gem and stone puzzle games for JavaScript and TypeScript.</strong><br>
+Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable, seeded rules engine that runs anywhere, with graded challenges and lessons, saves that replay to the same board, and a keyboard, keypad and touch player in the demo. Magnetic Blocks adds bonded squares, a magnetic floor and its own campaign. Shizen and Arashi each add a separate Colour Chains campaign. In English and Japanese. No dependencies.</p>
 
 <p align="center">
   <a href="https://github.com/johnmorrisdotca/houseki/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/johnmorrisdotca/houseki/actions/workflows/ci.yml/badge.svg"></a>
@@ -61,14 +61,14 @@ Or straight from a page, with nothing to build:
 
 ## Features
 
-- **Four games**, each its own engine and its own entry point: [Falling Triplets](docs/design/01-FALLING-TRIPLETS.md), [Stone Collapse](docs/design/02-STONE-COLLAPSE.md), [Colour Chains](docs/design/03-COLOUR-CHAINS.md) and [Gem Swap](docs/design/04-GEM-SWAP.md).
-- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
+- **Five games**, each its own engine and its own entry point: [Falling Triplets](docs/design/01-FALLING-TRIPLETS.md), [Stone Collapse](docs/design/02-STONE-COLLAPSE.md), [Colour Chains](docs/design/03-COLOUR-CHAINS.md) [Gem Swap](docs/design/04-GEM-SWAP.md) and [Magnetic Blocks](docs/design/CAMPAIGN-EXTENSIONS.md).
+- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse, 50 Gem Swap, 50 Magnetic Blocks, 50 Shizen and 50 Arashi challenges (450 total), ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
 - **Three modes**: Relaxed (no clock, plan each move), Arcade (a timer drops the pieces) and Daily (the same board for everyone on a date).
 - **Seeded and replayable**: a state is made from a seed and a list of actions, so a save is that list, and it decodes to exactly the board it came from.
 - **Configurable boards**: presets from compact to extra wide and deep, custom sizes within stated limits, up to six colours, and shaped boards (heart, star, hexagon) for the full-board games.
 - **Stored tools** for Gem Swap (Bomb, Row clear, Colour clear) and Stone Collapse (Bomb, Pick): select a tool and a stone, look at the highlighted effect, then confirm or cancel. A run that uses a tool is marked assisted. An optional earned Black Hole shrinks as it consumes nearby gems.
 - **Nature, optional**: Shizen magnetic stones with one bounded rebound, and Arashi weather, a rare or frequent earthquake that jumbles stones and lightning that removes exposed ones, on a seeded schedule.
-- **Magnetic Blocks, experimental**: bonded 2×2 squares, a floor that turns magnetic on a schedule, a one-use Floor Switch and impact drops. It has no graded campaign yet.
+- **Magnetic Blocks**: bonded 2×2 squares, a floor that turns magnetic on a schedule, a one-use Floor Switch and impact drops. Its fifty challenges introduce Calm/Pull choices, planned floor schedules, the Floor Switch and impact drops.
 - **Accessible**: permanent colour symbols, keyboard and keypad control, an Animation setting that is on by default and a reduced-motion choice that is respected.
 - **Light and dark** that follow the device, in the demo's family look.
 - **English and Japanese** words for every lesson, challenge, button and line of the demo.
@@ -82,7 +82,9 @@ Or straight from a page, with nothing to build:
 | Stone Collapse | `stone-collapse` | select a connected group and confirm | two or more touching stones of one colour | 100 |
 | Colour Chains | `colour-chains` | rotate a falling pair | a group of four or more | 50 |
 | Gem Swap | `gem-swap` | swap two neighbours | a run of three or more, which can make special gems | 50 |
-| Magnetic Blocks (experimental) | `magnetic-blocks` | rotate a falling 2×2 block | bonded groups, on a floor that pulls | none yet |
+| Magnetic Blocks | `magnetic-blocks` | rotate a falling 2×2 block | four connected gems, with Calm/Pull settling | 50 |
+| Shizen | `colour-chains` | anticipate marked stones and rebound | four connected gems after attraction | 50 |
+| Arashi | `colour-chains` | plan around earthquakes and lightning | four connected gems after weather | 50 |
 
 ## Use it in your project
 
@@ -104,6 +106,21 @@ const saved = encodeGame(later);                    // a string; decodeGame(save
 Every function returns a new state and leaves the one it was given untouched. `legalActions(state)` lists what may be done now, so a bot or a test needs no knowledge of the rules. The two full-board games, Gem Swap and Stone Collapse, also have an undo and a hint (`undoGame` and `hintGame` in Gem Swap, `undo` and `requestHint` in Stone Collapse) and a restart; their stored tools are actions of their own.
 
 To run the whole demo, `pnpm install && pnpm site`, then serve `site/` with any static server. A page of the demo takes `?seed=anything` in its address to start the same board again, and `?lang=ja` for Japanese.
+
+### Additional campaigns
+
+![Magnetic Blocks campaign: fixed board settings, a marked-gem objective, progress bars and the shared cloth and piece appearance](docs/images/magnetic-blocks-campaign-desktop.png)
+
+```ts
+import { createShizenLevel, createArashiLevel } from "@johnmorrisdotca/houseki/colour-chains";
+import { createLevel } from "@johnmorrisdotca/houseki/magnetic-blocks";
+
+const magneticStones = createShizenLevel(1);
+const weather = createArashiLevel(1);
+const bondedSquares = createLevel(1);
+```
+
+Each campaign has fifty fixed puzzles ordered from easy to hard. Use its manifest for stable IDs, bilingual titles, objectives, difficulty marks and verified winning plans. Select Shizen or Arashi in the Colour Chains demo, or a challenge in Magnetic Blocks. A campaign uses a finite queue with no falling clock; the goal and progress appear beside the board. Fixed rules stay visible, and the result offers replay or the next challenge. See the [campaign contract](docs/design/CAMPAIGN-EXTENSIONS.md).
 
 ## API
 
@@ -135,7 +152,7 @@ The demo is in English and Japanese: every lesson and challenge title, button, s
 
 ## Roadmap
 
-Physical-device feel testing, a fluent Japanese review and human difficulty review of the campaigns are next, and a graded campaign for Magnetic Blocks. [docs/COVERAGE.md](docs/COVERAGE.md) says what is verified by tests and what is not. Nothing here is promised for a date.
+Physical-device feel testing, a fluent Japanese review and human difficulty review of the campaigns are next, and new techniques for later campaigns. [docs/COVERAGE.md](docs/COVERAGE.md) says what is verified by tests and what is not. Nothing here is promised for a date.
 
 ## Architecture
 
@@ -178,6 +195,9 @@ src/
 ├── gem-swap.ts
 ├── index.ts
 ├── magnetic-blocks/
+│   ├── content-data.ts
+│   ├── content-types.ts
+│   ├── content.ts
 │   ├── engine.ts
 │   ├── persistence.ts
 │   ├── physics.ts
@@ -214,7 +234,7 @@ Houseki (宝石) is Japanese for a gem or precious stone: the pieces of these ga
 
 ## Where it comes from
 
-Match games are an old family and their rules are common property. These four are original: the rules are written out in the design pack in our own words, every board is generated and checked by the repository's own scripts, and the pictures are drawn in code. No art, sound or level comes from another game.
+Match games are an old family and their rules are common property. These five are original: the rules are written out in the design pack in our own words, every board is generated and checked by the repository's own scripts, and the pictures are drawn in code. No art, sound or level comes from another game.
 
 ### The family
 

@@ -8,11 +8,17 @@ export interface ChainDifficultyMetrics {
   readonly forcedPlacementShare: number;
   readonly seededPlayoutSamples: number;
   readonly seededPlayoutQueueDepth: number;
+  /** Number of pair placements randomized in each seeded playout. */
+  readonly seededPlayoutVariablePrefixLength?: number;
+  /** Number of later witnessed placements held fixed in each seeded playout. */
+  readonly seededPlayoutFixedSuffixLength?: number;
   readonly seededPlayoutSuccesses: number;
   readonly seededPlayoutSuccessRate: number;
   readonly setupPairsBeforePayoff: number;
   readonly requiredSetupPairs: number;
   readonly verifiedSetupDependencies: number;
+  /** Number of pre-payoff steps checked by exhaustive single-step deviations. */
+  readonly setupDependencyProbeSteps?: number;
   readonly requiredChainDepth: number;
   readonly requiredRotations: number;
   readonly requiredWallKicks: number;
@@ -24,6 +30,10 @@ export interface ChainCampaignLevel {
   readonly id: string;
   readonly number: number;
   readonly title: LocalizedText;
+  readonly objective?: LocalizedText;
+  readonly nature?: true;
+  readonly weather?: 'frequent';
+  readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
   readonly canonicalKeyHash: string;
   readonly width: number;
   readonly height: number;
@@ -41,6 +51,12 @@ export interface ChainCampaignLevel {
   readonly proofStatus: 'engine-witness-verified';
   readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
 }
+export interface NatureChainCampaignLevel extends ChainCampaignLevel {
+  readonly objective: LocalizedText;
+  readonly nature: true;
+  readonly weather?: 'frequent';
+  readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
+}
 export interface ChainCampaignManifest {
   readonly count: number;
   readonly candidatePoolCount: number;
@@ -54,6 +70,7 @@ export interface ChainCampaignManifest {
   readonly checksum: string;
   readonly levels: readonly ChainCampaignLevel[];
 }
+export interface NatureChainCampaignManifest extends Omit<ChainCampaignManifest, 'levels'> { readonly levels: readonly NatureChainCampaignLevel[] }
 export interface ChainTutorialStep { readonly instruction: LocalizedText; readonly action: string }
 export interface ChainTutorialDefinition {
   readonly id: string;
@@ -63,5 +80,5 @@ export interface ChainTutorialDefinition {
   readonly steps: readonly ChainTutorialStep[];
   readonly tags: readonly string[];
 }
-export interface ChainContentData { readonly campaign: ChainCampaignManifest; readonly tutorials: readonly ChainTutorialDefinition[] }
+export interface ChainContentData { readonly campaign: ChainCampaignManifest; readonly tutorials: readonly ChainTutorialDefinition[]; readonly shizen?: NatureChainCampaignManifest; readonly arashi?: NatureChainCampaignManifest }
 export type { Colour, Orientation, WitnessStep, ChallengeGoal };
