@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { applyAction, advanceTicks, campaignManifest, createChallenge, createLevel, getLevel, getTutorial, levelManifest, tutorialManifest } from '../dist/falling-triplets.js';
 import { generateCampaign, tutorialDefinitions } from '../scripts/falling-triplets-levels.mjs';

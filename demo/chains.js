@@ -1,8 +1,10 @@
-import {preferredLanguage,refreshAppearanceLanguage} from './appearance.js';
+import {refreshAppearanceLanguage} from './appearance.js';
 import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { syncAuthoredSettings, readFreeSettings, restoreFreeSettings } from './settings.js';
+import { pageWords } from './words.js';
+import { newSeed } from './seed.js';
 import { restartGame, createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingCells, powerDropPreview, createInputScheduler, setHeldInput as setHeldAction, queueInputEdge, actionsForTick, releaseAllInput as releaseAllActions } from './dist/colour-chains.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
@@ -12,7 +14,7 @@ const words = {
 };
 const saveKey = 'houseki-colour-chains-save'; const preferenceKey = 'houseki-ui';
 let weatherNotice=null;function rememberWeather(events){const event=events.find(event=>event.type==='weather-triggered');if(event)weatherNotice={kind:event.kind,until:performance.now()+2500};}
-let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
+let selectedLevel=null; let lang='en'; const family=familyLanguage({id:'houseki',words:pageWords('chains'),onChange:next=>{lang=next;syncAuthoredSettings(selectedSettingsConfig(),lang);render();writePreferences();}});lang=family.lang; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
 const pendingReleases = new Set();
 function selectedAuthoredConfig(){
@@ -26,14 +28,14 @@ function selectedSettingsConfig(){return selectedAuthoredConfig()??($('#mode').v
 function beginHold(action) { pendingReleases.delete(action); input = setHeldAction(input, action, true); }
 function endHold(action) { if (input.held[action] === 0) pendingReleases.add(action); else input = setHeldAction(input, action, false); }
 function readPreferences() {
-  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); lang = preferredLanguage(pref.lang); restoreFreeSettings(pref.freeSetup); if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
+  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); restoreFreeSettings(pref.freeSetup); if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
   catch { /* Play starts normally when preferences are unavailable. */ }
 }
 function writePreferences() {
   try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, freeSetup:readFreeSettings(), material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Preferences are optional. */ }
 }
-function getOptions() {if($('#mode').value==='daily')return{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)};const boardSize=$('#preset').value==='saved-size'&&game?{width:game.settings.width,height:game.settings.height}:{};return{mode:$('#mode').value,...(Object.keys(boardSize).length?boardSize:{preset:$('#preset').value}),colourCount:Number($('#colours').value),nature:$('#nature').checked||Boolean($('#weather').value),...($('#weather').value?{weather:$('#weather').value}:{}),seed:crypto.randomUUID()};}
+function getOptions() {if($('#mode').value==='daily')return{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)};const boardSize=$('#preset').value==='saved-size'&&game?{width:game.settings.width,height:game.settings.height}:{};return{mode:$('#mode').value,...(Object.keys(boardSize).length?boardSize:{preset:$('#preset').value}),colourCount:Number($('#colours').value),nature:$('#nature').checked||Boolean($('#weather').value),...($('#weather').value?{weather:$('#weather').value}:{}),seed:newSeed()};}
 function applyRecoveredControls(settings){
   if(settings.mode==='challenge')return;
   $('#mode').value=settings.mode;$('#colours').value=String(settings.colourCount);$('#nature').checked=settings.nature===true;$('#weather').value=settings.weather??'';
@@ -41,7 +43,7 @@ function applyRecoveredControls(settings){
   if(settings.mode==='daily')preset='standard';
   else for(const option of [...$('#preset').options]){
     if(option.value==='authored'||option.value==='saved-size')continue;
-    try{const probe=createGame({mode:settings.mode,preset:option.value,colourCount:settings.colourCount,nature:settings.nature===true,...(settings.weather?{weather:settings.weather}:{}),seed:'control-probe'});if(probe.settings.width===settings.width&&probe.settings.height===settings.height){preset=option.value;break;}}catch{}
+    try{const probe=createGame({mode:settings.mode,preset:option.value,colourCount:settings.colourCount,nature:settings.nature===true,...(settings.weather?{weather:settings.weather}:{}),seed:'control-probe'});if(probe.settings.width===settings.width&&probe.settings.height===settings.height){preset=option.value;break;}}catch{/* Optional preferences. */}
   }
   $('#preset').querySelector('[data-saved-size]')?.remove();
   if(preset)$('#preset').value=preset;
@@ -106,7 +108,6 @@ function render() {refreshAppearanceLanguage(lang);
   const terminal=['won','lost','finished'].includes(game.phase);
   document.querySelectorAll('.controls [data-action]').forEach(button=>{button.disabled=terminal;});
   $('#well').parentElement.className = `well-wrap material-${$('#material').value}`;
-  document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === lang)));
   const nextLevel=selectedLevel&&!selectedLevel.lesson?levelManifest[levelManifest.findIndex(level=>level.id===selectedLevel.id)+1]:null;updateEnding({phase:game.phase,score:game.score,lang,mode:game.settings.mode,level:selectedLevel,next:nextLevel,onRestart:()=>newGame(true),onNext:()=>{$('#level').value=nextLevel.id;$('#lesson').value='';newGame();},detail:status});
 }
 function cellLabel(index, width, markup) { const y = Math.floor(index / width) - 3; const x = index % width; const gem = markup.match(/aria-label="([a-z]+)"/); return gem ? `${gem[1]} gem, column ${x + 1}, row ${y + 1}` : `Empty, column ${x + 1}, row ${y + 1}`; }
@@ -158,7 +159,6 @@ for (const selector of ['#preset', '#colours', '#nature', '#weather']) $(selecto
 $('#material').addEventListener('change', () => { render(); writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
 $('#sound').addEventListener('change',event=>{setSound(event.target.checked);writePreferences();});
-document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang;syncAuthoredSettings(selectedSettingsConfig(),lang); render(); writePreferences(); }));
 const keypadKeys = { Numpad4: 'arrowleft', Numpad6: 'arrowright', Numpad7: 'z', Numpad9: 'x', Numpad5: 'arrowdown', Numpad2: 'drop' };
 document.addEventListener('keydown', event => {
   const target = event.target instanceof HTMLElement ? event.target : null;
@@ -193,8 +193,8 @@ $('#lesson').addEventListener('change',()=>{$('#level').value='';syncAuthoredSet
 $('#mode').addEventListener('change',()=>{$('#level').value='';$('#lesson').value='';syncAuthoredSettings($('#mode').value==='daily'?dailySettingsConfig():null,lang);$('#pending').hidden=false;writePreferences();});
 $('#level').innerHTML='<option value="">Free play</option>'+levelManifest.map(level=>`<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title.en}</option>`).join('');
 readPreferences();
-let recovered = false;
-try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pairLimit ? { pairLimit: game.settings.pairLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
+
+try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pairLimit ? { pairLimit: game.settings.pairLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state;  } } catch { game = null; }
 if (!game) newGame(); else { if(selectedLevel)syncAuthoredSettings({width:selectedLevel.width??6,height:selectedLevel.height??12,colourCount:selectedLevel.colourCount??4,seed:selectedLevel.seed},lang);else{syncAuthoredSettings(null,lang);applyRecoveredControls(game.settings);if(game.settings.mode==='daily')syncAuthoredSettings(dailySettingsConfig(),lang);}resumeRequired = false; render(); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
 

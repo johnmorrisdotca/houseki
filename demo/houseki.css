@@ -76,3 +76,7 @@ aside .micro { font-size: .78rem; color: var(--muted); }
 .next-wrap{flex:0 0 144px;width:144px}.next-wrap #status{min-height:3em;line-height:1.5}
 @media(max-width:980px){.next-wrap{display:grid;grid-template-columns:48px 144px;flex-basis:100%;width:100%;justify-content:center;gap:6px 12px}.next-wrap h3{grid-column:1;grid-row:1}.next-wrap .next{grid-column:2;grid-row:1}.next-wrap #status{grid-column:1/-1;grid-row:2;text-align:center}.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:56px;gap:8px}.controls button{min-width:0!important;width:100%;padding:6px 8px;white-space:normal;line-height:1.2}.controls button[hidden]{display:none}}
 .ending-actions button{min-width:112px;min-height:44px}
+
+.checks{display:grid;gap:4px}.checks .check{margin:0}.pages{margin:4px 0 14px}.pages .fam-button[aria-current="page"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+p[data-say="status"]{line-height:20px;min-height:40px;margin:12px 0}

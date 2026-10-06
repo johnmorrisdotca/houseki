@@ -292,7 +292,7 @@ function refill(state: GameState): readonly [readonly (Gem | null)[], number, nu
 }
 function awardTools(state: GameState, removed: number): { readonly inventory: GameState['inventory']; readonly progress: number; readonly cursor: number; readonly events: readonly GameEvent[] } {
   if (!state.settings.tools || state.toolWaveActive) return { inventory: state.inventory, progress: state.toolProgress, cursor: state.toolAwardCursor, events: Object.freeze([]) };
-  let progress = state.toolProgress + removed; let cursor = state.toolAwardCursor; let inventory = { ...state.inventory }; const events: GameEvent[] = [];
+  let progress = state.toolProgress + removed; let cursor = state.toolAwardCursor; const inventory = { ...state.inventory }; const events: GameEvent[] = [];
   while (progress >= 12) {
     progress -= 12; const tool = TOOL_ORDER[cursor]!; const before = inventory[tool];
     if (before < 3) inventory[tool] = before + 1;

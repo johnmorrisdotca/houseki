@@ -153,7 +153,7 @@ function comboPlan(state: GameState, p: number, q: number, protectedCells: Reado
 }
 
 function effectCells(state: GameState, cell: number, kind: SpecialKind): readonly number[] {
-  const { width, height } = state.settings; const x = cell % width; const y = Math.floor(cell / width);
+  const { width } = state.settings; const x = cell % width; const y = Math.floor(cell / width);
   if (kind === 'row-beam') return activeCells(state).filter(index => Math.floor(index / width) === y);
   if (kind === 'column-beam') return activeCells(state).filter(index => index % width === x);
   if (kind === 'bomb') return activeCells(state).filter(index => Math.abs(index % width - x) <= 1 && Math.abs(Math.floor(index / width) - y) <= 1);

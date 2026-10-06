@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createGame, applyAction, encodeGame, decodeGame, restartGame, MagneticBlocksOptionsError } from '../dist/magnetic-blocks.js';
 

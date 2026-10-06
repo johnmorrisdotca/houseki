@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { applyEarthquake, applyLightning, createNatureState, isEnvironmentTurnScheduled, NatureOptionsError, previewEarthquake, previewFault, previewJumble, previewLightning } from '../dist/nature.js';
 
@@ -14,7 +14,7 @@ test('fault follows a bounded jagged row-by-row path, fractures those cells and 
   const state = board(6, 5, [[1, 0, stone(11)], [1, 1, stone(12)], [0, 4, stone(30)]], { seed: 'fault-fixture' });
   const preview = previewFault(state);
   assert.deepEqual(preview.path, [1, 7, 14, 19, 26]);
-  assert.ok(preview.path.every((index, y, path) => Math.floor(index / 6) === y && index % 6 >= 1 && index % 6 <= 4));
+  assert.ok(preview.path.every((index, y) => Math.floor(index / 6) === y && index % 6 >= 1 && index % 6 <= 4));
   assert.ok(preview.path.slice(1).every((index, y) => Math.abs(index % 6 - preview.path[y] % 6) <= 1));
   assert.ok(Array.from({ length: 5 }, (_, y) => preview.activeCells[y * 6] && preview.activeCells[y * 6 + 5]).every(Boolean));
   assert.deepEqual(preview.fracturedCells, preview.path);

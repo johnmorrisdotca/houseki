@@ -1,9 +1,8 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createGame, createChallenge, applyAction, advanceTicks, legalActions, statusOf, landingCells, restartGame, encodeGame, decodeGame, createInputScheduler, setHeldInput, queueInputEdge, actionsForTick, applyScheduledActions, processInputTick, StoneChainsOptionsError } from '../dist/colour-chains.js';
 import { findGroups, compactBoard } from '../dist/colour-chains/match.js';
 
-const C = { R: 'red', B: 'blue', G: 'green', Y: 'gold', P: 'purple', T: 'teal', '.': null };
 const W = 6; const H = 12; const FULL = H + 3;
 function blank() { return Array(W * FULL).fill(null); }
 function put(board, x, y, colour, id) { board[(y + 3) * W + x] = { id, colour }; }

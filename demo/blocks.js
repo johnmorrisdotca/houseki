@@ -1,8 +1,10 @@
-import {preferredLanguage,refreshAppearanceLanguage} from './appearance.js';
+import {refreshAppearanceLanguage} from './appearance.js';
 import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { advanceTicks, applyAction, blockCells, createGame, decodeGame, encodeGame, restartGame } from './dist/magnetic-blocks.js';
+import { pageWords } from './words.js';
+import { newSeed } from './seed.js';
 
 const $ = selector => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
@@ -35,7 +37,8 @@ const text = {
 
 const saveKey = 'houseki-magnetic-blocks-save';
 const preferenceKey = 'houseki-ui';
-let lang = 'en', game, startOptions = null, lastFrame = 0, accumulator = 0, saveTimer = 0;
+const family=familyLanguage({id:'houseki',words:pageWords('blocks'),onChange:next=>setLanguage(next)});
+let lang = family.lang, game, startOptions = null, lastFrame = 0, accumulator = 0, saveTimer = 0;
 let boardKey = '', hudKey = '';
 const capOversized = globalThis.housekiConfig?.oversizedUnlocked === false;
 
@@ -44,15 +47,13 @@ function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; render(true);
 function readPreferences() {
   try {
     const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}');
-    lang = preferredLanguage(pref.lang);
-
     if (pref.material) $('#material').value = pref.material;
     if (pref.motion) $('#motion').checked = true;
     document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full';
   } catch { /* Optional preferences do not block play. */ }
 }
 function writePreferences() {
-  try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
+  try { localStorage.setItem(preferenceKey, JSON.stringify({ material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Optional preferences do not block play. */ }
 }
 function floorFromValue(value) {
@@ -68,7 +69,7 @@ function optionsFromControls() {
   const width = Number($('#width').value), height = Number($('#height').value);
   if (!Number.isInteger(width) || !Number.isInteger(height) || width < 4 || width > 16 || height < 4 || height > 32 || width * height > 512) throw new RangeError(t('invalidSize'));
   if (capOversized && (width > 12 || height > 20)) throw new RangeError(lang === 'en' ? 'Large boards are locked in this host configuration.' : 'この環境では大型盤面がロックされています。');
-  return { mode: $('#mode').value, width, height, colourCount: Number($('#colours').value), seed: globalThis.crypto?.randomUUID?.() ?? `magnetic-${Date.now()}`, pieceLimit: 200, schedule: floorFromValue($('#schedule').value), floorSwitch: true, magneticImpact: $('#impact').checked };
+  return { mode: $('#mode').value, width, height, colourCount: Number($('#colours').value), seed: newSeed(), pieceLimit: 200, schedule: floorFromValue($('#schedule').value), floorSwitch: true, magneticImpact: $('#impact').checked };
 }
 function changedSettings() { $('#pending').hidden = false; validateSize(); }
 function validateSize() {
@@ -200,7 +201,6 @@ function renderHud(force = false) {
   document.querySelectorAll('.controls button[data-action]').forEach(button => { const action = button.dataset.action; button.disabled = !game.active && ['left','right','soft-drop','hard-drop','land','rotate-clockwise','rotate-anticlockwise'].includes(action) || !['falling','paused','clear-mark','clear-remove','gravity'].includes(game.phase); });
   $('#well').parentElement.className = `well-wrap material-${$('#material').value}`;
   document.documentElement.lang = lang;
-  for (const button of document.querySelectorAll('[data-lang]')) button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
   document.querySelectorAll('[data-i]').forEach(element => { const value = t(element.dataset.i); if (value) element.textContent = value; });
   $('[data-action="hard-drop"]').textContent = t('drop'); $('[data-action="land"]').textContent = t('place'); $('[data-action="soft-drop"]').textContent = t('down');
   $('[data-action="pause"]').textContent = t('pause'); $('[data-action="resume"]').textContent = t('resume');
@@ -263,7 +263,6 @@ $('#material').addEventListener('change', () => { boardKey = ''; render(true); w
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
 $('#animations').checked = animationEnabled(); $('#animations').addEventListener('change', event => setAnimations(event.target.checked));
 $('#sound').checked = soundEnabled(); $('#sound').addEventListener('change', event => { setSound(event.target.checked); writePreferences(); });
-for (const button of document.querySelectorAll('[data-lang]')) button.addEventListener('click', () => setLanguage(button.dataset.lang));
 document.addEventListener('pointerdown', unlockSound); document.addEventListener('keydown', unlockSound);
 
 const keypad = { Numpad4: 'ArrowLeft', Numpad6: 'ArrowRight', Numpad7: 'z', Numpad9: 'x', Numpad5: 'ArrowDown', Numpad2: 'Space' };

@@ -2,7 +2,7 @@ import { compactBoard, findGroups } from './match.js';
 import { drawPair, seedState } from './random.js';
 import { applyEarthquake, applyLightning, applyMagneticPulse, createNatureState, isEnvironmentTurnScheduled, markMagneticStones, previewPowerDrop } from '../nature.js';
 import type { PowerDropPreview } from '../nature/types.js';
-import { StoneChainsOptionsError, normalizeOptions } from './validation.js';
+import { normalizeOptions } from './validation.js';
 import type { Action, Cell, Colour, CreateOptions, GameEvent, GameState, GameStatus, Gem, Landing, Orientation, Pair, Settings, Transition } from './types.js';
 
 export { StoneChainsOptionsError } from './validation.js';

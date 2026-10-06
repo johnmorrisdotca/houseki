@@ -4,6 +4,8 @@ import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { restartGame, createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from './dist/falling-triplets.js';
+import { pageWords } from './words.js';
+import { newSeed } from './seed.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
@@ -11,7 +13,7 @@ const words = {
   ja: { lessonLabel:'遊び方',challengeLabel:'チャレンジ',animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-falling-triplets-save'; const preferenceKey = 'houseki-ui';
-let customSize=null;let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
+let customSize=null;let selectedLevel=null; const family = familyLanguage({ id: 'houseki', words: pageWords('triplets'), onChange: next => { lang = next; render(); } }); let lang = family.lang; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
 const pendingReleases = new Set();
 function beginHold(action) { pendingReleases.delete(action); input = setHeldAction(input, action, true); }
@@ -25,7 +27,7 @@ function writePreferences() {
   catch { /* Preferences are optional. */ }
 }
 function syncSetup(){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);const level=levelManifest.find(item=>item.id===$('#level').value);const config=lesson?{...lesson.setup,seed:`lesson:${lesson.id}`}:level??null;syncAuthoredSettings(config,lang);if(!config&&$('#mode').value==='daily')syncAuthoredSettings(createGame({mode:'daily',seed:new Date().toISOString().slice(0,10)}).settings,lang);}
-function getOptions() { return { ...($('#preset').value==='custom'&&customSize?customSize:{preset:$('#mode').value==='daily'?'narrow':$('#preset').value}), mode: $('#mode').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
+function getOptions() { return { ...($('#preset').value==='custom'&&customSize?customSize:{preset:$('#mode').value==='daily'?'narrow':$('#preset').value}), mode: $('#mode').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : newSeed() }; }
 function restoreControls(){if(game.settings.mode==='challenge'){syncAuthoredSettings(game.settings,lang);return;}$('#mode').value=game.settings.mode;$('#colours').value=String(game.settings.colourCount);const preset=[...$('#preset').options].find(option=>{if(['authored','custom'].includes(option.value))return false;try{const settings=createGame({preset:option.value,seed:'size-check'}).settings;return settings.width===game.settings.width&&settings.height===game.settings.height;}catch{return false;}});if(preset)$('#preset').value=preset.value;else{customSize={width:game.settings.width,height:game.settings.height};let option=$('#preset option[value="custom"]');if(!option){option=document.createElement('option');option.value='custom';$('#preset').append(option);}option.textContent=`Custom · ${customSize.width} × ${customSize.height}`;$('#preset').value='custom';}}
 function newGame(restart = false) {
   if(!restart)syncSetup();
@@ -154,8 +156,8 @@ $('#lesson').innerHTML='<option value="">No lesson</option>'+tutorialManifest.ma
 $('#level').addEventListener('change',()=>{$('#lesson').value='';syncSetup();writePreferences();});$('#lesson').addEventListener('change',()=>{$('#level').value='';syncSetup();writePreferences();});
 $('#level').innerHTML='<option value="">Free play</option>'+levelManifest.map(level=>`<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title.en}</option>`).join('');
 readPreferences();
-let recovered = false;
-try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
+
+try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state;  } } catch { game = null; }
 if (!game) newGame(); else { restoreControls();if(selectedLevel||game.settings.mode==='daily')syncSetup();resumeRequired = false; render(); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
 

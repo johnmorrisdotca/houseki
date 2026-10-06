@@ -1,9 +1,8 @@
-import type { BoardPreset, BoardShape, CreateOptions, GameMode, StoneColour } from './types.js';
+import type { BoardPreset, BoardShape, CreateOptions, GameMode } from './types.js';
 
 const PRESETS: Readonly<Record<BoardPreset, readonly [number, number]>> = {
   compact: [6, 8], standard: [8, 10], wide: [10, 8], tall: [6, 12], extraWide: [16, 10], deep: [8, 32], large: [12, 32],
 };
-const COLOURS: readonly StoneColour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 
 /** Typed public-settings validation error. */
 export class StoneCollapseOptionsError extends RangeError {
@@ -85,7 +84,7 @@ export function optionsFor(options: CreateOptions): NormalizedOptions {
   }
   if (options.dailyDate !== undefined) throw new StoneCollapseOptionsError('daily-date-outside-daily', 'dailyDate is supported only in Daily mode');
   const hasDimensions = options.width !== undefined || options.height !== undefined;
-  let width: number; let height: number; let shape = options.shape; let mask = options.mask;
+  let width: number; let height: number; const shape = options.shape; let mask = options.mask;
   if (shape !== undefined) {
     if (options.preset !== undefined || hasDimensions || mask !== undefined || !['heart', 'star', 'hexagon'].includes(shape)) throw new StoneCollapseOptionsError('conflicting-board-options', 'Choose one shape or one rectangular preset/custom size');
     [width, height, mask] = shapeMask(shape);

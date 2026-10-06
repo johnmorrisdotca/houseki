@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { applyAction, advanceTicks, createChallenge, createGame, decodeGame, encodeGame, legalActions, requestHint, restartGame, statusOf, undo, StoneCollapseOptionsError } from '../dist/stone-collapse.js';
 import { fallbackBoard } from '../dist/stone-collapse/engine.js';

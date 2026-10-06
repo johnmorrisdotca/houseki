@@ -1,0 +1,25 @@
+// The demo's own tests: a real browser, real input. `pnpm test:demo` builds the demo and runs them.
+import { defineConfig, devices } from "@playwright/test";
+
+const phone = { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true };
+const small = { viewport: { width: 360, height: 740 }, hasTouch: true, isMobile: true };
+// Playing whole campaigns is Chromium's job, at the two widths; every browser and width looks at the page itself.
+const page = ["smoke.demo.mjs", "help.demo.mjs"];
+
+export default defineConfig({
+  testDir: "e2e",
+  testMatch: "*.demo.mjs",
+  fullyParallel: true,
+  forbidOnly: true,
+  reporter: "list",
+  timeout: 90000,
+  use: { reducedMotion: "reduce", locale: "en-US" },
+  projects: [
+    { name: "chromium-phone", use: { ...devices["Desktop Chrome"], ...phone } },
+    // A small Android: the narrowest width the page is made for.
+    { name: "chromium-phone-small", testMatch: page, use: { ...devices["Desktop Chrome"], ...small } },
+    { name: "chromium-desk", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 } } },
+    // WebKit on a desktop viewport with touch: `isMobile` is Chromium's to honour.
+    { name: "webkit-phone", testMatch: page, use: { ...devices["Desktop Safari"], viewport: phone.viewport, hasTouch: true } },
+  ],
+});

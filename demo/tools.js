@@ -1,10 +1,12 @@
-import {preferredLanguage,refreshAppearanceLanguage} from './appearance.js';
+import {refreshAppearanceLanguage} from './appearance.js';
 import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
 import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from './settings.js';
 import * as swap from './dist/gem-swap.js';
 import * as collapse from './dist/stone-collapse.js';
+import { pageWords } from './words.js';
+import { newSeed } from './seed.js';
 const $ = selector => document.querySelector(selector);
 const engines = { 'gem-swap': {...swap, levelManifest:swap.GEM_SWAP_CAMPAIGN, tutorialManifest:swap.GEM_SWAP_LESSONS, createLevel:id=>swap.createGame(swap.GEM_SWAP_CAMPAIGN.find(level=>level.id===id).options)}, 'stone-collapse': collapse };
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
@@ -13,7 +15,7 @@ const text = {
  en: { mode:'Mode',lessonLabel:'Learn to play',challengeLabel:'Challenge level',hint:'Hint',reshuffle:'Reshuffle',intro:'Full boards, useful tools and careful choices.', falling:'Falling Triplets', development:'Development demo · Campaign and player refinement are in progress.', game:'Game', board:'Board', shape:'Shape', colours:'Colours', sound:'Sound effects',animations:'Animation', enable:'Stored tools', advanced:'Rare Black Hole power', code:'Board code (optional)', 'black-hole':'Black Hole', rare:'ordinary clears toward a Black Hole', charges:'charges', remaining:'moves left', new:'New game', restart:'Restart', apply:'Select New game to apply changed settings.', keyboard:'Keyboard: arrows move board focus; Enter selects. Escape cancels. Tab reaches tools and confirmation.', score:'Score', moves:'Moves', tray:'Tool tray', confirm:'Confirm', cancel:'Cancel', undo:'Undo', assisted:'Assisted run · a stored tool or undo was used.', bomb:'Bomb', 'row-clear':'Row clear', 'colour-clear':'Colour clear', pick:'Pick', target:'Choose a stone to preview this tool.', preview:'stones will be removed. Confirm or cancel.', earning:'ordinary clears toward the next tool', choose:'Choose a group or a tool.', chooseSwap:'Choose a gem or a tool.', swap:'Select a gem, then an adjacent gem to match three or more. Larger matches create special gems.', collapse:'Select a connected group of two or more stones. Confirm, or tap the group again, to remove it.', invalid:'That move is unavailable. Choose another stone.', goalWon:'Goal complete!',timeUp:'Time is up.',goalLost:'Goal not reached.',dailyDone:'Daily complete.',won:'Board cleared!', finished:'No moves or tools remain.', clearing:'Resolving…', disabled:'Stored tools are off.', small:'This board uses small stones. Choose Compact for larger targets.' },
  ja: { mode:'モード',lessonLabel:'遊び方',challengeLabel:'チャレンジ',hint:'ヒント',reshuffle:'並べ替え',intro:'盤面いっぱいの石と、便利な道具。', falling:'三つの宝石', development:'開発中のデモ · レベルと操作画面を調整中です。', game:'ゲーム', board:'盤面', shape:'形', colours:'色数', sound:'効果音',animations:'アニメーション', enable:'道具を使う', advanced:'ブラックホール', code:'盤面コード（任意）', 'black-hole':'ブラックホール', rare:'個消すとブラックホールを獲得', charges:'残り吸収数', remaining:'残り手数', new:'新しいゲーム', restart:'やり直す', apply:'設定の変更後は「新しいゲーム」を選んでください。', keyboard:'矢印キーで盤面を移動、Enterで選択。Escapeで取消。Tabで道具と確認へ。', score:'得点', moves:'手数', tray:'道具箱', confirm:'確認', cancel:'取消', undo:'一手戻す', assisted:'道具または一手戻すを使いました。', bomb:'爆弾', 'row-clear':'横一列', 'colour-clear':'同じ色', pick:'一つ消す', target:'石を選ぶと効果を確認できます。', preview:'個の石を消します。確認または取消を選んでください。', earning:'個消すと次の道具を獲得', choose:'石のグループか道具を選んでください。', chooseSwap:'石か道具を選んでください。', swap:'石を選び、隣の石と入れ替えて三つ以上並べます。大きな形で特殊な石ができます。', collapse:'同じ色の隣接する石を二つ以上選びます。確認または同じグループをもう一度選ぶと消えます。', invalid:'この手は使えません。別の石を選んでください。', goalWon:'目標達成！',timeUp:'時間切れです。',goalLost:'目標を達成できませんでした。',dailyDone:'今日のゲームが終わりました。',won:'盤面を空にしました！', finished:'使える手と道具がありません。', clearing:'処理中…', disabled:'道具は無効です。', small:'石が小さい盤面です。Compactでは石が大きくなります。' }
 };
-let selectedLevel=null, pendingLevel=null, saveTimer=0;let lang=preferredLanguage(), state, engine, startOptions, activeUi=null, freePreferences=null, selectedCell=null, focusCell=0, notice='', lastFrame=0, remainder=0;
+let selectedLevel=null, pendingLevel=null, saveTimer=0;const family=familyLanguage({id:'houseki',words:pageWords('tools'),onChange:next=>{lang=next;refreshAppearanceLanguage(lang);syncAuthoredSettings(pendingLevel?authoredSettings(pendingLevel):$('#mode').value==='daily'?modeSettings('daily'):null,lang);render();}});let lang=family.lang, state, engine, startOptions, activeUi=null, freePreferences=null, selectedCell=null, focusCell=0, notice='', lastFrame=0, remainder=0;
 const presetSizes={compact:[6,6],standard:[8,8],wide:[10,6],tall:[6,10],extraWide:[16,10],deep:[8,32],large:[12,32]};
 function canonical(value){if(Array.isArray(value))return `[${value.map(canonical).join(',')}]`;if(value&&typeof value==='object')return `{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`;return JSON.stringify(value);}
 function contentFor(kind,id){if(!kind||typeof id!=='string')return null;const list=kind==='lesson'?engine.tutorialManifest:engine.levelManifest;return list?.find(item=>item.id===id)??null;}
@@ -104,7 +106,7 @@ function newGame(restart=false) {
   const lesson=(engine.tutorialManifest??[]).find(item=>item.id===$('#lesson').value);
   nextLevel=lesson?{...lesson,...lesson.setup,seed:`lesson:${lesson.id}`,lesson:true}:(engine.levelManifest??[]).find(item=>item.id===$('#level').value)??null;
   if(nextLevel&&!freePreferences)freePreferences=readFreeSettings();
-  startOptions=$('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{ ...(!$('#shape').value?{preset:$('#preset').value}:{}), mode:$('#mode').value||'relaxed', colourCount:Number($('#colours').value), seed:$('#code').value.trim()||crypto.randomUUID(), tools:$('#tools').checked, ...($('#game').value==='gem-swap'?{advancedTools:$('#tools').checked&&$('#advanced').checked}:{}), ...($('#shape').value ? {shape:$('#shape').value}:{} ) };
+  startOptions=$('#mode').value==='daily'?{mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}:{ ...(!$('#shape').value?{preset:$('#preset').value}:{}), mode:$('#mode').value||'relaxed', colourCount:Number($('#colours').value), seed:$('#code').value.trim()||newSeed(), tools:$('#tools').checked, ...($('#game').value==='gem-swap'?{advancedTools:$('#tools').checked&&$('#advanced').checked}:{}), ...($('#shape').value ? {shape:$('#shape').value}:{} ) };
  }
  try {
   const nextState=restart&&engine.restartGame?engine.restartGame(state):nextLevel?nextLevel.lesson?nextLevel.initial?engine.createGame(nextLevel.initial):engine.createChallenge({id:nextLevel.id,seed:nextLevel.seed,width:nextLevel.setup.width,height:nextLevel.setup.height,colourCount:nextLevel.setup.colourCount,initialBoard:nextLevel.board,goal:nextLevel.goal,moveLimit:nextLevel.setup.moveLimit,witness:nextLevel.witness}):engine.createLevel(nextLevel.id):engine.createGame(startOptions);
@@ -130,7 +132,7 @@ function cellClick(cell) {
 }
 function render() {
  const previous=positions($('#grid'));
- refreshAppearanceLanguage(lang);document.querySelectorAll('[data-lang]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.lang===lang)));const t=text[lang];document.documentElement.lang=lang;
+ const t=text[lang];document.documentElement.lang=lang;
  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t[e.dataset.i];});
  $('#title').textContent=state.game==='gem-swap'?'Gem Swap':'Stone Collapse';$('#score').textContent=state.score;$('#moves').textContent=state.moves;
  $('#instructions').textContent=state.game==='gem-swap'?t.swap:t.collapse;
@@ -194,7 +196,7 @@ $('#undo').addEventListener('click',()=>act({kind:'undo'}));$('#hint').addEventL
 $('#mode').addEventListener('change',modeChanged);
 $('#game').addEventListener('change',()=>{if(pendingLevel||selectedLevel){syncAuthoredSettings(null,lang);if(freePreferences)restoreFreeSettings(freePreferences);}pendingLevel=null;freePreferences=null;catalog();$('#level').value='';$('#lesson').value='';if($('#mode').value==='challenge')$('#mode').value='relaxed';newGame();});
 $('#level').addEventListener('change',()=>selectionChanged('level'));$('#lesson').addEventListener('change',()=>selectionChanged('lesson'));
-document.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{lang=button.dataset.lang;syncAuthoredSettings(pendingLevel?authoredSettings(pendingLevel):$('#mode').value==='daily'?engine.createGame({mode:'daily',dailyDate:new Date().toISOString().slice(0,10)}).settings:null,lang);render();}));$('.game-screen').addEventListener('dragstart',event=>event.preventDefault());
+$('.game-screen').addEventListener('dragstart',event=>event.preventDefault());
 function frame(timestamp){const elapsed=Math.min(100,timestamp-(lastFrame||timestamp));lastFrame=timestamp;if(state?.mode==='arcade'&&engine.advanceTime&&document.visibilityState==='visible'){state=engine.advanceTime(state,Math.round(elapsed)).state;render();queueSave();}remainder+=elapsed;const ticks=Math.min(6,Math.floor(remainder/(1000/60)));remainder-=ticks*(1000/60);if(ticks&&state&&!['ready','won','lost','finished'].includes(state.phase)){const result=engine.advanceTicks(state,ticks);state=result.state;for(const event of result.events)if(['cells-cleared','group-cleared','tool-cleared'].includes(event.type))playTone(event.chain??1);render();queueSave();}requestAnimationFrame(frame);}
 window.addEventListener('resize',()=>{if(state)render();});
 $('#animations').checked=animationEnabled();$('#animations').addEventListener('change',event=>setAnimations(event.target.checked));

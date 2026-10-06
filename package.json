@@ -1,19 +1,53 @@
 {
   "name": "@johnmorrisdotca/houseki",
-  "version": "0.1.0",
-  "description": "Original immutable gem-matching game engines and accessible English/Japanese play.",
-  "type": "module",
-  "author": "John Morris",
-  "license": "MIT",
+  "version": "0.1.1",
+  "description": "Houseki \u5b9d\u77f3: four original gem and stone puzzle games, Falling Triplets, Colour Chains, Stone Collapse and Gem Swap, as immutable seeded engines with 300 graded levels, plus experimental Magnetic Blocks. English and Japanese. Zero dependencies.",
+  "keywords": [
+    "puzzle",
+    "puzzle-game",
+    "match-three",
+    "match-3",
+    "falling-triplets",
+    "colour-chains",
+    "stone-collapse",
+    "gem-swap",
+    "magnetic-blocks",
+    "gravity",
+    "cascade",
+    "game-engine",
+    "levels",
+    "immutable",
+    "deterministic",
+    "seeded-random",
+    "accessible",
+    "touch",
+    "keyboard",
+    "japanese",
+    "typescript",
+    "javascript",
+    "zero-dependencies",
+    "browser",
+    "node",
+    "itsutsu"
+  ],
+  "homepage": "https://johnmorrisdotca.github.io/houseki/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/johnmorrisdotca/houseki.git"
   },
-  "homepage": "https://johnmorrisdotca.github.io/houseki/",
   "bugs": {
     "url": "https://github.com/johnmorrisdotca/houseki/issues"
   },
+  "author": {
+    "name": "John Morris",
+    "email": "john@johnmorris.ca",
+    "url": "https://johnmorris.ca"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -63,36 +97,24 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test test/*.test.mjs",
-    "site": "npm run build && node scripts/site.mjs",
-    "demo": "npm run site && node scripts/serve.mjs",
-    "test:browser": "npm run site && node --test --test-concurrency=2 test/browser/*.mjs",
-    "check:package": "npm run build && node scripts/check-package.mjs"
+    "test": "pnpm build && vitest run",
+    "test:package": "pnpm build && node scripts/check-package.mjs",
+    "family:readme": "node scripts/family-readme.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "prepublishOnly": "pnpm check && pnpm build",
+    "site": "pnpm build && node scripts/site.mjs",
+    "test:demo": "pnpm site && playwright test && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
+    "test:review": "pnpm site && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "@playwright/test": "^1.58.2"
+    "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.63.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^5.0.0"
   },
-  "packageManager": "pnpm@10.11.0",
-  "keywords": [
-    "falling-triplets",
-    "match-three",
-    "puzzle-game",
-    "immutable",
-    "typescript",
-    "zero-dependencies",
-    "accessible",
-    "touch",
-    "keyboard",
-    "japanese",
-    "stone-collapse",
-    "colour-chains",
-    "gem-swap",
-    "match-3",
-    "gravity",
-    "cascade",
-    "puzzle",
-    "game-engine"
-  ]
+  "packageManager": "pnpm@10.11.0"
 }

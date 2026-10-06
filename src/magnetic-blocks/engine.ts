@@ -1,7 +1,7 @@
 import { nextInt, seedState } from './random.js';
-import { allMatchedCells, blockBonds, blockCells, canPlace, cell, impactSupportIds, landingY, matchGroups, removeIds, settle, MARK_TICKS, REMOVE_TICKS, GRAVITY_TICKS } from './physics.js';
+import { allMatchedCells, blockBonds, blockCells, canPlace, impactSupportIds, landingY, matchGroups, removeIds, settle, MARK_TICKS, REMOVE_TICKS, GRAVITY_TICKS } from './physics.js';
 import { COLOURS, validateOptions } from './validation.js';
-import type { Action, Block, Bond, Colour, Floor, FloorSchedule, GameEvent, GameState, GameStatus, Gem, RecordedAction, Transition } from './types.js';
+import type { Action, Block, Bond, Colour, Floor, FloorSchedule, GameEvent, GameState, GameStatus, RecordedAction, Transition } from './types.js';
 
 function floorAt(schedule: FloorSchedule, placement: number): Floor {
   switch (schedule.kind) {

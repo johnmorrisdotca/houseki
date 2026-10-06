@@ -30,4 +30,5 @@ export function actionsForTick(state: InputSchedulerState): readonly [readonly A
   return [actions, { held, queued: [] }];
 }
 /** Releases every held action after blur, pause, or pointer cancellation. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the public signature takes the state a caller holds, though nothing of it is kept
 export function releaseAllActions(state: InputSchedulerState): InputSchedulerState { return { held: {}, queued: [] }; }

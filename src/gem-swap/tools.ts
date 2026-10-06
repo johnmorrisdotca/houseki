@@ -3,7 +3,7 @@ import type { GameState, ToolKind } from './types.js';
 
 /** Computes the occupied cells affected by a tool and all special activations it causes. */
 export function previewTool(state: GameState, tool: ToolKind, target: number): readonly number[] {
-  const { width, height, mask } = state.settings;
+  const { width, mask } = state.settings;
   if (!Number.isInteger(target) || target < 0 || target >= state.board.length || !mask[target] || !state.board[target]) return Object.freeze([]);
   const x = target % width; const y = Math.floor(target / width); const targetGem = state.board[target]!;
   const direct = state.board.flatMap((gem, cell) => {

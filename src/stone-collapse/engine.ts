@@ -1,6 +1,5 @@
-import type { Action, ChallengeDefinition, ChallengeGoal, ChallengeOptions, CreateOptions, GameEvent, GameMode, GameState, GameStatus, Settings, Stone, StoneColour, StoredTool, Transition, UndoFrame } from './types.js';
+import type { Action, ChallengeDefinition, ChallengeGoal, ChallengeOptions, CreateOptions, GameEvent, GameState, GameStatus, Settings, Stone, StoneColour, StoredTool, Transition, UndoFrame } from './types.js';
 import { optionsFor, neighbors, StoneCollapseOptionsError } from './validation.js';
-import type { NormalizedOptions } from './validation.js';
 
 const COLOURS: readonly StoneColour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
 const COLOURS_USED: readonly StoneColour[] = COLOURS;
@@ -60,7 +59,7 @@ function previewAt(state: GameState, tool: StoredTool, target: number): readonly
   }
   return cells;
 }
-function clearToolSelection(state: GameState): Pick<GameState, 'selectedTool' | 'toolTarget' | 'toolPreview'> {
+function clearToolSelection(_state: GameState): Pick<GameState, 'selectedTool' | 'toolTarget' | 'toolPreview'> {
   return { selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]) };
 }
 function recordToolAction(state: GameState, action: GameState['recording'][number]): readonly GameState['recording'][number][] | null {

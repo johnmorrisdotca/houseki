@@ -1,19 +1,27 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Houseki 宝石 · Full-board games</title><link rel="stylesheet" href="family.css"><link rel="stylesheet" href="game.css"><link rel="stylesheet" href="tools.css"><link rel="stylesheet" href="ending.css">
+<head>
+  <!--family:head-->
+  <link rel="stylesheet" href="family.css">
+  <link rel="stylesheet" href="houseki.css">
+  <link rel="stylesheet" href="tools.css">
+  <link rel="stylesheet" href="ending.css">
 </head>
 <body><main>
-<header><div class="intro"><h1>Houseki<span lang="ja">宝石</span></h1><p data-i="intro">Full boards, useful tools and careful choices.</p></div><nav><button class="fam-button" id="language">日本語</button><button class="fam-button" id="theme">Theme</button><a class="fam-button" href="index.html" data-i="falling">Falling Triplets</a><a class="fam-button api-link" href="api.html">API reference</a><a class="fam-button" href="chains.html">Colour Chains</a><a class="fam-button" href="blocks.html">Magnetic Blocks · Beta</a></nav></header>
-<p class="fam-fine" data-i="development">Development demo · Campaign and player refinement are in progress.</p>
+<!--family:header-->
+  <!--family:pages-->
+
 <div class="layout"><aside>
-<label class="field"><span data-i="game">Game</span><select id="game"><option value="gem-swap">Gem Swap</option><option value="stone-collapse">Stone Collapse</option></select></label>
-<label class="field"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option><option value="daily">Daily</option></select></label>
-<label class="field"><span data-i="lessonLabel">Learn to play</span><select id="lesson"></select></label><label class="field"><span data-i="challengeLabel">Challenge level</span><select id="level"></select></label>
-<label class="field"><span data-i="board">Board</span><select id="preset"><option value="compact">Compact</option><option value="standard" selected>Standard</option><option value="wide">Wide</option><option value="tall">Tall</option><option value="extraWide">Extra wide · bonus</option><option value="deep">Deep · bonus</option><option value="large">Large · bonus</option></select></label>
-<label class="field"><span data-i="shape">Shape</span><select id="shape"><option value="">Rectangle</option><option value="heart">Heart</option><option value="star">Star</option><option value="hexagon">Hexagon</option></select></label>
-<label class="field"><span data-i="colours">Colours</span><select id="colours"><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option></select></label>
+<label class="field" data-help-en="Choose Gem Swap or Stone Collapse. Press New game to start it." data-help-ja="宝石入れ替えか石くずしを選びます。「新しいゲーム」で始めます。"><span data-i="game">Game</span><select id="game"><option value="gem-swap">Gem Swap</option><option value="stone-collapse">Stone Collapse</option></select></label>
+<label class="field" data-help-en="Relaxed has no clock, so you can plan each move. Arcade drops pieces on a timer. Daily is today's board, the same for everyone." data-help-ja="リラックスは時間制限がなく、じっくり考えられます。アーケードは一定の間隔で石が落ちます。デイリーは今日の盤面で、全員が同じです。"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed">Relaxed</option><option value="arcade">Arcade</option><option value="daily">Daily</option></select></label>
+<label class="field" data-help-en="Short guided lessons, one idea at a time. Choose one, then press New game." data-help-ja="ひとつずつ学べる短いレッスンです。選んで「新しいゲーム」を押します。"><span data-i="lessonLabel">Learn to play</span><select id="lesson"></select></label><label class="field" data-help-en="Graded challenges from easy to hard, each with a goal. Free play has no goal. Press New game to start." data-help-ja="やさしい順に並んだ、目標つきのチャレンジです。自由に遊ぶには目標がありません。「新しいゲーム」で始めます。"><span data-i="challengeLabel">Challenge level</span><select id="level"></select></label>
+<label class="field" data-help-en="The size of the board. Bonus sizes are larger and scroll inside the play area." data-help-ja="盤面の大きさです。ボーナスの大きさは広く、遊ぶ場所の中でスクロールします。"><span data-i="board">Board</span><select id="preset"><option value="compact">Compact</option><option value="standard" selected>Standard</option><option value="wide">Wide</option><option value="tall">Tall</option><option value="extraWide">Extra wide · bonus</option><option value="deep">Deep · bonus</option><option value="large">Large · bonus</option></select></label>
+<label class="field" data-help-en="Play on a rectangle or a shaped board." data-help-ja="長方形、または形のある盤面で遊びます。"><span data-i="shape">Shape</span><select id="shape"><option value="">Rectangle</option><option value="heart">Heart</option><option value="star">Star</option><option value="hexagon">Hexagon</option></select></label>
+<label class="field" data-help-en="How many gem colours are in play. Fewer colours make matches easier." data-help-ja="使う宝石の色数です。色が少ないほど、そろえやすくなります。"><span data-i="colours">Colours</span><select id="colours"><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option></select></label>
+<div class="checks" data-help-en="Animation and sound are kept on this device." data-help-ja="アニメーションと効果音の設定は、この端末に保存されます。">
 <label class="check"><input type="checkbox" id="animations" checked><span data-i="animations">Animation</span></label>
 <label class="check"><input type="checkbox" id="sound"><span data-i="sound">Sound effects</span></label>
+</div>
 <label class="check"><input type="checkbox" id="tools" checked><span data-i="enable">Stored tools</span></label>
 <label class="check" id="advanced-field"><input type="checkbox" id="advanced"><span data-i="advanced">Rare Black Hole power</span></label><label class="field"><span data-i="code">Board code (optional)</span><input id="code" maxlength="128" type="text"></label><div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
 <p data-i="apply">Select New game to apply changed settings.</p><p id="instructions"></p><p data-i="keyboard">Keyboard: arrows move board focus; Enter selects. Escape cancels. Tab reaches tools and confirmation.</p>
@@ -21,5 +29,6 @@
 <div class="panel-head"><h2 id="title">Gem Swap</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="moves">Moves</b> <output id="moves">0</output></span></div></div>
 <section id="objectives" hidden></section><p id="budget" hidden></p><p id="lesson-guide" hidden></p><div class="full-play"><div class="board-scroll"><div id="grid" class="full-board" role="grid" aria-label="Game board"></div></div><section class="tool-tray" aria-labelledby="tools-title"><h3 id="tools-title" data-i="tray">Tool tray</h3><div id="inventory"></div><p id="earning"></p><p id="rare-earning" hidden></p><p id="portal-state" hidden></p><p id="preview" aria-live="polite"></p><div class="tray-actions"><button class="fam-button" id="confirm" data-accent="true" data-i="confirm">Confirm</button><button class="fam-button" id="cancel" data-i="cancel">Cancel</button></div><button class="fam-button" id="undo" data-i="undo">Undo</button><button class="fam-button" id="hint" data-i="hint">Hint</button><button class="fam-button" id="reshuffle" data-i="reshuffle">Reshuffle</button></section></div>
 <p id="size-hint" class="fam-fine" hidden></p><p id="status" aria-live="polite"></p><p id="assisted" data-i="assisted" hidden>Assisted run · a stored tool or undo was used.</p>
-</section></div><footer><a href="api.html">API reference</a><span>@johnmorrisdotca/houseki · MIT · © John Morris</span></footer>
-</main><script type="module" src="tools.js"></script></body></html>
+</section></div><!--family:unreviewed-->
+  <!--family:footer-->
+</main><!--family:scripts tools.js--></body></html>

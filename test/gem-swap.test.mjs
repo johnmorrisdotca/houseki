@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createGame, applyAction, advanceTicks, legalActions, statusOf, GemSwapOptionsError } from '../dist/gem-swap.js';
 import { findMatches } from '../dist/gem-swap/board.js';

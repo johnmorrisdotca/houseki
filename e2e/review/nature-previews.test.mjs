@@ -1,13 +1,10 @@
+import {serve,ORIGIN} from '../demo.mjs';
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
-import {spawn} from 'node:child_process';
 
-const server=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,PORT:'0',BASE_PATH:'/houseki'},stdio:['ignore','pipe','pipe']});
-const url=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>{server.kill();reject(new Error('Demo server startup timed out'));},10000);server.on('error',error=>{clearTimeout(timeout);reject(error);});server.stdout.on('data',data=>{const found=String(data).match(/http:\/\/127\.0\.0\.1:\d+\/houseki/);if(found){clearTimeout(timeout);resolve(found[0]);}});server.on('exit',code=>{clearTimeout(timeout);reject(new Error(`Demo server exited: ${code}`));});});
-let browser;
-try{browser=await chromium.launch();}catch(error){server.kill();throw error;}
+const url=ORIGIN;const browser=await chromium.launch();
 try{
- const page=await browser.newPage({viewport:{width:390,height:844}});
+ const page=await browser.newPage({viewport:{width:390,height:844}});await serve(page);
  await page.goto(`${url}/chains.html`);
  await page.waitForSelector('#well .active');
  await page.evaluate(()=>localStorage.clear());await page.reload();
@@ -58,4 +55,4 @@ try{
  await page.addInitScript(encoded=>localStorage.setItem('houseki-magnetic-blocks-save',encoded),lostSave);await page.reload();
  assert.equal(await page.locator('#well').getAttribute('data-phase'),'lost');assert.equal(await page.locator('.controls [data-action="left"]').isDisabled(),true);assert.equal(await page.locator('[data-floor="calm"]').isDisabled(),true);assert.equal(await page.locator('#new').isDisabled(),false);assert.equal(await page.locator('#restart').isDisabled(),false);
  console.log('Nature previews, authored settings, oversized-board navigation, and terminal controls passed.');
-}finally{await browser.close();server.kill();}
+}finally{await browser.close();}

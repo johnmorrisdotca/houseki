@@ -13,6 +13,7 @@ export function setHeldInput(state: InputSchedulerState, control: HeldControl, p
 /** Queues a one-shot rotation, drop, Place, pause or resume edge for the next logical tick. */
 export function queueInputEdge(state: InputSchedulerState, action: EdgeAction): InputSchedulerState { return { ...state, queued: Object.freeze([...state.queued, action]) }; }
 /** Releases every held or queued control after focus loss, lock, resolution or pause. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the public signature takes the state a caller holds, though nothing of it is kept
 export function releaseAllInput(state: InputSchedulerState): InputSchedulerState { return createInputScheduler(); }
 /** Resolves this tick's inputs in lateral, rotation, drop, soft-drop, pause order. */
 export function actionsForTick(game: GameState, input: InputSchedulerState): readonly [readonly Action[], InputSchedulerState] {

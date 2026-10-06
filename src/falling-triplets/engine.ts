@@ -1,5 +1,5 @@
 import { compactBoard, findMatches } from './match.js';
-import { drawBag, nextInt, seedState } from './random.js';
+import { drawBag, seedState } from './random.js';
 import type { Action, ChallengeOptions, Colour, CreateOptions, GameEvent, GameState, Gem, Mode, Piece, Settings, Transition, Triplet } from './types.js';
 const PRESETS = { compact: [5, 13], extraWide: [12, 13], narrow: [6, 13], standard: [8, 13], wide: [10, 13], tall: [8, 17], deep: [8, 32], large: [12, 24] } as const;
 const RULES = 'triplets-1' as const;
@@ -53,7 +53,7 @@ export function createGame(options: CreateOptions = {}): GameState {
   if (pieceLimit !== undefined && (!Number.isInteger(pieceLimit) || pieceLimit < 1 || pieceLimit > 60)) throw new RangeError('Piece limit must be an integer from 1 to 60');
   const settings: Settings = { mode, width, height, colourCount, seed, ...(pieceLimit === undefined ? {} : { pieceLimit }) };
   if (![4, 5, 6].includes(settings.colourCount)) throw new RangeError('Colour count must be 4, 5, or 6');
-  let randomState = seedState(`falling-triplets|${RULES}|${seed}`); const initial: GameState = { game: 'falling-triplets', rules: RULES, settings, board: Array(width * (height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState, nextId: 1, score: 0, maxChain: 0, completedPieces: 0, elapsedTicks: 0, pieceTicks: 0, resolutionTick: 0, waves: [], assisted: false, hintsUsed: 0, witnessPathMatches: true, recording: [] };
+  const randomState = seedState(`falling-triplets|${RULES}|${seed}`); const initial: GameState = { game: 'falling-triplets', rules: RULES, settings, board: Array(width * (height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState, nextId: 1, score: 0, maxChain: 0, completedPieces: 0, elapsedTicks: 0, pieceTicks: 0, resolutionTick: 0, waves: [], assisted: false, hintsUsed: 0, witnessPathMatches: true, recording: [] };
   const first = drawTriplet(initial); let state: GameState = { ...initial, bag: first.bag, randomState: first.randomState, hintsUsed: 0 };
   const preview = advanceBag(state); state = { ...state, bag: preview[0], randomState: preview[1], active: activeFromColours(state, first.colours), next: preview[2], nextId: 4 };
   return state;
