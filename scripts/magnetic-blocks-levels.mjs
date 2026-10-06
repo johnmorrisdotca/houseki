@@ -1,28 +1,36 @@
 import { writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { createGame, applyAction, advanceTicks } from '../dist/magnetic-blocks.js';
+import { createGame, applyAction, advanceTicks, campaignManifest as previousCampaign } from '../dist/magnetic-blocks.js';
 
-const REVISION = 'magnetic-blocks-campaign-1';
-const GRADING = 'legal-choices-and-witness-length-1';
+const REVISION = 'magnetic-blocks-campaign-2';
+const GRADING = 'full-plan-and-interaction-evidence-2';
 const WIDTH = 8, HEIGHT = 12;
 const palette = ['blue', 'green', 'gold', 'purple'];
-const cell = (x, y) => y * WIDTH + x;
 function hash(text) {
   return createHash('sha256').update(text).digest('hex');
 }
 function stable(value) { if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`; if (value && typeof value === 'object') return `{${Object.entries(value).filter(([, v]) => v !== undefined).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${JSON.stringify(k)}:${stable(v)}`).join(',')}}`; return JSON.stringify(value); }
 function normalizedColourKey(options) {
+  const width = options.width ?? WIDTH, height = options.height ?? HEIGHT;
   const variants = [];
   const targets = new Set(options.goal.targetIds);
   for (const reflect of [false, true]) {
     const seen = new Map();
     const colour = name => { if (!seen.has(name)) seen.set(name, String.fromCharCode(65 + seen.size)); return seen.get(name); };
-    const board = Array.from({ length: WIDTH * HEIGHT }, (_, index) => {
-      const x = index % WIDTH, y = Math.floor(index / WIDTH), source = options.initialBoard[y * WIDTH + (reflect ? WIDTH - 1 - x : x)];
+    const board = Array.from({ length: width * height }, (_, index) => {
+      const x = index % width, y = Math.floor(index / width), source = options.initialBoard[y * width + (reflect ? width - 1 - x : x)];
       return source ? `${colour(source.colour)}:${targets.has(source.id) ? 't' : 'g'}` : '.';
     });
     const queue = options.queue.map(piece => (reflect ? [piece[1], piece[0], piece[3], piece[2]] : piece).map(colour));
-    variants.push(stable({ width: options.width, height: options.height, board, queue, schedule: options.schedule, floorSwitch: options.floorSwitch, magneticImpact: options.magneticImpact, targetCount: targets.size }));
+    const mask = options.mask && Array.from({ length: width * height }, (_, index) => {
+      const x = index % width, y = Math.floor(index / width);
+      return options.mask[y * width + (reflect ? width - 1 - x : x)];
+    });
+    const targetGeometry = options.goal.targetIds.map(id => {
+      const i = options.initialBoard.findIndex(g => g?.id === id), x = i % width;
+      return [reflect ? width - 1 - x : x, Math.floor(i / width)];
+    }).sort((a,b) => a[1]-b[1] || a[0]-b[0]);
+    variants.push(stable({ width, height, mask, board, queue, bonds: options.bonds, schedule: options.schedule, floorSwitch: options.floorSwitch, magneticImpact: options.magneticImpact, targetGeometry }));
   }
   return variants.sort()[0];
 }
@@ -43,14 +51,25 @@ function actionPath(state, x, orientation, floor, resolve = true) {
   return { state: resolve ? advanceToInput(current) : current, actions };
 }
 function floorVariants(state) { return state.floorSwitchCharges ? [null, 'calm', 'magnetic'] : [null]; }
+const choiceCache = new Map();
 function choices(state, wantCount = false) {
+  const key = stable({ mode: state.settings.mode, width: state.settings.width, height: state.settings.height, mask: state.settings.mask,
+    goal: state.settings.goal, schedule: state.settings.schedule, floorSwitch: state.settings.floorSwitch,
+    magneticImpact: state.settings.magneticImpact, pieceLimit: state.settings.pieceLimit,
+    board: state.board, bonds: state.bonds,
+    active: state.active && { x: state.active.x, y: state.active.y, orientation: state.active.orientation, gems: state.active.gems },
+    queue: state.queue, placements: state.placements, floor: state.floor, nextFloor: state.nextFloor,
+    floorSwitchCharges: state.floorSwitchCharges, pendingFloorOverride: state.pendingFloorOverride, phase: state.phase });
+  const cached = choiceCache.get(key);
+  if (cached) return wantCount ? { outputs: cached, legal: cached.length } : cached;
   const outputs = []; let legal = 0;
-  for (let x = 0; x < WIDTH - 1; x++) for (let orientation = 0; orientation < 4; orientation++) for (const floor of floorVariants(state)) {
+  for (let x = 0; x < state.settings.width - 1; x++) for (let orientation = 0; orientation < 4; orientation++) for (const floor of floorVariants(state)) {
     const result = actionPath(state, x, orientation, floor);
     if (!result) continue;
     legal++;
     outputs.push({ ...result, x, orientation, floor });
   }
+  choiceCache.set(key, outputs);
   return wantCount ? { outputs, legal } : outputs;
 }
 function prove(options) {
@@ -79,67 +98,222 @@ function proveWithWitness(options, witness) {
   }
   return advanceToInput(state);
 }
-function candidate(serial) {
-  const variant = serial % 5;
-  const targetX = variant === 0 ? serial % 6 : 2 + serial % 4;
-  const initialBoard = Array(WIDTH * HEIGHT).fill(null); let id = 1;
-  if (variant === 0) {
-    for (let dx = 0; dx < 3; dx++) initialBoard[cell(targetX + dx, HEIGHT - 1)] = { id: id++, colour: 'red' };
-    for (let x = 0; x < WIDTH; x++) {
-      if (x >= targetX && x < targetX + 3) continue;
-      const height = (serial * (x + 5) + x * x * 3) % 4;
-      for (let depth = 0; depth < height; depth++) initialBoard[cell(x, HEIGHT - 1 - depth)] = { id: id++, colour: palette[(x + depth) % 4] };
-    }
-  } else {
-    const leftHeight = 6 + (serial % 3), rightHeight = 2 + (Math.floor(serial / 3) % 5);
-    for (const [x, height] of [[targetX - 1, leftHeight], [targetX + 1, rightHeight]]) {
-      for (let depth = 0; depth < height; depth++) initialBoard[cell(x, HEIGHT - 1 - depth)] = { id: id++, colour: palette[(x + depth + serial) % 4] };
-    }
-    for (let depth = 0; depth < 3; depth++) initialBoard[cell(targetX, HEIGHT - 1 - depth)] = { id: id++, colour: 'red' };
-    for (const x of [0, WIDTH - 1]) {
-      if ([targetX - 1, targetX, targetX + 1].includes(x)) continue;
-      const height = (serial + x * 2) % 4;
-      for (let depth = 0; depth < height; depth++) initialBoard[cell(x, HEIGHT - 1 - depth)] = { id: id++, colour: palette[(x + depth * 2 + serial) % 4] };
+function openCandidate(serial) {
+  const widths = [4, 5, 6, 7, 8], heights = [6, 8, 10, 12];
+  const width = widths[Math.floor(serial / 16) % widths.length];
+  const height = heights[Math.floor(serial / 80) % heights.length];
+  const vertical = Math.floor(serial / 144) % 2 === 1;
+  const shapeIndex = Math.floor(serial / 288) % 3;
+  const extent = vertical ? width : width - 2;
+  const targetStart = (serial * 7 + Math.floor(serial / 11)) % (extent + 1);
+  const targetY = height - 3;
+  const initialBoard = Array(width * height).fill(null), targetIds = [];
+  const targetCells = Array.from({ length: 3 }, (_, i) => vertical ? [targetStart, targetY + i] : [targetStart + i, height - 1]);
+  let id = 1;
+  for (const [x, y] of targetCells) { initialBoard[y * width + x] = { id, colour: 'red' }; targetIds.push(id++); }
+  // A bottom-connected asymmetric shelf changes actual landing options. Its
+  // profile is included in the geometry key and never exists as inert padding.
+  const profileCode = Math.floor(serial / 576);
+  for (let x = 0; x < width; x++) {
+    if (targetCells.some(([tx]) => tx === x && !vertical)) continue;
+    if (vertical && x === targetStart) continue;
+    const heightHere = (Math.floor(serial / (5 ** (x % 5))) + profileCode + x * 3) % 5;
+    for (let d = 0; d < heightHere; d++) {
+      const y = height - 1 - d;
+      if (initialBoard[y * width + x]) continue;
+      initialBoard[y * width + x] = { id: id++, colour: palette[(x + d + shapeIndex) % palette.length] };
     }
   }
-  const targetIds = initialBoard.flatMap(gem => gem?.colour === 'red' ? [gem.id] : []);
-  const options = {
-    mode: 'relaxed', width: WIDTH, height: HEIGHT, colourCount: 5, seed: `magnetic-level-${serial}`,
-    initialBoard, queue: variant === 0 ? [['blue','green','gold','red']] : variant === 2 ? [['blue','green','gold','purple'], ['blue','gold','red','green']] : [['blue','gold','red','green']],
-    pieceLimit: variant === 2 ? 2 : 1,
-    schedule: variant === 0 || variant === 3 ? { kind: 'fixed', floor: 'calm' } : variant === 2 ? { kind: 'frequent' } : { kind: 'fixed', floor: 'magnetic' },
-    floorSwitch: variant === 3, magneticImpact: variant === 4,
-    goal: { kind: 'clear-targets', targetIds },
-  };
+  // Rotate which corners carry red across all nonempty patterns; the four
+  // corners remain a genuine placement decision rather than a seed variant.
+  const redMask = serial % 4 === 0 ? 15 : 1 + ((serial + Math.floor(serial / 5)) % 15);
+  const colours = ['blue', 'green', 'gold', 'purple'].map((colour, corner) => redMask & (1 << corner) ? 'red' : colour);
+  const options = { mode: 'relaxed', width, height, colourCount: 6, seed: `magnetic-open-${serial}`, initialBoard,
+    queue: [colours], pieceLimit: 1, schedule: { kind: 'fixed', floor: 'calm' },
+    goal: { kind: 'clear-targets', targetIds } };
   try {
-    const { witness, legalPlacementChoices, setupPlacementChoices, winningPlacementChoices } = prove(options);
-    if (!witness || witness.state.phase !== 'won') return null;
-    const counterfactualOptions = structuredClone(options);
-    if (variant === 1 || variant === 2 || variant === 4) counterfactualOptions.schedule = { kind: 'fixed', floor: 'calm' };
-    if (variant === 3) counterfactualOptions.floorSwitch = false;
-    const counterfactualActions = variant === 3 ? witness.actions.filter(action => action.kind !== 'set-floor-override') : witness.actions;
-    let counterfactualResult = 'not-run';
-    try { counterfactualResult = proveWithWitness(counterfactualOptions, counterfactualActions).phase; } catch { return null; }
-    if (variant > 0 && !['lost', 'finished'].includes(counterfactualResult)) return null;
-    if (variant === 4 && !witness.state.impactRemovedIds.length) return null;
-    let disabledImpactResult;
-    if (variant === 4) {
-      disabledImpactResult = proveWithWitness({ ...options, magneticImpact: false }, witness.actions).phase;
-      if (disabledImpactResult !== 'won') return null;
-    }
-    return { serial, targetX, options, witness: witness.actions, legalPlacementChoices, setupPlacementChoices, winningPlacementChoices, witnessPlacements: witness.state.placements, witnessFloorDecisions: witness.decisions, impactRemovedIds: witness.state.impactRemovedIds, disabledImpactResult, counterfactualResult, variant };
+    const proof = prove(options);
+    if (!proof.witness || proof.witness.state.phase !== 'won') return null;
+    return { serial, options, witness: proof.witness.actions, legalPlacementChoices: proof.legalPlacementChoices,
+      setupPlacementChoices: 0, winningPlacementChoices: proof.winningPlacementChoices,
+      witnessPlacements: proof.witness.state.placements, witnessFloorDecisions: proof.witness.decisions,
+      interactionDepth: 0, setupDecisionPressure: 0, necessaryFloorDecisionShare: 0,
+      exactFullPlanWins: proof.winningPlacementChoices, exactFullPlanTrials: proof.legalPlacementChoices,
+      variant: 5, targetGroupCount: 1 };
   } catch { return null; }
 }
-function levelText(serial, variant) {
-  const names = [
-    ['Bonded landing', '結合着地', 'Add the red corner to the marked group. Calm keeps the new square bonded as it settles.', '赤い角を印のグループにつなげます。静穏の床では四角形の結合が保たれます。'],
-    ['Split magnetic landing', '磁力で分かれる着地', 'The marked red column sits below the tall guard. Pull separates the block so its red corner can fall onto the target.', '高い支えの下に赤い列があります。引力でブロックを分け、赤い角を目標まで落としましょう。'],
-    ['Read the floor schedule', '床の予定を読む', 'The first queued block is a setup. Place it, then use the scheduled Pull floor for the red block.', '最初のブロックは準備用です。配置したあと、予定された引力の床で赤いブロックを置きましょう。'],
-    ['Spend one floor switch', '床スイッチを1回使う', 'The scheduled floor is Calm, where the block stays above the target. Spend the one switch to choose Pull.', '予定された床は静穏で、ブロックは目標より上に留まります。1回分のスイッチで引力を選びましょう。'],
-    ['Impact the support', '支えに衝撃を与える', 'Hard-drop on Pull to break one contacted guard stone, then watch the red corner split onto the target.', '引力の床でハードドロップし、接触した支えを壊してから赤い角を目標へ落としましょう。'],
-  ];
-  const [en, ja, objectiveEn, objectiveJa] = names[variant];
-  return { title: { en: `${en} ${String(serial).padStart(2, '0')}`, ja: `${ja} ${String(serial).padStart(2, '0')}` }, objective: { en: objectiveEn, ja: objectiveJa } };
+function doubleTargetCandidate(serial) {
+  const widths = [4, 6, 8], heights = [10, 12];
+  const width = widths[Math.floor(serial / 8) % widths.length], height = heights[Math.floor(serial / 24) % heights.length];
+  const targetX = (serial * 3 + Math.floor(serial / 5)) % (width - 1);
+  const initialBoard = Array(width * height).fill(null), targetIds = [];
+  let id = 1;
+  for (const y of [height - 4, height - 3, height - 2]) { const gem = { id: id++, colour: 'red' }; initialBoard[y * width + targetX] = gem; targetIds.push(gem.id); }
+  for (const y of [height - 7, height - 6, height - 5]) { const gem = { id: id++, colour: 'red' }; initialBoard[y * width + targetX + 1] = gem; targetIds.push(gem.id); }
+  initialBoard[(height - 1) * width + targetX] = { id: id++, colour: 'blue' };
+  for (let y = height - 4; y < height; y++) initialBoard[y * width + targetX + 1] = { id: id++, colour: ['gold','purple','teal','blue'][y - (height - 4)] };
+  for (let x = 0; x < width; x++) {
+    if (x === targetX || x === targetX + 1) continue;
+    const heightHere = (Math.floor(serial / (7 ** (x % 3))) + x + Math.floor(serial / 9)) % 4;
+    for (let depth = 0; depth < heightHere; depth++) {
+      const y = height - 1 - depth;
+      initialBoard[y * width + x] = { id: id++, colour: palette[(x + depth * 2) % palette.length] };
+    }
+  }
+  const options = { mode: 'relaxed', width, height, colourCount: 6, seed: `magnetic-two-target-${serial}`, initialBoard,
+    queue: [['red','red','red','red']], pieceLimit: 1, schedule: { kind: 'fixed', floor: 'magnetic' },
+    goal: { kind: 'clear-targets', targetIds } };
+  try {
+    const proof = prove(options);
+    if (!proof.witness || proof.witness.state.phase !== 'won') return null;
+    const calmOptions = structuredClone(options); calmOptions.schedule = { kind: 'fixed', floor: 'calm' };
+    const calmResult = proveWithWitness(calmOptions, proof.witness.actions).phase;
+    if (calmResult === 'won') return null;
+    return { serial, options, witness: proof.witness.actions, legalPlacementChoices: proof.legalPlacementChoices,
+      setupPlacementChoices: 0, winningPlacementChoices: proof.winningPlacementChoices,
+      witnessPlacements: 1, witnessFloorDecisions: proof.witness.decisions, interactionDepth: 0, setupDecisionPressure: 0,
+      necessaryFloorDecisionShare: 1, exactFullPlanWins: proof.winningPlacementChoices,
+      exactFullPlanTrials: proof.legalPlacementChoices, counterfactualResult: calmResult, variant: 8, targetGroupCount: 2 };
+  } catch { return null; }
+}
+function layeredCandidate(serial, requireSwitch = true) {
+  const shift = Math.floor(serial / 4) % 2;
+  const mirror = Math.floor(serial / 8) % 2 === 1;
+  const towerHeight = 4 + serial % 4;
+  const width = WIDTH, height = HEIGHT, targetX = 3 + shift;
+  const initialBoard = Array(width * height).fill(null), targetIds = [];
+  let id = 1;
+  const put = (x, y, colour, target = false) => { const gem = { id: id++, colour }; initialBoard[y * width + x] = gem; if (target) targetIds.push(gem.id); };
+  // The lower blue and green bars are separate support layers. Removing them
+  // in queue order lowers the red column twice before the final split.
+  for (let dx = -1; dx <= 1; dx++) put(targetX + dx, 10, 'blue', true);
+  for (let dx = -1; dx <= 1; dx++) put(targetX + dx, 11, 'green', true);
+  for (let y = 7; y <= 9; y++) put(targetX, y, 'red', true);
+  const towerX = targetX + (mirror ? -1 : 1);
+  const colours = ['gold', 'purple', 'teal', 'gold', 'purple', 'teal', 'gold', 'purple', 'teal'];
+  for (let i = 0; i < towerHeight; i++) put(towerX, 10 - towerHeight + i, colours[i]);
+  const outerX = (serial & 1) === 0 ? 0 : width - 1;
+  const outerHeight = Math.floor(serial / 16) % 5;
+  for (let i = 0; i < outerHeight; i++) put(outerX, height - 1 - i, ['teal','gold','purple','teal','gold'][i]);
+  if (mirror) {
+    const reflected = Array(width * height).fill(null);
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) reflected[y * width + width - 1 - x] = initialBoard[y * width + x];
+    initialBoard.splice(0, initialBoard.length, ...reflected);
+  }
+  const queue = [['blue','gold','purple','teal'], ['blue','gold','green','purple'], ['gold','purple','teal','red']];
+  if (mirror) for (const piece of queue) {
+    [piece[0], piece[1]] = [piece[1], piece[0]];
+    [piece[2], piece[3]] = [piece[3], piece[2]];
+  }
+  const options = { mode: 'relaxed', width, height, colourCount: 6, seed: `magnetic-layer-${serial}`, initialBoard, queue,
+    pieceLimit: 3, schedule: requireSwitch ? { kind: 'fixed', floor: 'calm' } : { kind: 'authored', magneticPlacements: [3] },
+    floorSwitch: requireSwitch, magneticImpact: false, goal: { kind: 'clear-targets', targetIds } };
+  const xs = mirror ? [1 - shift, 6 - shift, 3 - shift] : [5 + shift, shift, 3 + shift];
+  const witness = [];
+  let state = createGame(options);
+  for (let i = 0; i < 3; i++) {
+    const p = actionPath(state, xs[i], 0, requireSwitch && i === 2 ? 'magnetic' : null);
+    if (!p || ['lost', 'finished'].includes(p.state.phase)) return null;
+    witness.push(...p.actions); state = p.state;
+  }
+  if (state.phase !== 'won') return null;
+  const calmOptions = structuredClone(options); calmOptions.schedule = { kind: 'fixed', floor: 'calm' }; calmOptions.floorSwitch = false;
+  const calmActions = witness.filter(action => action.kind !== 'set-floor-override');
+  let floorAlternative;
+  try { floorAlternative = proveWithWitness(calmOptions, calmActions).phase; } catch { return null; }
+  if (requireSwitch && floorAlternative === 'won') return null;
+  const groups = []; let group = []; for (const action of witness) { group.push(action); if (action.kind === 'hard-drop') { groups.push(group); group = []; } }
+  let finalStart = createGame(options); finalStart = applyGroup(finalStart, groups[0]); finalStart = applyGroup(finalStart, groups[1]);
+  const finalChoices = choices(finalStart), setupEvidence = measureSetupPressure(options, witness);
+  let causalState = createGame(options), remaining = targetIds.length;
+  const targetIdsClearedByPlacement = [], targetIdsRemainingAfterPlacement = [], targetIdsMovedByPlacement = [];
+  for (const actionGroup of groups) {
+    const before = new Map(targetIds.map(targetId => [targetId, causalState.board.findIndex(gem => gem?.id === targetId)]));
+    causalState = applyGroup(causalState, actionGroup);
+    const after = targetIds.filter(targetId => causalState.board.some(gem => gem?.id === targetId)).length;
+    const moved = targetIds.filter(targetId => {
+      const oldIndex = before.get(targetId), newIndex = causalState.board.findIndex(gem => gem?.id === targetId);
+      return oldIndex >= 0 && newIndex >= 0 && oldIndex !== newIndex;
+    }).length;
+    targetIdsClearedByPlacement.push(remaining - after); targetIdsRemainingAfterPlacement.push(after); remaining = after;
+    targetIdsMovedByPlacement.push(moved);
+  }
+  return { serial, options, witness, legalPlacementChoices: finalChoices.length,
+    setupPlacementChoices: choices(createGame(options)).length, winningPlacementChoices: finalChoices.filter(choice => choice.state.phase === 'won').length,
+    witnessPlacements: state.placements, witnessFloorDecisions: requireSwitch ? 1 : 0,
+    interactionDepth: requireSwitch ? 2 : 1, setupDecisionPressure: setupEvidence.pressure, setupEvidence: setupEvidence.steps,
+    targetIdsClearedByPlacement, targetIdsRemainingAfterPlacement, targetIdsMovedByPlacement, necessaryFloorDecisionShare: requireSwitch ? 1 : 0,
+    counterfactualResult: floorAlternative, variant: requireSwitch ? 6 : 7, layerEvidence: true };
+}
+function measureSetupPressure(options, witness) {
+  const groups = []; let group = [];
+  for (const action of witness) { group.push(action); if (action.kind === 'hard-drop' || action.kind === 'land') { groups.push(group); group = []; } }
+  if (group.length) groups.push(group);
+  if (groups.length < 2) return { pressure: 0, steps: [] };
+  const pressures = [];
+  for (let step = 0; step < groups.length - 1; step++) {
+    let state = createGame(options);
+    for (let i = 0; i < step; i++) state = applyGroup(state, groups[i]);
+    const legal = choices(state), suffix = groups.slice(step + 1).flat(); let wins = 0;
+    for (const choice of legal) {
+      let next = choice.state;
+      try { next = applyActions(next, suffix); if (next.phase === 'won') wins++; } catch { /* invalid alternatives are losing evidence */ }
+    }
+    pressures.push({ step, legalChoices: legal.length, preservingChoices: wins, pressure: legal.length ? 1 - wins / legal.length : 1 });
+  }
+  return { pressure: pressures.reduce((sum, value) => sum + value.pressure, 0) / pressures.length, steps: pressures };
+}
+function applyActions(state, actions) {
+  for (const action of actions) {
+    state = advanceToInput(state);
+    if (state.phase !== 'falling') throw new Error(`terminal phase ${state.phase}`);
+    const result = applyAction(state, action);
+    if (!result.accepted) throw new Error(`rejected ${action.kind}`);
+    state = result.state;
+  }
+  return advanceToInput(state);
+}
+function applyGroup(state, group) { return applyActions(state, group); }
+function seededRandom(seedText) {
+  let state = Number.parseInt(hash(seedText).slice(0, 8), 16) || 1;
+  return () => { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return state / 0x100000000; };
+}
+function sampleFullPlans(options, trials, seedText) {
+  const random = seededRandom(seedText); let wins = 0;
+  for (let trial = 0; trial < trials; trial++) {
+    let state = createGame(options);
+    for (let placed = 0; state.phase === 'falling' && placed < options.pieceLimit; placed++) {
+      const legal = choices(state);
+      if (!legal.length) break;
+      state = legal[Math.floor(random() * legal.length)].state;
+    }
+    if (state.phase === 'won') wins++;
+  }
+  return wins;
+}
+function grade(item, canonicalKey) {
+  const trials = item.variant === 6 ? 1024 : 128;
+  let wins;
+  if (item.witnessPlacements === 1) {
+    const legal = choices(createGame(item.options)), random = seededRandom(canonicalKey); wins = 0;
+    for (let i = 0; i < trials; i++) if (legal[Math.floor(random() * legal.length)]?.state.phase === 'won') wins++;
+  } else wins = sampleFullPlans(item.options, trials, canonicalKey);
+  const fullRate = wins / trials;
+  const finalRate = item.legalPlacementChoices ? item.winningPlacementChoices / item.legalPlacementChoices : 0;
+  const raw = 0.35 * (1 - fullRate) + 0.25 * (1 - finalRate)
+    + 0.15 * Math.min(1, (item.setupDecisionPressure ?? 0))
+    + 0.15 * Math.min(1, (item.interactionDepth ?? 0) / 2)
+    + 0.10 * Math.min(1, (item.necessaryFloorDecisionShare ?? 0));
+  return { raw, score: Math.max(1, Math.min(100, 1 + Math.round(99 * raw))), trials, wins, fullRate, finalRate, setupDecisionPressure: item.setupDecisionPressure ?? 0 };
+}
+/** Structural gate rejects several independent target clears masquerading as a layered plan. */
+export function hasCausalTargetDependencies(item, minimumDependentSteps) {
+  const clears = item.targetIdsClearedByPlacement ?? [];
+  const remaining = item.targetIdsRemainingAfterPlacement ?? [];
+  const moved = item.targetIdsMovedByPlacement ?? [];
+  return Boolean(item.layerEvidence) && remaining.at(-1) === 0
+    && clears.filter(count => count > 0).length >= 2
+    && moved.slice(0, -1).filter(count => count > 0).length >= minimumDependentSteps;
 }
 function makeLessons() {
   const lessons = [];
@@ -162,51 +336,67 @@ function makeLessons() {
 function deepFreeze(value) { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) deepFreeze(child); } return value; }
 
 export function generateContent() {
-  const candidates = new Map();
-  for (let serial = 1; serial <= 500 && candidates.size < 80; serial++) {
-    const item = candidate(serial); if (!item) continue;
-    const canonicalKey = normalizedColourKey(item.options);
-    if (!candidates.has(canonicalKey)) candidates.set(canonicalKey, { ...item, canonicalKey });
-  }
-  if (candidates.size < 50) throw new Error(`Only ${candidates.size} verified canonical candidates were found`);
-  const scoreOf = value => value.legalPlacementChoices > 0
-    ? (1 - value.winningPlacementChoices / value.legalPlacementChoices) * 0.55
-      + Math.max(0, value.witnessPlacements - 1) * 0.35
-      + (value.witnessFloorDecisions ? 0.10 : 0)
-    : 0;
+  const pool = new Map();
+  const add = item => { if (!item) return; const canonicalKey = normalizedColourKey(item.options); if (!pool.has(canonicalKey)) pool.set(canonicalKey, { ...item, canonicalKey }); };
+  for (let serial = 0; serial < 600; serial++) add(openCandidate(serial));
+  for (let serial = 0; serial < 500; serial++) add(doubleTargetCandidate(serial));
+  for (let serial = 0; serial < 32; serial++) { add(layeredCandidate(serial, false)); add(layeredCandidate(serial, true)); }
+  const graded = [...pool.values()].map(item => ({ ...item, ...grade(item, item.canonicalKey) }));
+  const ranges = [
+    { id: 'entry', count: 32, min: 1, max: 20 }, { id: 'easy', count: 32, min: 21, max: 40 },
+    { id: 'intermediate', count: 32, min: 41, max: 60 }, { id: 'hard', count: 24, min: 61, max: 80 },
+    { id: 'expert', count: 8, min: 81, max: 100 },
+  ];
   const selected = [];
-  for (let variant = 0; variant < 5; variant++) {
-    const group = [...candidates.values()].filter(item => item.variant === variant).sort((a, b) => scoreOf(a) - scoreOf(b) || a.canonicalKey.localeCompare(b.canonicalKey));
-    if (group.length < 10) throw new Error(`Only ${group.length} verified levels for mechanic group ${variant}`);
-    selected.push(...group.slice(0, 10));
+  for (const range of ranges) {
+    let matches = graded.filter(item => item.score >= range.min && item.score <= range.max);
+    if (range.id === 'intermediate') matches = matches.filter(item => item.targetGroupCount === 2);
+    if (range.id === 'hard') matches = matches.filter(item => hasCausalTargetDependencies(item, 1));
+    if (range.id === 'expert') matches = matches.filter(item => item.interactionDepth === 2 && item.necessaryFloorDecisionShare === 1 && hasCausalTargetDependencies(item, 2));
+    matches.sort((a, b) => a.score - b.score || a.canonicalKey.localeCompare(b.canonicalKey));
+    if (matches.length < range.count) throw new Error(`Only ${matches.length}/${range.count} verified ${range.id} candidates; pool=${pool.size}; scores=${JSON.stringify(graded.reduce((out, item) => { const key = item.score <= 20 ? 'entry' : item.score <= 40 ? 'easy' : item.score <= 60 ? 'intermediate' : item.score <= 80 ? 'hard' : 'expert'; out[key] = (out[key] ?? 0) + 1; return out; }, {}))}`);
+    selected.push(...matches.slice(0, range.count).map(item => ({ ...item, band: range.id })));
   }
-  const levels = selected.sort((a, b) => {
-    return scoreOf(a) - scoreOf(b) || a.canonicalKey.localeCompare(b.canonicalKey);
-  }).map((item, index, ordered) => {
-    const score = scoreOf(item);
-    const scores = ordered.map(scoreOf), low = Math.min(...scores), high = Math.max(...scores);
-    const score100 = high === low ? 0 : Math.round((score - low) / (high - low) * 100);
-    const variant = item.variant;
-    const localized = levelText(item.serial, variant);
-    return {
-      id: `magnetic-${hash(item.canonicalKey).slice(0, 16)}`, number: index + 1,
-      ...localized, options: item.options, witness: item.witness, witnessResult: 'won',
-      metrics: { legalPlacementChoices: item.legalPlacementChoices, setupPlacementChoices: item.setupPlacementChoices, winningPlacementChoices: item.winningPlacementChoices, availableFloorChoices: item.options.floorSwitch ? 3 : 1, witnessPlacements: item.witnessPlacements, witnessFloorDecisions: item.witnessFloorDecisions, difficultyScore: score100 },
-      marks: Math.min(5, 1 + Math.floor(score100 / 20)), tags: [variant === 0 ? 'calm-bonded' : variant === 1 ? 'magnetic-split' : variant === 2 ? 'floor-schedule' : variant === 3 ? 'floor-switch' : 'magnetic-impact', item.witnessPlacements > 1 ? 'multi-placement' : 'single-placement'], canonicalKey: item.canonicalKey,
-      canonicalKeyHash: hash(item.canonicalKey), score: score100, gradingVersion: GRADING, proofStatus: 'engine-witness-verified', reviewStatus: 'human-review-pending',
-      ...(variant ? { counterfactual: { kind: variant === 1 || variant === 4 ? 'floor-choice' : variant === 2 ? 'floor-schedule' : 'floor-switch', alternative: variant === 3 ? 'same action sequence with no Floor Switch available' : 'same action sequence with Calm floor on every placement', result: item.counterfactualResult } } : {}),
-      ...(variant === 4 ? { impactEvidence: { removedSupportCount: item.impactRemovedIds.length, disabledImpactResult: item.disabledImpactResult } } : {}),
-    };
+  selected.sort((a, b) => a.score - b.score || a.canonicalKey.localeCompare(b.canonicalKey));
+  const bands = []; let cursor = 0;
+  for (const range of ranges) { bands.push({ id: range.id, count: range.count, first: cursor + 1, last: cursor + range.count }); cursor += range.count; }
+  const levels = selected.map((item, index) => {
+    const band = item.band;
+    const text = band === 'expert' ? ['Layered support sequence', '重なる支えの順序', 'Clear blue, then green, then switch to Pull for the red target.', '青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。']
+      : band === 'hard' ? ['Layered support', '重なる支え', 'Remove the marked support layers in queue order to expose the final target.', '順番に支えの層を消して、最後の目標を見つけます。']
+      : band === 'intermediate' ? ['Two marked columns', '2つの印の列', 'Use Pull to split one block across two marked red columns.', '引力でブロックを分け、2つの印の赤い列に届けます。']
+      : ['Open landing', '自由な着地', 'Match the marked red line with a legal block placement.', '合法なブロック配置で印の赤い列をそろえます。'];
+    const [titleEn, titleJa, objectiveEn, objectiveJa] = text;
+    const metrics = { legalPlacementChoices: item.legalPlacementChoices, setupPlacementChoices: item.setupPlacementChoices ?? 0,
+      winningPlacementChoices: item.winningPlacementChoices, availableFloorChoices: item.options.floorSwitch ? 3 : 1,
+      witnessPlacements: item.witnessPlacements, witnessFloorDecisions: item.witnessFloorDecisions, difficultyScore: item.score,
+      fullPlanTrials: item.trials, fullPlanWins: item.wins, fullPlanSuccessRate: item.fullRate,
+      setupDecisionPressure: item.setupDecisionPressure ?? 0, interactingDependencyDepth: item.interactionDepth ?? 0,
+      necessaryFloorDecisionShare: item.necessaryFloorDecisionShare ?? 0,
+      ...(item.setupEvidence ? { setupDecisionEvidence: item.setupEvidence } : {}),
+      ...(item.targetIdsClearedByPlacement ? { targetIdsClearedByPlacement: item.targetIdsClearedByPlacement, targetIdsRemainingAfterPlacement: item.targetIdsRemainingAfterPlacement, targetIdsMovedByPlacement: item.targetIdsMovedByPlacement } : {}),
+      minimumPlanSearch: { status: item.witnessPlacements === 1 ? 'exact' : 'unknown', nodeBudget: item.witnessPlacements === 1 ? item.legalPlacementChoices : 0,
+        nodesVisited: item.witnessPlacements === 1 ? item.legalPlacementChoices : 0, lowerBound: 1,
+        upperBound: item.witnessPlacements } };
+    const id = `magnetic-${hash(item.canonicalKey).slice(0, 16)}`;
+    const options = { ...item.options, seed: id };
+    return { id, number: index + 1, band,
+      title: { en: `${titleEn} ${String(index + 1).padStart(3, '0')}`, ja: `${titleJa} ${String(index + 1).padStart(3, '0')}` },
+      objective: { en: objectiveEn, ja: objectiveJa }, options, witness: item.witness, witnessResult: 'won', metrics,
+      marks: Math.min(5, 1 + Math.floor((item.score - 1) / 20)), tags: [band, item.layerEvidence ? 'layered-support' : item.targetGroupCount === 2 ? 'two-target-groups' : 'marked-line', item.witnessPlacements > 1 ? 'multi-placement' : 'single-placement'],
+      canonicalKey: item.canonicalKey, canonicalKeyHash: hash(item.canonicalKey), score: item.score, gradingVersion: GRADING,
+      proofStatus: 'engine-witness-verified', reviewStatus: 'human-review-pending',
+      ...(item.counterfactualResult ? { counterfactual: { kind: item.options.floorSwitch ? 'floor-switch' : 'floor-schedule', alternative: item.options.floorSwitch ? 'same witness without the one-use floor switch' : 'same witness with Calm on the scheduled placement', result: item.counterfactualResult } } : {}) };
   });
-  const body = { count: levels.length, candidateCount: candidates.size, generationRevision: REVISION, gradingVersion: GRADING,
-    difficultyFormula: 'raw = 0.55*(1 - winningChoicesAtFinalDecision / legalPlacementChoicesAtFinalDecision) + 0.35*max(0,witnessPlacements-1) + 0.10*Boolean(witnessFloorDecision); setupPlacementChoices is reported separately and floor availability alone has no weight.',
-    normalization: 'Map raw scores across the selected fifty levels linearly from the observed minimum to maximum onto integer 0–100; if all scores are equal use 0.',
-    marksFormula: 'min(5, 1 + floor(score / 20))',
-    orderingPolicy: 'Sort ascending by the raw engine-derived difficulty score, then canonical SHA-256 key; number after sorting.', levels };
+  const legacyArchive = previousCampaign.legacyArchive ?? previousCampaign.levels;
+  const body = { count: levels.length, currentCount: levels.length, candidateCount: pool.size, generationRevision: REVISION, gradingVersion: GRADING,
+    difficultyFormula: 'raw = .35*(1 - completePlanWinRate) + .25*(1 - finalWinningChoices/finalLegalChoices) + .15*meanFixedSuffixSetupPressure + .15*min(1, interactingDependencyDepth/2) + .10*necessaryFloorDecisionShare; score = clamp(1,100,1+round(99*raw)). Full-plan evidence uses 128 seeded legal playouts (1024 for expert candidates).',
+    normalization: 'Absolute score; no pool-relative normalization. Bands are fixed at 1–20, 21–40, 41–60, 61–80, and 81–100.',
+    marksFormula: 'min(5, 1 + floor((score - 1) / 20))', orderingPolicy: 'Sort ascending by measured integer score, then canonical SHA-256 key; band comes from fixed score ranges.',
+    bands, levels, legacyArchive };
   const campaign = { ...body, checksum: hash(stable(body)) };
   return deepFreeze({ campaign, lessons: makeLessons() });
 }
-
 if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
   const data = generateContent();
   const source = `import type { MagneticContentData } from './content-types.js';\n\n/** Generated by scripts/magnetic-blocks-levels.mjs. */\nexport const contentData: MagneticContentData = ${JSON.stringify(data, null, 2)};\n`;
