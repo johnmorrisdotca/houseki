@@ -11,12 +11,25 @@ Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable,
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-2f5d4a">
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/houseki/"><strong>Play a game →</strong></a> · <a href="https://johnmorrisdotca.github.io/houseki/api.html">API reference</a></p>
+<table align="center">
+<tr>
+<td align="center" valign="top">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page header with its language chooser, the API reference link, five cloth patches and the Help switch, the page chooser (Falling Triplets, Colour Chains, Gem Swap and Stone Collapse chosen, Magnetic Blocks), the settings column, and Gem Swap on green felt: an eight by eight board of red, blue, green, gold and purple gems with a permanent symbol on each, and the tool tray beside it with Bomb, Row clear and Colour clear" width="600">
+</picture>
+<br><em>The demo on a desk: Gem Swap with its tool tray.</em>
+</td>
+<td align="center" valign="top">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-phone-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-phone-light.webp" alt="The demo on a phone, in Japanese: the Gem Swap board of gems with their symbols, and under it the tool tray, 道具箱, with the bomb, row and colour tools, the confirm and cancel buttons, and the hint and reshuffle buttons" width="190">
+</picture>
+<br><em>On a phone, in Japanese, in the device's light or dark.</em>
+</td>
+</tr>
+</table>
 
-<p align="center">
-  <img src="docs/images/gem-swap-desktop.png" alt="Gem Swap on a full board in the demo: a grid of red, blue, green, gold, purple and teal gems with permanent symbols on them, the tool tray beside it with Bomb, Row clear and Colour clear, and the family's header above" width="620">
-  <img src="docs/images/tool-tray-phone.png" alt="The same tool tray on a phone, under the board" width="200">
-</p>
 
 Houseki is a set of match-style puzzle games made to be dropped into a page or a server. Every game is a set of plain functions on plain data: a state in, a new state out, nothing read from the page, the clock or the network. The demo's players draw those states, and a person can play them with the keyboard, a keypad or a finger.
 
@@ -86,7 +99,90 @@ Or straight from a page, with nothing to build:
 | Shizen | `colour-chains` | anticipate marked stones and rebound | four connected gems after attraction | 50 |
 | Arashi | `colour-chains` | plan around earthquakes and lightning | four connected gems after weather | 50 |
 
+
+### What's in it
+
+Each picture is the real game, drawn by the demo's player from the package's engine and taken with `pnpm screenshots:readme`, in light and dark. The board is the same seed every time, so the pictures are the same each run.
+
+<table>
+<tr>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/falling-triplets-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/falling-triplets-desk-light.webp" alt="Falling Triplets on a desk after six placed triplets: a tall pale well in a wooden frame with a heap of gems at the bottom, each with a permanent symbol, the Next column of three triplets beside it, the line Place the triplet and the buttons for the arrows, Reverse cycle, Cycle, Place and Pause under it" width="360">
+</picture>
+<br><em><strong>Falling Triplets.</strong> Cycle the colours of a falling vertical triplet and place it; three in a line, across, down or diagonal, clear.</em>
+</td>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/colour-chains-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/colour-chains-desk-light.webp" alt="Colour Chains on a desk after six placed pairs: a tall pale well with a heap of gems at the bottom and a pair of gems at the top, the Next pair beside it, and the buttons for the arrows, Rotate left, Rotate right, Place and Pause under it" width="360">
+</picture>
+<br><em><strong>Colour Chains.</strong> Rotate a falling pair; four or more of a colour connected clear, and the stones above fall and may clear again.</em>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/gem-swap-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/gem-swap-desk-light.webp" alt="Gem Swap on a desk: an eight by eight board of gems in a wooden frame with the top-left gem selected, and the Tool tray beside it with Bomb × 1, Row clear × 1 and Colour clear × 1, the counter 0/12 ordinary clears toward the next tool, and the Confirm, Cancel, Hint and Reshuffle buttons" width="400">
+</picture>
+<br><em><strong>Gem Swap.</strong> Swap two neighbours to make a run of three or more; stored tools are previewed, then confirmed or cancelled.</em>
+</td>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/stone-collapse-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/stone-collapse-desk-light.webp" alt="Stone Collapse on a desk: a board of gems in a wooden frame, ten rows of eight, and the Tool tray beside it with Bomb × 1 and Pick × 1, the counter 0/12 ordinary clears toward the next tool, and the Confirm and Cancel buttons, with the line Choose a group or a tool" width="400">
+</picture>
+<br><em><strong>Stone Collapse.</strong> Select a connected group of two or more stones of one colour, read the preview, and confirm.</em>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/magnetic-blocks-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/magnetic-blocks-desk-light.webp" alt="Magnetic Blocks, challenge 1, on a desk: a well with bonded two-by-two blocks of gems along the floor, a falling block at the top, the Next floor and Current floor chips showing Calm, the objective Marked gem 0/3, the Floor Switch panel with Calm, Pull and Cancel buttons, and the buttons for the arrows, Rotate left, Rotate right, Hard drop, Place and Pause" width="360">
+</picture>
+<br><em><strong>Magnetic Blocks.</strong> Bonded 2×2 squares, a floor that turns magnetic on a schedule, and a one-use Floor Switch.</em>
+</td>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/shizen-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/shizen-desk-light.webp" alt="Shizen challenge 1 on a desk: a Colour Chains well with a few gems at the bottom and a pair at the top, the objective Target gems cleared 0 / 3 with a progress bar, Pieces left: 3, and the Next pair beside it" width="360">
+</picture>
+<br><em><strong>Shizen.</strong> Colour Chains with magnetic stones and one bounded rebound: a finite queue, a goal and a count of pieces left.</em>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/arashi-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/arashi-desk-light.webp" alt="Arashi challenge 1 on a desk: a Colour Chains well with a few gems at the bottom and a pair at the top, the objective Target gems cleared 0 / 1 with a progress bar, Pieces left: 4, and the Next pair beside it" width="360">
+</picture>
+<br><em><strong>Arashi.</strong> Colour Chains with weather: plan around earthquakes that jumble stones and lightning that removes exposed ones.</em>
+</td>
+<td align="center" valign="top" width="50%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/tool-tray-phone-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/tool-tray-phone-light.webp" alt="The Gem Swap board and its tool tray on a phone: an eight by eight board of gems with their symbols, and under it the Tool tray with the Bomb × 1, Row clear × 1 and Colour clear × 1 buttons, the counter 0/12 ordinary clears toward the next tool, the Confirm, Cancel, Hint and Reshuffle buttons and the line Choose a gem or a tool" width="240">
+</picture>
+<br><em><strong>On a phone.</strong> The tool tray sits under the board, and every button is at least 44 pixels high.</em>
+</td>
+</tr>
+</table>
+
 ## Use it in your project
+
+### Install
+
+```sh
+npm install @johnmorrisdotca/houseki
+# or: pnpm add @johnmorrisdotca/houseki
+# or: yarn add @johnmorrisdotca/houseki
+```
+
+It is ES modules only, with its types included, and needs Node 22 or later outside a browser. A page with no bundler imports an engine from a CDN (`@0` is the major version): see the first example under [Examples](#examples).
+
 
 Import a game directly from `@johnmorrisdotca/houseki/falling-triplets`, `@johnmorrisdotca/houseki/stone-collapse`, `@johnmorrisdotca/houseki/colour-chains`, `@johnmorrisdotca/houseki/gem-swap` or `@johnmorrisdotca/houseki/magnetic-blocks`, and the deterministic attraction, rebound and environment utilities from `@johnmorrisdotca/houseki/nature`. The main entry, `@johnmorrisdotca/houseki`, groups the same names as the namespaces `fallingTriplets`, `stoneCollapse`, `colourChains`, `gemSwap`, `nature` and `magneticBlocks`. The engines do not touch the DOM, storage or the network.
 
@@ -109,7 +205,6 @@ To run the whole demo, `pnpm install && pnpm site`, then serve `site/` with any 
 
 ### Additional campaigns
 
-![Magnetic Blocks campaign: fixed board settings, a marked-gem objective, progress bars and the shared cloth and piece appearance](docs/images/magnetic-blocks-campaign-desktop.png)
 
 ```ts
 import { createShizenLevel, createArashiLevel } from "@johnmorrisdotca/houseki/colour-chains";
@@ -122,9 +217,363 @@ const bondedSquares = createLevel(1);
 
 Each campaign has fifty fixed puzzles ordered from easy to hard. Use its manifest for stable IDs, bilingual titles, objectives, difficulty marks and verified winning plans. Select Shizen or Arashi in the Colour Chains demo, or a challenge in Magnetic Blocks. A campaign uses a finite queue with no falling clock; the goal and progress appear beside the board. Fixed rules stay visible, and the result offers replay or the next challenge. See the [campaign contract](docs/design/CAMPAIGN-EXTENSIONS.md).
 
+### In a framework
+
+The engines are plain functions with no framework code, so each framework holds a state and replaces it with what `applyAction` returns. Each of these is a Gem Swap board of buttons; the engine does the rules, and `advanceTicks` lets a swap settle.
+
+#### React
+
+```jsx
+import { useState } from "react";
+import { advanceTicks, applyAction, createGame, legalActions } from "@johnmorrisdotca/houseki/gem-swap";
+
+export function Board() {
+  const [game, setGame] = useState(() => createGame({ seed: "hello" }));
+  const [chosen, setChosen] = useState(null);
+  const press = (index) => {
+    const swap = legalActions(game).find((a) => a.kind === "swap" && a.from === chosen && a.to === index);
+    if (swap) setGame(advanceTicks(applyAction(game, swap).state, 200).state);
+    setChosen(swap ? null : index);
+  };
+  return <div role="group" aria-label="Gem board" style={{ display: "grid", gridTemplateColumns: "repeat(8, 44px)" }}>
+    {game.board.map((gem, index) => <button key={gem.id} aria-pressed={chosen === index} onClick={() => press(index)}>{gem.colour}</button>)}
+  </div>;
+}
+```
+
+#### Vue
+
+```vue
+<script setup>
+import { ref, shallowRef } from "vue";
+import { advanceTicks, applyAction, createGame, legalActions } from "@johnmorrisdotca/houseki/gem-swap";
+
+const game = shallowRef(createGame({ seed: "hello" }));
+const chosen = ref(null);
+function press(index) {
+  const swap = legalActions(game.value).find((a) => a.kind === "swap" && a.from === chosen.value && a.to === index);
+  if (swap) game.value = advanceTicks(applyAction(game.value, swap).state, 200).state;
+  chosen.value = swap ? null : index;
+}
+</script>
+
+<template>
+  <div role="group" aria-label="Gem board" style="display: grid; grid-template-columns: repeat(8, 44px)">
+    <button v-for="(gem, index) in game.board" :key="gem.id" :aria-pressed="chosen === index" @click="press(index)">{{ gem.colour }}</button>
+  </div>
+</template>
+```
+
+#### Svelte
+
+```svelte
+<script>
+  import { advanceTicks, applyAction, createGame, legalActions } from "@johnmorrisdotca/houseki/gem-swap";
+
+  let game = createGame({ seed: "hello" });
+  let chosen = null;
+  function press(index) {
+    const swap = legalActions(game).find((a) => a.kind === "swap" && a.from === chosen && a.to === index);
+    if (swap) game = advanceTicks(applyAction(game, swap).state, 200).state;
+    chosen = swap ? null : index;
+  }
+</script>
+
+<div role="group" aria-label="Gem board" style="display: grid; grid-template-columns: repeat(8, 44px)">
+  {#each game.board as gem, index (gem.id)}
+    <button aria-pressed={chosen === index} on:click={() => press(index)}>{gem.colour}</button>
+  {/each}
+</div>
+```
+
+#### Angular
+
+```ts no-check
+import { Component, signal } from "@angular/core";
+import { advanceTicks, applyAction, createGame, legalActions } from "@johnmorrisdotca/houseki/gem-swap";
+
+@Component({
+  selector: "app-board",
+  standalone: true,
+  template: `<div role="group" aria-label="Gem board" style="display: grid; grid-template-columns: repeat(8, 44px)">
+    @for (gem of game().board; track gem.id; let index = $index) {
+      <button [attr.aria-pressed]="chosen() === index" (click)="press(index)">{{ gem.colour }}</button>
+    }
+  </div>`,
+})
+export class BoardComponent {
+  game = signal(createGame({ seed: "hello" }));
+  chosen = signal<number | null>(null);
+  press(index: number) {
+    const swap = legalActions(this.game()).find((a) => a.kind === "swap" && a.from === this.chosen() && a.to === index);
+    if (swap) this.game.set(advanceTicks(applyAction(this.game(), swap).state, 200).state);
+    this.chosen.set(swap ? null : index);
+  }
+}
+```
+
+## Examples
+
+Each example is a whole recipe: copy it and it works. The ones in TypeScript are run in CI against the built package (`pnpm test:readme`), so none of them is a guess, and the output shown is what they print.
+
+### A Gem Swap board in a page, with no bundler
+
+The engine draws nothing, so a page draws the state. Save this as a file and serve it: an eight-by-eight board of buttons, press one gem and then the one beside it, and the swap is made if the rules allow it. The module comes from a CDN, and `@0` is the major version.
+
+```html
+<!doctype html>
+<meta charset="utf-8">
+<title>Gem Swap</title>
+<style>
+  #board { display: grid; grid-template-columns: repeat(8, 44px); gap: 4px; }
+  #board button { width: 44px; height: 44px; border-radius: 22px; border: 2px solid #333; }
+  #board button[aria-pressed="true"] { outline: 3px solid black; }
+</style>
+<p id="score" role="status"></p>
+<div id="board"></div>
+<script type="module">
+  import { advanceTicks, applyAction, createGame, legalActions } from "https://cdn.jsdelivr.net/npm/@johnmorrisdotca/houseki@0/dist/gem-swap.js";
+
+  const FILL = { red: "#c8372d", blue: "#2a5ea8", green: "#2f8a4f", gold: "#dfa11b", purple: "#7b4fa3", teal: "#1f9a9a" };
+  let game = createGame({ seed: "hello" });
+  let chosen = null;
+
+  function draw() {
+    document.getElementById("score").textContent = `Score ${game.score}, moves ${game.moves}`;
+    document.getElementById("board").replaceChildren(...game.board.map((gem, index) => {
+      const button = document.createElement("button");
+      button.style.background = FILL[gem.colour];
+      button.setAttribute("aria-label", gem.colour);          // a colour is also a word
+      button.setAttribute("aria-pressed", String(chosen === index));
+      button.onclick = () => {
+        const swap = legalActions(game).find((action) => action.kind === "swap" && ((action.from === chosen && action.to === index) || (action.from === index && action.to === chosen)));
+        if (chosen !== null && swap) game = advanceTicks(applyAction(game, swap).state, 200).state;   // time is a count of ticks
+        chosen = chosen === null || swap ? null : index;
+        draw();
+      };
+      return button;
+    }));
+  }
+  draw();
+</script>
+```
+
+### A challenge won by its recorded play
+
+Every graded challenge ships a winning play, and the tests replay all 450. A server can do the same to check that a client really won, with no screen: start the level, make the recorded moves, and read the phase.
+
+```ts
+import { advanceTicks, applyAction, createLevel, levelManifest, statusOf } from "@johnmorrisdotca/houseki/falling-triplets";
+
+const challenge = levelManifest[0]!;
+console.log(challenge.number, challenge.title.en, "/", challenge.title.ja, `(${challenge.marks} of 5 marks)`);
+
+let state = createLevel(1);
+for (const move of challenge.witness) {
+  while (state.active!.x < move.x) state = applyAction(state, { kind: "right" }).state;
+  while (state.active!.x > move.x) state = applyAction(state, { kind: "left" }).state;
+  state = applyAction(state, { kind: "hard-drop" }).state;
+  state = advanceTicks(state, 200).state;                 // let it land and clear
+}
+console.log(statusOf(state));
+```
+
+```text
+1 Diagonal Thread 7 / 斜めの糸 7 (1 of 5 marks)
+{ phase: 'won', score: 72, maxChain: 1 }
+```
+
+### A bot that plays a free game
+
+An engine lists what may be done now (`legalActions`), so a bot needs no knowledge of the rules. This one moves and cycles at random from a seeded stream and places every triplet, on the compact board, until the well is full.
+
+```ts
+import { advanceTicks, applyAction, createGame } from "@johnmorrisdotca/houseki/falling-triplets";
+
+function stream(seed: number) {                            // a small seeded generator: the same game every run
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const random = stream(5);
+let game = createGame({ mode: "relaxed", seed: "bot", preset: "compact" });
+let pieces = 0;
+while (game.phase === "falling" && pieces < 300) {
+  for (let step = Math.floor(random() * 5); step > 0; step -= 1) game = applyAction(game, { kind: random() < 0.5 ? "left" : "right" }).state;
+  if (random() < 0.5) game = applyAction(game, { kind: "cycle-forward" }).state;
+  game = advanceTicks(applyAction(game, { kind: "place" }).state, 100).state;
+  pieces += 1;
+}
+console.log(pieces, "triplets;", game.phase, "with score", game.score);
+```
+
+```text
+11 triplets; lost with score 30
+```
+
+### Gem Swap: moves, hints and tools
+
+A swap is `{ kind: "swap", from, to }` by cell number, a hint is an action of its own, and a game that has used one is marked assisted. Stored tools are actions too.
+
+```ts
+import { advanceTicks, applyAction, createGame, hintGame, legalActions, statusOf } from "@johnmorrisdotca/houseki/gem-swap";
+
+const game = createGame({ seed: "x" });
+console.log(legalActions(game).length, "swaps; the first is", legalActions(game)[0]);
+const moved = advanceTicks(applyAction(game, { kind: "swap", from: 0, to: 1 }).state, 200).state;
+console.log("score", moved.score, "after", moved.moves, "move; phase", moved.phase);
+
+const hinted = hintGame(game).state;
+console.log("hint used, so the game is marked assisted:", statusOf(hinted).assisted);
+
+const withTools = createGame({ seed: "x", tools: true });
+console.log(withTools.inventory, legalActions(withTools).filter((action) => action.kind === "select-tool").length, "tools to choose");
+```
+
+```text
+17 swaps; the first is { kind: 'swap', from: 0, to: 1 }
+score 90 after 1 move; phase ready
+hint used, so the game is marked assisted: true
+{ bomb: 1, 'row-clear': 1, 'colour-clear': 1 } 3 tools to choose
+```
+
+### Stone Collapse: choose a group, look, then confirm
+
+Stone Collapse is chosen by group: select a stone, read the score of the preview in `statusOf`, then `confirm` or `cancel`. Nothing is spent until it is confirmed.
+
+```ts
+import { applyAction, createGame, legalActions, statusOf } from "@johnmorrisdotca/houseki/stone-collapse";
+
+let game = createGame({ seed: "x" });
+const firstGroup = legalActions(game)[0]!;                  // select the first stone that has a group
+console.log(firstGroup);
+game = applyAction(game, firstGroup).state;
+console.log("preview", statusOf(game).previewScore, "points; actions now:", legalActions(game).slice(-2));
+const confirmed = applyAction(game, { kind: "confirm" });
+console.log(confirmed.accepted, "score", statusOf(confirmed.state).score);
+```
+
+```text
+{ kind: 'select', stoneId: 3 }
+preview 10 points; actions now: [ { kind: 'confirm' }, { kind: 'cancel' } ]
+true score 10
+```
+
+### Save a game and read it back
+
+A game is its settings and the actions taken, so a save is that list as text, and reading it plays the actions again. A save that does not match its own record, or is not a save, is refused: `decodeGame` throws, so a server can catch it and say the save is bad.
+
+```ts
+import { advanceTicks, applyAction, createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/falling-triplets";
+
+let game = createGame({ mode: "relaxed", seed: "first-game" });
+game = applyAction(game, { kind: "cycle-forward" }).state;
+game = advanceTicks(applyAction(game, { kind: "place" }).state, 22).state;
+
+const saved = encodeGame(game);
+console.log(saved.length > 1000, decodeGame(saved)?.score === game.score);
+for (const bad of ["not a save", saved.replace("first-game", "another")]) {
+  try {
+    decodeGame(bad);
+  } catch (error) {
+    console.log("refused:", (error as Error).message);
+  }
+}
+```
+
+```text
+true true
+refused: Unexpected token 'o', "not a save" is not valid JSON
+refused: Save checkpoint does not match its action recording
+```
+
+### Daily: the same board for everyone on a date
+
+A Daily game takes the date from the host, in UTC, as its seed, and the queue of pieces comes from the date alone.
+
+```ts
+import { createGame } from "@johnmorrisdotca/houseki/falling-triplets";
+
+const today = createGame({ mode: "daily", seed: "2026-10-06" });
+const again = createGame({ mode: "daily", seed: "2026-10-06" });
+const tomorrow = createGame({ mode: "daily", seed: "2026-10-07" });
+console.log(JSON.stringify(today.next) === JSON.stringify(again.next), JSON.stringify(today.next) === JSON.stringify(tomorrow.next));
+```
+
+```text
+true false
+```
+
+### The three campaigns that came after
+
+Magnetic Blocks, Shizen and Arashi each have fifty fixed puzzles ordered from easy to hard, with stable IDs, titles in both languages, an objective and a verified winning plan. A campaign has a finite queue and no falling clock.
+
+```ts
+import { createArashiLevel, createShizenLevel, arashiLevelManifest, shizenLevelManifest } from "@johnmorrisdotca/houseki/colour-chains";
+import { createLevel, levelManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+
+console.log(levelManifest.length, shizenLevelManifest.length, arashiLevelManifest.length);
+console.log(levelManifest[0]!.title.en, "|", shizenLevelManifest[0]!.title.ja, "|", arashiLevelManifest[0]!.title.en);
+console.log(createLevel(1).phase, createShizenLevel(1).settings.goal, createArashiLevel(1).settings.weather);
+```
+
+```text
+50 50 50
+Bonded landing 25 | 磁力の後にリバウンド | Save a path for lightning
+falling { kind: 'clear-targets', targetIds: [ 1, 2, 3 ] } frequent
+```
+
+### A page that plays a level with the keyboard
+
+The demo's players are the worked example of drawing the states: `demo/chains.js`, `demo/blocks.js`, `demo/tools.js` and `demo/demo.js` are plain DOM, with the keyboard and keypad scheduled through `createInputScheduler`, which turns held keys into actions on a count of ticks.
+
+```ts no-run
+import { actionsForTick, advanceTicks, applyAction, createInputScheduler, createLevel, queueInputEdge } from "@johnmorrisdotca/houseki/falling-triplets";
+
+let game = createLevel(1);
+let input = createInputScheduler();
+addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") input = queueInputEdge(input, { kind: "left" });
+  if (event.key === "ArrowRight") input = queueInputEdge(input, { kind: "right" });
+  if (event.key === " ") input = queueInputEdge(input, { kind: "hard-drop" });
+});
+setInterval(() => {                                  // the page owns the clock; the engine counts ticks
+  const [actions, next] = actionsForTick(input);
+  input = next;
+  for (const action of actions) game = applyAction(game, action).state;
+  game = advanceTicks(game, 1).state;
+}, 50);
+```
+
 ## API
 
 Every export of every entry point is in the [API reference](https://johnmorrisdotca.github.io/houseki/api.html), made from the source when the demo is built, with each signature and doc comment. A test fails when a public export has no doc comment.
+
+### Entry points
+
+| Import | What it holds |
+| --- | --- |
+| `@johnmorrisdotca/houseki` | Every engine, grouped by game as `fallingTriplets`, `stoneCollapse`, `colourChains`, `gemSwap`, `nature` and `magneticBlocks` |
+| `@johnmorrisdotca/houseki/falling-triplets` | Falling Triplets: 100 challenges, three lessons, saves |
+| `@johnmorrisdotca/houseki/colour-chains` | Colour Chains: 50 challenges, three lessons, and the Shizen and Arashi campaigns |
+| `@johnmorrisdotca/houseki/stone-collapse` | Stone Collapse: 100 challenges, three lessons, hints, undo and stored tools |
+| `@johnmorrisdotca/houseki/gem-swap` | Gem Swap: 50 challenges, three lessons, hints, undo, stored tools and the Black Hole |
+| `@johnmorrisdotca/houseki/magnetic-blocks` | Magnetic Blocks: bonded squares, the magnetic floor and its 50 challenges |
+| `@johnmorrisdotca/houseki/nature` | The deterministic attraction, rebound and environment utilities |
+
+### The calls to learn first
+
+| Call | What it does |
+| --- | --- |
+| `createGame(options)` and `createLevel(number)` | A free game from a seed, and a graded challenge |
+| `applyAction(state, action)` | `{ state, events, accepted }`: the new state, what happened, and whether the action was allowed |
+| `advanceTicks(state, n)` | Time passing, as a count of ticks and never the clock |
+| `legalActions(state)` | Every action that may be taken now |
+| `encodeGame(state)` and `decodeGame(text)` | A save as text, and back; a save that does not check is refused with an error |
+| `statusOf(state)` | The phase, score and what a screen needs to say |
 
 ## Theming
 
@@ -141,6 +590,18 @@ The engines draw nothing. The demo's players take their colours from the family'
 | Daily mode | the standard board and colour count only, from a date |
 | Saves | a replay of the actions taken, checked when it is decoded; a save that does not match its own record is refused |
 | Tools | capped inventory, earned by ordinary clears, and not offered in Daily or in authored challenges |
+
+## Accessibility
+
+The engines draw nothing, so what they can do is give a player the facts it needs; what a person hears and presses is the player's. The demo's players are the worked example, and what follows is what they do and what they do not yet.
+
+- **Colour is never alone.** Every colour has its own permanent symbol on the gem (circle, square, triangle, diamond, cross and a sixth), kept under selection and flashes, so no choice of cloth or board material hides a colour. Special gems add their marks around the symbol and do not replace it.
+- **The keyboard and the keypad play every game.** Falling games: ← → move, ↑ rotate, Z and X reverse and cycle, ↓ soft drop, Space place or drop, Escape pause, and the keypad's 4, 6, 7, 9, 5 and 2 for the same. The full-board games are a `grid` with one tab stop: Tab reaches it, the arrow keys move between gems, and Enter or Space chooses one. Every on-screen button is also at least 44 pixels high.
+- **A status line that is spoken.** What to do next and what happened ("Place the triplet", "Choose a gem or a tool.", the result of a challenge) is in an `aria-live="polite"` line, and the goal's progress is a labelled `progress` element with its minimum, maximum and value, so a screen reader hears meaningful thresholds and the result and not every animation frame.
+- **Reduced motion is respected.** An Animation setting is on by default, a Reduce motion choice turns every movement off, and the system's `prefers-reduced-motion` stills them even when Animation is on: the final cells are drawn at once and nothing about timing or the rules changes.
+- **Nothing is timed against you in Relaxed play**, and a challenge has no falling clock.
+- **Light and dark** follow the device, and every word of the demo is in English and Japanese.
+- **Not yet.** In the falling games the well is drawn as one image named "Gem board", so a screen reader does not read out which gem is where; the full-board games' grid does name each cell. The colour pairs have not been measured against WCAG contrast ratios, and the design pack asks for that to be done. The Japanese has not been read by a native reader (see [Languages](#languages)).
 
 ## Browser support
 
@@ -236,6 +697,10 @@ Houseki (宝石) is Japanese for a gem or precious stone: the pieces of these ga
 
 Match games are an old family and their rules are common property. These five are original: the rules are written out in the design pack in our own words, every board is generated and checked by the repository's own scripts, and the pictures are drawn in code. No art, sound or level comes from another game.
 
+### Used by
+
+Using Houseki in something? Open an *Add my project* issue and we will add you.
+
 ### The family
 
 <!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
@@ -274,10 +739,12 @@ Houseki is one of twenty-four packages, each made for the same site, each at
 
 ```sh
 pnpm install
-pnpm check          # lint, types and tests: every game's rules, every campaign's recorded wins
-pnpm test:package   # pack it as npm does, install it in an empty project, import every entry
-pnpm test:demo      # build the demo and play it in a real browser, at a phone's width and a desk's
-pnpm site           # build the demo and the API reference into site/
+pnpm check              # lint, types and tests: every game's rules, every campaign's recorded wins
+pnpm test:package       # pack it as npm does, install it in an empty project, import every entry
+pnpm test:demo          # build the demo and play it in a real browser, at a phone's width and a desk's
+pnpm site               # build the demo and the API reference into site/
+pnpm test:readme        # run every example in this README against the built package
+pnpm screenshots:readme # take the README's pictures from the built demo, in light and dark
 ```
 
 ## Contributing
@@ -286,8 +753,9 @@ Ideas, bug reports and pull requests are welcome in the [issues](https://github.
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md).
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.2.1, adds no code: it is this README in full, with pictures of every game, examples that are run on every change, examples for React, Vue, Svelte and Angular, and an Accessibility section.
 
 ## Licence
 
 [MIT](./LICENSE) © John Morris. The code, the boards and the words are all the package's own. Report vulnerabilities through [SECURITY.md](./SECURITY.md).
+

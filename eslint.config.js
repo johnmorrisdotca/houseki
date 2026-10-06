@@ -11,11 +11,14 @@ const browser = {
 
 export default tseslint.config(
   { ignores: ["dist/", "site/", "node_modules/", "test-results/", "playwright-report/"] },
+  { ignores: [".readme-examples/"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   // A name that starts with an underscore says it is left out on purpose: a rest sibling dropped from a copy, a parameter a signature must keep.
   { rules: { "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", destructuredArrayIgnorePattern: "^_", ignoreRestSiblings: true }] } },
   { files: ["e2e/**/*.mjs", "playwright.config.mjs"], languageOptions: { globals: { ...node, ...browser } } },
   { files: ["scripts/**/*.mjs", "test/**/*.mjs", "src/**/*.test.js"], languageOptions: { globals: node } },
+  // The pictures' script hands functions to the page it drives, which read the page's own globals.
+  { files: ["scripts/readme-pictures.mjs", "scripts/readme-pictures-lib.mjs"], languageOptions: { globals: { ...node, ...browser } } },
   { files: ["demo/**/*.js"], languageOptions: { globals: browser } },
 );
