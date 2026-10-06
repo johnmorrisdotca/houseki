@@ -29,7 +29,10 @@ function completeGoal(state: GameState): boolean {
 }
 function spawn(state: GameState): readonly [GameState, readonly GameEvent[]] {
   if (completeGoal(state)) return [{ ...state, phase: 'won', active: null, reason: 'goal-complete' }, [{ type: 'run-ended', result: 'won', reason: 'goal-complete', score: state.score }]];
-  if (state.placements >= state.settings.pieceLimit || !state.queue.length) return [{ ...state, phase: 'finished', active: null, reason: 'queue-exhausted' }, [{ type: 'run-ended', result: 'finished', reason: 'queue-exhausted', score: state.score }]];
+  if (state.placements >= state.settings.pieceLimit || !state.queue.length) {
+    const result = state.settings.goal ? 'lost' : 'finished';
+    return [{ ...state, phase: result, active: null, reason: 'queue-exhausted' }, [{ type: 'run-ended', result, reason: 'queue-exhausted', score: state.score }]];
+  }
   const [colours, ...rest] = state.queue, gems = colours!.map((colour, index) => ({ id: state.nextId + index, colour })) as unknown as Block['gems'];
   const block = freezeBlock({ x: Math.floor(state.settings.width / 2) - 1, y: 0, orientation: 0, gems, descent: 0, lockTicks: 0, lockResets: 0, lockStarted: false });
   const floor = floorAt(state.settings.schedule, state.placements + 1);

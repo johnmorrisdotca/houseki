@@ -4,7 +4,12 @@
 .settings-fields { display: grid; gap: 12px; }
 .dimension-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .dimension-row input { width: 100%; min-height: 44px; }
-.experimental { margin: 8px 0 2px; padding: 7px 10px; border: 1px solid #e0b43b80; border-radius: 10px; color: var(--felt-ink); font-size: .8rem; text-align: center; background: #0002; }
+.blocks-objective { margin: 2px 0 6px; padding: 9px 10px; border: 1px solid #e0b43b80; border-radius: 10px; color: var(--ink); background: var(--surface); }
+.objective-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.objective-heading h3 { margin: 0; font-size: .95rem; }
+.blocks-objective > p { margin: 6px 0 0; font-size: .82rem; line-height: 1.4; }
+.goal-hud { display: grid; gap: 4px; color: var(--felt-ink); font-size: .78rem; }
+.goal-hud progress { width: 100%; max-width: 150px; height: 10px; accent-color: var(--gold); }
 .blocks-play-area { display: grid; grid-template-columns: minmax(0, auto) minmax(120px, 170px); justify-content: center; align-items: start; gap: 12px 18px; padding: 10px 0; }
 .preview-strip { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; min-height: 46px; color: var(--felt-ink); }
 .preview-strip > div { display: flex; align-items: center; gap: 8px; }
@@ -83,6 +88,4 @@
 }
 @media(prefers-reduced-motion:reduce) { .gem.marked { animation:none; } }
 
-.experimental{line-height:20px;min-height:36px}
-@media(max-width:980px){.experimental{min-height:56px}}
 .preview-strip b,.current-floor > span,.floor-chip{line-height:20px}

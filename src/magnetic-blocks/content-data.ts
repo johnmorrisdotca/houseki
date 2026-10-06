@@ -2359,7 +2359,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -2581,7 +2581,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -2794,7 +2794,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -3016,7 +3016,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -3238,7 +3238,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -3463,7 +3463,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -3692,7 +3692,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -3920,7 +3920,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -4149,7 +4149,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -4365,7 +4365,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -4593,7 +4593,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -4816,7 +4816,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -5042,7 +5042,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -5271,7 +5271,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -5491,7 +5491,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -5720,7 +5720,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -5955,7 +5955,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -6189,7 +6189,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -6427,7 +6427,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -6664,7 +6664,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-choice",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         },
         "impactEvidence": {
           "removedSupportCount": 1,
@@ -6891,7 +6891,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -7117,7 +7117,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -7334,7 +7334,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -7560,7 +7560,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -7795,7 +7795,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -8033,7 +8033,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -8271,7 +8271,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -8500,7 +8500,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -8732,7 +8732,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -8967,7 +8967,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-switch",
           "alternative": "same action sequence with no Floor Switch available",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -9206,7 +9206,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -9448,7 +9448,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -9681,7 +9681,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -9923,7 +9923,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -10168,7 +10168,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -10416,7 +10416,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -10655,7 +10655,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -10903,7 +10903,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -11145,7 +11145,7 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       },
       {
@@ -11390,11 +11390,11 @@ export const contentData: MagneticContentData = {
         "counterfactual": {
           "kind": "floor-schedule",
           "alternative": "same action sequence with Calm floor on every placement",
-          "result": "finished"
+          "result": "lost"
         }
       }
     ],
-    "checksum": "16b607985e861996d31511af0c4129da4615ee954c1f4bef1da43c24e45cea1c"
+    "checksum": "508cdb80f7f1dcbe583db120d7c4d4da38d58b4bf6554bf6bb3d912a3cc2273b"
   },
   "lessons": [
     {
