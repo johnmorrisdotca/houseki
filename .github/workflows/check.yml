@@ -26,5 +26,5 @@ jobs:
       - run: pnpm site
       - run: pnpm exec playwright install --with-deps chromium
         if: matrix.node == 22
-      - run: node test/browser/tools.mjs
+      - run: node --test --test-concurrency=2 test/browser/*.mjs
         if: matrix.node == 22

@@ -67,7 +67,7 @@
     "test": "npm run build && node --test test/*.test.mjs",
     "site": "npm run build && node scripts/site.mjs",
     "demo": "npm run site && node scripts/serve.mjs",
-    "test:browser": "npm run site && node test/browser/tools.mjs",
+    "test:browser": "npm run site && node --test --test-concurrency=2 test/browser/*.mjs",
     "check:package": "npm run build && node scripts/check-package.mjs"
   },
   "devDependencies": {

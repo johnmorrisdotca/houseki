@@ -46,8 +46,12 @@ export function apiOf() {
         signature = clip(declaration.getText().replace(/^export /, ""));
       } else if (target.flags & ts.SymbolFlags.Module) {
         kind = "namespace";
-        signature = `import { ${symbol.name} } from "${pkg.name}"; // or everything in it from "${pkg.name}/${symbol.name}"`;
-        return { name: symbol.name, kind, signature, doc: `Everything the ${pkg.name}/${symbol.name} entry point exports, as one namespace.` };
+        const namespaceSource = target.declarations?.find(ts.isSourceFile);
+        const subpath = entries.find((candidate) => namespaceSource && resolve(candidate.file) === resolve(namespaceSource.fileName));
+        if (!subpath) throw new Error(`No package export targets the TypeScript source for namespace ${symbol.name}`);
+        const alias = `${symbol.name}Entry`;
+        signature = `import { ${symbol.name} } from "${pkg.name}";\nimport * as ${alias} from "${subpath.name}";`;
+        return { name: symbol.name, kind, signature, doc: `The ${subpath.name} package entry point, also available from the root entry point as ${symbol.name}.` };
       } else {
         const type = checker.getTypeOfSymbolAtLocation(target, declaration);
         const calls = type.getCallSignatures();
@@ -130,7 +134,7 @@ export function apiPage({ id, name, icon, api = apiBody() }) {
 <html lang="en">
   <head>
     ${familyHead({ id, title: `${name} API reference: every export, with its signature`, description: `The API reference of the ${name} package: every export of every entry point, with its signature and its documentation, made from the source.` })}
-    <link rel="icon" href="${icon}" />
+    <link rel="icon" href="${escape(icon)}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="api.css" />
   </head>

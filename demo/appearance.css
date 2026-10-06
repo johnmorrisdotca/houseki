@@ -1,0 +1,5 @@
+.gem.red{--gem-solid:#b5452c}.gem.blue{--gem-solid:#366f91}.gem.green{--gem-solid:#3e7957}.gem.gold{--gem-solid:#9c7117}.gem.purple{--gem-solid:#765785}.gem.teal{--gem-solid:#287b7b}
+:root[data-pieces="matte"] .gem{background:var(--gem-solid);box-shadow:inset 0 -2px 3px #0003}
+:root[data-pieces="flat"] .gem{background:var(--gem-solid);border-radius:22%;box-shadow:none}
+:root[data-pieces="matte"] .gem.magnetic,:root[data-pieces="flat"] .gem.magnetic{outline:2px solid #b9c2c9;outline-offset:-2px}
+.cloth{flex-shrink:0}nav .lang{flex-shrink:0}

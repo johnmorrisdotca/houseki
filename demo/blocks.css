@@ -20,6 +20,7 @@
 .current-floor { display: grid; gap: 5px; justify-items: start; }
 .game-info #status { min-height: 2.3em; margin: 4px 0; }
 .game-info .micro { min-height: 2em; margin: 0; }
+.stats #placement-progress { display:block; width:110px; height:8px; margin-top:3px; accent-color:var(--gold); }
 .lock-meter { display: grid; gap: 4px; font-size: .78rem; }
 .lock-meter progress { width: 100%; height: 12px; accent-color: var(--gold); }
 .well-wrap { justify-self: center; width: max-content; max-width: 100%; border-color: var(--blocks-frame); background: var(--blocks-frame); }
@@ -54,10 +55,12 @@
 .keys { text-align: center; color: var(--felt-ink); padding: 4px 4px 0; }
 .well-scroll[data-oversized="true"] { max-height: min(65dvh, 680px); overflow: auto; overscroll-behavior: contain; }
 .well-scroll[data-oversized="true"] .well { width: max-content; --cell: max(25px,min(34px,calc((100vw - 90px)/var(--cols)))); }
+.board-column { min-width: 0; max-width: 100%; }
+.board-column .board-nav { justify-content: center; padding-top: 6px; }
 .material-slate { --blocks-board: #d8e0dc; }
 .material-wood { --blocks-board: #d7b680; }
 @keyframes marked-pulse { to { filter: brightness(1.65); } }
-@media(max-width:760px) {
+@media(max-width:980px) {
   .blocks-layout { grid-template-columns: minmax(0,1fr); }
   .blocks-layout aside { order: 2; }
   .blocks-layout .game-screen { order: 1; padding: 12px 8px; }
@@ -79,3 +82,6 @@
   .controls .fam-button { min-width: 42px; padding: 0 9px; }
 }
 @media(prefers-reduced-motion:reduce) { .gem.marked { animation:none; } }
+
+.experimental{line-height:20px;min-height:36px}
+@media(max-width:980px){.experimental{min-height:56px}}

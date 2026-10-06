@@ -279,7 +279,7 @@ export const FAMILY_SCRIPT = `var familyHelp = (function familyHelpSwitch() {
   var kept = null;
   try { kept = localStorage.getItem(KEY); } catch (error) { /* A browser that keeps nothing starts on green. */ }
   var wear = function (name, keep) {
-    if (!(name in CLOTHS)) name = "green";
+    if (!Object.prototype.hasOwnProperty.call(CLOTHS, name)) name = "green";
     var cloth = CLOTHS[name];
     var root = document.documentElement.style;
     root.setProperty("--felt", cloth.felt);

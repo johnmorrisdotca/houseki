@@ -1,6 +1,9 @@
+import {preferredLanguage,refreshAppearanceLanguage} from './appearance.js';
+import {syncAuthoredSettings,readFreeSettings,restoreFreeSettings} from './settings.js';
+import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
-import { createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from './dist/falling-triplets.js';
+import { restartGame, createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from './dist/falling-triplets.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {
@@ -8,40 +11,43 @@ const words = {
   ja: { lessonLabel:'遊び方',challengeLabel:'チャレンジ',animations:'アニメーション', settings: '設定', mode: 'モード', board: '盤面', colours: '色数', help: '宝石の色を入れ替えて三つ並べましょう。消えた宝石の上にあった石が落ち、新しい連鎖が起きることがあります。横・縦・斜めに並びます。', keys: 'キー操作：← → 移動 · ↑ 色を入れ替え · Z / X 逆順/順送り · ↓ 落下 · Space 置く/落とす · Escape 一時停止。テンキー：4 / 6 移動 · 7 / 9 逆順/順送り · 5 落下 · 2 置く/落とす', material: '盤面の素材', reduced: '動きを減らす', sound: '効果音', title: '三つの宝石', score: '得点', chain: '最大連鎖', next: '次の石', reverse: '逆順', cycle: '色を入れ替え', new: '新しいゲーム', restart: 'やり直す', place: '三つの宝石を置いてください', paused: '一時停止中', won: 'チャレンジ達成', lost: '盤面がいっぱいです', placeButton: '置く', drop: '落とす', down: '下へ', theme: 'テーマ', continue: '続ける', countdown: '開始まで', left: '左', right: '右', pause: '一時停止', resume: '続ける' }
 };
 const saveKey = 'houseki-falling-triplets-save'; const preferenceKey = 'houseki-ui';
-let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
+let customSize=null;let selectedLevel=null; let lang = 'en'; let game; let startOptions = {}; let input = createInputScheduler(); let lastFrame = 0; let accumulator = 0; let saveTimer = 0; let resumeRequired = false;
 const heldKeys = new Map();
 const pendingReleases = new Set();
 function beginHold(action) { pendingReleases.delete(action); input = setHeldAction(input, action, true); }
 function endHold(action) { if (input.held[action] === 0) pendingReleases.add(action); else input = setHeldAction(input, action, false); }
 function readPreferences() {
-  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); lang = pref.lang === 'ja' ? 'ja' : 'en'; if (pref.theme) document.documentElement.dataset.theme = pref.theme; if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
+  try { const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}'); lang = preferredLanguage(pref.lang); restoreFreeSettings(pref.freeSetup); if (pref.material) $('#material').value = pref.material; if (pref.motion) $('#motion').checked = true; if (pref.sound) $('#sound').checked = true; document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full'; }
   catch { /* Play starts normally when preferences are unavailable. */ }
 }
 function writePreferences() {
-  try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, theme: document.documentElement.dataset.theme, material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
+  try { localStorage.setItem(preferenceKey, JSON.stringify({ lang, freeSetup:readFreeSettings(), material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Preferences are optional. */ }
 }
-function getOptions() { return { mode: $('#mode').value, preset: $('#mode').value === 'daily' ? 'narrow' : $('#preset').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
+function syncSetup(){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);const level=levelManifest.find(item=>item.id===$('#level').value);const config=lesson?{...lesson.setup,seed:`lesson:${lesson.id}`}:level??null;syncAuthoredSettings(config,lang);if(!config&&$('#mode').value==='daily')syncAuthoredSettings(createGame({mode:'daily',seed:new Date().toISOString().slice(0,10)}).settings,lang);}
+function getOptions() { return { ...($('#preset').value==='custom'&&customSize?customSize:{preset:$('#mode').value==='daily'?'narrow':$('#preset').value}), mode: $('#mode').value, colourCount: $('#mode').value === 'daily' ? 5 : Number($('#colours').value), seed: $('#mode').value === 'daily' ? new Date().toISOString().slice(0, 10) : crypto.randomUUID() }; }
+function restoreControls(){if(game.settings.mode==='challenge'){syncAuthoredSettings(game.settings,lang);return;}$('#mode').value=game.settings.mode;$('#colours').value=String(game.settings.colourCount);const preset=[...$('#preset').options].find(option=>{if(['authored','custom'].includes(option.value))return false;try{const settings=createGame({preset:option.value,seed:'size-check'}).settings;return settings.width===game.settings.width&&settings.height===game.settings.height;}catch{return false;}});if(preset)$('#preset').value=preset.value;else{customSize={width:game.settings.width,height:game.settings.height};let option=$('#preset option[value="custom"]');if(!option){option=document.createElement('option');option.value='custom';$('#preset').append(option);}option.textContent=`Custom · ${customSize.width} × ${customSize.height}`;$('#preset').value='custom';}}
 function newGame(restart = false) {
+  if(!restart)syncSetup();
   if (!restart || !startOptions.seed) startOptions = getOptions();
   if(!restart){const lesson=tutorialManifest.find(item=>item.id===$('#lesson').value);selectedLevel=lesson?{...lesson,...lesson.setup,seed:`lesson:${lesson.id}`,lesson:true}:levelManifest.find(level=>level.id===$('#level').value)??null;}
-  game = selectedLevel?selectedLevel.lesson?createChallenge({...selectedLevel.setup,seed:selectedLevel.seed}):createLevel(selectedLevel.id):createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
+  game = restart&&game?restartGame(game):selectedLevel?selectedLevel.lesson?createChallenge({...selectedLevel.setup,seed:selectedLevel.seed}):createLevel(selectedLevel.id):createGame(startOptions); startOptions = { ...startOptions, seed: game.settings.seed }; input = createInputScheduler(); resumeRequired = false; $('#status').textContent = ''; $('#pending').hidden = true;
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
-  heldKeys.clear(); pendingReleases.clear(); render(); save(); $('.game-screen').focus({ preventScroll: true });
+  heldKeys.clear(); pendingReleases.clear(); render(); save(); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true });
 }
 function gemMarkup(gem, extra = '') { return `<span ${gem.id!==undefined?`data-id="${gem.id}"`:""} class="gem ${gem.colour} ${extra}" aria-label="${gem.colour}">${symbols[gem.colour]}</span>`; }
-function render() {
+function render() {refreshAppearanceLanguage(lang);
   if (!game) return;
   const previous=positions($('#well'));
   const w = game.settings.width; const h = game.settings.height; const totalH = h + 3; const cells = Array(w * totalH).fill('');
-  game.board.forEach((gem, idx) => { if (gem) cells[idx] = gemMarkup(gem); });
+  const board=game.phase==='gravity'&&game.gravityBoard?game.gravityBoard:game.board;const clearing=new Set(game.pendingClear??[]);board.forEach((gem,idx)=>{if(gem)cells[idx]=gemMarkup(gem,clearing.has(idx)?game.phase==='clear-remove'?'removing':'marked':'');});
   const ghostY = landingY(game); if (game.active && ghostY !== null) game.active.gems.forEach((gem, i) => { const at = (ghostY + i + 3) * w + game.active.x; if (!cells[at]) cells[at] = gemMarkup(gem, 'ghost'); });
   if (game.active) game.active.gems.forEach((gem, i) => { const y = game.active.y + i; const at = (y + 3) * w + game.active.x; if (at >= 0 && at < cells.length) cells[at] = gemMarkup(gem, 'active'); });
   const well = $('#well'); well.style.setProperty('--cols', String(w)); well.style.setProperty('--rows', String(h));
   well.style.gridTemplateRows = `repeat(3, calc(var(--cell) * .42)) repeat(${h}, var(--cell))`; well.dataset.width = String(w);well.dataset.phase=game.phase;const oversized=h>20||w>12;$('.well-scroll').dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;
   const markup = cells.map((content, index) => `<div class="cell${index<w*3?' hidden-row':''}" aria-label="${cellLabel(index, w, content)}">${content}</div>`).join('');
   if(well.dataset.markup!==markup){well.innerHTML=markup;well.dataset.markup=markup;settle(well,previous);}
-  const objective=$('#objective');objective.hidden=!selectedLevel;$('#lesson-guide').hidden=!selectedLevel?.lesson;if(selectedLevel?.lesson)$('#lesson-guide').textContent=selectedLevel.steps.map(step=>step.instruction[lang]).join(' ');
+  const objective=$('#objective');objective.hidden=!selectedLevel&&!game.settings.pieceLimit;$('#lesson-guide').hidden=!selectedLevel?.lesson;if(selectedLevel?.lesson)$('#lesson-guide').textContent=selectedLevel.steps.map(step=>step.instruction[lang]).join(' ');
   if(selectedLevel){const goal=selectedLevel.goal;const ids=goal.targetIds;const chain=goal.minimumChain??goal.chain;let target,current,label;
    if(ids){target=ids.length;const remaining=new Set(game.board.filter(Boolean).map(gem=>gem.id));current=ids.filter(id=>!remaining.has(id)).length;label=lang==='en'?'Target gems cleared':'目標の石';}
    else if(chain){target=chain;current=game.maxChain;label=lang==='en'?'Best chain':'最大連鎖';}
@@ -50,6 +56,7 @@ function render() {
    const placed=game.completedPieces??game.completedPairs;$('#budget').textContent=`${lang==='en'?'Pieces left':'残り'}: ${Math.max(0,selectedLevel.queue.length-placed)}`;
   }
   $('#score').textContent = String(game.score); $('#chain').textContent = String(game.maxChain);
+  if(!selectedLevel&&game.settings.pieceLimit){const total=game.settings.pieceLimit,placed=game.completedPieces;$('#goal-text').textContent=`${lang==='ja'?'置いた石':'Pieces placed'}: ${placed}/${total}`;$('#goal-progress').max=total;$('#goal-progress').value=placed;$('#budget').textContent=`${lang==='ja'?'残り':'Pieces left'}: ${Math.max(0,total-placed)}`;}
   $('#next').innerHTML = game.next.map(piece => `<div class="next-piece" aria-label="Next: ${piece.join(', ')}">${piece.map(colour => gemMarkup({ colour })).join('')}</div>`).join('');
   const t = words[lang]; let status = game.phase === 'lost' ? (selectedLevel?(lang==='en'?'Challenge ended before the goal was reached':'目標を達成できませんでした'):t.lost) : game.phase === 'won' || game.phase === 'finished' ? t.won : game.phase === 'paused' ? t.paused : game.phase === 'clear-mark' ? (game.resolutionChain > 1 ? `Chain ${game.resolutionChain}` : `Clear · ${game.pendingClear?.length ?? 0}`) : t.place;
   const lastWave = game.waves.at(-1); if (lastWave && ['clear-mark', 'clear-remove', 'gravity'].includes(game.phase)) status = lastWave.chain > 1 ? `Chain ${lastWave.chain}` : `Clear · ${lastWave.clearedIds.length}`;
@@ -58,15 +65,16 @@ function render() {
   document.querySelectorAll('[data-i]').forEach(el => { const key = el.dataset.i; if (t[key]) el.textContent = t[key]; });
   $('[data-action="place"]').textContent = t.placeButton; $('[data-action="hard-drop"]').textContent = t.drop; $('[data-action="soft-drop"]').textContent = t.down;
   $('[data-action="left"]').setAttribute('aria-label', t.left); $('[data-action="right"]').setAttribute('aria-label', t.right); $('[data-action="pause"]').textContent = t.pause; $('[data-action="resume"]').textContent = t.resume;
-  const relaxed = game.settings.mode === 'relaxed'; $('.drop').hidden = relaxed; $('.soft').hidden = relaxed; $('.place').hidden = !relaxed;
+  const terminal=['won','lost','finished'].includes(game.phase);document.querySelectorAll('.controls [data-action]').forEach(button=>{button.disabled=terminal;});const relaxed = game.settings.mode === 'relaxed'; $('.drop').hidden = relaxed; $('.soft').hidden = relaxed; $('.place').hidden = !relaxed;
   $('.pause').hidden = game.phase === 'paused' || ['won', 'lost', 'finished'].includes(game.phase);
   $('.resume').hidden = game.phase !== 'paused'; $('.resume').disabled = false;
   $('#well').parentElement.className = `well-wrap material-${$('#material').value}`;
   document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === lang)));
+  const nextLevel=selectedLevel&&!selectedLevel.lesson?levelManifest[levelManifest.findIndex(level=>level.id===selectedLevel.id)+1]:null;updateEnding({phase:game.phase,score:game.score,lang,mode:game.settings.mode,level:selectedLevel,next:nextLevel,onRestart:()=>newGame(true),onNext:()=>{$('#level').value=nextLevel.id;$('#lesson').value='';newGame();},detail:status});
 }
 function cellLabel(index, width, markup) { const y = Math.floor(index / width) - 3; const x = index % width; const gem = markup.match(/aria-label="([a-z]+)"/); return gem ? `${gem[1]} gem, column ${x + 1}, row ${y + 1}` : `Empty, column ${x + 1}, row ${y + 1}`; }
 function save() { try { localStorage.setItem(saveKey, encodeGame(game)); } catch { /* Storage failure never interrupts play. */ } }
-function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 350); }
+function queueSave() { if(!saveTimer)saveTimer=setTimeout(()=>{saveTimer=0;save();},350); }
 function playAction(kind) {
   const result = applyAction(game, { kind }); if (!result.accepted) return false;
   game = result.state; render(); queueSave();
@@ -109,12 +117,12 @@ function bindHeld(button, action) {
 document.querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]').forEach(button => bindHeld(button, button.dataset.action));
 document.querySelectorAll('[data-action]').forEach(button => { if (['left', 'right', 'soft-drop', 'resume'].includes(button.dataset.action)) return; button.addEventListener('click', () => { input = queueInputEdge(input, { kind: button.dataset.action }); }); });
 $('#new').addEventListener('click', () => newGame()); $('#restart').addEventListener('click', () => newGame(true));
+$('#mode').addEventListener('change',()=>{$('#level').value='';$('#lesson').value='';syncSetup();});
 for (const selector of ['#mode', '#preset', '#colours']) $(selector).addEventListener('change', () => { $('#pending').hidden = false; });
 $('#material').addEventListener('change', () => { render(); writePreferences(); });
-$('#theme').addEventListener('click', () => { document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
 $('#sound').addEventListener('change',event=>{setSound(event.target.checked);writePreferences();});
-document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang; render(); writePreferences(); }));
+document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang;syncSetup(); render(); writePreferences(); }));
 const keypadKeys = { Numpad4: 'arrowleft', Numpad6: 'arrowright', Numpad7: 'z', Numpad9: 'x', Numpad5: 'arrowdown', Numpad2: 'drop' };
 document.addEventListener('keydown', event => {
   const target = event.target instanceof HTMLElement ? event.target : null;
@@ -143,12 +151,12 @@ $('.resume').addEventListener('click', resumeCountdown);
 window.addEventListener('pagehide', () => { clearTimeout(saveTimer); if (game && game.settings.mode !== 'relaxed' && game.phase === 'falling') game = applyAction(game, { kind: 'pause' }).state; save(); });
 
 $('#lesson').innerHTML='<option value="">No lesson</option>'+tutorialManifest.map(lesson=>`<option value="${lesson.id}">${lesson.title.en}</option>`).join('');
-$('#level').addEventListener('change',()=>{$('#lesson').value='';});$('#lesson').addEventListener('change',()=>{$('#level').value='';});
+$('#level').addEventListener('change',()=>{$('#lesson').value='';syncSetup();writePreferences();});$('#lesson').addEventListener('change',()=>{$('#level').value='';syncSetup();writePreferences();});
 $('#level').innerHTML='<option value="">Free play</option>'+levelManifest.map(level=>`<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title.en}</option>`).join('');
 readPreferences();
 let recovered = false;
 try { const saved = localStorage.getItem(saveKey); if (saved) { game = decodeGame(saved);selectedLevel=levelManifest.find(level=>level.seed===game.settings.seed)??null;const restoredLesson=tutorialManifest.find(lesson=>`lesson:${lesson.id}`===game.settings.seed);if(restoredLesson){selectedLevel={...restoredLesson,...restoredLesson.setup,seed:game.settings.seed,lesson:true};$('#lesson').value=restoredLesson.id;}if(selectedLevel&&!selectedLevel.lesson)$('#level').value=selectedLevel.id; startOptions = { mode: game.settings.mode, width: game.settings.width, height: game.settings.height, seed: game.settings.seed, colourCount: game.settings.colourCount, ...(game.settings.pieceLimit ? { pieceLimit: game.settings.pieceLimit } : {}) }; if (game.phase === 'falling' && game.settings.mode !== 'relaxed') game = applyAction(game, { kind: 'pause' }).state; recovered = true; } } catch { game = null; }
-if (!game) newGame(); else { resumeRequired = false; render(); $('.game-screen').focus({ preventScroll: true }); }
+if (!game) newGame(); else { restoreControls();if(selectedLevel||game.settings.mode==='daily')syncSetup();resumeRequired = false; render(); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); }
 requestAnimationFrame(animate);
 
 $('#animations').checked=animationEnabled();$('#animations').addEventListener('change',event=>setAnimations(event.target.checked));

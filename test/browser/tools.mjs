@@ -68,12 +68,12 @@ try{
    const box=await page.locator('#grid').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=viewport.width);
    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.gem')).userSelect),'none');
    assert.notEqual(await page.evaluate(()=>getComputedStyle(document.querySelector('aside p')).userSelect),'none');
-   await page.locator('#language').click();assert.equal(await page.locator('#tools-title').textContent(),'道具箱');await page.locator('#language').click();
+   await page.locator('[data-lang="ja"]').click();assert.equal(await page.locator('#tools-title').textContent(),'道具箱');await page.locator('[data-lang="en"]').click();
   }
   await page.locator('#animations').uncheck();await page.reload();assert.equal(await page.locator('#animations').isChecked(),false);
   await page.goto(`${url}/`);assert.equal(await page.locator('#animations').isChecked(),false);
   await page.locator('#animations').check();await page.goto(`${url}/tools.html`);assert.equal(await page.locator('#animations').isChecked(),true);
-  await page.locator('#game').selectOption('gem-swap');await page.locator('#code').fill('black-hole-browser');await page.locator('#advanced').check();await page.locator('#new').click();
+  await page.locator('#game').selectOption('gem-swap');await page.locator('#mode').selectOption('relaxed');await page.locator('#preset').selectOption('standard');await page.locator('#colours').selectOption('5');await page.locator('#shape').selectOption('');await page.locator('#tools').check();await page.locator('#code').fill('black-hole-browser');await page.locator('#advanced').check();await page.locator('#new').click();
   async function ordinarySwap(){
    const move=await page.evaluate(async()=>{
     const module=await import('./dist/gem-swap.js');const grid=document.querySelector('#grid');

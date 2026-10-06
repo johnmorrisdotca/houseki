@@ -15,3 +15,11 @@ Automated checks verify rules and exercised browser flows. They do not claim phy
 Human translation and physical-device feel review remain pending. Development evidence must not be described as human acceptance. Itsutsu integration belongs to the site maintainer and is outside this package release.
 
 Release 0.1.0: all 185 tests and desktop/phone browser checks passed, with GitHub checks on Node.js 22 and 24. Hosted players and the API reference were verified. npm registry metadata, MIT license, exact tarball checksum, isolated installation, public exports and README image/API links were verified.
+
+## Follow-up interface review
+
+The first hosted smoke check was too weak: a successful HTML response did not prove Falling Triplets loaded its engine. The local test server now mounts `/houseki/`, and browser checks require rendered pieces and reject missing modules or styles.
+
+The expanded browser checks cover win/loss panels and disabled controls; exact campaign/lesson recovery; pending versus active settings; fixed campaign and Daily geometry; actual placement previews; oversized navigation; shared family colours and piece appearance; English/Japanese board stability; and clipping at 360, 562, 828, 1024 and 1280 pixels. API examples are parsed and imported through the real package exports.
+
+Dedicated Magnetic Blocks, Shizen and Arashi campaigns remain missing and are recorded on the Itsutsu board. The wider cross-project language-layout work is also tracked there at medium priority. These are separate from the delivered interface corrections.

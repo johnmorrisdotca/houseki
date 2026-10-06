@@ -42,7 +42,7 @@ pnpm test
 pnpm demo
 ```
 
-The local demo instructions print its address. The first page plays Falling Triplets; `chains.html` plays Colour Chains; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. The campaigns contain 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty. Finite goals show progress and remaining pieces or moves. All players share the persisted default-on Animation setting and respect reduced motion. See [CONTRIBUTING.md](https://github.com/johnmorrisdotca/houseki/blob/main/CONTRIBUTING.md) for contribution conventions and [the implementation plan](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
+The local demo instructions print its address. The first page plays Falling Triplets; `chains.html` plays Colour Chains; `tools.html` plays Gem Swap and Stone Collapse with optional stored-tool trays. The campaigns contain 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse and 50 Gem Swap challenges, ordered by measured difficulty. Finite goals show progress and remaining pieces or moves. All players share the family’s five board-cloth colours, persistent piece appearance, a default-on Animation setting and reduced-motion support. Finished runs show an outcome and final score with replay or next-level actions. Fixed campaign and Daily settings display their actual board dimensions. See [CONTRIBUTING.md](https://github.com/johnmorrisdotca/houseki/blob/main/CONTRIBUTING.md) for contribution conventions and [the implementation plan](https://github.com/johnmorrisdotca/houseki/blob/main/docs/design/IMPLEMENTATION-PLAN.md) for bounded review milestones.
 
 ## Engine example
 
@@ -78,3 +78,7 @@ const objective = firstChallenge.settings.goal;
 ```
 
 Run `npm run check:package` to build, pack and install the actual tarball into a temporary consumer and check every game entry point. `npm run test:browser` verifies desktop and phone player controls, witnessed campaign wins, progress, tool use, persistence of animation preferences and reduced motion.
+
+## The name
+
+Houseki (宝石) is Japanese for gemstones.

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="family.css">
   <link rel="stylesheet" href="game.css">
   <link rel="stylesheet" href="blocks.css">
+<link rel="stylesheet" href="ending.css">
 </head>
 <body>
 <main>
@@ -38,11 +39,12 @@
       </details>
     </aside>
     <section class="fam-felt game-screen" tabindex="0" aria-label="Magnetic Blocks game">
-      <div class="panel-head"><h2 data-i="title">Magnetic Blocks</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="bestChain">Best chain</b> <output id="chain">0</output></span><span><b data-i="placed">Placed</b> <output id="placed">0</output></span><span class="time-stat"><b data-i="time">Time</b> <output id="elapsed">00:00</output></span></div></div>
+      <div class="panel-head"><h2 data-i="title">Magnetic Blocks</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="bestChain">Best chain</b> <output id="chain">0</output></span><span><b data-i="placed">Placed</b> <output id="placed">0</output>/<span id="piece-limit">200</span><progress id="placement-progress" max="200" value="0" aria-label="Placed pieces"></progress></span><span class="time-stat"><b data-i="time">Time</b> <output id="elapsed">00:00</output></span></div></div>
       <p class="experimental" data-i="experimental">Experimental rules demo · no campaign yet</p>
       <div class="play-area blocks-play-area">
         <section class="preview-strip" aria-label="Upcoming pieces"><div><b data-i="next">Next</b><div id="next" class="next"></div></div><div class="floor-next"><b data-i="nextFloor">Next floor</b><span id="next-floor" class="floor-chip"></span></div></section>
-        <div class="well-scroll"><div class="well-wrap material-ivory"><div id="well" class="well" role="img" aria-label="Magnetic Blocks board"></div><div class="loss-line"></div><div id="floor-line" class="floor-line" aria-label="Current floor"></div></div></div>
+        <div class="board-column"><div class="well-scroll" tabindex="0" role="region" aria-label="Magnetic Blocks board"><div class="well-wrap material-ivory"><div id="well" class="well" role="img" aria-label="Magnetic Blocks board"></div><div class="loss-line"></div><div id="floor-line" class="floor-line" aria-label="Current floor"></div></div></div>
+        <div class="board-nav" hidden><button class="fam-button" data-scroll="top" data-i="scrollTop">Top</button><button class="fam-button" data-scroll="bottom" data-i="scrollBottom">Bottom</button><output class="scroll-position" aria-label="Board scroll position">0%</output></div></div>
         <section class="game-info"><div class="current-floor"><span data-i="currentFloor">Current floor</span><strong id="current-floor" class="floor-chip"></strong></div><p id="status" aria-live="polite">Place the block</p><div class="lock-meter" id="lock-wrap" hidden><label for="lock-progress" data-i="lock">Landing</label><progress id="lock-progress" max="24" value="0"></progress></div><p id="hits" class="micro" aria-live="polite"></p></section>
       </div>
       <section class="switch-tray" aria-labelledby="switch-title"><div class="tray-head"><h3 id="switch-title" data-i="floorSwitch">Floor Switch</h3><span id="charges" class="fam-badge">1</span></div><p data-i="switchHelp">Choose the floor for this block. Review its preview, then apply by placing or dropping.</p><div class="tray-options"><button class="fam-button" data-floor="calm" data-i="calm">Calm</button><button class="fam-button" data-floor="magnetic" data-i="pull">Pull</button><button class="fam-button" id="cancel-floor" data-i="cancel">Cancel</button><button class="fam-button apply-floor" id="apply-floor" data-accent="true" data-i="apply">Apply with this floor</button></div><p id="floor-preview" class="micro" aria-live="polite"></p></section>

@@ -1,0 +1,7 @@
+.ending-badge{padding:10px 14px;border:2px solid #dcc184;border-radius:12px;background:#faf6e8;color:#202720;font-weight:750;text-align:center}
+.ending-layer{position:absolute!important;inset:0;z-index:20!important;display:flex;align-items:center;justify-content:center;padding:16px;background:#f7f1e66b;border-radius:inherit;pointer-events:none}
+.ending-layer[hidden],.ending-badge[hidden]{display:none}
+.ending-card{pointer-events:auto;background:var(--surface,#faf7ef);color:var(--ink,#202720);width:min(100%,380px);border:3px solid #a98954;border-radius:18px;padding:22px;box-shadow:0 12px 40px #0006;outline:none}
+.ending-card[data-outcome="won"]{border-color:#3e7957}.ending-card h2{margin:0;font-size:1.8rem}.ending-card p{line-height:1.5}.ending-actions{display:flex;flex-wrap:wrap;gap:8px}
+.game-screen .ending-card .fam-button{background:var(--surface,#faf7ef);color:var(--ink,#202720);border:1px solid #bcb09b;box-shadow:none}
+.game-screen .ending-card button[data-accent]{background:var(--accent,#b5452c);color:#fff;border-color:transparent}
