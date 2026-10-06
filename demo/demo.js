@@ -1,6 +1,6 @@
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
-import { createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from '../dist/falling-triplets.js';
+import { createChallenge, tutorialManifest, createLevel, levelManifest, createGame, applyAction, advanceTicks, decodeGame, encodeGame, landingY, createInputScheduler, setHeldAction, queueInputEdge, actionsForTick, releaseAllActions } from './dist/falling-triplets.js';
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: '●', blue: '◆', green: '▲', gold: '■', purple: '+', teal: '☾' };
 const words = {

@@ -1,18 +1,18 @@
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-const server = spawn(process.execPath, ['scripts/serve.mjs'], { env: { ...process.env, PORT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
+const server = spawn(process.execPath, ['scripts/serve.mjs'], { env: { ...process.env, PORT: '0', BASE_PATH: '/houseki' }, stdio: ['ignore', 'pipe', 'pipe'] });
 const url = await new Promise((resolve, reject) => {
  const timeout = setTimeout(() => { server.kill(); reject(new Error('Demo server startup timed out')); }, 10000);
  server.on('error', error => { clearTimeout(timeout); reject(error); });
- server.stdout.on('data', data => { const found = String(data).match(/http:\/\/127\.0\.0\.1:\d+/); if(found) { clearTimeout(timeout); resolve(found[0]); } });
+ server.stdout.on('data', data => { const found = String(data).match(/http:\/\/127\.0\.0\.1:\d+\/houseki/); if(found) { clearTimeout(timeout); resolve(found[0]); } });
  server.on('exit', code => { clearTimeout(timeout); reject(new Error(`Demo server exited: ${code}`)); });
 });
 let browser;
 try { browser = await chromium.launch(); } catch(error) { server.kill(); throw error; }
 try{
  for(const viewport of [{width:1280,height:900},{width:390,height:844}]){
-  const page=await browser.newPage({viewport});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  const page=await browser.newPage({viewport});const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('requestfailed',request=>errors.push(`Failed resource: ${request.url()}`));page.on('response',response=>{if(response.status()>=400&&['script','stylesheet','document','font','image'].includes(response.request().resourceType()))errors.push(`HTTP ${response.status()}: ${response.url()}`);});
   await page.goto(`${url}/chains.html`);await page.waitForSelector('#well .active');
   const colours=()=>page.locator('#well .active').evaluateAll(gems=>gems.map(gem=>gem.className));
   const beforeRotation=await colours();await page.keyboard.press('ArrowUp');await page.waitForTimeout(80);
