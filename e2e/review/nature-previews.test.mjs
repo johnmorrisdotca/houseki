@@ -49,7 +49,7 @@ try{
  assert.equal(await page.locator('.board-nav').isVisible(),true);const scroller=page.locator('.well-scroll');await scroller.focus();await page.keyboard.press('ArrowDown');await page.waitForFunction(()=>document.querySelector('.well-scroll').scrollTop>0);
  assert.ok(await scroller.evaluate(area=>area.scrollTop)>0,'focused board region scrolls with arrow keys');
  await page.locator('[data-scroll="bottom"]').click();assert.ok(await scroller.evaluate(area=>area.scrollTop)>0);assert.match(await page.locator('.scroll-position').textContent(),/%/);
- await page.locator('[data-scroll="top"]').click();assert.equal(await scroller.evaluate(area=>area.scrollTop),0);
+ await page.locator('[data-scroll="top"]').click();await page.waitForFunction(()=>document.querySelector('.well-scroll').scrollTop===0);
 
  const lostSave=await page.evaluate(async()=>{const m=await import('./dist/magnetic-blocks.js');const width=8,height=16;const initialBoard=Array.from({length:width*height},(_,index)=>({id:index+1,colour:(index%width+Math.floor(index/width))%2?'red':'blue'}));return m.encodeGame(m.createGame({width,height,colourCount:4,initialBoard,seed:'terminal-controls'}));});
  await page.addInitScript(encoded=>localStorage.setItem('houseki-magnetic-blocks-save',encoded),lostSave);await page.reload();

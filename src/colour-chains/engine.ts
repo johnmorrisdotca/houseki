@@ -1,9 +1,8 @@
 import { compactBoard, findGroups } from './match.js';
 import { drawPair, seedState } from './random.js';
 import { applyEarthquake, applyLightning, applyMagneticPulse, createNatureState, isEnvironmentTurnScheduled, markMagneticStones, previewPowerDrop } from '../nature.js';
-import type { PowerDropPreview } from '../nature/types.js';
 import { normalizeOptions } from './validation.js';
-import type { Action, Cell, Colour, CreateOptions, GameEvent, GameState, GameStatus, Gem, Landing, Orientation, Pair, Settings, Transition } from './types.js';
+import type { Action, Cell, ChainsPowerDropPreview, Colour, CreateOptions, GameEvent, GameState, GameStatus, Gem, Landing, Orientation, Pair, Settings, Transition } from './types.js';
 
 export { StoneChainsOptionsError } from './validation.js';
 const HIDDEN = 3;
@@ -335,10 +334,24 @@ export function landingCells(state: GameState): Landing | null {
   const settled = compactBoard(board, state.settings.width, state.settings.height + HIDDEN);
   return pair.gems.map(gem => { const index = settled.findIndex(cell => cell?.id === gem.id); return { x: index % state.settings.width, y: Math.floor(index / state.settings.width) - HIDDEN }; }) as unknown as Landing;
 }
-/** Returns the Shizen hard-drop landing and one-step rebound preview without changing state. */
-export function powerDropPreview(state: GameState): PowerDropPreview | null {
+/**
+ * Returns the Shizen hard-drop landing and one-step rebound preview without changing state.
+ *
+ * `finalCells` is where the pair locks after any rebound, the cells of the `power-drop-landed` event. Stones above a
+ * gap then fall, so `settledCells` is where each stone of the pair comes to rest in the board the hard drop commits,
+ * before any clear: draw a ghost from it. Both carry the pair's stable stone ids, and both are checked against
+ * `applyAction` with a `hard-drop` over many played boards.
+ */
+export function powerDropPreview(state: GameState): ChainsPowerDropPreview | null {
   if (!state.settings.nature || state.settings.mode === 'relaxed' || !state.active) return null;
-  return rebound(state, state.active)?.preview ?? null;
+  const preview = rebound(state, state.active)?.preview;
+  if (!preview) return null;
+  const dropped = applyAction(state, { kind: 'hard-drop' });
+  const board = dropped.accepted ? (dropped.state.gravityBoard ?? dropped.state.board) : null;
+  const settledCells = board
+    ? state.active.gems.flatMap(gem => { const index = board.findIndex(cell => cell?.id === gem.id); return index < 0 ? [] : [{ ...(preview.finalCells.find(cell => cell.id === gem.id) ?? { id: gem.id, kind: 'stone' as const, colour: gem.colour }), x: index % state.settings.width, y: Math.floor(index / state.settings.width) - HIDDEN }]; })
+    : preview.finalCells;
+  return Object.freeze({ ...preview, settledCells: Object.freeze(settledCells) });
 }
 /** Returns score, mode, chain and completion fields derived from state. */
 export function statusOf(state: GameState): GameStatus { return { mode: state.settings.mode, phase: state.phase, score: state.score, maxChain: state.maxChain, allClears: state.allClears, completedPairs: state.completedPairs, assisted: state.assisted, ...(state.reason ? { reason: state.reason } : {}) }; }

@@ -4,6 +4,23 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-06
+
+The ten open fix tickets were each read against the code, and the ones that were real are fixed and held by new tests: Magnetic Blocks' settings and Space key, and the big-board region of Falling Triplets and Colour Chains. The other tickets were already fixed in 0.2.0, and the review tests that hold them now run in `pnpm test:demo`.
+
+### Added
+
+- `powerDropPreview` of Colour Chains returns `settledCells` as well as `finalCells`: where each stone of the pair comes to rest in the board the hard drop commits, before any clear, with the stones' stable ids. `finalCells` is where the pair locks after the rebound (the cells of the `power-drop-landed` event), and stones above a gap then fall, so a ghost drawn from `finalCells` could sit a row above where the stone ends up. The new type is `ChainsPowerDropPreview`.
+- `test/previews-match-outcomes.test.mjs` compares the previews with the boards the real actions leave, over thousands of played boards: the Shizen hard-drop preview, the gentle Place landing, Falling Triplets' landing row, and Magnetic Blocks' two actions. `e2e/review/boards-settings-and-keys.test.mjs` plays the demo's level settings, its Space key, its big-board keyboard navigation in both languages and the square cells of every size.
+
+### Fixed
+
+- Magnetic Blocks: choosing a level or lesson shows its own board size, colours, floor and impact at once, as "Fixed · 8 × 12" ("固定"), instead of the free-play choice it would not use; the rules are locked while it is chosen, and choosing Free play, or a mode, gives the player's own settings back. Before this the controls changed only on New game, then kept the level's values for good, labelled "Custom size". The board in play is not relabelled before New, and the free choices are remembered between visits.
+- Magnetic Blocks: in a campaign level or lesson the Space key did a hard drop while the ghost and the Place button showed a gentle land. The two leave different boards on about one in seven positions of the campaign. Space now does what the game's mode offers, as the ghost shows.
+- Magnetic Blocks keeps its checkpoint within 350 ms of a change during continuous play; every move used to postpone the save until the player stopped.
+- Falling Triplets: a board too big for the screen is a focusable, labelled region like the other two, with a position readout; its arrow keys scroll it and no longer move the triplet.
+- Falling Triplets, Colour Chains and Magnetic Blocks: "Top", "Bottom" and the position readout are in Japanese when the page is, and the region is named for the board it holds, not for its scroll position. A board that fits is no longer a tab stop.
+
 ## [0.2.1] - 2026-10-06
 
 Nothing that was exported has changed. The README is the family's one layout, in full.
@@ -66,7 +83,9 @@ Nothing that was exported has changed. The README is the family's one layout, in
 - An experimental Magnetic Blocks engine with bonded squares, magnetic floor schedules, a Floor Switch and impact drops.
 - Typed entry points, a generated API reference, an MIT licence and reproducible package checks.
 
-[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/johnmorrisdotca/houseki/releases/tag/v0.1.0

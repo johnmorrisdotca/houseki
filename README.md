@@ -753,7 +753,7 @@ Ideas, bug reports and pull requests are welcome in the [issues](https://github.
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.2.1, adds no code: it is this README in full, with pictures of every game, examples that are run on every change, examples for React, Vue, Svelte and Angular, and an Accessibility section.
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.3.0, makes Magnetic Blocks show a level's fixed rules as soon as the level is chosen and give free play its own choices back, makes Space do what the ghost showed, lets a big board be scrolled from the keyboard on all three falling players, and adds `settledCells` to the Shizen hard-drop preview.
 
 ## Licence
 

@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/houseki",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Houseki 宝石: five original gem and stone puzzle engines, 450 graded challenges, bilingual lessons, deterministic saves, magnetic floors, Shizen and Arashi campaigns. TypeScript. Zero dependencies.",
   "keywords": [
     "puzzle",
@@ -108,10 +108,10 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "prepublishOnly": "pnpm check && pnpm build",
     "site": "pnpm build && node scripts/site.mjs",
-    "test:demo": "pnpm site && playwright test && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
+    "test:demo": "pnpm site && playwright test && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
     "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
     "test:readme": "pnpm build && node scripts/check-readme-examples.mjs",
-    "test:review": "pnpm site && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs"
+    "test:review": "pnpm site && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

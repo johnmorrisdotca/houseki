@@ -1,4 +1,5 @@
 import {refreshAppearanceLanguage} from './appearance.js';
+import {syncAuthoredSettings,readFreeSettings,restoreFreeSettings} from './settings.js';
 import {updateEnding} from './ending.js';
 import { soundEnabled, setSound, unlockSound, playTone } from './audio.js';
 import { positions, settle, animationEnabled, setAnimations } from './animation.js';
@@ -15,7 +16,7 @@ const text = {
     title:'Magnetic Blocks', score:'Score', bestChain:'Best chain', placed:'Placed', campaign:'Campaign level', lessonLabel:'Lesson', freePlay:'Free play', noLesson:'No lesson', next:'Next', nextFloor:'Next floor', currentFloor:'Current floor',
     floorSwitch:'Floor Switch', switchHelp:'Choose the floor for this block. Review its preview, then apply by placing or dropping.', calm:'Calm', pull:'Pull', cancel:'Cancel', apply:'Apply with this floor', rotateLeft:'Rotate left', rotateRight:'Rotate right',
     keys:'← → move · ↑/Z/X rotate · Space drop/place · keypad 4/6/7/9/5/2 · Esc pause', lock:'Landing',
-    ready:'Move, rotate, and place the block', paused:'Paused', won:'Goal complete', lost:'The block could not spawn', finished:'Queue complete', scrollTop:'Top', scrollBottom:'Bottom', scrollLabel:'Board scroll position',
+    ready:'Move, rotate, and place the block', paused:'Paused', won:'Goal complete', lost:'The block could not spawn', finished:'Queue complete', scrollTop:'Top', scrollBottom:'Bottom', scrollLabel:'Board scroll position', boardLabel:'Magnetic Blocks board',
     floorCalm:'Calm · bonded blocks settle together', floorMagnetic:'Pull · bonds break and columns settle apart', previewCalm:'Preview: new gems will stay bonded during Calm settling.', previewMagnetic:'Preview: bonds will break and each column will settle on its own.', impactPreview:'Magnetic Impact will remove {n} support gem(s) on this hard drop.', noImpact:'No support gems are in contact for Magnetic Impact.',
     switchUsed:'Floor Switch used', switchAvailable:'1 Floor Switch available', switchSpent:'Floor Switch spent', override:'Selected for this block', scheduleNext:'Then scheduled floor', settingsPending:'Settings changed. Select New game to apply.',
     invalidSize:'Choose width 4–16 and height 4–32 (up to 512 cells).', blocked:'That move is blocked.', pausedHelp:'Resume when ready.', time:'Time', theme:'Theme', drop:'Hard drop', place:'Place', down:'Down', pause:'Pause', resume:'Continue',
@@ -27,7 +28,7 @@ const text = {
     title:'磁石ブロック', score:'得点', bestChain:'最大連鎖', placed:'配置数', campaign:'キャンペーン', lessonLabel:'レッスン', freePlay:'フリープレイ', noLesson:'レッスンなし', next:'次のブロック', nextFloor:'次の床', currentFloor:'現在の床',
     floorSwitch:'床スイッチ', switchHelp:'このブロックの床を選びます。プレビューを確認して、配置または落下で適用します。', calm:'静穏', pull:'引力', cancel:'取消', apply:'この床で配置', rotateLeft:'↶ 回転', rotateRight:'↷ 回転',
     keys:'← → 移動 · ↑/Z/X 回転 · Space 落下/配置 · テンキー 4/6/7/9/5/2 · Esc 一時停止', lock:'着地',
-    ready:'移動・回転してブロックを配置します', paused:'一時停止中', won:'目標達成', lost:'ブロックを配置できません', finished:'キュー終了', scrollTop:'上へ', scrollBottom:'下へ', scrollLabel:'盤面のスクロール位置',
+    ready:'移動・回転してブロックを配置します', paused:'一時停止中', won:'目標達成', lost:'ブロックを配置できません', finished:'キュー終了', scrollTop:'上へ', scrollBottom:'下へ', scrollLabel:'盤面のスクロール位置', boardLabel:'磁石ブロックの盤面',
     floorCalm:'静穏 · 結合したブロックが一緒に落ちます', floorMagnetic:'引力 · 結合が切れ、列ごとに落ちます', previewCalm:'プレビュー：静穏では新しい宝石の結合が保たれます。', previewMagnetic:'プレビュー：結合が切れ、それぞれの列が落下します。', impactPreview:'磁気衝撃で接触中の宝石を {n} 個取り除きます。',
     noImpact:'磁気衝撃で取り除く接触中の宝石はありません。', switchUsed:'床スイッチを使用', switchAvailable:'床スイッチ 1 回分', switchSpent:'床スイッチ使用済み', override:'このブロックに選択中', scheduleNext:'次は予定された床', settingsPending:'設定が変わりました。新しいゲームを始めて適用してください。',
     invalidSize:'幅は4〜16、高さは4〜32、合計512セル以内にしてください。', blocked:'その操作はできません。', pausedHelp:'準備ができたら続けてください。', time:'時間', theme:'テーマ', drop:'ハードドロップ', place:'配置', down:'下へ', pause:'一時停止', resume:'続ける',
@@ -43,7 +44,7 @@ let boardKey = '', hudKey = '';
 const capOversized = globalThis.housekiConfig?.oversizedUnlocked === false;
 
 function t(key) { return text[lang][key] ?? text.en[key] ?? key; }
-function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; populateCampaignSelectors(); render(true); writePreferences(); }
+function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; populateCampaignSelectors(); syncSetup(); render(true); writePreferences(); }
 function populateCampaignSelectors() {
   const selectedLevelId = $('#level').value, selectedLessonId = $('#lesson').value;
   $('#level').innerHTML = `<option value="">${t('freePlay')}</option>` + levelManifest.map(level => `<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title[lang]}</option>`).join('');
@@ -53,13 +54,14 @@ function populateCampaignSelectors() {
 function readPreferences() {
   try {
     const pref = JSON.parse(localStorage.getItem(preferenceKey) || '{}');
+    restoreFreeSettings(pref.freeSetup);
     if (pref.material) $('#material').value = pref.material;
     if (pref.motion) $('#motion').checked = true;
     document.documentElement.dataset.motion = pref.motion ? 'reduced' : 'full';
   } catch { /* Optional preferences do not block play. */ }
 }
 function writePreferences() {
-  try { localStorage.setItem(preferenceKey, JSON.stringify({ material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
+  try { localStorage.setItem(preferenceKey, JSON.stringify({ freeSetup: readFreeSettings(), material: $('#material').value, motion: $('#motion').checked, sound: $('#sound').checked })); }
   catch { /* Optional preferences do not block play. */ }
 }
 function floorFromValue(value) {
@@ -89,19 +91,27 @@ function applySettingsToControls(settings) {
   $('#mode').value = settings.mode;
   $('#width').value = settings.width; $('#height').value = settings.height;
   $('#colours').value = settings.colourCount;
-  const schedule = settings.schedule;
-  $('#schedule').value = schedule.kind === 'fixed' ? schedule.floor : schedule.kind === 'frequent' ? 'frequent' : schedule.kind === 'infrequent' ? 'rare' : schedule.kind === 'occasional' ? 'rare' : schedule.kind === 'authored' && schedule.magneticPlacements.includes(1) ? 'magnetic' : 'calm';
+  $('#schedule').value = scheduleValue(settings.schedule);
   $('#impact').checked = settings.magneticImpact;
   const preset = Object.entries({ standard: [8,16], extraWide: [16,16], deep: [8,32], large: [16,32] }).find(([, size]) => size[0] === settings.width && size[1] === settings.height)?.[0] ?? 'custom';
   $('#preset').value = capOversized && (settings.width > 12 || settings.height > 20) ? 'custom' : preset;
   if (capOversized && (settings.width > 12 || settings.height > 20)) { $('#new').disabled = true; }
   validateSize();
 }
-function syncCampaignControls() {
-  const authored = Boolean(selectedLevel || selectedLesson);
-  for (const selector of ['#mode','#preset','#width','#height','#colours','#schedule','#impact']) $(selector).disabled = authored;
-  $('#objective').hidden = !authored;
+/** The select value for a floor schedule, as the settings panel names it. */
+function scheduleValue(schedule) {
+  return schedule.kind === 'fixed' ? schedule.floor : schedule.kind === 'frequent' ? 'frequent' : schedule.kind === 'infrequent' || schedule.kind === 'occasional' ? 'rare' : schedule.kind === 'authored' && schedule.magneticPlacements.includes(1) ? 'magnetic' : 'calm';
 }
+/** What the panel must show for the level or lesson chosen, or null for free play: the chosen content's own rules, not the free choices. */
+function setupConfig() {
+  const lesson = lessonManifest.find(item => item.id === $('#lesson').value) ?? null;
+  const level = lesson ? null : levelManifest.find(item => item.id === $('#level').value) ?? null;
+  const options = (lesson ?? level)?.options;
+  return options ? { mode: 'challenge', width: options.width, height: options.height, colourCount: options.colourCount, schedule: scheduleValue(options.schedule), magneticImpact: options.magneticImpact === true } : null;
+}
+/** Shows the chosen content's fixed rules and locks what it decides, or gives free play its own choices back. The board in play is not touched. */
+function syncSetup() { syncAuthoredSettings(setupConfig(), lang); validateSize(); }
+function syncCampaignControls() { $('#objective').hidden = !(selectedLevel || selectedLesson); }
 function newGame(restart = false) {
   try {
     if (!restart || !game) {
@@ -112,7 +122,8 @@ function newGame(restart = false) {
       startOptions = selectedLesson?.options ?? selectedLevel?.options ?? optionsFromControls();
     }
     game = restart && game ? restartGame(game) : selectedLesson ? createLesson(selectedLesson.id) : selectedLevel ? createLevel(selectedLevel.id) : createGame(startOptions);
-    applySettingsToControls(game.settings); $('#pending').hidden = true; $('#status').textContent = '';
+    if (!restart) { if (selectedLevel || selectedLesson) syncSetup(); else applySettingsToControls(game.settings); $('#pending').hidden = true; }
+    $('#status').textContent = '';
     syncCampaignControls();
     try { localStorage.removeItem(saveKey); } catch { /* Saving is optional. */ }
     render(true); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); queueSave();
@@ -166,7 +177,7 @@ function renderBoard(force = false) {
     for (const entry of blockCells(game.active, width)) if (entry.index >= 0 && entry.index < contents.length) contents[entry.index] = gemMarkup(entry.gem, 'active');
   }
   const boardMarkup = contents.map((gem, index) => `<div class="cell${game.settings.mask[index] ? '' : ' masked'}" data-cell="${index}">${gem}</div>`).join('');
-  const oversized=width>12||height>20;$('.well-scroll').dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;$('.well-scroll').setAttribute('aria-label',t('scrollLabel'));updateBoardScroll();
+  const oversized=width>12||height>20;$('.well-scroll').dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;{const area=$('.well-scroll');if(oversized){area.setAttribute('tabindex','0');area.setAttribute('role','region');area.setAttribute('aria-label',t('boardLabel'));}else{area.removeAttribute('tabindex');area.removeAttribute('role');area.removeAttribute('aria-label');}}updateBoardScroll();
   const key = `${width}x${height}|${game.phase}|${boardMarkup}|${currentShownFloor()}|${game.pendingClear.join(',')}`;
   if (!force && key === boardKey) return;
   const well = $('#well'), previous = positions(well);
@@ -265,8 +276,8 @@ function updateBoardScroll() {
   $('.scroll-position').setAttribute('aria-label',`${t('scrollLabel')}: ${percent}%`);
 }
 
-function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(save, 350); }
-function save() { try { if (game) localStorage.setItem(saveKey, encodeGame(game)); } catch { /* A save failure never interrupts play. */ } }
+function queueSave() { if (!saveTimer) saveTimer = setTimeout(save, 350); }
+function save() { clearTimeout(saveTimer); saveTimer = 0; try { if (game) localStorage.setItem(saveKey, encodeGame(game)); } catch { /* A save failure never interrupts play. */ } }
 function dispatch(kind, extra = {}) {
   if (!game) return false;
   const result = applyAction(game, { kind, ...extra });
@@ -301,10 +312,11 @@ for (const button of document.querySelectorAll('[data-floor]')) button.addEventL
 $('#cancel-floor').addEventListener('click', () => dispatch('cancel-floor-override'));
 $('#apply-floor').addEventListener('click', () => activateAction('apply-floor'));
 $('#new').addEventListener('click', () => newGame()); $('#restart').addEventListener('click', () => newGame(true));
-$('#level').addEventListener('change', () => { $('#lesson').value = ''; $('#pending').hidden = false; });
-$('#lesson').addEventListener('change', () => { $('#level').value = ''; $('#pending').hidden = false; });
-$('#preset').addEventListener('change', () => { const size = presetSize($('#preset').value); if (size) { $('#width').value = size[0]; $('#height').value = size[1]; } changedSettings(); });
-for (const selector of ['#mode','#colours','#schedule','#impact','#width','#height']) $(selector).addEventListener('change', () => { if (selector === '#width' || selector === '#height') $('#preset').value = 'custom'; changedSettings(); });
+$('#level').addEventListener('change', () => { $('#lesson').value = ''; $('#pending').hidden = false; syncSetup(); writePreferences(); });
+$('#lesson').addEventListener('change', () => { $('#level').value = ''; $('#pending').hidden = false; syncSetup(); writePreferences(); });
+$('#preset').addEventListener('change', () => { const size = presetSize($('#preset').value); if (size) { $('#width').value = size[0]; $('#height').value = size[1]; } changedSettings(); writePreferences(); });
+$('#mode').addEventListener('change', () => { $('#level').value = ''; $('#lesson').value = ''; syncSetup(); changedSettings(); writePreferences(); });
+for (const selector of ['#colours','#schedule','#impact','#width','#height']) $(selector).addEventListener('change', () => { if (selector === '#width' || selector === '#height') $('#preset').value = 'custom'; changedSettings(); writePreferences(); });
 $('#width').addEventListener('input', changedSettings); $('#height').addEventListener('input', changedSettings);
 $('#material').addEventListener('change', () => { boardKey = ''; render(true); writePreferences(); });
 $('#motion').addEventListener('change', event => { document.documentElement.dataset.motion = event.target.checked ? 'reduced' : 'full'; writePreferences(); });
@@ -325,7 +337,7 @@ document.addEventListener('keydown', event => {
   else if (key === 'ArrowDown') action = game.settings.mode === 'arcade' ? 'soft-drop' : null;
   else if (key === 'ArrowUp' || key.toLowerCase?.() === 'x') action = 'rotate-clockwise';
   else if (key.toLowerCase?.() === 'z') action = 'rotate-anticlockwise';
-  else if (key === ' ' || key === 'Space') action = (game.settings.mode === 'arcade' || selectedLevel || selectedLesson) ? 'hard-drop' : 'land';
+  else if (key === ' ' || key === 'Space') action = game.settings.mode === 'relaxed' ? 'land' : 'hard-drop';
   else if (key === 'Escape' || key.toLowerCase?.() === 'p') action = game.phase === 'paused' ? 'resume' : 'pause';
   if (!action) return;
   if ((key === ' ' || key === 'Space') && target?.closest('button')) return;
@@ -349,7 +361,8 @@ try {
     selectedLevel = levelManifest.find(level => level.options.seed === game.settings.seed) ?? null;
     selectedLesson = lessonManifest.find(lesson => lesson.options.seed === game.settings.seed) ?? null;
     $('#level').value = selectedLevel?.id ?? ''; $('#lesson').value = selectedLesson?.id ?? '';
-    applySettingsToControls(game.settings); syncCampaignControls();
+    if (selectedLevel || selectedLesson) syncSetup(); else applySettingsToControls(game.settings);
+    syncCampaignControls();
   }
 } catch { game = null; }
 if (!game) newGame(); else { render(true); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true }); }

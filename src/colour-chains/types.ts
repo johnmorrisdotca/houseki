@@ -1,3 +1,4 @@
+import type { NaturePieceCell, PowerDropPreview } from '../nature/types.js';
 /** A gem colour used by Colour Chains. */
 export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
 /** A settled or active stone with a stable run-local identity. */
@@ -50,3 +51,6 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
 export interface GameStatus { readonly mode: Mode; readonly phase: Phase; readonly score: number; readonly maxChain: number; readonly allClears: number; readonly completedPairs: number; readonly assisted: boolean; readonly reason?: string }
 /** Destination cells for the two independently settled ghost stones. */
 export type Landing = readonly [Cell, Cell];
+
+/** The Shizen hard-drop preview: the one-step rebound and where the pair locks (`finalCells`), and where each stone of the pair comes to rest once the committed drop's gravity has run (`settledCells`). */
+export interface ChainsPowerDropPreview extends PowerDropPreview { readonly settledCells: readonly NaturePieceCell[] }
