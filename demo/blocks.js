@@ -9,10 +9,10 @@ const text = {
     settings:'Settings', mode:'Mode', board:'Board preset', width:'Width', height:'Height', colours:'Colours', schedule:'Magnetic floor schedule', impact:'Magnetic Impact on hard drop',
     new:'New game', restart:'Restart', help:'Rotate the 2×2 block. Calm keeps bonded gems together; Pull separates them into columns.', material:'Board material', animations:'Animation', reduced:'Reduce motion', sound:'Sound effects',
     title:'Magnetic Blocks', score:'Score', bestChain:'Best chain', placed:'Placed', experimental:'Experimental rules demo · no campaign yet', next:'Next', nextFloor:'Next floor', currentFloor:'Current floor',
-    floorSwitch:'Floor Switch', switchHelp:'Choose the floor for this block. Review its preview, then apply by placing or dropping.', calm:'Calm', pull:'Pull', cancel:'Cancel', apply:'Apply with this floor', rotateLeft:'↶ Rotate', rotateRight:'↷ Rotate',
+    floorSwitch:'Floor Switch', switchHelp:'Choose the floor for this block. Review its preview, then apply by placing or dropping.', calm:'Calm', pull:'Pull', cancel:'Cancel', apply:'Apply with this floor', rotateLeft:'Rotate left', rotateRight:'Rotate right',
     keys:'← → move · ↑/Z/X rotate · Space drop/place · keypad 4/6/7/9/5/2 · Esc pause', lock:'Landing',
     ready:'Move, rotate, and place the block', paused:'Paused', won:'Goal complete', lost:'The block could not spawn', finished:'Queue complete',
-    floorCalm:'Calm · bonded blocks settle together', floorMagnetic:'Pull · bonds break and columns settle apart', previewCalm:'Preview: new gems will stay bonded during Calm settling.', previewMagnetic:'Preview: bonds will break and each column will settle on its own.', impact:'Magnetic Impact will remove {n} support gem(s) on this hard drop.', noImpact:'No support gems are in contact for Magnetic Impact.',
+    floorCalm:'Calm · bonded blocks settle together', floorMagnetic:'Pull · bonds break and columns settle apart', previewCalm:'Preview: new gems will stay bonded during Calm settling.', previewMagnetic:'Preview: bonds will break and each column will settle on its own.', impactPreview:'Magnetic Impact will remove {n} support gem(s) on this hard drop.', noImpact:'No support gems are in contact for Magnetic Impact.',
     switchUsed:'Floor Switch used', switchAvailable:'1 Floor Switch available', switchSpent:'Floor Switch spent', override:'Selected for this block', scheduleNext:'Then scheduled floor', settingsPending:'Settings changed. Select New game to apply.',
     invalidSize:'Choose width 4–16 and height 4–32 (up to 512 cells).', blocked:'That move is blocked.', pausedHelp:'Resume when ready.', time:'Time', theme:'Theme', drop:'Hard drop', place:'Place', down:'Down', pause:'Pause', resume:'Continue',
     floorNameCalm:'Calm', floorNameMagnetic:'Pull', newSave:'A new game could not start: ',
@@ -24,7 +24,7 @@ const text = {
     floorSwitch:'床スイッチ', switchHelp:'このブロックの床を選びます。プレビューを確認して、配置または落下で適用します。', calm:'静穏', pull:'引力', cancel:'取消', apply:'この床で配置', rotateLeft:'↶ 回転', rotateRight:'↷ 回転',
     keys:'← → 移動 · ↑/Z/X 回転 · Space 落下/配置 · テンキー 4/6/7/9/5/2 · Esc 一時停止', lock:'着地',
     ready:'移動・回転してブロックを配置します', paused:'一時停止中', won:'目標達成', lost:'ブロックを配置できません', finished:'キュー終了',
-    floorCalm:'静穏 · 結合したブロックが一緒に落ちます', floorMagnetic:'引力 · 結合が切れ、列ごとに落ちます', previewCalm:'プレビュー：静穏では新しい宝石の結合が保たれます。', previewMagnetic:'プレビュー：結合が切れ、それぞれの列が落下します。', impact:'磁気衝撃で接触中の宝石を {n} 個取り除きます。',
+    floorCalm:'静穏 · 結合したブロックが一緒に落ちます', floorMagnetic:'引力 · 結合が切れ、列ごとに落ちます', previewCalm:'プレビュー：静穏では新しい宝石の結合が保たれます。', previewMagnetic:'プレビュー：結合が切れ、それぞれの列が落下します。', impactPreview:'磁気衝撃で接触中の宝石を {n} 個取り除きます。',
     noImpact:'磁気衝撃で取り除く接触中の宝石はありません。', switchUsed:'床スイッチを使用', switchAvailable:'床スイッチ 1 回分', switchSpent:'床スイッチ使用済み', override:'このブロックに選択中', scheduleNext:'次は予定された床', settingsPending:'設定が変わりました。新しいゲームを始めて適用してください。',
     invalidSize:'幅は4〜16、高さは4〜32、合計512セル以内にしてください。', blocked:'その操作はできません。', pausedHelp:'準備ができたら続けてください。', time:'時間', theme:'テーマ', drop:'ハードドロップ', place:'配置', down:'下へ', pause:'一時停止', resume:'続ける',
     floorNameCalm:'静穏', floorNameMagnetic:'引力', newSave:'ゲームを開始できません：',
@@ -147,6 +147,7 @@ function renderBoard(force = false) {
   well.style.setProperty('--cols', String(width)); well.style.setProperty('--rows', String(height));
   well.dataset.width = String(width); well.dataset.height = String(height); well.dataset.phase = game.phase;
   well.style.gridTemplateColumns = `repeat(${width}, var(--cell))`;
+  well.style.gridTemplateRows = `repeat(${height}, var(--cell))`;
   well.innerHTML = boardMarkup; boardKey = key;
   settle(well, previous);
   const oversized = width > 12 || height > 20;
@@ -154,7 +155,7 @@ function renderBoard(force = false) {
   $('#floor-line').className = `floor-line ${floorClasses(currentShownFloor())}`;
   $('#floor-line').textContent = currentShownFloor() === 'magnetic' ? '✧' : '●';
   if (blockPreview?.impactRemovedIds.length) {
-    const message = t('impact').replace('{n}', String(blockPreview.impactRemovedIds.length));
+    const message = t('impactPreview').replace('{n}', String(blockPreview.impactRemovedIds.length));
     $('#hits').textContent = message;
     $('#floor-preview').textContent = `${t(currentShownFloor() === 'magnetic' ? 'previewMagnetic' : 'previewCalm')} ${message}`;
   } else {
