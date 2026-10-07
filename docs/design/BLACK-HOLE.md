@@ -1,6 +1,6 @@
 # Black Hole: advanced Gem Swap power
 
-Design status: proposed advanced mechanic, not part of the current playable tray. Implement only after the ordinary tray review gate; do not advertise it as shipped.
+Design status: implemented as an optional advanced Gem Swap tray power. Enable both `tools` and `advancedTools`; ordinary play leaves it off. Engine regression evidence is in `test/gem-swap-black-hole.test.mjs` and `test/gem-swap-modes.test.mjs`; desktop/phone tray, preview, keyboard, focus and reduced-motion checks run through `pnpm test:demo`. Human play and feel review remain pending. Dedicated authored portal campaigns are not claimed by this status.
 
 ## Intended experience
 
@@ -26,9 +26,9 @@ Consume actual stones, scoring 10 points per consumed gem with no new combo mult
 
 The player renders a high-contrast dark disc with a bright ring, an icon distinct from black/grey stones and a textual label. The ring loses segments as gems are consumed. Respect reduced motion: use a short fade rather than spinning or pulling animations. Show remaining capacity and moves next to the tool tray. Initial preview shows placement and first deterministic contact wave; label later contacts as dependent on subsequent moves, never promise an uncomputed complete chain.
 
-## Required gate before implementation approval
+## Implementation verification contract
 
-A bounded engine milestone must prove deterministic placement/initial contact, edge/mask clipping, diagonal exclusion, exact eighth-gem closure, third-move expiry, no decrement on UI actions or ticks, special swallowing without activation, barrier gravity/refill, closure/refill, no earning loop, one-portal limit, undo/restart and mid-resolution replay. Compare batched and sequential ticks and an independent contact/capacity oracle. Authored portal levels require explicit inventory/rules, complete solving witnesses and difficulty measured with the portal available. Follow with desktop/phone, keyboard, focus and reduced-motion browser checks. No release or level claims before these gates pass.
+A bounded engine milestone must prove deterministic placement/initial contact, edge/mask clipping, diagonal exclusion, exact eighth-gem closure, third-move expiry, no decrement on UI actions or ticks, special swallowing without activation, barrier gravity/refill, closure/refill, no earning loop, one-portal limit, undo/restart and mid-resolution replay. Compare batched and sequential ticks and an independent contact/capacity oracle. Authored portal levels require explicit inventory/rules, complete solving witnesses and difficulty measured with the portal available. Follow with desktop/phone, keyboard, focus and reduced-motion browser checks. These checks remain requirements for future changes. Authored portal levels require their own verified witnesses and measured difficulty.
 
 ## Contact pacing review
 

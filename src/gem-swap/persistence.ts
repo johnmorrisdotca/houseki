@@ -11,11 +11,12 @@ export class ReplayError extends TypeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'ReplayError'; this.code = code; }
 }
-function canonical(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+function canonical(value: unknown, depth = 0): string {
+  if (depth > 50) throw new ReplayError('save-too-deep', 'Replay is nested too deeply');
+  if (Array.isArray(value)) return `[${value.map(item => canonical(item, depth + 1)).join(',')}]`;
   if (value && typeof value === 'object') {
     const object = value as Record<string, unknown>;
-    return `{${Object.keys(object).sort().map(key => `${JSON.stringify(key)}:${canonical(object[key])}`).join(',')}}`;
+    return `{${Object.keys(object).sort().map(key => `${JSON.stringify(key)}:${canonical(object[key], depth + 1)}`).join(',')}}`;
   }
   return JSON.stringify(value);
 }

@@ -26,12 +26,12 @@ export function hintTransition(state: GameState): Transition {
 export function reshuffleTransition(state: GameState): Transition {
   const finishedRelaxed = state.mode === 'relaxed' && state.phase === 'finished' && state.outcome === 'finished' && !findMatches(state.board, state.settings).length;
   if (state.mode !== 'relaxed' || (!onReady(state) && !finishedRelaxed) || state.selectedTool) return rejected(state, 'reshuffle-unavailable');
-  const gems = state.board.filter((item): item is Gem => item !== null); let randomState = state.randomState;
+  const gems = state.board.filter((item, index): item is Gem => item !== null && index !== state.blackHole?.cell); let randomState = state.randomState;
   for (let attempt = 0; attempt < 128; attempt++) {
     const shuffled = [...gems];
     for (let index = shuffled.length - 1; index > 0; index--) { const [pick, next] = nextInt(randomState, index + 1); randomState = next; [shuffled[index], shuffled[pick]] = [shuffled[pick]!, shuffled[index]!]; }
     const board = [...state.board]; let at = 0;
-    for (let index = 0; index < board.length; index++) if (state.settings.mask[index]) board[index] = shuffled[at++]!;
+    for (let index = 0; index < board.length; index++) if (state.settings.mask[index] && index !== state.blackHole?.cell) board[index] = shuffled[at++]!;
     if (!findMatches(board, state.settings).length && listLegalSwaps({ ...state, board }).length) {
       return { state: Object.freeze({ ...state, board: Object.freeze(board), randomState, assisted: true, phase: 'ready', outcome: null, selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]) }), events: Object.freeze([{ type: 'board-reshuffled', attempts: attempt + 1, assisted: true }]), accepted: true };
     }

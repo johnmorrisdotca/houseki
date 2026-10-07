@@ -127,3 +127,8 @@ test('earned tools, rare charge progress, and an active Black Hole reconstruct f
   assert.ok(state.blackHole); assert.equal(state.blackHoleCharges, 0);
   assert.deepEqual(decodeGame(encodeGame(state)), state);
 });
+
+ test('deep replay inputs fail with a bounded validation error rather than exhausting the stack', () => {
+  const payload = '{"format":"gem-swap-replay-1","initial":{"nested":' + '['.repeat(10000) + '0' + ']'.repeat(10000) + '},"operations":[]}';
+  assert.throws(() => decodeGame(payload), error => error instanceof ReplayError && error.code === 'save-too-deep');
+});
