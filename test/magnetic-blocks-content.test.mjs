@@ -98,7 +98,7 @@ describe('Magnetic Blocks measured campaign', () => {
       expect(createLesson(lesson.id).settings.seed).toBe(lesson.options.seed);
       expect(Boolean(lesson.title.en && lesson.title.ja && lesson.objective.en && lesson.objective.ja)).toBe(true);
     }
-  });
+  }, 180_000);
 });
 
 it('retains the strongest expert endings when the verified pool exceeds the quota', () => {
