@@ -65,3 +65,9 @@ Carry these distinctions into new graders and regression fixtures: independent r
 A later grading review separated three cascade facts: an explicit required chain in the goal, the chain achieved by the retained witness, and the largest chain seen in random play. A lucky cascade in a losing random plan is not required difficulty. Likewise, three single-wave clears on three turns are not a three-wave cascade. Store these observations separately and weight only the feature the formula actually declares.
 
 Save-identity review also found that different authored layouts reused the same construction seed. A player restored its board but selected another level after reload. New Magnetic Blocks seeds now derive from the canonical stable level ID, while published seeds remain unchanged. Keep a regression that restores both running and completed levels through the actual player.
+
+Final curation checks must inspect the entire eligible band, not merely its first candidates. The easiest opening examples belong early, and the final expert selection must retain the strongest verified cases available. Sorting the chosen levels cannot compensate for discarding harder candidates before selection.
+
+For an ordinary matching objective, disconnected fragments of one colour can be joined and cleared by one match. Counting those fragments as separate coordinated goals can double-count placement precision. Nature grading now distinguishes target colours for ordinary matching, explicit dependent waves for a chain goal, and spatial exposure components for weather goals. Each definition and its regression belongs with the formula.
+
+Independent verification also checks canonical board indexing against the actual width, not a global default width. Retained proofs and weather event traces are evidence, not a way to invent distinct IDs for the same board, queue, goal and modifiers.

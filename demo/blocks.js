@@ -135,9 +135,10 @@ function newGame(restart = false) {
 }
 function symbol(gem) { return symbols[gem.colour] ?? '◆'; }
 function gemMarkup(gem, classes = '') {
+  const target=game?.settings.goal?.kind==='clear-targets'&&game.settings.goal.targetIds.includes(gem.id);
   const colourLabel = { red: 'red', blue: 'blue', green: 'green', gold: 'gold', purple: 'purple', teal: 'teal' }[gem.colour] ?? 'gem';
   const overlay=classes.includes('destination-ghost')?' style="position:absolute;inset:6%;pointer-events:none"':'';
-  return `<span class="gem ${gem.colour} ${classes}"${overlay}${gem.id !== undefined ? ` data-id="${gem.id}"` : ''} role="img" aria-label="${colourLabel} gem">${symbol(gem)}</span>`;
+  return `<span class="gem ${gem.colour} ${target?'goal-target':''} ${classes}"${overlay}${gem.id !== undefined ? ` data-id="${gem.id}"` : ''} role="img" aria-label="${colourLabel} gem${target?(lang==='en'?', target':', 目標'):''}">${symbol(gem)}</span>`;
 }
 function previewDrop() {
   if (game.phase !== 'falling' || !game.active) return null;

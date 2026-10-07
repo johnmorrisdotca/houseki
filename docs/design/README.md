@@ -79,7 +79,7 @@ Advanced designs have separate implementation gates: [Black Hole](BLACK-HOLE.md)
 
 ## Additional campaigns
 
-[Campaign extensions](CAMPAIGN-EXTENSIONS.md) specifies the published fifty-level Magnetic Blocks, Shizen and Arashi baseline and the approved 128-level expansion, with fixed rules, verification, grading and player requirements.
+[Campaign extensions](CAMPAIGN-EXTENSIONS.md) specifies the 128-level Magnetic Blocks, Shizen and Arashi campaigns, with fixed rules, verification, grading and player requirements.
 
 ## Campaign maintenance
 

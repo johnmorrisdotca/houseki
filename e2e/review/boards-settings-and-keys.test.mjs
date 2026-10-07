@@ -62,26 +62,27 @@ try {
     await page.close();
   }
 
-  // Magnetic Blocks: in a level Space does what the ghost promised, and the two actions are not the same move.
+  // Magnetic Impact free play: Space follows the gentle landing preview; hard drop removes supports.
   {
     const { page, errors } = await open('blocks.html');
     const found = await page.evaluate(async () => {
       const m = await import('./dist/magnetic-blocks.js');
       const board = (transition) => JSON.stringify((transition.state.gravityBoard ?? transition.state.board).map((gem) => gem?.id ?? null));
-      for (const level of m.levelManifest) {
-        let state = m.createLevel(level.id);
-        for (const kind of ['left', 'left', 'rotate-clockwise', 'right', 'right', 'right', 'rotate-anticlockwise', 'left']) {
-          state = m.applyAction(state, { kind }).state;
-          if (board(m.applyAction(state, { kind: 'land' })) !== board(m.applyAction(state, { kind: 'hard-drop' }))) return { id: level.id, saved: m.encodeGame(state) };
-        }
-      }
+      const initialBoard = Array(48).fill(null);
+      initialBoard[38] = { id: 1, colour: 'blue' };
+      initialBoard[39] = { id: 2, colour: 'green' };
+      initialBoard[44] = { id: 3, colour: 'gold' };
+      initialBoard[45] = { id: 4, colour: 'gold' };
+      const state = m.createGame({ width: 6, height: 8, initialBoard, magneticImpact: true,
+        schedule: { kind: 'fixed', floor: 'magnetic' }, seed: 'impact-preview-review' });
+      if (board(m.applyAction(state, { kind: 'land' })) !== board(m.applyAction(state, { kind: 'hard-drop' }))) return { saved: m.encodeGame(state) };
       return null;
     });
-    assert.ok(found, 'a level state where a gentle land and a hard drop differ');
+    assert.ok(found, 'an impact state where a gentle land and a hard drop differ');
     await page.addInitScript((saved) => localStorage.setItem('houseki-magnetic-blocks-save', saved), found.saved);
     await page.reload();
     await page.locator('#well .destination-ghost').first().waitFor();
-    assert.equal(await page.locator('#level').inputValue(), found.id);
+    assert.equal(await page.locator('#level').inputValue(), '');
     const ghost = await page.locator('#well .destination-ghost').evaluateAll((gems) => gems.map((gem) => [Number(gem.dataset.id), Number(gem.closest('[data-cell]').dataset.cell)]).sort((a, b) => a[0] - b[0]));
     await page.locator('.game-screen').focus();
     await page.keyboard.press('Space');

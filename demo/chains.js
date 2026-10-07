@@ -59,7 +59,11 @@ function newGame(restart = false) {
   try { localStorage.removeItem(saveKey); } catch { /* A fresh game still starts. */ }
   heldKeys.clear(); pendingReleases.clear(); $('#nature').checked=game.settings.nature===true;$('#weather').value=game.settings.weather??'';render(); save(); if(!['won','lost','finished'].includes(game.phase))$('.game-screen').focus({ preventScroll: true });
 }
-function gemMarkup(gem, extra = '') { const overlay=extra.includes('gravity-destination')||extra.includes('power-drop-ghost')?'style="position:absolute;inset:6%;pointer-events:none"':'';return `<span ${gem.id!==undefined?`data-id="${gem.id}"`:""} class="gem ${gem.colour} ${gem.magnetic?'magnetic':''} ${extra}" ${overlay} aria-label="${gem.colour}">${symbols[gem.colour]}${gem.magnetic?'<small aria-label="magnetic">✧</small>':''}</span>`; }
+function gemMarkup(gem, extra = '') {
+  const target=game?.settings.goal?.kind==='clear-targets'&&game.settings.goal.targetIds.includes(gem.id);
+  const overlay=extra.includes('gravity-destination')||extra.includes('power-drop-ghost')?'style="position:absolute;inset:6%;pointer-events:none"':'';
+  return `<span ${gem.id!==undefined?`data-id="${gem.id}"`:''} class="gem ${gem.colour} ${gem.magnetic?'magnetic':''} ${target?'goal-target':''} ${extra}" ${overlay} aria-label="${gem.colour}${target?(lang==='en'?', target':', 目標'):''}">${symbols[gem.colour]}${gem.magnetic?'<small aria-label="magnetic">✧</small>':''}</span>`;
+}
 function render() {refreshAppearanceLanguage(lang);
   if (!game) return;
   if($('#nature').dataset.authoredLock!=='true'&&$('#weather').dataset.authoredLock!=='true'){const locked=game.settings.mode==='daily'||game.settings.mode==='challenge';$('#nature').disabled=locked;$('#weather').disabled=locked;}const previous=positions($('#well'));
@@ -114,8 +118,8 @@ function render() {refreshAppearanceLanguage(lang);
 }
 function populateLevels(){const campaign=$('#campaign').value;const placeholder=campaign==='basic'?(lang==='en'?'Free play':'自由に遊ぶ'):(lang==='en'?'Choose a level':'レベルを選択');fillCampaignSelector($('#level'),levelsFor(campaign),lang,placeholder);$('#level').dataset.campaignLanguage=lang;}
 function updateBoardScroll(){const area=$('.well-scroll');if(!area)return;const percent=Math.round(area.scrollTop/Math.max(1,area.scrollHeight-area.clientHeight)*100);$('.scroll-position').textContent=`${percent}%`;$('.scroll-position').setAttribute('aria-label',`${words[lang].scrollLabel}: ${percent}%`);}
-function markBoardRegion(oversized){const area=$('.well-scroll');area.dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;if(oversized){area.setAttribute('tabindex','0');area.setAttribute('role','region');area.setAttribute('aria-label',words[lang].boardLabel);}else{area.removeAttribute('tabindex');area.removeAttribute('role');area.removeAttribute('aria-label');}updateBoardScroll();}
-function cellLabel(index, width, markup) { const y = Math.floor(index / width) - 3; const x = index % width; const gem = markup.match(/aria-label="([a-z]+)"/); return gem ? `${gem[1]} gem, column ${x + 1}, row ${y + 1}` : `Empty, column ${x + 1}, row ${y + 1}`; }
+function markBoardRegion(oversized){const area=$('.well-scroll');const fitWide=game.settings.mode==='challenge'&&game.settings.width>12&&game.settings.height<=20;area.dataset.authoredFit=String(fitWide);if(fitWide){const available=Math.max(180,Math.min(window.innerWidth-100,$('.game-screen').clientWidth-76));$('#well').style.setProperty('--authored-fit-cell',`${Math.max(12,Math.min(32,(available-2*(game.settings.width-1))/game.settings.width))}px`);}oversized=oversized&&!fitWide;area.dataset.oversized=String(oversized);$('.board-nav').hidden=!oversized;if(oversized){area.setAttribute('tabindex','0');area.setAttribute('role','region');area.setAttribute('aria-label',words[lang].boardLabel);}else{area.removeAttribute('tabindex');area.removeAttribute('role');area.removeAttribute('aria-label');}updateBoardScroll();}
+function cellLabel(index, width, markup) { const y = Math.floor(index / width) - 3; const x = index % width; const gem = markup.match(/aria-label="([a-z]+)/); return gem ? `${markup.includes('goal-target')?(lang==='en'?'Target ':'目標 '):''}${gem[1]} gem, column ${x + 1}, row ${y + 1}` : `Empty, column ${x + 1}, row ${y + 1}`; }
 function save() { try { localStorage.setItem(saveKey, encodeGame(game)); } catch { /* Storage failure never interrupts play. */ } }
 function queueSave() { if(!saveTimer)saveTimer=setTimeout(()=>{saveTimer=0;save();},350); }
 function playAction(kind) {
@@ -212,3 +216,5 @@ for(const button of document.querySelectorAll('[data-scroll]'))button.addEventLi
 $('.well-scroll').addEventListener('scroll',updateBoardScroll,{passive:true});
 
 $('#sound').checked=soundEnabled();document.addEventListener('pointerdown',unlockSound);document.addEventListener('keydown',unlockSound);
+
+window.addEventListener('resize',()=>render());

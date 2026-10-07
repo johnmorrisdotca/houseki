@@ -87,8 +87,8 @@ for (const [entry, name] of [["falling-triplets", "fallingTriplets"], ["stone-co
 const chains = collection.colourChains;
 const blocks = collection.magneticBlocks;
 for (const [levels, create] of [[chains.shizenLevelManifest, chains.createShizenLevel], [chains.arashiLevelManifest, chains.createArashiLevel], [blocks.levelManifest, blocks.createLevel]]) {
-  assert.equal(levels.length, 50);
-  for (const number of [1, 25, 50]) {
+  assert.equal(levels.length, 128);
+  for (const number of [1, 64, 128]) {
     const state = create(number);
     assert.equal(state.phase, "falling");
     assert.ok(state.settings.goal);

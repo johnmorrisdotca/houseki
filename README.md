@@ -75,13 +75,13 @@ Or straight from a page, with nothing to build:
 ## Features
 
 - **Five games**, each its own engine and its own entry point: [Falling Triplets](docs/design/01-FALLING-TRIPLETS.md), [Stone Collapse](docs/design/02-STONE-COLLAPSE.md), [Colour Chains](docs/design/03-COLOUR-CHAINS.md) [Gem Swap](docs/design/04-GEM-SWAP.md) and [Magnetic Blocks](docs/design/CAMPAIGN-EXTENSIONS.md).
-- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse, 50 Gem Swap, 50 Magnetic Blocks, 50 Shizen and 50 Arashi challenges (450 total), ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
+- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse, 50 Gem Swap, 128 Magnetic Blocks, 128 Shizen and 128 Arashi challenges (684 total), ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
 - **Three modes**: Relaxed (no clock, plan each move), Arcade (a timer drops the pieces) and Daily (the same board for everyone on a date).
 - **Seeded and replayable**: a state is made from a seed and a list of actions, so a save is that list, and it decodes to exactly the board it came from.
 - **Configurable boards**: presets from compact to extra wide and deep, custom sizes within stated limits, up to six colours, and shaped boards (heart, star, hexagon) for the full-board games.
 - **Stored tools** for Gem Swap (Bomb, Row clear, Colour clear) and Stone Collapse (Bomb, Pick): select a tool and a stone, look at the highlighted effect, then confirm or cancel. A run that uses a tool is marked assisted. An optional earned Black Hole shrinks as it consumes nearby gems.
 - **Nature, optional**: Shizen magnetic stones with one bounded rebound, and Arashi weather, a rare or frequent earthquake that jumbles stones and lightning that removes exposed ones, on a seeded schedule.
-- **Magnetic Blocks**: bonded 2×2 squares, a floor that turns magnetic on a schedule, a one-use Floor Switch and impact drops. Its fifty challenges introduce Calm/Pull choices, planned floor schedules, the Floor Switch and impact drops.
+- **Magnetic Blocks**: bonded 2×2 squares, a floor that turns magnetic on a schedule, a one-use Floor Switch and impact drops. Its 128 challenges progress from forgiving landings to coupled support clearings and a necessary Floor Switch. Impact remains configurable in free play.
 - **Accessible**: permanent colour symbols, keyboard and keypad control, an Animation setting that is on by default and a reduced-motion choice that is respected.
 - **Light and dark** that follow the device, in the demo's family look.
 - **English and Japanese** words for every lesson, challenge, button and line of the demo.
@@ -95,9 +95,9 @@ Or straight from a page, with nothing to build:
 | Stone Collapse | `stone-collapse` | select a connected group and confirm | two or more touching stones of one colour | 100 |
 | Colour Chains | `colour-chains` | rotate a falling pair | a group of four or more | 50 |
 | Gem Swap | `gem-swap` | swap two neighbours | a run of three or more, which can make special gems | 50 |
-| Magnetic Blocks | `magnetic-blocks` | rotate a falling 2×2 block | four connected gems, with Calm/Pull settling | 50 |
-| Shizen | `colour-chains` | anticipate marked stones and rebound | four connected gems after attraction | 50 |
-| Arashi | `colour-chains` | plan around earthquakes and lightning | four connected gems after weather | 50 |
+| Magnetic Blocks | `magnetic-blocks` | rotate a falling 2×2 block | four connected gems, with Calm/Pull settling | 128 |
+| Shizen | `colour-chains` | anticipate marked stones and rebound | four connected gems after attraction | 128 |
+| Arashi | `colour-chains` | plan around earthquakes and lightning | four connected gems after weather | 128 |
 
 
 ### What's in it
@@ -215,7 +215,7 @@ const weather = createArashiLevel(1);
 const bondedSquares = createLevel(1);
 ```
 
-Each campaign has fifty fixed puzzles ordered from easy to hard. Use its manifest for stable IDs, bilingual titles, objectives, difficulty marks and verified winning plans. Select Shizen or Arashi in the Colour Chains demo, or a challenge in Magnetic Blocks. A campaign uses a finite queue with no falling clock; the goal and progress appear beside the board. Fixed rules stay visible, and the result offers replay or the next challenge. See the [campaign contract](docs/design/CAMPAIGN-EXTENSIONS.md).
+Each of these three campaigns has 128 fixed puzzles: 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert. All selected puzzles are regraded from measured evidence on an integer 1–100 scale, then ordered within those bands. Use its manifest for stable IDs, bilingual titles, objectives, difficulty marks and verified winning plans. Select Shizen or Arashi in the Colour Chains demo, or a challenge in Magnetic Blocks. A campaign uses a finite queue with no falling clock; the goal and progress appear beside the board. Fixed rules stay visible, and the result offers replay or the next challenge. See the [campaign contract](docs/design/CAMPAIGN-EXTENSIONS.md). The [review workflow](docs/design/CAMPAIGN-REVIEW-WORKFLOW.md) and [design worksheet](docs/design/CAMPAIGN-DESIGN-TEMPLATE.md) explain how to measure, review and improve future campaigns.
 
 ### In a framework
 
@@ -360,7 +360,7 @@ The engine draws nothing, so a page draws the state. Save this as a file and ser
 
 ### A challenge won by its recorded play
 
-Every graded challenge ships a winning play, and the tests replay all 450. A server can do the same to check that a client really won, with no screen: start the level, make the recorded moves, and read the phase.
+Every graded challenge ships a winning play, and the tests replay all 684. A server can do the same to check that a client really won, with no screen: start the level, make the recorded moves, and read the phase.
 
 ```ts
 import { advanceTicks, applyAction, createLevel, levelManifest, statusOf } from "@johnmorrisdotca/houseki/falling-triplets";
@@ -509,7 +509,7 @@ true false
 
 ### The three campaigns that came after
 
-Magnetic Blocks, Shizen and Arashi each have fifty fixed puzzles ordered from easy to hard, with stable IDs, titles in both languages, an objective and a verified winning plan. A campaign has a finite queue and no falling clock.
+Magnetic Blocks, Shizen and Arashi each have 128 fixed puzzles ordered from easy to hard, with stable IDs, titles in both languages, an objective and a verified winning plan. A campaign has a finite queue and no falling clock.
 
 ```ts
 import { createArashiLevel, createShizenLevel, arashiLevelManifest, shizenLevelManifest } from "@johnmorrisdotca/houseki/colour-chains";
@@ -521,8 +521,8 @@ console.log(createLevel(1).phase, createShizenLevel(1).settings.goal, createAras
 ```
 
 ```text
-50 50 50
-Bonded landing 25 | 磁力の後にリバウンド | Save a path for lightning
+128 128 128
+Open landing 001 | 青いガイドでリバウンド | Leave space above the target
 falling { kind: 'clear-targets', targetIds: [ 1, 2, 3 ] } frequent
 ```
 
@@ -561,7 +561,7 @@ Every export of every entry point is in the [API reference](https://johnmorrisdo
 | `@johnmorrisdotca/houseki/colour-chains` | Colour Chains: 50 challenges, three lessons, and the Shizen and Arashi campaigns |
 | `@johnmorrisdotca/houseki/stone-collapse` | Stone Collapse: 100 challenges, three lessons, hints, undo and stored tools |
 | `@johnmorrisdotca/houseki/gem-swap` | Gem Swap: 50 challenges, three lessons, hints, undo, stored tools and the Black Hole |
-| `@johnmorrisdotca/houseki/magnetic-blocks` | Magnetic Blocks: bonded squares, the magnetic floor and its 50 challenges |
+| `@johnmorrisdotca/houseki/magnetic-blocks` | Magnetic Blocks: bonded squares, the magnetic floor and its 128 challenges |
 | `@johnmorrisdotca/houseki/nature` | The deterministic attraction, rebound and environment utilities |
 
 ### The calls to learn first

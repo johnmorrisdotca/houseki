@@ -182,4 +182,4 @@ test('generation script reproduces the immutable manifest checksum', () => {
   const data = JSON.parse(generated.slice(generated.indexOf('=') + 1).trim().replace(/;$/, ''));
   assert.deepEqual(data.shizen, shizenCampaignManifest);
   assert.deepEqual(data.arashi, arashiCampaignManifest);
-}, 180_000);
+}, 600_000);

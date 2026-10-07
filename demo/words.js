@@ -15,7 +15,7 @@ export const PAGES = {
     title: "Houseki · Colour Chains",
     description: "Play Colour Chains, a falling-pairs gem game: rotate the pair, connect four of one colour and set off cascading chains, with optional magnetic stones and weather. Graded challenges, in English and Japanese, free and open source.",
     foot: { en: "Colour Chains · Shizen and Arashi campaigns · relaxed, arcade and daily play", ja: "色の連鎖 · 自然と嵐のキャンペーン · じっくり考える・時間で落ちる・毎日のチャレンジ" },
-    status: { en: "150 graded challenges · Colour Chains, Shizen and Arashi.", ja: "150のチャレンジ · 色の連鎖・自然・嵐。" },
+    status: { en: "306 graded challenges · Colour Chains, Shizen and Arashi.", ja: "306のチャレンジ · 色の連鎖・自然・嵐。" },
   },
   tools: {
     file: "tools.html",

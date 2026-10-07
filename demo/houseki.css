@@ -100,3 +100,7 @@ header .intro{min-height:200px}
 #objective progress{height:12px}
 /* A title takes the whole row on a phone, so that it is one line in any font and either language, and the board under it does not move when the language changes. */
 @media (max-width: 480px) { .panel-head h2 { flex-basis: 100%; white-space: nowrap; } }
+
+.gem.goal-target{outline:2px solid var(--gold);outline-offset:1px}
+.well-scroll[data-authored-fit="true"] .well{--cell:var(--authored-fit-cell)}
+.well-scroll[data-authored-fit="true"] .gem{font-size:clamp(6px,calc(var(--cell)*.42),18px)}
