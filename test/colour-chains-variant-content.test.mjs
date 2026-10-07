@@ -6,7 +6,6 @@ import {
   createArashiLevel, createChallenge, createShizenLevel, decodeGame, encodeGame,
   restartGame, shizenCampaignManifest, shizenLevelManifest
 } from '../dist/colour-chains.js';
-import { generateArashiCampaign, generateShizenCampaign } from '../scripts/colour-chains-levels.mjs';
 
 const turns = { up: 0, right: 1, down: 2, left: 3 };
 const bands = [['entry', 32, 1, 20], ['easy', 32, 21, 40], ['intermediate', 32, 41, 60], ['hard', 24, 61, 80], ['expert', 8, 81, 100]];
@@ -189,7 +188,5 @@ test('nature campaign settings and action replay survive save and restart', () =
   }
 });
 
-test('Shizen and Arashi regenerate byte-for-byte from their authored construction pools', () => {
-  assert.deepEqual(generateShizenCampaign(), shizenCampaignManifest);
-  assert.deepEqual(generateArashiCampaign(), arashiCampaignManifest);
-}, 600_000);
+// The native-process regeneration comparison in colour-chains-content.test.mjs
+// verifies both complete catalogues. Keep the independent evidence checks above here.
