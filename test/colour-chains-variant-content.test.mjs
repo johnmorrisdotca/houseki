@@ -140,7 +140,7 @@ for (const [name, manifest, levels, create] of [
       assert.equal(metrics.seededPlayoutSamples, level.score >= 81 ? 256 : 64);
       assert.equal(metrics.seededPlayoutVariablePrefixLength, level.rawMetrics.seededPlayoutQueueDepth);
       assert.equal(metrics.seededPlayoutFixedSuffixLength, 0);
-      assert.equal(metrics.seededPlayoutSuccessRate, metrics.seededPlayoutSuccesses / metrics.seededPlayoutSamples);
+      assert.equal(metrics.seededPlayoutSuccessRate, Number((metrics.seededPlayoutSuccesses / metrics.seededPlayoutSamples).toFixed(6)));
       assert.ok(metrics.placementProbes > 0 && metrics.legalPlacements > 0);
       assert.ok(metrics.requiredSetupPairs <= metrics.verifiedSetupDependencies);
       assert.ok(metrics.verifiedSetupDependencies <= metrics.setupDependencyProbeSteps);
