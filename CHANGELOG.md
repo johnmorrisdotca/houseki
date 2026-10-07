@@ -4,6 +4,19 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-06
+
+### Added
+
+- Magnetic Blocks, Shizen and Arashi each have 128 original challenges, bringing the active package to 684. Each expansion has 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert levels, with bilingual objectives and verified winning plays.
+- Reusable campaign design and review documents, concrete grading methods, rejected-example regressions and board-coverage evidence.
+
+### Changed
+
+- All expanded content is regraded from complete seeded plans, consequential placement probes, interacting objectives and mechanic-specific counterfactuals. Integer difficulty is shown from 1 to 100 in five groups. Search limits remain explicitly unknown.
+- The expansion replaces the former fifty-level sets. Current campaign save/restart behavior is verified; previous-version level archives are not retained.
+
+
 ## [0.3.0] - 2026-10-06
 
 The ten open fix tickets were each read against the code, and the ones that were real are fixed and held by new tests: Magnetic Blocks' settings and Space key, and the big-board region of Falling Triplets and Colour Chains. The other tickets were already fixed in 0.2.0, and the review tests that hold them now run in `pnpm test:demo`.
@@ -83,9 +96,11 @@ Nothing that was exported has changed. The README is the family's one layout, in
 - An experimental Magnetic Blocks engine with bonded squares, magnetic floor schedules, a Floor Switch and impact drops.
 - Typed entry points, a generated API reference, an MIT licence and reproducible package checks.
 
-[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.0...HEAD
 [0.3.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/johnmorrisdotca/houseki/releases/tag/v0.1.0
+
+[0.4.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.3.0...v0.4.0

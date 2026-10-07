@@ -37,4 +37,4 @@ A band is a content requirement, not permission to assign difficulty from its in
 
 Prototype and review representative entry, intermediate and expert constructions before generating a whole band. Expert examples need demonstrated consequential choices and substantially less forgiveness than the openings. Generate surplus original candidates; do not pad quotas with seeds, recolours, mirrors or longer queues that leave the same decision unchanged.
 
-The published fifty-level campaigns remain the baseline. This document does not assert that the 128-level expansion, expert calibration or human review is complete. Site integration remains outside this package work.
+The 128-level expansion has regenerated, measured catalogues and automated winning-plan checks. Expert calibration and human review remain pending. Site integration remains outside this package work.

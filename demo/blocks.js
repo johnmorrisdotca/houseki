@@ -1,3 +1,4 @@
+import {fillCampaignSelector,difficultyText} from './campaigns.js';
 import {refreshAppearanceLanguage} from './appearance.js';
 import {syncAuthoredSettings,readFreeSettings,restoreFreeSettings} from './settings.js';
 import {updateEnding} from './ending.js';
@@ -47,7 +48,7 @@ function t(key) { return text[lang][key] ?? text.en[key] ?? key; }
 function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; populateCampaignSelectors(); syncSetup(); render(true); writePreferences(); }
 function populateCampaignSelectors() {
   const selectedLevelId = $('#level').value, selectedLessonId = $('#lesson').value;
-  $('#level').innerHTML = `<option value="">${t('freePlay')}</option>` + levelManifest.map(level => `<option value="${level.id}">${level.number} · ${level.marks}/5 · ${level.title[lang]}</option>`).join('');
+  fillCampaignSelector($('#level'), levelManifest, lang, t('freePlay'));
   $('#lesson').innerHTML = `<option value="">${t('noLesson')}</option>` + lessonManifest.map(lesson => `<option value="${lesson.id}">${lesson.title[lang]}</option>`).join('');
   $('#level').value = selectedLevelId; $('#lesson').value = selectedLessonId;
 }
@@ -134,9 +135,10 @@ function newGame(restart = false) {
 }
 function symbol(gem) { return symbols[gem.colour] ?? '◆'; }
 function gemMarkup(gem, classes = '') {
+  const target=game?.settings.goal?.kind==='clear-targets'&&game.settings.goal.targetIds.includes(gem.id);
   const colourLabel = { red: 'red', blue: 'blue', green: 'green', gold: 'gold', purple: 'purple', teal: 'teal' }[gem.colour] ?? 'gem';
   const overlay=classes.includes('destination-ghost')?' style="position:absolute;inset:6%;pointer-events:none"':'';
-  return `<span class="gem ${gem.colour} ${classes}"${overlay}${gem.id !== undefined ? ` data-id="${gem.id}"` : ''} role="img" aria-label="${colourLabel} gem">${symbol(gem)}</span>`;
+  return `<span class="gem ${gem.colour} ${target?'goal-target':''} ${classes}"${overlay}${gem.id !== undefined ? ` data-id="${gem.id}"` : ''} role="img" aria-label="${colourLabel} gem${target?(lang==='en'?', target':', 目標'):''}">${symbol(gem)}</span>`;
 }
 function previewDrop() {
   if (game.phase !== 'falling' || !game.active) return null;
@@ -229,7 +231,7 @@ function renderHud(force = false) {
   $('.place').hidden = game.settings.mode !== 'relaxed'; $('.drop').hidden = game.settings.mode !== 'arcade' && !campaignDrop; $('.soft').hidden = game.settings.mode !== 'arcade';
   const level = selectedLevel, lesson = selectedLesson;
   $('#objective-title').textContent = level ? `${level.number} · ${level.title[lang]}` : lesson?.title[lang] ?? '';
-  $('#objective-marks').hidden = !level; $('#objective-marks').textContent = level ? `${level.marks}/5` : '';
+  $('#objective-marks').hidden = !level; $('#objective-marks').textContent = level ? difficultyText(level) : '';
   $('#objective-copy').textContent = level?.objective[lang] ?? lesson?.objective[lang] ?? '';
   const goalHud = $('#goal-hud'); goalHud.hidden = !level;
   if (level) {
@@ -260,8 +262,9 @@ function render(force = false) {
   refreshAppearanceLanguage(lang); if (!game) return;
   renderBoard(force); renderHud(force); syncCampaignControls();
   const activeLevel = selectedLesson ? { ...selectedLesson, lesson: true } : selectedLevel;
-  const index = selectedLevel ? levelManifest.findIndex(level => level.id === selectedLevel.id) : -1;
-  const next = index >= 0 ? levelManifest[index + 1] ?? null : null;
+  const activeLevels = levelManifest;
+  const index = selectedLevel ? activeLevels.findIndex(level => level.id === selectedLevel.id) : -1;
+  const next = index >= 0 ? activeLevels[index + 1] ?? null : null;
   const endingPhase = selectedLevel && game.phase === 'finished' ? 'lost' : game.phase;
   updateEnding({ phase: endingPhase, score: game.score, lang, mode: game.settings.mode, level: activeLevel, next,
     onRestart: () => newGame(true),
@@ -360,6 +363,7 @@ try {
     game = decodeGame(saved); startOptions = null;
     selectedLevel = levelManifest.find(level => level.options.seed === game.settings.seed) ?? null;
     selectedLesson = lessonManifest.find(lesson => lesson.options.seed === game.settings.seed) ?? null;
+    if(game.settings.goal&&!selectedLevel&&!selectedLesson)throw new Error('Unknown campaign revision');
     $('#level').value = selectedLevel?.id ?? ''; $('#lesson').value = selectedLesson?.id ?? '';
     if (selectedLevel || selectedLesson) syncSetup(); else applySettingsToControls(game.settings);
     syncCampaignControls();

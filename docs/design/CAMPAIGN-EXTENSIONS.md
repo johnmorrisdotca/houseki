@@ -1,6 +1,6 @@
 # Magnetic Blocks, Shizen and Arashi campaigns
 
-The published baseline has 50 challenges per extension. The approved next revision has **128 challenges each**: 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert. Tutorials remain separate. The four original campaigns retain their 300 challenges. The expanded total will be 684 only after all three 128-level sets pass their release gates; the published baseline remains 450 until then.
+The published baseline has 50 challenges per extension. The approved next revision has **128 challenges each**: 32 entry-level, 32 easy, 32 intermediate, 24 hard and 8 expert. Tutorials remain separate. The four original campaigns retain their 300 challenges. The expanded active total is 684. Its release requires all three 128-level sets to pass their documented gates.
 
 Follow [LEVEL-GENERATION.md](LEVEL-GENERATION.md) and [the family grading review](LEVEL-GRADING-REFERENCES.md). Display measured integer difficulty from 1 to 100, retain raw metrics, and introduce concepts before testing combinations. These are expansion requirements, not claims about the current fifty-level content.
 
@@ -27,3 +27,7 @@ Campaign selection displays its own level list and objective in English and Japa
 Verify every witness independently, deterministic regeneration, canonical uniqueness, grades/order, first and last difficulty bands, rejection of malformed options, and terminal behavior. Browser checks cover all three selectors, representative witnessed wins, next level, loss, restart, exact recovery, both languages and phone/desktop geometry. Existing basic campaigns, Daily mode, themes, piece styles, keyboard/keypad input and reduced motion retain their behavior.
 
 Publish the typed APIs, regenerated API reference, updated README and MIT package together. Deployment must be checked on the actual `/houseki/` public path. Physical-device feel, fluent translation review and subjective difficulty calibration remain separate human reviews. Itsutsu integration is outside this package work.
+
+## Construction methods
+
+[Magnetic Blocks method](MAGNETIC-CAMPAIGN-METHOD.md) records full-plan sampling, interacting target motion, floor necessity and the rejected independent-target example. [Nature campaign method](NATURE-CAMPAIGN-METHOD.md) records rebound restoration, dependent cascades, jumble-directed exposure, guard timing, and conservative grading definitions. [Review workflow](CAMPAIGN-REVIEW-WORKFLOW.md) captures corrections that should improve future games. All expanded content is regraded; preserving previous campaign IDs and ratings is outside this revision.

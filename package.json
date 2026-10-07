@@ -1,7 +1,7 @@
 {
   "name": "@johnmorrisdotca/houseki",
-  "version": "0.3.0",
-  "description": "Houseki 宝石: five original gem and stone puzzle engines, 450 graded challenges, bilingual lessons, deterministic saves, magnetic floors, Shizen and Arashi campaigns. TypeScript. Zero dependencies.",
+  "version": "0.4.0",
+  "description": "Houseki 宝石: five gem and stone puzzle engines, 684 measured challenges, bilingual lessons, deterministic saves, magnetic floors, Shizen and Arashi campaigns. TypeScript. Zero dependencies.",
   "keywords": [
     "puzzle",
     "puzzle-game",

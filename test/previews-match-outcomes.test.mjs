@@ -79,7 +79,7 @@ test('Falling Triplets: the landing row is where a hard drop leaves the triplet'
   assert.ok(checked > 1000);
 });
 
-test('Magnetic Blocks: a gentle land and a hard drop can leave different boards, which is why a campaign level must preview and play the same one', () => {
+test('Magnetic Blocks: campaigns use gentle placement; impact free play distinguishes land from hard drop', () => {
   let differ = 0;
   let checked = 0;
   for (const level of blocks.levelManifest) {
@@ -100,7 +100,19 @@ test('Magnetic Blocks: a gentle land and a hard drop can leave different boards,
     }
   }
   assert.ok(checked >= 100);
-  assert.ok(differ > 0, 'the two actions do differ on real campaign boards');
+  assert.equal(differ, 0, 'current campaigns do not enable impact');
+  const initialBoard = Array(48).fill(null);
+  initialBoard[38] = { id: 1, colour: 'blue' };
+  initialBoard[39] = { id: 2, colour: 'green' };
+  initialBoard[44] = { id: 3, colour: 'gold' };
+  initialBoard[45] = { id: 4, colour: 'gold' };
+  const impact = blocks.createGame({ width: 6, height: 8, initialBoard, magneticImpact: true,
+    schedule: { kind: 'fixed', floor: 'magnetic' }, seed: 'impact-preview-review' });
+  const land = blocks.applyAction(impact, { kind: 'land' });
+  const drop = blocks.applyAction(impact, { kind: 'hard-drop' });
+  assert.equal(land.accepted && drop.accepted, true);
+  assert.notDeepEqual(land.state.gravityBoard ?? land.state.board, drop.state.gravityBoard ?? drop.state.board);
+  assert.deepEqual(drop.state.impactRemovedIds, [1, 2]);
   assert.equal(new Set(blocks.levelManifest.map((level) => level.options.mode)).size, 1);
   assert.equal(blocks.levelManifest[0].options.mode, 'relaxed', 'campaign levels are played in the gentle mode, with Place');
 });

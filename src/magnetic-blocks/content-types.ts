@@ -9,7 +9,23 @@ export interface MagneticDifficultyMetrics {
   readonly witnessPlacements: number;
   readonly witnessFloorDecisions: number;
   readonly difficultyScore: number;
+  /** Board context, recorded separately from strategic difficulty weights. */
+  readonly occupiedCells?: number;
+  readonly usableCells?: number;
+  readonly boardCoverage?: number;
+  readonly fullPlanTrials?: number;
+  readonly fullPlanWins?: number;
+  readonly fullPlanSuccessRate?: number;
+  readonly setupDecisionPressure?: number;
+  readonly interactingDependencyDepth?: number;
+  readonly necessaryFloorDecisionShare?: number;
+  readonly setupDecisionEvidence?: readonly { readonly step: number; readonly legalChoices: number; readonly preservingChoices: number; readonly pressure: number }[];
+  readonly targetIdsClearedByPlacement?: readonly number[];
+  readonly targetIdsRemainingAfterPlacement?: readonly number[];
+  readonly targetIdsMovedByPlacement?: readonly number[];
+  readonly minimumPlanSearch?: { readonly status: 'exact' | 'unknown'; readonly nodeBudget: number; readonly nodesVisited: number; readonly lowerBound: number; readonly upperBound?: number };
 }
+export type MagneticDifficultyBand = 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert';
 export interface MagneticCampaignLevel {
   readonly id: string;
   readonly number: number;
@@ -27,11 +43,13 @@ export interface MagneticCampaignLevel {
   readonly gradingVersion: string;
   readonly proofStatus: 'engine-witness-verified';
   readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
+  readonly band?: MagneticDifficultyBand;
   readonly counterfactual?: { readonly kind: 'floor-choice' | 'floor-schedule' | 'floor-switch'; readonly alternative: string; readonly result: 'won' | 'lost' | 'finished' };
   readonly impactEvidence?: { readonly removedSupportCount: number; readonly disabledImpactResult: 'won' };
 }
 export interface MagneticCampaignManifest {
   readonly count: number;
+  readonly currentCount?: number;
   readonly candidateCount: number;
   readonly generationRevision: string;
   readonly gradingVersion: string;
@@ -41,6 +59,7 @@ export interface MagneticCampaignManifest {
   readonly checksum: string;
   readonly orderingPolicy: string;
   readonly levels: readonly MagneticCampaignLevel[];
+  readonly bands?: readonly { readonly id: MagneticDifficultyBand; readonly count: number; readonly first: number; readonly last: number }[];
 }
 export interface MagneticLesson {
   readonly id: string;

@@ -15,7 +15,7 @@ export const PAGES = {
     title: "Houseki · Colour Chains",
     description: "Play Colour Chains, a falling-pairs gem game: rotate the pair, connect four of one colour and set off cascading chains, with optional magnetic stones and weather. Graded challenges, in English and Japanese, free and open source.",
     foot: { en: "Colour Chains · Shizen and Arashi campaigns · relaxed, arcade and daily play", ja: "色の連鎖 · 自然と嵐のキャンペーン · じっくり考える・時間で落ちる・毎日のチャレンジ" },
-    status: { en: "150 graded challenges · Colour Chains, Shizen and Arashi.", ja: "150のチャレンジ · 色の連鎖・自然・嵐。" },
+    status: { en: "306 graded challenges · Colour Chains, Shizen and Arashi.", ja: "306のチャレンジ · 色の連鎖・自然・嵐。" },
   },
   tools: {
     file: "tools.html",
@@ -31,7 +31,7 @@ export const PAGES = {
     title: "Houseki · Magnetic Blocks",
     description: "Play Magnetic Blocks, a falling-blocks game with bonded 2×2 squares, a floor that turns magnetic on a schedule, a one-use Floor Switch and magnetic impact drops. In English and Japanese, free and open source.",
     foot: { en: "Magnetic Blocks · relaxed planning · arcade timing · Calm and Pull floor rules", ja: "磁石ブロック · じっくり考える · 時間で落ちる · 「穏やか」と「引き寄せ」の床" },
-    status: { en: "50 graded challenges · bonded squares, Calm and Pull floors.", ja: "50のチャレンジ · 結合したブロック・静穏と引力の床。" },
+    status: { en: "128 graded challenges · five difficulty groups.", ja: "128のチャレンジ · 5つの難易度グループ。" },
   },
 };
 

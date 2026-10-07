@@ -111,9 +111,9 @@ describe("the README's promises", () => {
     const blocks = await import("./magnetic-blocks.ts");
     for (const [name, count] of [["Magnetic Blocks", blocks.levelManifest.length], ["Shizen", chains.shizenLevelManifest.length], ["Arashi", chains.arashiLevelManifest.length]]) {
       expect(table.find(cells => cells[0] === name)?.[4], name).toBe(String(count));
-      expect(count, name).toBe(50);
+      expect(count, name).toBe(128);
     }
-    expect(Object.values(counts).reduce((sum, count) => sum + count, 0) + blocks.levelManifest.length + chains.shizenLevelManifest.length + chains.arashiLevelManifest.length).toBe(450);
+    expect(Object.values(counts).reduce((sum, count) => sum + count, 0) + blocks.levelManifest.length + chains.shizenLevelManifest.length + chains.arashiLevelManifest.length).toBe(684);
     expect(table.find((cells) => cells[1] === "`magnetic-blocks`")).toBeDefined();
   });
 
