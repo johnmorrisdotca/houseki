@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advanceTicks, applyAction, campaignManifest, archivedLevelManifest, createGame, createLevel, createLesson, getLevel, getLesson, lessonManifest, levelManifest, tutorialManifest } from '../dist/magnetic-blocks.js';
+import { advanceTicks, applyAction, campaignManifest, createGame, createLevel, createLesson, getLevel, getLesson, lessonManifest, levelManifest, tutorialManifest } from '../dist/magnetic-blocks.js';
 import { generateContent, hasCausalTargetDependencies } from '../scripts/magnetic-blocks-levels.mjs';
 
 function resolve(state) {
@@ -38,7 +38,6 @@ describe('Magnetic Blocks measured campaign', () => {
     expect(levelManifest.every(level => level.marks === Math.min(5, 1 + Math.floor((level.score - 1) / 20)))).toBe(true);
     expect(levelManifest.every(level => level.options.pieceLimit === level.options.queue.length)).toBe(true);
     expect(new Set(levelManifest.map(level => level.options.seed)).size).toBe(128);
-    expect(levelManifest.every(level => !archivedLevelManifest.some(old => old.options.seed === level.options.seed))).toBe(true);
     expect(levelManifest.filter(level => level.band === 'intermediate').every(level => level.tags.includes('two-target-groups') && level.options.goal.targetIds.length === 6 && level.witness.filter(action => action.kind === 'hard-drop').length === 1)).toBe(true);
     expect(levelManifest.filter(level => level.band === 'intermediate').every(level => level.counterfactual?.result !== 'won' && level.metrics.necessaryFloorDecisionShare === 1)).toBe(true);
     expect(campaignManifest.bands.map(band => [band.id, band.count])).toEqual(expected.map(([id, count]) => [id, count]));
@@ -86,14 +85,6 @@ describe('Magnetic Blocks measured campaign', () => {
     const independentGroups = { layerEvidence: true, targetIdsClearedByPlacement: [3, 3, 3], targetIdsRemainingAfterPlacement: [6, 3, 0], targetIdsMovedByPlacement: [0, 0, 0] };
     expect(hasCausalTargetDependencies(independentGroups, 1)).toBe(false);
     expect(hasCausalTargetDependencies(independentGroups, 2)).toBe(false);
-  });
-
-  it('keeps the original 50 IDs available as archive records and playable levels', () => {
-    expect(archivedLevelManifest).toHaveLength(50);
-    for (const level of archivedLevelManifest) {
-      expect(getLevel(level.id)).toBe(level);
-      expect(createLevel(level.id).settings.seed).toBe(level.options.seed);
-    }
   });
 
   it('regenerates byte-for-byte equivalent campaign data and preserves the three lessons', () => {

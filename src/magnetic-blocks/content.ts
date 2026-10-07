@@ -13,8 +13,6 @@ function deepFreeze<T>(value: T): T {
 
 export const campaignManifest: MagneticCampaignManifest = deepFreeze(contentData.campaign);
 export const levelManifest: readonly MagneticCampaignLevel[] = campaignManifest.levels;
-/** Stable pre-expansion IDs retained for saved games and bookmarks. */
-export const archivedLevelManifest: readonly MagneticCampaignLevel[] = campaignManifest.legacyArchive ?? [];
 /** Alias kept alongside other Houseki campaign lesson APIs. */
 export const tutorialManifest: readonly MagneticLesson[] = deepFreeze(contentData.lessons);
 export const lessonManifest = tutorialManifest;
@@ -22,7 +20,7 @@ export const lessonManifest = tutorialManifest;
 /** Finds a Magnetic Blocks campaign level by stable ID or one-based display number. */
 export function getLevel(id: string | number): MagneticCampaignLevel | undefined {
   if (typeof id === 'number') return Number.isInteger(id) ? levelManifest.find(level => level.number === id) : undefined;
-  return levelManifest.find(level => level.id === id) ?? archivedLevelManifest.find(level => level.id === id);
+  return levelManifest.find(level => level.id === id);
 }
 
 /** Creates a fresh game with the authored rules, board, queue, and finite move budget. */

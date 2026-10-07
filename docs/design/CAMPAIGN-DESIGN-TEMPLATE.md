@@ -46,7 +46,7 @@ Do not substitute first-step probes for whole-plan sampling. Random success comp
 - Rule for rejecting seed-only, recolour, reflection and inert-geometry padding:
 - Coverage table for selected techniques and band counts:
 - Sorting, tie-breaking and stable numbering policy:
-- Published-ID archive and exact-save recovery policy:
+- Compatibility scope (optional), and exact recovery of current saves:
 
 ## Verification and release evidence
 

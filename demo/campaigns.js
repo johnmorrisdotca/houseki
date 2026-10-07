@@ -12,7 +12,7 @@ export function difficultyText(level) {
 export function levelText(level, lang) {
   return `${level.number} · ${difficultyText(level)} · ${level.title[lang]}`;
 }
-export function fillCampaignSelector(select, levels, lang, placeholder, legacy = []) {
+export function fillCampaignSelector(select, levels, lang, placeholder) {
   const selected = select.value;
   select.replaceChildren(new window.Option(placeholder, ''));
   const groups = new Map();
@@ -30,18 +30,5 @@ export function fillCampaignSelector(select, levels, lang, placeholder, legacy =
     option.title = `${bands[level.band]?.[lang] ?? ''} ${option.textContent}`.trim();
     parent.append(option);
   }
-  if (selected && !levels.some(level => level.id === selected)) {
-    const old = legacy.find(level => level.id === selected);
-    if (old) {
-      const group = document.createElement('optgroup');
-      group.label = lang === 'en' ? 'Earlier campaign' : '以前のキャンペーン';
-      group.append(new window.Option(levelText(old, lang), old.id)); select.append(group);
-    }
-  }
   select.value = selected;
-}
-export function retainLegacyOption(select, level, lang) {
-  if ([...select.options].some(option => option.value === level.id)) return;
-  const option = new window.Option(levelText(level, lang), level.id);
-  option.dataset.legacy = 'true'; select.append(option);
 }

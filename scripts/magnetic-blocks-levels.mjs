@@ -1,6 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { createGame, applyAction, advanceTicks, campaignManifest as previousCampaign } from '../dist/magnetic-blocks.js';
+import { createGame, applyAction, advanceTicks } from '../dist/magnetic-blocks.js';
 
 const REVISION = 'magnetic-blocks-campaign-2';
 const GRADING = 'full-plan-and-interaction-evidence-2';
@@ -390,12 +390,11 @@ export function generateContent() {
       proofStatus: 'engine-witness-verified', reviewStatus: 'human-review-pending',
       ...(item.counterfactualResult ? { counterfactual: { kind: item.options.floorSwitch ? 'floor-switch' : 'floor-schedule', alternative: item.options.floorSwitch ? 'same witness without the one-use floor switch' : 'same witness with Calm on the scheduled placement', result: item.counterfactualResult } } : {}) };
   });
-  const legacyArchive = previousCampaign.legacyArchive ?? previousCampaign.levels;
   const body = { count: levels.length, currentCount: levels.length, candidateCount: pool.size, generationRevision: REVISION, gradingVersion: GRADING,
     difficultyFormula: 'raw = .35*(1 - completePlanWinRate) + .25*(1 - finalWinningChoices/finalLegalChoices) + .15*meanFixedSuffixSetupPressure + .15*min(1, interactingDependencyDepth/2) + .10*necessaryFloorDecisionShare; score = clamp(1,100,1+round(99*raw)). Full-plan evidence uses 128 seeded legal playouts (1024 for expert candidates).',
     normalization: 'Absolute score; no pool-relative normalization. Bands are fixed at 1–20, 21–40, 41–60, 61–80, and 81–100.',
     marksFormula: 'min(5, 1 + floor((score - 1) / 20))', orderingPolicy: 'Sort ascending by measured integer score, then canonical SHA-256 key; band comes from fixed score ranges.',
-    bands, levels, legacyArchive };
+    bands, levels };
   const campaign = { ...body, checksum: hash(stable(body)) };
   return deepFreeze({ campaign, lessons: makeLessons() });
 }

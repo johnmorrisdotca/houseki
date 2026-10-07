@@ -40,9 +40,9 @@ Preserve fixtures for deceptively easy large boards, long forced sequences, repe
 
 ## Release gate
 
-Verify every witness, exact count and bands, canonical uniqueness, regeneration checksum, stable recovery of published IDs, ordering, metadata and grade calculations. Play first, middle and final fixtures through the real phone and desktop controls. Check goal progress, fixed rules, win/loss controls, replay, next level, language geometry and optional appearance.
+Verify every witness, exact count and bands, canonical uniqueness, regeneration checksum, exact recovery of current campaign IDs, ordering, metadata and grade calculations. Play first, middle and final fixtures through the real phone and desktop controls. Check goal progress, fixed rules, win/loss controls, replay, next level, language geometry and optional appearance.
 
-Document actual counts and test results. Package and demo must agree. Verify the installed tarball and deployed path. Keep published results separate from future targets; a planning document must never be used as evidence of shipped content.
+Document actual counts and test results. Package and demo must agree. Verify the installed tarball and deployed path. Keep published results separate from future targets; a planning document must never be used as evidence of shipped content. Backward compatibility is optional and must be scoped explicitly; the current Houseki expansion does not require it.
 
 ## Improve this process
 

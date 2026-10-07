@@ -59,7 +59,6 @@ export interface MagneticCampaignManifest {
   readonly checksum: string;
   readonly orderingPolicy: string;
   readonly levels: readonly MagneticCampaignLevel[];
-  readonly legacyArchive?: readonly MagneticCampaignLevel[];
   readonly bands?: readonly { readonly id: MagneticDifficultyBand; readonly count: number; readonly first: number; readonly last: number }[];
 }
 export interface MagneticLesson {

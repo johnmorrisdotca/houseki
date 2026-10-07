@@ -1,5 +1,4 @@
-import {fillCampaignSelector,difficultyText,retainLegacyOption} from './campaigns.js';
-import * as campaignContent from './dist/magnetic-blocks.js';
+import {fillCampaignSelector,difficultyText} from './campaigns.js';
 import {refreshAppearanceLanguage} from './appearance.js';
 import {syncAuthoredSettings,readFreeSettings,restoreFreeSettings} from './settings.js';
 import {updateEnding} from './ending.js';
@@ -49,7 +48,7 @@ function t(key) { return text[lang][key] ?? text.en[key] ?? key; }
 function setLanguage(value) { lang = value === 'ja' ? 'ja' : 'en'; populateCampaignSelectors(); syncSetup(); render(true); writePreferences(); }
 function populateCampaignSelectors() {
   const selectedLevelId = $('#level').value, selectedLessonId = $('#lesson').value;
-  fillCampaignSelector($('#level'), levelManifest, lang, t('freePlay'), campaignContent.archivedLevelManifest ?? []);
+  fillCampaignSelector($('#level'), levelManifest, lang, t('freePlay'));
   $('#lesson').innerHTML = `<option value="">${t('noLesson')}</option>` + lessonManifest.map(lesson => `<option value="${lesson.id}">${lesson.title[lang]}</option>`).join('');
   $('#level').value = selectedLevelId; $('#lesson').value = selectedLessonId;
 }
@@ -118,7 +117,7 @@ function newGame(restart = false) {
   try {
     if (!restart || !game) {
       selectedLesson = lessonManifest.find(lesson => lesson.id === $('#lesson').value) ?? null;
-      selectedLevel = selectedLesson ? null : [...levelManifest,...(campaignContent.archivedLevelManifest ?? [])].find(level => level.id === $('#level').value) ?? null;
+      selectedLevel = selectedLesson ? null : levelManifest.find(level => level.id === $('#level').value) ?? null;
       $('#level').value = selectedLevel?.id ?? '';
       $('#lesson').value = selectedLesson?.id ?? '';
       startOptions = selectedLesson?.options ?? selectedLevel?.options ?? optionsFromControls();
@@ -262,13 +261,13 @@ function render(force = false) {
   refreshAppearanceLanguage(lang); if (!game) return;
   renderBoard(force); renderHud(force); syncCampaignControls();
   const activeLevel = selectedLesson ? { ...selectedLesson, lesson: true } : selectedLevel;
-  const activeLevels = selectedLevel && !levelManifest.some(level=>level.id===selectedLevel.id) ? campaignContent.archivedLevelManifest ?? [] : levelManifest;
+  const activeLevels = levelManifest;
   const index = selectedLevel ? activeLevels.findIndex(level => level.id === selectedLevel.id) : -1;
   const next = index >= 0 ? activeLevels[index + 1] ?? null : null;
   const endingPhase = selectedLevel && game.phase === 'finished' ? 'lost' : game.phase;
   updateEnding({ phase: endingPhase, score: game.score, lang, mode: game.settings.mode, level: activeLevel, next,
     onRestart: () => newGame(true),
-    onNext: next ? () => { retainLegacyOption($('#level'),next,lang); $('#level').value = next.id; $('#lesson').value = ''; newGame(); } : undefined,
+    onNext: next ? () => { $('#level').value = next.id; $('#lesson').value = ''; newGame(); } : undefined,
     detail: activeLevel?.objective?.[lang] ?? $('#status').textContent });
 }
 
@@ -361,9 +360,9 @@ try {
   const saved = localStorage.getItem(saveKey);
   if (saved) {
     game = decodeGame(saved); startOptions = null;
-    selectedLevel = [...levelManifest,...(campaignContent.archivedLevelManifest ?? [])].find(level => level.options.seed === game.settings.seed) ?? null;
-    if(selectedLevel)retainLegacyOption($('#level'),selectedLevel,lang);
+    selectedLevel = levelManifest.find(level => level.options.seed === game.settings.seed) ?? null;
     selectedLesson = lessonManifest.find(lesson => lesson.options.seed === game.settings.seed) ?? null;
+    if(game.settings.goal&&!selectedLevel&&!selectedLesson)throw new Error('Unknown campaign revision');
     $('#level').value = selectedLevel?.id ?? ''; $('#lesson').value = selectedLesson?.id ?? '';
     if (selectedLevel || selectedLesson) syncSetup(); else applySettingsToControls(game.settings);
     syncCampaignControls();

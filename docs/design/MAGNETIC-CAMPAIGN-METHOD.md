@@ -40,8 +40,6 @@ changes later target access, and a consequential floor decision. Repeating
 independent one-placement targets or adding inert queued pieces does not meet
 that gate.
 
-The earlier 50-level campaign remains in `campaignManifest.legacyArchive` with
-its original IDs and grading revision. Those records are compatibility data;
-the current 128-level manifest is graded independently.
+This revision regrades and renumbers all 128 selected challenges. Backward compatibility with the former fifty-level campaign is outside the approved scope; no archived level records are retained.
 
 Occupied cells, usable cells and board coverage are stored as context alongside the strategic metrics. They are not independent score weights: an open obvious puzzle and a crowded forced puzzle can both be easy. Coverage affects the measured placement and failure behavior rather than granting difficulty for area alone.
