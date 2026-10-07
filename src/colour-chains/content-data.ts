@@ -9551,7 +9551,7 @@ export const contentData: ChainContentData = {
       "seededPlayoutScope": "Each deterministic sample chooses independently from the complete legal placement set at every pair through the full finite queue."
     },
     "sampleBudget": 64,
-    "checksum": "9e06617d1c839de9833378a72e5ea27a9f168f4c648905609ff1914a9afa6d6c",
+    "checksum": "631ef28d8f1da6aac168c2a398dfc60b4ad6047aa830899486bb18060a48f0ac",
     "bands": [
       {
         "id": "entry",
@@ -9725,7 +9725,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 24,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -9914,7 +9914,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 20,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -10109,7 +10109,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 20,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -10313,7 +10313,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 24,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -10505,7 +10505,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 20,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -10706,7 +10706,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 24,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -10888,7 +10888,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -11101,7 +11101,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 28,
           "legalPlacements": 28,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 25,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -11287,7 +11287,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -11473,7 +11473,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -11692,7 +11692,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 28,
           "legalPlacements": 28,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 25,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -11878,7 +11878,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -12094,7 +12094,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 28,
           "legalPlacements": 28,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 25,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -12292,7 +12292,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 22,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -12502,7 +12502,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 28,
           "legalPlacements": 28,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 23,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -12696,7 +12696,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -12878,7 +12878,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -13076,7 +13076,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -13301,7 +13301,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -13487,7 +13487,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -13712,7 +13712,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 32,
           "legalPlacements": 32,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 23,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -13940,7 +13940,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 32,
           "legalPlacements": 32,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 23,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -14171,7 +14171,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 32,
           "legalPlacements": 32,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 23,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -14378,7 +14378,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 17,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -14576,7 +14576,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 16,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -14798,7 +14798,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 32,
           "legalPlacements": 32,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 21,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -14993,7 +14993,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 13,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -15191,7 +15191,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 16,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -15409,7 +15409,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -15591,7 +15591,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -15773,7 +15773,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -15979,7 +15979,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -16206,7 +16206,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 13,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -16392,7 +16392,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 20,
           "legalPlacements": 20,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -16650,7 +16650,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 44,
           "legalPlacements": 44,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -16875,7 +16875,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -17096,7 +17096,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 13,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -17294,7 +17294,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 13,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -17538,7 +17538,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -17812,7 +17812,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -18031,7 +18031,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -18265,7 +18265,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 36,
           "legalPlacements": 36,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -18523,7 +18523,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 44,
           "legalPlacements": 44,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -18766,7 +18766,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -19003,7 +19003,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 28,
           "legalPlacements": 28,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -19239,7 +19239,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -19466,7 +19466,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -19702,7 +19702,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -19908,7 +19908,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -20170,7 +20170,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -20436,7 +20436,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -20690,7 +20690,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -20932,7 +20932,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -21182,7 +21182,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 40,
           "legalPlacements": 40,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 19,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -21412,7 +21412,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -21627,7 +21627,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -21885,7 +21885,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 44,
           "legalPlacements": 44,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -22148,7 +22148,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -22394,7 +22394,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 12,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -22644,7 +22644,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -22870,7 +22870,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 32,
           "legalPlacements": 32,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 15,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -23103,7 +23103,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 24,
           "legalPlacements": 24,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 11,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -23353,7 +23353,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -23627,7 +23627,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 1,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -23882,7 +23882,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 41,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -24131,7 +24131,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 39,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -24397,7 +24397,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 21,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -24653,7 +24653,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -24932,7 +24932,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 52,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -25198,7 +25198,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -25452,7 +25452,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -25706,7 +25706,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -25979,7 +25979,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 52,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -26233,7 +26233,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -26487,7 +26487,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 18,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -26772,7 +26772,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 54,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -27063,7 +27063,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 54,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -27366,7 +27366,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 58,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -27663,7 +27663,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 58,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -27929,7 +27929,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 21,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -28240,7 +28240,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 62,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -28549,7 +28549,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 62,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -28805,7 +28805,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 39,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -29066,7 +29066,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 41,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -29335,7 +29335,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -29616,7 +29616,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 46,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -29883,7 +29883,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 41,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -30143,7 +30143,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 36,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -30423,7 +30423,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -30716,7 +30716,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 50,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -31014,7 +31014,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 49,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -31319,7 +31319,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 54,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -31605,7 +31605,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -31909,7 +31909,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 49,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -32183,7 +32183,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -32456,7 +32456,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 39,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -32748,7 +32748,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -33058,7 +33058,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 53,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -33314,7 +33314,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 72,
           "legalPlacements": 72,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 33,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -33599,7 +33599,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -33884,7 +33884,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -34153,7 +34153,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 84,
           "legalPlacements": 84,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 33,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -34463,7 +34463,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 45,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -34760,7 +34760,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -35014,7 +35014,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 10,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -35326,7 +35326,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 45,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -35623,7 +35623,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -35889,7 +35889,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 8,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -36151,7 +36151,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 8,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -36456,7 +36456,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -36713,7 +36713,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 9,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -37018,7 +37018,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 120,
           "legalPlacements": 120,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 37,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -37299,7 +37299,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 31,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -37553,7 +37553,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 9,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -37842,7 +37842,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 108,
           "legalPlacements": 108,
-          "goalPreservingPlacements": 3,
+          "goalPreservingPlacements": 31,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 3,
@@ -38093,7 +38093,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 9,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -38352,7 +38352,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 8,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -38599,7 +38599,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 9,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -38858,7 +38858,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 8,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -39108,7 +39108,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 8,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 2,
@@ -39361,7 +39361,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 3,
           "forcedPlacementShare": 0.5,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 2,
@@ -39611,7 +39611,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 3,
           "forcedPlacementShare": 0.5,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 2,
@@ -39861,7 +39861,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 3,
           "forcedPlacementShare": 0.5,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 2,
@@ -40117,7 +40117,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 3,
           "forcedPlacementShare": 0.5,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 2,
@@ -40379,7 +40379,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 48,
           "legalPlacements": 48,
-          "goalPreservingPlacements": 2,
+          "goalPreservingPlacements": 3,
           "forcedPlacementShare": 0.5,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 2,
@@ -41214,7 +41214,7 @@ export const contentData: ChainContentData = {
       "seededPlayoutScope": "Each deterministic sample chooses independently from the complete legal placement set at every pair through the full finite queue."
     },
     "sampleBudget": 64,
-    "checksum": "b0fb3dc71e7c10aa57caa5cebc06aeea82a3879af43ad3e7ac9368685ce54a66",
+    "checksum": "aef8ad913d62ff642a38350ded32b1aa2d7fb546632fd453eb176be5adedad89",
     "bands": [
       {
         "id": "entry",
@@ -41507,7 +41507,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 204,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -41888,7 +41888,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 220,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -42294,7 +42294,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 252,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -42683,7 +42683,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 236,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -43086,7 +43086,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 248,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -43478,7 +43478,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 214,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -43868,7 +43868,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 232,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -44259,7 +44259,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 232,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -44662,7 +44662,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 248,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -45066,7 +45066,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 248,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -45460,7 +45460,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 232,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -45861,7 +45861,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 247,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -46262,7 +46262,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 232,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -46664,7 +46664,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 244,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -47054,7 +47054,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 232,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -47456,7 +47456,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 246,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -47824,7 +47824,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 200,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -48206,7 +48206,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 216,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -48589,7 +48589,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 212,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -48989,7 +48989,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 210,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -49357,7 +49357,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 200,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -49756,7 +49756,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 225,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -50164,7 +50164,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 248,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -50556,7 +50556,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 212,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -50936,7 +50936,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 212,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -51307,7 +51307,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 196,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -51692,7 +51692,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 198,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -52086,7 +52086,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 222,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -52458,7 +52458,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 164,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -52812,7 +52812,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 160,
           "legalPlacements": 160,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 148,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -53197,7 +53197,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 180,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -53619,7 +53619,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 244,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -54024,7 +54024,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 200,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -54423,7 +54423,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 196,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -54809,7 +54809,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 184,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -55199,7 +55199,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 184,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -55628,7 +55628,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 220,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -56062,7 +56062,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 256,
           "legalPlacements": 256,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 228,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -56440,7 +56440,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 166,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -56813,7 +56813,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 152,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -57188,7 +57188,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 168,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -57579,7 +57579,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 184,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -57956,7 +57956,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 168,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -58350,7 +58350,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 180,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -58750,7 +58750,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 224,
           "legalPlacements": 224,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 200,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -59163,7 +59163,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 212,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -59525,7 +59525,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 152,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -59912,7 +59912,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 208,
           "legalPlacements": 208,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 184,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -60275,7 +60275,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 149,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -60652,7 +60652,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 152,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -60995,7 +60995,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 144,
           "legalPlacements": 144,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 120,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -61383,7 +61383,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 164,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -61766,7 +61766,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 160,
           "legalPlacements": 160,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 136,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -62132,7 +62132,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 176,
           "legalPlacements": 176,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 148,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -62484,7 +62484,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 160,
           "legalPlacements": 160,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 136,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -62826,7 +62826,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 144,
           "legalPlacements": 144,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 120,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -63162,7 +63162,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 104,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -63511,7 +63511,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 160,
           "legalPlacements": 160,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 132,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -63921,7 +63921,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 240,
           "legalPlacements": 240,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 188,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -64232,7 +64232,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 104,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -64597,7 +64597,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 160,
           "legalPlacements": 160,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 124,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -64936,7 +64936,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 144,
           "legalPlacements": 144,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 110,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -65276,7 +65276,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 100,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -65652,7 +65652,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 192,
           "legalPlacements": 192,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 146,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -65926,7 +65926,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 69,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -66196,7 +66196,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 65,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -66478,7 +66478,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 67,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -66760,7 +66760,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 66,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -67035,7 +67035,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 64,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -67306,7 +67306,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 62,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -67597,7 +67597,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 63,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -67887,7 +67887,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 64,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -68178,7 +68178,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 61,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -68442,7 +68442,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 66,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -68704,7 +68704,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 62,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -68973,7 +68973,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 63,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -69247,7 +69247,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 60,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -69514,7 +69514,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 57,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -69783,7 +69783,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 60,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -70044,7 +70044,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 57,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -70305,7 +70305,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 59,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -70587,7 +70587,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 53,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -70850,7 +70850,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 57,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -71126,7 +71126,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 59,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -71403,7 +71403,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 56,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -71666,7 +71666,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 53,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -71930,7 +71930,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 54,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -72201,7 +72201,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 43,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -72468,7 +72468,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 57,
           "forcedPlacementShare": 0.25,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -72733,7 +72733,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 50,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -72996,7 +72996,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 55,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -73270,7 +73270,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 55,
           "forcedPlacementShare": 0.25,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -73579,7 +73579,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 52,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -73846,7 +73846,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 48,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -74119,7 +74119,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 53,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -74426,7 +74426,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 46,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -74709,7 +74709,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 43,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -74975,7 +74975,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 43,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -75339,7 +75339,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -75690,7 +75690,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 53,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -76074,7 +76074,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -76370,7 +76370,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 30,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -76744,7 +76744,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 55,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -77100,7 +77100,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 55,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -77469,7 +77469,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 52,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -77838,7 +77838,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 49,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -78206,7 +78206,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 50,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -78632,7 +78632,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -79004,7 +79004,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 45,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -79376,7 +79376,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -79782,7 +79782,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -80216,7 +80216,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -80623,7 +80623,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 44,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -81005,7 +81005,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -81402,7 +81402,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -81791,7 +81791,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -82183,7 +82183,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -82576,7 +82576,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -82960,7 +82960,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 32,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -83361,7 +83361,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 32,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 64,
           "seededPlayoutQueueDepth": 4,
@@ -83783,7 +83783,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 28,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -84218,7 +84218,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 45,
           "forcedPlacementShare": 0.25,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -84629,7 +84629,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 42,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -85007,7 +85007,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 43,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -85395,7 +85395,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 38,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -85772,7 +85772,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 96,
           "legalPlacements": 96,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 24,
           "forcedPlacementShare": 0,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -86180,7 +86180,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 36,
           "forcedPlacementShare": 0.25,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,
@@ -86568,7 +86568,7 @@ export const contentData: ChainContentData = {
         "rawMetrics": {
           "placementProbes": 128,
           "legalPlacements": 128,
-          "goalPreservingPlacements": 4,
+          "goalPreservingPlacements": 36,
           "forcedPlacementShare": 0.25,
           "seededPlayoutSamples": 256,
           "seededPlayoutQueueDepth": 4,

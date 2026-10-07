@@ -71,3 +71,5 @@ Final curation checks must inspect the entire eligible band, not merely its firs
 For an ordinary matching objective, disconnected fragments of one colour can be joined and cleared by one match. Counting those fragments as separate coordinated goals can double-count placement precision. Nature grading now distinguishes target colours for ordinary matching, explicit dependent waves for a chain goal, and spatial exposure components for weather goals. Each definition and its regression belongs with the formula.
 
 Independent verification also checks canonical board indexing against the actual width, not a global default width. Retained proofs and weather event traces are evidence, not a way to invent distinct IDs for the same board, queue, goal and modifiers.
+
+Measurement review also checks denominator populations: goal-preserving choices include both the witnessed choice and winning alternatives. Recorded rates are compared at their declared precision. Run the complete native regeneration comparison once; independent rule and evidence checks remain separate.

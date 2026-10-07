@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { advanceTicks, applyAction, campaignManifest, createGame, createLevel, createLesson, getLevel, getLesson, lessonManifest, levelManifest, tutorialManifest } from '../dist/magnetic-blocks.js';
-import { generateContent, hasCausalTargetDependencies } from '../scripts/magnetic-blocks-levels.mjs';
+import { generateContent, hasCausalTargetDependencies, selectBandCandidates } from '../scripts/magnetic-blocks-levels.mjs';
 
 function resolve(state) {
   for (let guard = 0; guard < 12 && ['gravity', 'clear-mark', 'clear-remove'].includes(state.phase); guard++) state = advanceTicks(state, 60).state;
@@ -99,4 +99,10 @@ describe('Magnetic Blocks measured campaign', () => {
       expect(Boolean(lesson.title.en && lesson.title.ja && lesson.objective.en && lesson.objective.ja)).toBe(true);
     }
   });
+});
+
+it('retains the strongest expert endings when the verified pool exceeds the quota', () => {
+  const pool = [81, 84, 87, 90, 94, 96, 97, 98, 99].map(score => ({ score }));
+  expect(selectBandCandidates(pool, { id: 'expert', count: 8 }).map(item => item.score)).toEqual([84, 87, 90, 94, 96, 97, 98, 99]);
+  expect(selectBandCandidates(pool, { id: 'entry', count: 2 }).map(item => item.score)).toEqual([81, 84]);
 });

@@ -23168,1230 +23168,12 @@ export const contentData: MagneticContentData = {
         }
       },
       {
-        "id": "magnetic-8c065e6d8fe9fa90",
+        "id": "magnetic-690561c3bb7d6fef",
         "number": 121,
         "band": "expert",
         "title": {
           "en": "Layered support sequence 121",
           "ja": "重なる支えの順序 121"
-        },
-        "objective": {
-          "en": "Clear blue, then green, then switch to Pull for the red target.",
-          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
-        },
-        "options": {
-          "mode": "relaxed",
-          "width": 8,
-          "height": 12,
-          "colourCount": 6,
-          "seed": "magnetic-8c065e6d8fe9fa90",
-          "initialBoard": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 10,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 7,
-              "colour": "red"
-            },
-            {
-              "id": 11,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 8,
-              "colour": "red"
-            },
-            {
-              "id": 12,
-              "colour": "teal"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 9,
-              "colour": "red"
-            },
-            {
-              "id": 13,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 1,
-              "colour": "blue"
-            },
-            {
-              "id": 2,
-              "colour": "blue"
-            },
-            {
-              "id": 3,
-              "colour": "blue"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 4,
-              "colour": "green"
-            },
-            {
-              "id": 5,
-              "colour": "green"
-            },
-            {
-              "id": 6,
-              "colour": "green"
-            },
-            null,
-            null
-          ],
-          "queue": [
-            [
-              "blue",
-              "gold",
-              "purple",
-              "teal"
-            ],
-            [
-              "blue",
-              "gold",
-              "green",
-              "purple"
-            ],
-            [
-              "gold",
-              "purple",
-              "teal",
-              "red"
-            ]
-          ],
-          "pieceLimit": 3,
-          "schedule": {
-            "kind": "fixed",
-            "floor": "calm"
-          },
-          "floorSwitch": true,
-          "magneticImpact": false,
-          "goal": {
-            "kind": "clear-targets",
-            "targetIds": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9
-            ]
-          }
-        },
-        "witness": [
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "set-floor-override",
-            "floor": "magnetic"
-          },
-          {
-            "kind": "hard-drop"
-          }
-        ],
-        "witnessResult": "won",
-        "metrics": {
-          "occupiedCells": 13,
-          "usableCells": 96,
-          "boardCoverage": 0.135417,
-          "legalPlacementChoices": 84,
-          "setupPlacementChoices": 84,
-          "winningPlacementChoices": 10,
-          "availableFloorChoices": 3,
-          "witnessPlacements": 3,
-          "witnessFloorDecisions": 1,
-          "difficultyScore": 96,
-          "fullPlanTrials": 1024,
-          "fullPlanWins": 3,
-          "fullPlanSuccessRate": 0.0029296875,
-          "setupDecisionPressure": 0.9642857142857143,
-          "interactingDependencyDepth": 2,
-          "necessaryFloorDecisionShare": 1,
-          "setupDecisionEvidence": [
-            {
-              "step": 0,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            },
-            {
-              "step": 1,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            }
-          ],
-          "targetIdsClearedByPlacement": [
-            3,
-            3,
-            3
-          ],
-          "targetIdsRemainingAfterPlacement": [
-            6,
-            3,
-            0
-          ],
-          "targetIdsMovedByPlacement": [
-            3,
-            3,
-            0
-          ],
-          "minimumPlanSearch": {
-            "status": "unknown",
-            "nodeBudget": 0,
-            "nodesVisited": 0,
-            "lowerBound": 1,
-            "upperBound": 3
-          }
-        },
-        "marks": 5,
-        "tags": [
-          "expert",
-          "layered-support",
-          "multi-placement"
-        ],
-        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"D:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"C\",\"D\"],[\"E\",\"A\",\"F\",\"C\"],[\"A\",\"C\",\"D\",\"B\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[4,7],[4,8],[4,9],[3,10],[4,10],[5,10],[3,11],[4,11],[5,11]],\"width\":8}",
-        "canonicalKeyHash": "8c065e6d8fe9fa90f1a1e048671216b5cbf330d2b06a423e85ccd4f752da3344",
-        "score": 96,
-        "gradingVersion": "full-plan-and-interaction-evidence-2",
-        "proofStatus": "engine-witness-verified",
-        "reviewStatus": "human-review-pending",
-        "counterfactual": {
-          "kind": "floor-switch",
-          "alternative": "same witness without the one-use floor switch",
-          "result": "lost"
-        }
-      },
-      {
-        "id": "magnetic-f7c67d4473075c4b",
-        "number": 122,
-        "band": "expert",
-        "title": {
-          "en": "Layered support sequence 122",
-          "ja": "重なる支えの順序 122"
-        },
-        "objective": {
-          "en": "Clear blue, then green, then switch to Pull for the red target.",
-          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
-        },
-        "options": {
-          "mode": "relaxed",
-          "width": 8,
-          "height": 12,
-          "colourCount": 6,
-          "seed": "magnetic-f7c67d4473075c4b",
-          "initialBoard": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 10,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 7,
-              "colour": "red"
-            },
-            {
-              "id": 11,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 8,
-              "colour": "red"
-            },
-            {
-              "id": 12,
-              "colour": "teal"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 9,
-              "colour": "red"
-            },
-            {
-              "id": 13,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 1,
-              "colour": "blue"
-            },
-            {
-              "id": 2,
-              "colour": "blue"
-            },
-            {
-              "id": 3,
-              "colour": "blue"
-            },
-            null,
-            null,
-            {
-              "id": 14,
-              "colour": "teal"
-            },
-            null,
-            null,
-            {
-              "id": 4,
-              "colour": "green"
-            },
-            {
-              "id": 5,
-              "colour": "green"
-            },
-            {
-              "id": 6,
-              "colour": "green"
-            },
-            null,
-            null
-          ],
-          "queue": [
-            [
-              "blue",
-              "gold",
-              "purple",
-              "teal"
-            ],
-            [
-              "blue",
-              "gold",
-              "green",
-              "purple"
-            ],
-            [
-              "gold",
-              "purple",
-              "teal",
-              "red"
-            ]
-          ],
-          "pieceLimit": 3,
-          "schedule": {
-            "kind": "fixed",
-            "floor": "calm"
-          },
-          "floorSwitch": true,
-          "magneticImpact": false,
-          "goal": {
-            "kind": "clear-targets",
-            "targetIds": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9
-            ]
-          }
-        },
-        "witness": [
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "set-floor-override",
-            "floor": "magnetic"
-          },
-          {
-            "kind": "hard-drop"
-          }
-        ],
-        "witnessResult": "won",
-        "metrics": {
-          "occupiedCells": 14,
-          "usableCells": 96,
-          "boardCoverage": 0.145833,
-          "legalPlacementChoices": 84,
-          "setupPlacementChoices": 84,
-          "winningPlacementChoices": 10,
-          "availableFloorChoices": 3,
-          "witnessPlacements": 3,
-          "witnessFloorDecisions": 1,
-          "difficultyScore": 96,
-          "fullPlanTrials": 1024,
-          "fullPlanWins": 2,
-          "fullPlanSuccessRate": 0.001953125,
-          "setupDecisionPressure": 0.9642857142857143,
-          "interactingDependencyDepth": 2,
-          "necessaryFloorDecisionShare": 1,
-          "setupDecisionEvidence": [
-            {
-              "step": 0,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            },
-            {
-              "step": 1,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            }
-          ],
-          "targetIdsClearedByPlacement": [
-            3,
-            3,
-            3
-          ],
-          "targetIdsRemainingAfterPlacement": [
-            6,
-            3,
-            0
-          ],
-          "targetIdsMovedByPlacement": [
-            3,
-            3,
-            0
-          ],
-          "minimumPlanSearch": {
-            "status": "unknown",
-            "nodeBudget": 0,
-            "nodesVisited": 0,
-            "lowerBound": 1,
-            "upperBound": 3
-          }
-        },
-        "marks": 5,
-        "tags": [
-          "expert",
-          "layered-support",
-          "multi-placement"
-        ],
-        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"D:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\"D:g\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"C\",\"D\"],[\"E\",\"A\",\"F\",\"C\"],[\"A\",\"C\",\"D\",\"B\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[4,7],[4,8],[4,9],[3,10],[4,10],[5,10],[3,11],[4,11],[5,11]],\"width\":8}",
-        "canonicalKeyHash": "f7c67d4473075c4bdb0f13d657ce6a5e6f17ff4e1de18b293c784d85da1fe266",
-        "score": 96,
-        "gradingVersion": "full-plan-and-interaction-evidence-2",
-        "proofStatus": "engine-witness-verified",
-        "reviewStatus": "human-review-pending",
-        "counterfactual": {
-          "kind": "floor-switch",
-          "alternative": "same witness without the one-use floor switch",
-          "result": "lost"
-        }
-      },
-      {
-        "id": "magnetic-ce020ac1031c2ae4",
-        "number": 123,
-        "band": "expert",
-        "title": {
-          "en": "Layered support sequence 123",
-          "ja": "重なる支えの順序 123"
-        },
-        "objective": {
-          "en": "Clear blue, then green, then switch to Pull for the red target.",
-          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
-        },
-        "options": {
-          "mode": "relaxed",
-          "width": 8,
-          "height": 12,
-          "colourCount": 6,
-          "seed": "magnetic-ce020ac1031c2ae4",
-          "initialBoard": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 10,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 11,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 7,
-              "colour": "red"
-            },
-            {
-              "id": 12,
-              "colour": "teal"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 8,
-              "colour": "red"
-            },
-            {
-              "id": 13,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 9,
-              "colour": "red"
-            },
-            {
-              "id": 14,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 1,
-              "colour": "blue"
-            },
-            {
-              "id": 2,
-              "colour": "blue"
-            },
-            {
-              "id": 3,
-              "colour": "blue"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 4,
-              "colour": "green"
-            },
-            {
-              "id": 5,
-              "colour": "green"
-            },
-            {
-              "id": 6,
-              "colour": "green"
-            },
-            null,
-            null
-          ],
-          "queue": [
-            [
-              "blue",
-              "gold",
-              "purple",
-              "teal"
-            ],
-            [
-              "blue",
-              "gold",
-              "green",
-              "purple"
-            ],
-            [
-              "gold",
-              "purple",
-              "teal",
-              "red"
-            ]
-          ],
-          "pieceLimit": 3,
-          "schedule": {
-            "kind": "fixed",
-            "floor": "calm"
-          },
-          "floorSwitch": true,
-          "magneticImpact": false,
-          "goal": {
-            "kind": "clear-targets",
-            "targetIds": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9
-            ]
-          }
-        },
-        "witness": [
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "set-floor-override",
-            "floor": "magnetic"
-          },
-          {
-            "kind": "hard-drop"
-          }
-        ],
-        "witnessResult": "won",
-        "metrics": {
-          "occupiedCells": 14,
-          "usableCells": 96,
-          "boardCoverage": 0.145833,
-          "legalPlacementChoices": 84,
-          "setupPlacementChoices": 84,
-          "winningPlacementChoices": 10,
-          "availableFloorChoices": 3,
-          "witnessPlacements": 3,
-          "witnessFloorDecisions": 1,
-          "difficultyScore": 96,
-          "fullPlanTrials": 1024,
-          "fullPlanWins": 5,
-          "fullPlanSuccessRate": 0.0048828125,
-          "setupDecisionPressure": 0.9642857142857143,
-          "interactingDependencyDepth": 2,
-          "necessaryFloorDecisionShare": 1,
-          "setupDecisionEvidence": [
-            {
-              "step": 0,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            },
-            {
-              "step": 1,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            }
-          ],
-          "targetIdsClearedByPlacement": [
-            3,
-            3,
-            3
-          ],
-          "targetIdsRemainingAfterPlacement": [
-            6,
-            3,
-            0
-          ],
-          "targetIdsMovedByPlacement": [
-            3,
-            3,
-            0
-          ],
-          "minimumPlanSearch": {
-            "status": "unknown",
-            "nodeBudget": 0,
-            "nodesVisited": 0,
-            "lowerBound": 1,
-            "upperBound": 3
-          }
-        },
-        "marks": 5,
-        "tags": [
-          "expert",
-          "layered-support",
-          "multi-placement"
-        ],
-        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"D:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"B\",\"D\"],[\"E\",\"A\",\"F\",\"B\"],[\"A\",\"B\",\"D\",\"C\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[4,7],[4,8],[4,9],[3,10],[4,10],[5,10],[3,11],[4,11],[5,11]],\"width\":8}",
-        "canonicalKeyHash": "ce020ac1031c2ae4acff9008c67ae05e1aa09e39a517fb064d602f477e472c0d",
-        "score": 96,
-        "gradingVersion": "full-plan-and-interaction-evidence-2",
-        "proofStatus": "engine-witness-verified",
-        "reviewStatus": "human-review-pending",
-        "counterfactual": {
-          "kind": "floor-switch",
-          "alternative": "same witness without the one-use floor switch",
-          "result": "lost"
-        }
-      },
-      {
-        "id": "magnetic-e616a3bb95bb29af",
-        "number": 124,
-        "band": "expert",
-        "title": {
-          "en": "Layered support sequence 124",
-          "ja": "重なる支えの順序 124"
-        },
-        "objective": {
-          "en": "Clear blue, then green, then switch to Pull for the red target.",
-          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
-        },
-        "options": {
-          "mode": "relaxed",
-          "width": 8,
-          "height": 12,
-          "colourCount": 6,
-          "seed": "magnetic-e616a3bb95bb29af",
-          "initialBoard": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 10,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 11,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 7,
-              "colour": "red"
-            },
-            {
-              "id": 12,
-              "colour": "teal"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 8,
-              "colour": "red"
-            },
-            {
-              "id": 13,
-              "colour": "gold"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 9,
-              "colour": "red"
-            },
-            {
-              "id": 14,
-              "colour": "purple"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 1,
-              "colour": "blue"
-            },
-            {
-              "id": 2,
-              "colour": "blue"
-            },
-            {
-              "id": 3,
-              "colour": "blue"
-            },
-            null,
-            null,
-            null,
-            null,
-            null,
-            {
-              "id": 4,
-              "colour": "green"
-            },
-            {
-              "id": 5,
-              "colour": "green"
-            },
-            {
-              "id": 6,
-              "colour": "green"
-            },
-            null,
-            null,
-            null
-          ],
-          "queue": [
-            [
-              "blue",
-              "gold",
-              "purple",
-              "teal"
-            ],
-            [
-              "blue",
-              "gold",
-              "green",
-              "purple"
-            ],
-            [
-              "gold",
-              "purple",
-              "teal",
-              "red"
-            ]
-          ],
-          "pieceLimit": 3,
-          "schedule": {
-            "kind": "fixed",
-            "floor": "calm"
-          },
-          "floorSwitch": true,
-          "magneticImpact": false,
-          "goal": {
-            "kind": "clear-targets",
-            "targetIds": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9
-            ]
-          }
-        },
-        "witness": [
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "right"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "left"
-          },
-          {
-            "kind": "hard-drop"
-          },
-          {
-            "kind": "set-floor-override",
-            "floor": "magnetic"
-          },
-          {
-            "kind": "hard-drop"
-          }
-        ],
-        "witnessResult": "won",
-        "metrics": {
-          "occupiedCells": 14,
-          "usableCells": 96,
-          "boardCoverage": 0.145833,
-          "legalPlacementChoices": 84,
-          "setupPlacementChoices": 84,
-          "winningPlacementChoices": 10,
-          "availableFloorChoices": 3,
-          "witnessPlacements": 3,
-          "witnessFloorDecisions": 1,
-          "difficultyScore": 96,
-          "fullPlanTrials": 1024,
-          "fullPlanWins": 1,
-          "fullPlanSuccessRate": 0.0009765625,
-          "setupDecisionPressure": 0.9642857142857143,
-          "interactingDependencyDepth": 2,
-          "necessaryFloorDecisionShare": 1,
-          "setupDecisionEvidence": [
-            {
-              "step": 0,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            },
-            {
-              "step": 1,
-              "legalChoices": 84,
-              "preservingChoices": 3,
-              "pressure": 0.9642857142857143
-            }
-          ],
-          "targetIdsClearedByPlacement": [
-            3,
-            3,
-            3
-          ],
-          "targetIdsRemainingAfterPlacement": [
-            6,
-            3,
-            0
-          ],
-          "targetIdsMovedByPlacement": [
-            3,
-            3,
-            0
-          ],
-          "minimumPlanSearch": {
-            "status": "unknown",
-            "nodeBudget": 0,
-            "nodesVisited": 0,
-            "lowerBound": 1,
-            "upperBound": 3
-          }
-        },
-        "marks": 5,
-        "tags": [
-          "expert",
-          "layered-support",
-          "multi-placement"
-        ],
-        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"D:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:t\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"B\",\"D\"],[\"E\",\"A\",\"F\",\"B\"],[\"A\",\"B\",\"D\",\"C\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[3,7],[3,8],[3,9],[2,10],[3,10],[4,10],[2,11],[3,11],[4,11]],\"width\":8}",
-        "canonicalKeyHash": "e616a3bb95bb29af68a12ee069fca7428fd822bb3c79ed19785efac06e4ebd0a",
-        "score": 96,
-        "gradingVersion": "full-plan-and-interaction-evidence-2",
-        "proofStatus": "engine-witness-verified",
-        "reviewStatus": "human-review-pending",
-        "counterfactual": {
-          "kind": "floor-switch",
-          "alternative": "same witness without the one-use floor switch",
-          "result": "lost"
-        }
-      },
-      {
-        "id": "magnetic-690561c3bb7d6fef",
-        "number": 125,
-        "band": "expert",
-        "title": {
-          "en": "Layered support sequence 125",
-          "ja": "重なる支えの順序 125"
         },
         "objective": {
           "en": "Clear blue, then green, then switch to Pull for the red target.",
@@ -24693,11 +23475,11 @@ export const contentData: MagneticContentData = {
       },
       {
         "id": "magnetic-81aea020346d25c0",
-        "number": 126,
+        "number": 122,
         "band": "expert",
         "title": {
-          "en": "Layered support sequence 126",
-          "ja": "重なる支えの順序 126"
+          "en": "Layered support sequence 122",
+          "ja": "重なる支えの順序 122"
         },
         "objective": {
           "en": "Clear blue, then green, then switch to Pull for the red target.",
@@ -25002,11 +23784,11 @@ export const contentData: MagneticContentData = {
       },
       {
         "id": "magnetic-7d67ff7aea2c3f11",
-        "number": 127,
+        "number": 123,
         "band": "expert",
         "title": {
-          "en": "Layered support sequence 127",
-          "ja": "重なる支えの順序 127"
+          "en": "Layered support sequence 123",
+          "ja": "重なる支えの順序 123"
         },
         "objective": {
           "en": "Clear blue, then green, then switch to Pull for the red target.",
@@ -25314,11 +24096,11 @@ export const contentData: MagneticContentData = {
       },
       {
         "id": "magnetic-b62895b741e2f180",
-        "number": 128,
+        "number": 124,
         "band": "expert",
         "title": {
-          "en": "Layered support sequence 128",
-          "ja": "重なる支えの順序 128"
+          "en": "Layered support sequence 124",
+          "ja": "重なる支えの順序 124"
         },
         "objective": {
           "en": "Clear blue, then green, then switch to Pull for the red target.",
@@ -25617,9 +24399,1242 @@ export const contentData: MagneticContentData = {
           "alternative": "same witness without the one-use floor switch",
           "result": "lost"
         }
+      },
+      {
+        "id": "magnetic-1bb64dba930b760c",
+        "number": 125,
+        "band": "expert",
+        "title": {
+          "en": "Layered support sequence 125",
+          "ja": "重なる支えの順序 125"
+        },
+        "objective": {
+          "en": "Clear blue, then green, then switch to Pull for the red target.",
+          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
+        },
+        "options": {
+          "mode": "relaxed",
+          "width": 8,
+          "height": 12,
+          "colourCount": 6,
+          "seed": "magnetic-1bb64dba930b760c",
+          "initialBoard": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 10,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 11,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 12,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 13,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 7,
+              "colour": "red"
+            },
+            {
+              "id": 14,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 8,
+              "colour": "red"
+            },
+            {
+              "id": 15,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 9,
+              "colour": "red"
+            },
+            {
+              "id": 16,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 1,
+              "colour": "blue"
+            },
+            {
+              "id": 2,
+              "colour": "blue"
+            },
+            {
+              "id": 3,
+              "colour": "blue"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 4,
+              "colour": "green"
+            },
+            {
+              "id": 5,
+              "colour": "green"
+            },
+            {
+              "id": 6,
+              "colour": "green"
+            },
+            null,
+            null
+          ],
+          "queue": [
+            [
+              "blue",
+              "gold",
+              "purple",
+              "teal"
+            ],
+            [
+              "blue",
+              "gold",
+              "green",
+              "purple"
+            ],
+            [
+              "gold",
+              "purple",
+              "teal",
+              "red"
+            ]
+          ],
+          "pieceLimit": 3,
+          "schedule": {
+            "kind": "fixed",
+            "floor": "calm"
+          },
+          "floorSwitch": true,
+          "magneticImpact": false,
+          "goal": {
+            "kind": "clear-targets",
+            "targetIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          }
+        },
+        "witness": [
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "set-floor-override",
+            "floor": "magnetic"
+          },
+          {
+            "kind": "hard-drop"
+          }
+        ],
+        "witnessResult": "won",
+        "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
+          "legalPlacementChoices": 84,
+          "setupPlacementChoices": 84,
+          "winningPlacementChoices": 10,
+          "availableFloorChoices": 3,
+          "witnessPlacements": 3,
+          "witnessFloorDecisions": 1,
+          "difficultyScore": 96,
+          "fullPlanTrials": 1024,
+          "fullPlanWins": 2,
+          "fullPlanSuccessRate": 0.001953125,
+          "setupDecisionPressure": 0.9642857142857143,
+          "interactingDependencyDepth": 2,
+          "necessaryFloorDecisionShare": 1,
+          "setupDecisionEvidence": [
+            {
+              "step": 0,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            },
+            {
+              "step": 1,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            }
+          ],
+          "targetIdsClearedByPlacement": [
+            3,
+            3,
+            3
+          ],
+          "targetIdsRemainingAfterPlacement": [
+            6,
+            3,
+            0
+          ],
+          "targetIdsMovedByPlacement": [
+            3,
+            3,
+            0
+          ],
+          "minimumPlanSearch": {
+            "status": "unknown",
+            "nodeBudget": 0,
+            "nodesVisited": 0,
+            "lowerBound": 1,
+            "upperBound": 3
+          }
+        },
+        "marks": 5,
+        "tags": [
+          "expert",
+          "layered-support",
+          "multi-placement"
+        ],
+        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"B\",\"C\"],[\"E\",\"A\",\"F\",\"B\"],[\"A\",\"B\",\"C\",\"D\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[4,7],[4,8],[4,9],[3,10],[4,10],[5,10],[3,11],[4,11],[5,11]],\"width\":8}",
+        "canonicalKeyHash": "1bb64dba930b760c9c8963ee078c3e6ca33b6f6ea826a8ff2eb94773c7ad1244",
+        "score": 96,
+        "gradingVersion": "full-plan-and-interaction-evidence-2",
+        "proofStatus": "engine-witness-verified",
+        "reviewStatus": "human-review-pending",
+        "counterfactual": {
+          "kind": "floor-switch",
+          "alternative": "same witness without the one-use floor switch",
+          "result": "lost"
+        }
+      },
+      {
+        "id": "magnetic-df84bede98457b7c",
+        "number": 126,
+        "band": "expert",
+        "title": {
+          "en": "Layered support sequence 126",
+          "ja": "重なる支えの順序 126"
+        },
+        "objective": {
+          "en": "Clear blue, then green, then switch to Pull for the red target.",
+          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
+        },
+        "options": {
+          "mode": "relaxed",
+          "width": 8,
+          "height": 12,
+          "colourCount": 6,
+          "seed": "magnetic-df84bede98457b7c",
+          "initialBoard": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 10,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 7,
+              "colour": "red"
+            },
+            {
+              "id": 11,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 8,
+              "colour": "red"
+            },
+            {
+              "id": 12,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 9,
+              "colour": "red"
+            },
+            {
+              "id": 13,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 1,
+              "colour": "blue"
+            },
+            {
+              "id": 2,
+              "colour": "blue"
+            },
+            {
+              "id": 3,
+              "colour": "blue"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 4,
+              "colour": "green"
+            },
+            {
+              "id": 5,
+              "colour": "green"
+            },
+            {
+              "id": 6,
+              "colour": "green"
+            },
+            null,
+            null,
+            null
+          ],
+          "queue": [
+            [
+              "blue",
+              "gold",
+              "purple",
+              "teal"
+            ],
+            [
+              "blue",
+              "gold",
+              "green",
+              "purple"
+            ],
+            [
+              "gold",
+              "purple",
+              "teal",
+              "red"
+            ]
+          ],
+          "pieceLimit": 3,
+          "schedule": {
+            "kind": "fixed",
+            "floor": "calm"
+          },
+          "floorSwitch": true,
+          "magneticImpact": false,
+          "goal": {
+            "kind": "clear-targets",
+            "targetIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          }
+        },
+        "witness": [
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "set-floor-override",
+            "floor": "magnetic"
+          },
+          {
+            "kind": "hard-drop"
+          }
+        ],
+        "witnessResult": "won",
+        "metrics": {
+          "occupiedCells": 13,
+          "usableCells": 96,
+          "boardCoverage": 0.135417,
+          "legalPlacementChoices": 84,
+          "setupPlacementChoices": 84,
+          "winningPlacementChoices": 10,
+          "availableFloorChoices": 3,
+          "witnessPlacements": 3,
+          "witnessFloorDecisions": 1,
+          "difficultyScore": 97,
+          "fullPlanTrials": 1024,
+          "fullPlanWins": 0,
+          "fullPlanSuccessRate": 0,
+          "setupDecisionPressure": 0.9642857142857143,
+          "interactingDependencyDepth": 2,
+          "necessaryFloorDecisionShare": 1,
+          "setupDecisionEvidence": [
+            {
+              "step": 0,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            },
+            {
+              "step": 1,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            }
+          ],
+          "targetIdsClearedByPlacement": [
+            3,
+            3,
+            3
+          ],
+          "targetIdsRemainingAfterPlacement": [
+            6,
+            3,
+            0
+          ],
+          "targetIdsMovedByPlacement": [
+            3,
+            3,
+            0
+          ],
+          "minimumPlanSearch": {
+            "status": "unknown",
+            "nodeBudget": 0,
+            "nodesVisited": 0,
+            "lowerBound": 1,
+            "upperBound": 3
+          }
+        },
+        "marks": 5,
+        "tags": [
+          "expert",
+          "layered-support",
+          "multi-placement"
+        ],
+        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"D:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"C\",\"D\"],[\"E\",\"A\",\"F\",\"C\"],[\"A\",\"C\",\"D\",\"B\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[3,7],[3,8],[3,9],[2,10],[3,10],[4,10],[2,11],[3,11],[4,11]],\"width\":8}",
+        "canonicalKeyHash": "df84bede98457b7c91da43f6c4d6b2700c1fd7e7f71fda01ce716e0be587bf7a",
+        "score": 97,
+        "gradingVersion": "full-plan-and-interaction-evidence-2",
+        "proofStatus": "engine-witness-verified",
+        "reviewStatus": "human-review-pending",
+        "counterfactual": {
+          "kind": "floor-switch",
+          "alternative": "same witness without the one-use floor switch",
+          "result": "lost"
+        }
+      },
+      {
+        "id": "magnetic-88c08553699ca6c2",
+        "number": 127,
+        "band": "expert",
+        "title": {
+          "en": "Layered support sequence 127",
+          "ja": "重なる支えの順序 127"
+        },
+        "objective": {
+          "en": "Clear blue, then green, then switch to Pull for the red target.",
+          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
+        },
+        "options": {
+          "mode": "relaxed",
+          "width": 8,
+          "height": 12,
+          "colourCount": 6,
+          "seed": "magnetic-88c08553699ca6c2",
+          "initialBoard": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 10,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 11,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 12,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 13,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 7,
+              "colour": "red"
+            },
+            {
+              "id": 14,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 8,
+              "colour": "red"
+            },
+            {
+              "id": 15,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 9,
+              "colour": "red"
+            },
+            {
+              "id": 16,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 1,
+              "colour": "blue"
+            },
+            {
+              "id": 2,
+              "colour": "blue"
+            },
+            {
+              "id": 3,
+              "colour": "blue"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 4,
+              "colour": "green"
+            },
+            {
+              "id": 5,
+              "colour": "green"
+            },
+            {
+              "id": 6,
+              "colour": "green"
+            },
+            null,
+            null,
+            null
+          ],
+          "queue": [
+            [
+              "blue",
+              "gold",
+              "purple",
+              "teal"
+            ],
+            [
+              "blue",
+              "gold",
+              "green",
+              "purple"
+            ],
+            [
+              "gold",
+              "purple",
+              "teal",
+              "red"
+            ]
+          ],
+          "pieceLimit": 3,
+          "schedule": {
+            "kind": "fixed",
+            "floor": "calm"
+          },
+          "floorSwitch": true,
+          "magneticImpact": false,
+          "goal": {
+            "kind": "clear-targets",
+            "targetIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          }
+        },
+        "witness": [
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "set-floor-override",
+            "floor": "magnetic"
+          },
+          {
+            "kind": "hard-drop"
+          }
+        ],
+        "witnessResult": "won",
+        "metrics": {
+          "occupiedCells": 16,
+          "usableCells": 96,
+          "boardCoverage": 0.166667,
+          "legalPlacementChoices": 84,
+          "setupPlacementChoices": 84,
+          "winningPlacementChoices": 10,
+          "availableFloorChoices": 3,
+          "witnessPlacements": 3,
+          "witnessFloorDecisions": 1,
+          "difficultyScore": 97,
+          "fullPlanTrials": 1024,
+          "fullPlanWins": 3,
+          "fullPlanSuccessRate": 0.0029296875,
+          "setupDecisionPressure": 0.9702380952380952,
+          "interactingDependencyDepth": 2,
+          "necessaryFloorDecisionShare": 1,
+          "setupDecisionEvidence": [
+            {
+              "step": 0,
+              "legalChoices": 84,
+              "preservingChoices": 2,
+              "pressure": 0.9761904761904762
+            },
+            {
+              "step": 1,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            }
+          ],
+          "targetIdsClearedByPlacement": [
+            3,
+            3,
+            3
+          ],
+          "targetIdsRemainingAfterPlacement": [
+            6,
+            3,
+            0
+          ],
+          "targetIdsMovedByPlacement": [
+            3,
+            3,
+            0
+          ],
+          "minimumPlanSearch": {
+            "status": "unknown",
+            "nodeBudget": 0,
+            "nodesVisited": 0,
+            "lowerBound": 1,
+            "upperBound": 3
+          }
+        },
+        "marks": 5,
+        "tags": [
+          "expert",
+          "layered-support",
+          "multi-placement"
+        ],
+        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\",\".\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"B\",\"C\"],[\"E\",\"A\",\"F\",\"B\"],[\"A\",\"B\",\"C\",\"D\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[3,7],[3,8],[3,9],[2,10],[3,10],[4,10],[2,11],[3,11],[4,11]],\"width\":8}",
+        "canonicalKeyHash": "88c08553699ca6c20c54758a7ba48c8ba8f754bbe421280c5871581f01ccbe0a",
+        "score": 97,
+        "gradingVersion": "full-plan-and-interaction-evidence-2",
+        "proofStatus": "engine-witness-verified",
+        "reviewStatus": "human-review-pending",
+        "counterfactual": {
+          "kind": "floor-switch",
+          "alternative": "same witness without the one-use floor switch",
+          "result": "lost"
+        }
+      },
+      {
+        "id": "magnetic-75956bdeaeeae824",
+        "number": 128,
+        "band": "expert",
+        "title": {
+          "en": "Layered support sequence 128",
+          "ja": "重なる支えの順序 128"
+        },
+        "objective": {
+          "en": "Clear blue, then green, then switch to Pull for the red target.",
+          "ja": "青、緑の順に消し、最後に引力へ切り替えて赤い目標を消します。"
+        },
+        "options": {
+          "mode": "relaxed",
+          "width": 8,
+          "height": 12,
+          "colourCount": 6,
+          "seed": "magnetic-75956bdeaeeae824",
+          "initialBoard": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 10,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 11,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 12,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 13,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 7,
+              "colour": "red"
+            },
+            {
+              "id": 14,
+              "colour": "purple"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 8,
+              "colour": "red"
+            },
+            {
+              "id": 15,
+              "colour": "teal"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 9,
+              "colour": "red"
+            },
+            {
+              "id": 16,
+              "colour": "gold"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 1,
+              "colour": "blue"
+            },
+            {
+              "id": 2,
+              "colour": "blue"
+            },
+            {
+              "id": 3,
+              "colour": "blue"
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "id": 4,
+              "colour": "green"
+            },
+            {
+              "id": 5,
+              "colour": "green"
+            },
+            {
+              "id": 6,
+              "colour": "green"
+            },
+            null,
+            null,
+            {
+              "id": 17,
+              "colour": "teal"
+            }
+          ],
+          "queue": [
+            [
+              "blue",
+              "gold",
+              "purple",
+              "teal"
+            ],
+            [
+              "blue",
+              "gold",
+              "green",
+              "purple"
+            ],
+            [
+              "gold",
+              "purple",
+              "teal",
+              "red"
+            ]
+          ],
+          "pieceLimit": 3,
+          "schedule": {
+            "kind": "fixed",
+            "floor": "calm"
+          },
+          "floorSwitch": true,
+          "magneticImpact": false,
+          "goal": {
+            "kind": "clear-targets",
+            "targetIds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          }
+        },
+        "witness": [
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "right"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "left"
+          },
+          {
+            "kind": "hard-drop"
+          },
+          {
+            "kind": "set-floor-override",
+            "floor": "magnetic"
+          },
+          {
+            "kind": "hard-drop"
+          }
+        ],
+        "witnessResult": "won",
+        "metrics": {
+          "occupiedCells": 17,
+          "usableCells": 96,
+          "boardCoverage": 0.177083,
+          "legalPlacementChoices": 84,
+          "setupPlacementChoices": 84,
+          "winningPlacementChoices": 10,
+          "availableFloorChoices": 3,
+          "witnessPlacements": 3,
+          "witnessFloorDecisions": 1,
+          "difficultyScore": 97,
+          "fullPlanTrials": 1024,
+          "fullPlanWins": 0,
+          "fullPlanSuccessRate": 0,
+          "setupDecisionPressure": 0.9702380952380952,
+          "interactingDependencyDepth": 2,
+          "necessaryFloorDecisionShare": 1,
+          "setupDecisionEvidence": [
+            {
+              "step": 0,
+              "legalChoices": 84,
+              "preservingChoices": 2,
+              "pressure": 0.9761904761904762
+            },
+            {
+              "step": 1,
+              "legalChoices": 84,
+              "preservingChoices": 3,
+              "pressure": 0.9642857142857143
+            }
+          ],
+          "targetIdsClearedByPlacement": [
+            3,
+            3,
+            3
+          ],
+          "targetIdsRemainingAfterPlacement": [
+            6,
+            3,
+            0
+          ],
+          "targetIdsMovedByPlacement": [
+            3,
+            3,
+            0
+          ],
+          "minimumPlanSearch": {
+            "status": "unknown",
+            "nodeBudget": 0,
+            "nodesVisited": 0,
+            "lowerBound": 1,
+            "upperBound": 3
+          }
+        },
+        "marks": 5,
+        "tags": [
+          "expert",
+          "layered-support",
+          "multi-placement"
+        ],
+        "canonicalKey": "{\"board\":[\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\".\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"B:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"C:g\",\".\",\".\",\".\",\".\",\".\",\".\",\"D:t\",\"A:g\",\".\",\".\",\".\",\".\",\".\",\"E:t\",\"E:t\",\"E:t\",\".\",\".\",\".\",\".\",\".\",\"F:t\",\"F:t\",\"F:t\",\".\",\".\",\"C:g\"],\"floorSwitch\":true,\"height\":12,\"magneticImpact\":false,\"queue\":[[\"E\",\"A\",\"B\",\"C\"],[\"E\",\"A\",\"F\",\"B\"],[\"A\",\"B\",\"C\",\"D\"]],\"schedule\":{\"floor\":\"calm\",\"kind\":\"fixed\"},\"targetGeometry\":[[3,7],[3,8],[3,9],[2,10],[3,10],[4,10],[2,11],[3,11],[4,11]],\"width\":8}",
+        "canonicalKeyHash": "75956bdeaeeae82464ca97b7c85eb1270e4d895c9ebf6b54721424da6c2eb335",
+        "score": 97,
+        "gradingVersion": "full-plan-and-interaction-evidence-2",
+        "proofStatus": "engine-witness-verified",
+        "reviewStatus": "human-review-pending",
+        "counterfactual": {
+          "kind": "floor-switch",
+          "alternative": "same witness without the one-use floor switch",
+          "result": "lost"
+        }
       }
     ],
-    "checksum": "666ca04e3312512b884034b5daaf8ff046fb8f1fca4ee987a155d33549b0290a"
+    "checksum": "5511460814bdb267df2eac9f849e076f95e4980ed1b32835d96755dd7a9a50b7"
   },
   "lessons": [
     {

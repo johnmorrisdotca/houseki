@@ -160,7 +160,7 @@ function natureMetrics(source, options, witness, events, scoreData = {}) {
     if (!actual) continue;
     legalPlacements += alternatives + 1;
     const actualSuffix = actual.state.phase === 'falling' ? playPlan(actual.state, witness.slice(index + 1)) : { state: actual.state, events: [] };
-    if (actualSuffix?.state.phase === 'won') wins++;
+    wins += alternativeWins + (actualSuffix?.state.phase === 'won' ? 1 : 0);
     if (alternativeWins > 0 && alternatives - alternativeWins > 0) branchingPoints++;
     if (alternativeWins === 0) forcedSafeSteps++;
     if (alternatives && index < witness.length - 1) {

@@ -142,6 +142,7 @@ for (const [name, manifest, levels, create] of [
       assert.equal(metrics.seededPlayoutFixedSuffixLength, 0);
       assert.equal(metrics.seededPlayoutSuccessRate, Number((metrics.seededPlayoutSuccesses / metrics.seededPlayoutSamples).toFixed(6)));
       assert.ok(metrics.placementProbes > 0 && metrics.legalPlacements > 0);
+      assert.equal(metrics.goalPreservingPlacements, metrics.singleStepDeviationWins + level.witness.length);
       assert.ok(metrics.requiredSetupPairs <= metrics.verifiedSetupDependencies);
       assert.ok(metrics.verifiedSetupDependencies <= metrics.setupDependencyProbeSteps);
       assert.equal(metrics.occupiedCells, level.board.filter(Boolean).length);

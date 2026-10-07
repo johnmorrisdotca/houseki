@@ -43,3 +43,5 @@ that gate.
 This revision regrades and renumbers all 128 selected challenges. Backward compatibility with the former fifty-level campaign is outside the approved scope; no archived level records are retained.
 
 Occupied cells, usable cells and board coverage are stored as context alongside the strategic metrics. They are not independent score weights: an open obvious puzzle and a crowded forced puzzle can both be easy. Coverage affects the measured placement and failure behavior rather than granting difficulty for area alone.
+
+Curation retains the lowest eligible scores for entry through hard bands and the highest eight eligible expert candidates. The final catalogue remains ascending. A surplus-pool regression protects this distinction.

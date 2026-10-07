@@ -335,6 +335,11 @@ function makeLessons() {
 }
 function deepFreeze(value) { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) deepFreeze(child); } return value; }
 
+/** Keep forgiving openings and the strongest verified endings in an ascending pool. */
+export function selectBandCandidates(sortedCandidates, range) {
+  return range.id === 'expert' ? sortedCandidates.slice(-range.count) : sortedCandidates.slice(0, range.count);
+}
+
 export function generateContent() {
   const pool = new Map();
   const add = item => { if (!item) return; const canonicalKey = normalizedColourKey(item.options); if (!pool.has(canonicalKey)) pool.set(canonicalKey, { ...item, canonicalKey }); };
@@ -355,7 +360,8 @@ export function generateContent() {
     if (range.id === 'expert') matches = matches.filter(item => item.interactionDepth === 2 && item.necessaryFloorDecisionShare === 1 && hasCausalTargetDependencies(item, 2));
     matches.sort((a, b) => a.score - b.score || a.canonicalKey.localeCompare(b.canonicalKey));
     if (matches.length < range.count) throw new Error(`Only ${matches.length}/${range.count} verified ${range.id} candidates; pool=${pool.size}; scores=${JSON.stringify(graded.reduce((out, item) => { const key = item.score <= 20 ? 'entry' : item.score <= 40 ? 'easy' : item.score <= 60 ? 'intermediate' : item.score <= 80 ? 'hard' : 'expert'; out[key] = (out[key] ?? 0) + 1; return out; }, {}))}`);
-    selected.push(...matches.slice(0, range.count).map(item => ({ ...item, band: range.id })));
+    const chosen = selectBandCandidates(matches, range);
+    selected.push(...chosen.map(item => ({ ...item, band: range.id })));
   }
   selected.sort((a, b) => a.score - b.score || a.canonicalKey.localeCompare(b.canonicalKey));
   const bands = []; let cursor = 0;
