@@ -4,6 +4,8 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-07
+
 ### Fixed
 
 - Gem Swap rejects excessively nested replay inputs with a bounded validation error.
@@ -102,7 +104,7 @@ Nothing that was exported has changed. The README is the family's one layout, in
 - An experimental Magnetic Blocks engine with bonded squares, magnetic floor schedules, a Floor Switch and impact drops.
 - Typed entry points, a generated API reference, an MIT licence and reproducible package checks.
 
-[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.1...HEAD
 [0.3.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...v0.2.0
@@ -110,3 +112,5 @@ Nothing that was exported has changed. The README is the family's one layout, in
 [0.1.0]: https://github.com/johnmorrisdotca/houseki/releases/tag/v0.1.0
 
 [0.4.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.3.0...v0.4.0
+
+[0.4.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.0...v0.4.1
