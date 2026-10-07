@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { createGame, applyAction, advanceTicks, legalActions, GemSwapOptionsError } from '../dist/gem-swap.js';
+import { createGame, applyAction, advanceTicks, legalActions, reshuffleGame, GemSwapOptionsError } from '../dist/gem-swap.js';
 import { drawColour } from '../dist/gem-swap/random.js';
 import { findMatches } from '../dist/gem-swap/board.js';
 
@@ -187,4 +187,15 @@ test('black-hole contacts batch and sequence identically without consuming rando
   const batched = advanceTicks(confirmed, 240); let sequential = confirmed; const events = [];
   for (let tick = 0; tick < 240; tick++) { const step = advanceTicks(sequential, 1); sequential = step.state; events.push(...step.events); }
   assert.deepEqual(batched.state, sequential); assert.deepEqual(batched.events, events);
+});
+
+test('reshuffling preserves an active portal and every remaining gem without undefined cells', () => {
+  const placed = place(enabled(5), 0);
+  const state = advanceTicks(placed.state, 360).state;
+  assert.equal(state.phase, 'ready'); assert.ok(state.blackHole);
+  const result = reshuffleGame(state); assert.equal(result.accepted, true);
+  assert.deepEqual(result.state.blackHole, state.blackHole);
+  assert.equal(result.state.board[state.blackHole.cell], null);
+  assert.ok(result.state.board.every(gem => gem !== undefined));
+  assert.deepEqual(result.state.board.filter(Boolean).map(gem => gem.id).sort((a,b) => a-b), state.board.filter(Boolean).map(gem => gem.id).sort((a,b) => a-b));
 });

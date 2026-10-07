@@ -4,6 +4,12 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+### Fixed
+
+- Gem Swap rejects excessively nested replay inputs with a bounded validation error.
+- Reshuffling preserves an active Black Hole portal and all remaining gem identities.
+- Black Hole design status now matches the optional shipped tray power. CI explicitly checks public metadata and machine-specific documentation paths.
+
 ## [0.4.0] - 2026-10-06
 
 ### Added
