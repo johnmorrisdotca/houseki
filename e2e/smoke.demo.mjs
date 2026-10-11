@@ -44,7 +44,7 @@ test("the language chooser speaks Japanese in the header, the footer and the pag
   await page.locator('header [data-lang="ja"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
   await expect(page.locator("header .intro p").first()).toContainText("宝石と石のオリジナルパズルゲーム");
-  await expect(page.locator("footer .family span").first()).toHaveText("姉妹パッケージ:");
+  await expect(page.locator("footer .family span").first()).toHaveText("ファミリー：");
   await expect(page.locator("#unreviewed")).toBeVisible();
   await expect(page.locator('.game-screen h2[data-i="title"]')).toHaveText("色の連鎖");
   await page.reload();
