@@ -125,7 +125,17 @@ function core(state: GameState, action: Action): Transition {
   const reset = state.settings.mode === 'arcade' && grounded && active.lockResets < 8;
   return { state: { ...state, active: freezeBlock({ ...rotated, lockTicks: reset ? 0 : active.lockTicks, lockResets: active.lockResets + (reset ? 1 : 0), lockStarted: reset ? true : active.lockStarted }) }, events: [{ type: 'piece-rotated', orientation, ids: rotated.gems.map(gem => gem.id), cells: blockCells(rotated, width).map(item => item.index) }], accepted: true };
 }
-/** Creates an immutable seeded 2×2-block game with a fixed queue and explicit floor schedule. */
+/** Creates an immutable seeded 2×2-block game with a fixed queue and explicit floor schedule.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates an immutable seeded 2×2-block game with a fixed queue and explicit floor schedule.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * console.log(createGame({seed:"docs"}).phase);
+ * ```
+ */
 export function createGame(options: import('./types.js').CreateOptions = {}): GameState {
   const valid = validateOptions(options); let randomState: number, queue: readonly (readonly [Colour, Colour, Colour, Colour])[];
   if (valid.queue) { queue = valid.queue; randomState = seedState(`magnetic-blocks|magnetic-blocks-1|${String(valid.seed)}`); }
@@ -136,7 +146,21 @@ export function createGame(options: import('./types.js').CreateOptions = {}): Ga
   if (matchGroups(state.board, valid.width, valid.height, valid.mask).length) throw new RangeError('Initial board must not contain a clearable group');
   const [started] = spawn(state); return freezeState(started);
 }
-/** Applies one movement, rotation, floor-switch or placement action without mutation. */
+/** Applies one movement, rotation, floor-switch or placement action without mutation.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param action - One native action for this entry point; inspect accepted and reason on the result.
+ * @returns Applies one movement, rotation, floor-switch or placement action without mutation.
+ * @example
+ * ```ts
+ * import { applyAction, createGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ * import type { Action } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * const action: Action={kind:"left"};
+ * console.log(applyAction(state,action).accepted);
+ * ```
+ */
 export function applyAction(state: GameState, action: Action): Transition {
   const result = core(state, action);
   if (!result.accepted) return { ...result, state: freezeState(result.state) };
@@ -146,7 +170,19 @@ export function applyAction(state: GameState, action: Action): Transition {
   const next = freezeState({ ...result.state, recording: Object.freeze([...state.recording, recorded]) });
   return { ...result, state: next };
 }
-/** Advances fixed 60 Hz time, resolving phases in all modes and falling/locking only in Arcade. */
+/** Advances fixed 60 Hz time, resolving phases in all modes and falling/locking only in Arcade.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param ticks - The nonnegative number of fixed 60 Hz logical ticks to advance.
+ * @returns Advances fixed 60 Hz time, resolving phases in all modes and falling/locking only in Arcade.
+ * @example
+ * ```ts
+ * import { advanceTicks, createGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTicks(state,1).state.phase);
+ * ```
+ */
 export function advanceTicks(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   let current = state; const events: GameEvent[] = [];
@@ -184,7 +220,18 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
   }
   return { state: freezeState(current), events: Object.freeze(events), accepted: true };
 }
-/** Lists accepted controls for the current falling or resolution phase. */
+/** Lists accepted controls for the current falling or resolution phase.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Lists accepted controls for the current falling or resolution phase.
+ * @example
+ * ```ts
+ * import { createGame, legalActions } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(legalActions(state).length);
+ * ```
+ */
 export function legalActions(state: GameState): readonly Action[] {
   if (state.phase === 'paused') return Object.freeze([{ kind: 'resume' }]);
   if (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase)) return Object.freeze([{ kind: 'pause' }]);
@@ -197,5 +244,16 @@ export function legalActions(state: GameState): readonly Action[] {
   ]);
   return Object.freeze([]);
 }
-/** Returns a compact immutable status including current and upcoming floor state. */
+/** Returns a compact immutable status including current and upcoming floor state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns a compact immutable status including current and upcoming floor state.
+ * @example
+ * ```ts
+ * import { createGame, statusOf } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(statusOf(state).phase);
+ * ```
+ */
 export function statusOf(state: GameState): GameStatus { return Object.freeze({ phase: state.phase, score: state.score, moves: state.moves, placements: state.placements, floor: state.pendingFloorOverride ?? state.floor, nextFloor: state.nextFloor, floorSwitchCharges: state.floorSwitchCharges, pendingFloorOverride: state.pendingFloorOverride, maxChain: state.maxChain, ...(state.reason ? { reason: state.reason } : {}) }); }

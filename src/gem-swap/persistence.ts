@@ -7,6 +7,18 @@ const MAX_OPERATIONS = 5_000;
 const MAX_TICKS = 100_000;
 const byteLength = (value: string) => new TextEncoder().encode(value).byteLength;
 
+/** A typed rejection of a malformed, unsupported or inconsistent native replay.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { ReplayError } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const error=new ReplayError("docs-example","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class ReplayError extends TypeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'ReplayError'; this.code = code; }
@@ -49,7 +61,18 @@ function execute(initial: CreateOptions, operations: readonly ReplayOperation[])
   return state;
 }
 
-/** Encodes the initial rules plus accepted actions and logical inputs in canonical JSON. */
+/** Encodes the initial rules plus accepted actions and logical inputs in canonical JSON.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Encodes the initial rules plus accepted actions and logical inputs in canonical JSON.
+ * @example
+ * ```ts
+ * import { createGame, encodeGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(encodeGame(state).length);
+ * ```
+ */
 export function encodeGame(state: GameState): string {
   if (!state || state.game !== 'gem-swap' || state.history.length > MAX_OPERATIONS) throw new ReplayError('invalid-state', 'State is invalid or exceeds the operation limit');
   const operations = state.history.map(validateOperation);
@@ -60,7 +83,18 @@ export function encodeGame(state: GameState): string {
   return result;
 }
 
-/** Validates and reconstructs a state by replay; serialized board snapshots are never trusted. */
+/** Validates and reconstructs a state by replay; serialized board snapshots are never trusted.
+ *
+ * @param serialized - A saved JSON recording from this entry’s encodeGame; malformed or inconsistent saves throw.
+ * @returns Validates and reconstructs a state by replay; serialized board snapshots are never trusted.
+ * @example
+ * ```ts
+ * import { createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(decodeGame(encodeGame(state)).phase);
+ * ```
+ */
 export function decodeGame(serialized: string): GameState {
   if (typeof serialized !== 'string' || byteLength(serialized) > MAX_BYTES) throw new ReplayError('save-too-large', 'Replay must be a string no larger than 256 KiB');
   let parsed: unknown;
@@ -73,10 +107,32 @@ export function decodeGame(serialized: string): GameState {
   return execute(value.initial as CreateOptions, operations);
 }
 
-/** Starts the exact initial ruleset and seed again, discarding all run progress. */
+/** Starts the exact initial ruleset and seed again, discarding all run progress.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Starts the exact initial ruleset and seed again, discarding all run progress.
+ * @example
+ * ```ts
+ * import { createGame, restartGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(restartGame(state).phase);
+ * ```
+ */
 export function restartGame(state: GameState): GameState { return createGame(state.initialOptions); }
 
-/** Checks a complete authored witness through the public deterministic rules API. */
+/** Checks a complete authored witness through the public deterministic rules API.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @param witness - The ordered native replay operations proposed as a winning challenge proof.
+ * @returns Checks a complete authored witness through the public deterministic rules API.
+ * @example
+ * ```ts
+ * import { GEM_SWAP_CAMPAIGN, validateChallengeWitness } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(validateChallengeWitness(GEM_SWAP_CAMPAIGN[0].options,GEM_SWAP_CAMPAIGN[0].witness).valid);
+ * ```
+ */
 export function validateChallengeWitness(options: CreateOptions, witness: readonly ReplayOperation[]): { readonly valid: boolean; readonly state?: GameState; readonly reason?: string } {
   try {
     if (options.mode !== 'challenge' || !Array.isArray(witness) || witness.length > MAX_OPERATIONS) throw new ReplayError('invalid-witness', 'Challenge witness or settings are invalid');

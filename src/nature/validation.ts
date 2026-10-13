@@ -1,5 +1,17 @@
 import type { MarkingOptions, NatureEntity, NatureErrorCode, NatureOptions, NatureState, PowerDropRequest, QuarterTurn } from './types.js';
 
+/** A typed native grid, cell, marking or power-drop validation error.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { NatureOptionsError } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const error=new NatureOptionsError("invalid-grid-size","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class NatureOptionsError extends RangeError {
   readonly code: NatureErrorCode;
   constructor(code: NatureErrorCode, message: string) { super(message); this.name = 'NatureOptionsError'; this.code = code; }

@@ -6,7 +6,18 @@ import { consumePortal, contactCells, placementCells } from './black-hole.js';
 import { hintTransition, reshuffleTransition, undoTransition } from './practice.js';
 import type { Action, BoardPreset, BoardShape, ChallengeRules, CreateOptions, GameEvent, GameMode, GameState, GameStatus, Gem, GemColour, Goal, OrdinaryToolKind, ReplayOperation, Seal, Settings, ToolKind, Transition } from './types.js';
 
-/** Typed error for invalid settings or a board that cannot be generated safely. */
+/** Typed error for invalid settings or a board that cannot be generated safely.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { GemSwapOptionsError } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const error=new GemSwapOptionsError("docs-example","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class GemSwapOptionsError extends RangeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'GemSwapOptionsError'; this.code = code; }
@@ -132,7 +143,17 @@ export function fallbackBoardForTest(settings: Settings): readonly (Gem | null)[
   return Object.freeze(board);
 }
 
-/** Creates a deterministic stable board with at least one legal normal swap. */
+/** Creates a deterministic stable board with at least one legal normal swap.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a deterministic stable board with at least one legal normal swap.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(createGame({seed:"docs"}).phase);
+ * ```
+ */
 export function createGame(options: CreateOptions = {}): GameState {
   const config = optionsFor(options); const { settings } = config; let randomState = seedState(settings.seed); let board: (Gem | null)[] = []; let nextId = 1; let found = false;
   for (let attempt = 0; attempt < 128 && !found; attempt++) {
@@ -201,7 +222,21 @@ function appendHistory(state: GameState, operation: ReplayOperation): GameState 
   if (operation.kind === 'time' && previous?.kind === 'time') return Object.freeze({ ...state, history: Object.freeze([...state.history.slice(0, -1), Object.freeze({ kind: 'time', milliseconds: previous.milliseconds + operation.milliseconds })]) });
   return Object.freeze({ ...state, history: Object.freeze([...state.history, Object.freeze(operation)]) });
 }
-/** Applies one recorded player action. Rejected actions preserve state identity and are not recorded. */
+/** Applies one recorded player action. Rejected actions preserve state identity and are not recorded.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param action - One native action for this entry point; inspect accepted and reason on the result.
+ * @returns Applies one recorded player action. Rejected actions preserve state identity and are not recorded.
+ * @example
+ * ```ts
+ * import { applyAction, createGame } from "@johnmorrisdotca/houseki/gem-swap";
+ * import type { Action } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * const action: Action={kind:"hint"};
+ * console.log(applyAction(state,action).accepted);
+ * ```
+ */
 export function applyAction(state: GameState, action: Action): Transition {
   const explicitPracticeReshuffle = action?.kind === 'reshuffle' && state.mode === 'relaxed' && state.outcome === 'finished';
   if ((state.outcome && !explicitPracticeReshuffle) || (state.mode === 'arcade' && state.elapsedMs >= 180_000)) return rejected(state, 'run-ended');
@@ -412,7 +447,19 @@ function advanceTicksBase(state: GameState, ticks: number): Transition {
   return { state: current, events: Object.freeze(events), accepted: true };
 }
 
-/** Advances deterministic resolution ticks; wall-clock time is supplied separately by the host. */
+/** Advances deterministic resolution ticks; wall-clock time is supplied separately by the host.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param ticks - The nonnegative number of fixed 60 Hz logical ticks to advance.
+ * @returns Advances deterministic resolution ticks; wall-clock time is supplied separately by the host.
+ * @example
+ * ```ts
+ * import { advanceTicks, createGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTicks(state,1).state.phase);
+ * ```
+ */
 export function advanceTicks(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   let current = state; let consumed = 0; const events: GameEvent[] = [];
@@ -423,7 +470,19 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
   return { state: current, events: Object.freeze(events), accepted: true };
 }
 
-/** Adds explicit host-measured elapsed time. Arcade runs end at 180 seconds; no clock is read here. */
+/** Adds explicit host-measured elapsed time. Arcade runs end at 180 seconds; no clock is read here.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param milliseconds - The nonnegative elapsed milliseconds for the native timer.
+ * @returns Adds explicit host-measured elapsed time. Arcade runs end at 180 seconds; no clock is read here.
+ * @example
+ * ```ts
+ * import { advanceTime, createGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTime(state,16).state.phase);
+ * ```
+ */
 export function advanceTime(state: GameState, milliseconds: number): Transition {
   if (!Number.isInteger(milliseconds) || milliseconds < 0 || milliseconds > 180_000) throw new RangeError('milliseconds must be an integer from 0 to 180000');
   if (state.mode !== 'arcade' || state.outcome || milliseconds === 0) return { state, events: Object.freeze([]), accepted: true };
@@ -448,14 +507,58 @@ function replayOperations(initial: CreateOptions, operations: readonly ReplayOpe
   }
   return state;
 }
-/** Returns a deterministic legal swap hint and permanently marks the run assisted. */
+/** Returns a deterministic legal swap hint and permanently marks the run assisted.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns a deterministic legal swap hint and permanently marks the run assisted.
+ * @example
+ * ```ts
+ * import { createGame, hintGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(hintGame(state).accepted);
+ * ```
+ */
 export function hintGame(state: GameState): Transition { return applyAction(state, { kind: 'hint' }); }
-/** Shuffles existing gem records in Relaxed play, preserving their colour and special counts. */
+/** Shuffles existing gem records in Relaxed play, preserving their colour and special counts.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Shuffles existing gem records in Relaxed play, preserving their colour and special counts.
+ * @example
+ * ```ts
+ * import { createGame, reshuffleGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(reshuffleGame(state).accepted);
+ * ```
+ */
 export function reshuffleGame(state: GameState): Transition { return applyAction(state, { kind: 'reshuffle' }); }
-/** Restores the last committed swap in Relaxed or Challenge play and marks assistance. */
+/** Restores the last committed swap in Relaxed or Challenge play and marks assistance.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Restores the last committed swap in Relaxed or Challenge play and marks assistance.
+ * @example
+ * ```ts
+ * import { createGame, undoGame } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(undoGame(state).accepted);
+ * ```
+ */
 export function undoGame(state: GameState): Transition { return applyAction(state, { kind: 'undo' }); }
 
-/** Lists all legal swaps that would be accepted from the current stable state. */
+/** Lists all legal swaps that would be accepted from the current stable state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Lists all legal swaps that would be accepted from the current stable state.
+ * @example
+ * ```ts
+ * import { createGame, legalActions } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(legalActions(state).length);
+ * ```
+ */
 export function legalActions(state: GameState): readonly Action[] {
   if (state.phase === 'finished') return state.mode === 'relaxed' && state.outcome === 'finished' ? Object.freeze([{ kind: 'reshuffle' }]) : Object.freeze([]);
   if (state.phase !== 'ready' || findMatches(state.board, state.settings).length) return [];
@@ -486,6 +589,18 @@ export function legalActions(state: GameState): readonly Action[] {
 /** Returns the current score, move count and accurately enumerated legal move count. */
 function availableToolCount(state: GameState): number { return TOOL_ORDER.reduce<number>((count, tool) => count + state.inventory[tool], state.blackHoleCharges); }
 function hasUsableTool(state: GameState): boolean { return TOOL_ORDER.some(tool => state.inventory[tool] > 0) || (state.settings.advancedTools && state.blackHoleCharges > 0 && state.blackHole === null); }
+/** Derive the native phase, score, legal-move count, tools and goal/timer progress for host labels.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Derive the native phase, score, legal-move count, tools and goal/timer progress for host labels.
+ * @example
+ * ```ts
+ * import { createGame, statusOf } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(statusOf(state).phase);
+ * ```
+ */
 export function statusOf(state: GameState): GameStatus {
   const goals = state.challenge?.goals ?? Object.freeze([]);
   const goalProgress = goals.map(goal => ({ kind: goal.kind, ...(goal.kind === 'collect' ? { colour: goal.colour } : {}), current: goalValue(state, goal), target: goalTarget(state, goal), complete: goalValue(state, goal) >= goalTarget(state, goal) }));

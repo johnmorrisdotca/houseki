@@ -23,7 +23,18 @@ function activeFromColours(state: GameState, colours: readonly [Colour, Colour, 
 function occupied(state: GameState, piece: Piece, x = piece.x, y = piece.y): boolean {
   return piece.gems.some((_, i) => { const cy = y + i; return x < 0 || x >= state.settings.width || cy < -HIDDEN || cy >= state.settings.height || state.board[addr(x, cy, state.settings.width)] !== null; });
 }
-/** Returns the exact landing row for the current rigid triplet. */
+/** Returns the exact landing row for the current rigid triplet.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns the exact landing row for the current rigid triplet. Returns null when there is no active piece or applicable preview.
+ * @example
+ * ```ts
+ * import { createGame, landingY } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(landingY(state));
+ * ```
+ */
 export function landingY(state: GameState): number | null {
   if (!state.active) return null; let y = state.active.y;
   while (!occupied(state, state.active, state.active.x, y + 1)) y++;
@@ -34,7 +45,17 @@ function advanceBag(state: GameState): readonly [readonly Colour[], number, read
   for (let p = 0; p < 3; p++) { const draw = drawTriplet({ bag, randomState, settings: state.settings }); bag = draw.bag; randomState = draw.randomState; next.push(draw.colours); }
   return [bag, randomState, next];
 }
-/** Creates a deterministic empty game with an active piece and three-piece preview. */
+/** Creates a deterministic empty game with an active piece and three-piece preview.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a deterministic empty game with an active piece and three-piece preview.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * console.log(createGame({seed:"docs"}).phase);
+ * ```
+ */
 export function createGame(options: CreateOptions = {}): GameState {
   if (options.preset !== undefined && !Object.hasOwn(PRESETS, options.preset)) throw new RangeError('Unsupported board preset');
   const preset = PRESETS[options.preset ?? (options.mode === 'daily' ? 'narrow' : 'standard')]; const width = options.width ?? preset[0]; const height = options.height ?? preset[1];
@@ -59,7 +80,17 @@ export function createGame(options: CreateOptions = {}): GameState {
   return state;
 }
 const VALID_COLOURS = new Set(['red', 'blue', 'green', 'gold', 'purple', 'teal']);
-/** Creates a challenge after validating its authored board, finite queue, goal, and witness. */
+/** Creates a challenge after validating its authored board, finite queue, goal, and witness.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a challenge after validating its authored board, finite queue, goal, and witness.
+ * @example
+ * ```ts
+ * import { createChallenge } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * console.log(createChallenge({width:6,height:12,board:Array(72).fill(null),queue:[["red","green","blue"],["blue","red","green"]],goal:{type:"empty"}}).phase);
+ * ```
+ */
 export function createChallenge(options: ChallengeOptions): GameState {
   const width = options.width ?? 6; const height = options.height ?? 13; const colourCount = options.colourCount ?? 5;
   validateDimensions(width, height);
@@ -221,14 +252,40 @@ function applyActionCore(state: GameState, action: Action): Transition {
   }
   return emptyTransition(state, 'unsupported-action');
 }
-/** Applies and records one immutable action; rejected actions preserve state identity. */
+/** Applies and records one immutable action; rejected actions preserve state identity.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param action - One native action for this entry point; inspect accepted and reason on the result.
+ * @returns Applies and records one immutable action; rejected actions preserve state identity.
+ * @example
+ * ```ts
+ * import { applyAction, createGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import type { Action } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * const action: Action={kind:"left"};
+ * console.log(applyAction(state,action).accepted);
+ * ```
+ */
 export function applyAction(state: GameState, action: Action): Transition {
   const result = applyActionCore(state, action);
   if (!result.accepted || action.kind === 'tick') return result;
   const last = state.recording.at(-1); const ordinal = last?.tick === state.elapsedTicks ? last.ordinal + 1 : 0;
   return { ...result, state: { ...result.state, recording: [...state.recording, { tick: state.elapsedTicks, ordinal, action }] } };
 }
-/** Advances fixed 60 Hz game ticks. Arcade timing is applied to the active piece. */
+/** Advances fixed 60 Hz game ticks. Arcade timing is applied to the active piece.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param ticks - The nonnegative number of fixed 60 Hz logical ticks to advance.
+ * @returns Advances fixed 60 Hz game ticks. Arcade timing is applied to the active piece.
+ * @example
+ * ```ts
+ * import { advanceTicks, createGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTicks(state,1).state.phase);
+ * ```
+ */
 export function advanceTicks(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   let current = state; const events: GameEvent[] = [];
@@ -253,7 +310,18 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
   }
   return { state: current, events, accepted: true };
 }
-/** Lists the core actions currently available to the player. */
+/** Lists the core actions currently available to the player.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Lists the core actions currently available to the player.
+ * @example
+ * ```ts
+ * import { createGame, legalActions } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(legalActions(state).length);
+ * ```
+ */
 export function legalActions(state: GameState): readonly Action[] {
   if (state.phase === 'paused') return [{ kind: 'resume' }];
   if (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase)) return [{ kind: 'pause' }];
@@ -266,9 +334,31 @@ export function legalActions(state: GameState): readonly Action[] {
   actions.push({ kind: 'pause' });
   return actions;
 }
-/** Returns a plain status summary suitable for UI labels. */
+/** Returns a plain status summary suitable for UI labels.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns a plain status summary suitable for UI labels.
+ * @example
+ * ```ts
+ * import { createGame, statusOf } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(statusOf(state).phase);
+ * ```
+ */
 export function statusOf(state: GameState): Readonly<{ phase: GameState['phase']; score: number; maxChain: number; reason?: string }> { return { phase: state.phase, score: state.score, maxChain: state.maxChain, ...(state.reason ? { reason: state.reason } : {}) }; }
-/** Recreates the same authored mode, seed, and challenge configuration from its original setup. */
+/** Recreates the same authored mode, seed, and challenge configuration from its original setup.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Recreates the same authored mode, seed, and challenge configuration from its original setup.
+ * @example
+ * ```ts
+ * import { createGame, restartGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(restartGame(state).phase);
+ * ```
+ */
 export function restartGame(state: GameState): GameState {
   if (state.settings.mode === 'challenge') {
     const settings = state.settings;
@@ -277,14 +367,36 @@ export function restartGame(state: GameState): GameState {
   }
   return createGame({ mode: state.settings.mode, seed: state.settings.seed, width: state.settings.width, height: state.settings.height, colourCount: state.settings.colourCount, ...(state.settings.pieceLimit === undefined ? {} : { pieceLimit: state.settings.pieceLimit }) });
 }
-/** Encodes the authoritative settings, action recording, and derived checkpoint. */
+/** Encodes the authoritative settings, action recording, and derived checkpoint.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Encodes the authoritative settings, action recording, and derived checkpoint.
+ * @example
+ * ```ts
+ * import { createGame, encodeGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(encodeGame(state).length);
+ * ```
+ */
 export function encodeGame(state: GameState): string { return JSON.stringify({ format: 1, game: state.game, rules: state.rules, settings: state.settings, actions: state.recording, elapsedTicks: state.elapsedTicks, checkpoint: state }); }
 function stable(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
   if (value && typeof value === 'object') return `{${Object.entries(value).filter(([, item]) => item !== undefined).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => `${JSON.stringify(key)}:${stable(item)}`).join(',')}}`;
   return JSON.stringify(value) ?? 'null';
 }
-/** Replays and validates a bounded save, then verifies its checkpoint against the derived state. */
+/** Replays and validates a bounded save, then verifies its checkpoint against the derived state.
+ *
+ * @param text - A saved JSON recording from this entry’s encodeGame; malformed or inconsistent saves throw.
+ * @returns Replays and validates a bounded save, then verifies its checkpoint against the derived state.
+ * @example
+ * ```ts
+ * import { createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(decodeGame(encodeGame(state)).phase);
+ * ```
+ */
 export function decodeGame(text: string): GameState {
   if (text.length > 2 * 1024 * 1024) throw new RangeError('Save exceeds 2 MiB');
   const value = JSON.parse(text) as { format?: number; game?: string; rules?: string; settings?: Settings; actions?: unknown[]; elapsedTicks?: number; checkpoint?: GameState };

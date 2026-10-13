@@ -43,7 +43,21 @@ function preferredDirection(state: NatureState, request: PowerDropRequest): read
   return [state.committedPlacements % 2 === 0 ? 'left' : 'right', state.randomState];
 }
 
-/** Preview a single normal landing and, for a power drop, at most one validated one-cell rebound. */
+/** Preview a single normal landing and, for a power drop, at most one validated one-cell rebound.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param request - The native falling piece, pivot id and power/rebound choice.
+ * @returns Preview a single normal landing and, for a power drop, at most one validated one-cell rebound.
+ * @example
+ * ```ts
+ * import { createNatureState, previewPowerDrop } from "@johnmorrisdotca/houseki/nature";
+ * import type { PowerDropRequest } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const request:PowerDropRequest={piece:[{id:1,kind:"stone",colour:"red",x:1,y:0}],pivotId:1,power:true};
+ * console.log(previewPowerDrop(state,request).finalCells.length);
+ * ```
+ */
 export function previewPowerDrop(state: NatureState, request: PowerDropRequest): PowerDropPreview {
   validateState(state);
   validatePowerDropRequest(state, request);
@@ -75,7 +89,21 @@ export function previewPowerDrop(state: NatureState, request: PowerDropRequest):
   return freeze({ normalLanding: normal, attempts, rebound: selectedDirection !== undefined, ...(selectedDirection ? { selectedDirection } : {}), quarterTurn: selectedTurn, finalCells, moves: movesBetween(request.piece, finalCells), randomStateAfter });
 }
 
-/** Commit a previewed landing as one immutable operation. A failed preview leaves the original state untouched. */
+/** Commit a previewed landing as one immutable operation. A failed preview leaves the original state untouched.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param request - The native falling piece, pivot id and power/rebound choice.
+ * @returns Commit a previewed landing as one immutable operation. A failed preview leaves the original state untouched.
+ * @example
+ * ```ts
+ * import { applyPowerDrop, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ * import type { PowerDropRequest } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const request:PowerDropRequest={piece:[{id:1,kind:"stone",colour:"red",x:1,y:0}],pivotId:1,power:true};
+ * console.log(applyPowerDrop(state,request).accepted);
+ * ```
+ */
 export function applyPowerDrop(state: NatureState, request: PowerDropRequest): NatureTransition {
   const preview = previewPowerDrop(state, request);
   const cells: (NatureEntity | null)[] = [...state.cells];

@@ -1,6 +1,18 @@
 import type { Colour, Gem } from './types.js';
 export interface MatchWave { readonly cells: readonly number[]; readonly colour: Colour }
-/** Finds the union of every maximal horizontal, vertical, and diagonal run of at least three. */
+/** Finds the union of every maximal horizontal, vertical, and diagonal run of at least three.
+ *
+ * @param board - The row-major native board; null cells are empty or masked.
+ * @param width - The native board width in cells.
+ * @param height - The native board height in cells.
+ * @returns Finds the union of every maximal horizontal, vertical, and diagonal run of at least three.
+ * @example
+ * ```ts
+ * import { findMatches } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * console.log(findMatches(Array(72).fill(null),6,12).length);
+ * ```
+ */
 export function findMatches(board: readonly (Gem | null)[], width: number, height: number): readonly MatchWave[] {
   const directions = [[1, 0], [0, 1], [1, 1], [1, -1]] as const;
   const found = new Map<Colour, Set<number>>();
@@ -16,7 +28,19 @@ export function findMatches(board: readonly (Gem | null)[], width: number, heigh
   }
   return [...found].map(([colour, cells]) => ({ colour, cells: [...cells].sort((a, b) => a - b) }));
 }
-/** Compacts each column downward while preserving the top-to-bottom order of survivors. */
+/** Compacts each column downward while preserving the top-to-bottom order of survivors.
+ *
+ * @param board - The row-major native board; null cells are empty or masked.
+ * @param width - The native board width in cells.
+ * @param height - The native board height in cells.
+ * @returns Compacts each column downward while preserving the top-to-bottom order of survivors. Nested null values denote empty board cells, absent active pieces, unselected tools or outcomes not yet reached; optional undefined fields are absent until applicable.
+ * @example
+ * ```ts
+ * import { compactBoard } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * console.log(compactBoard(Array(72).fill(null),6,12).length);
+ * ```
+ */
 export function compactBoard(board: readonly (Gem | null)[], width: number, height: number): readonly (Gem | null)[] {
   const result: (Gem | null)[] = Array(width * height).fill(null);
   for (let x = 0; x < width; x++) { const stack: Gem[] = []; for (let y = 0; y < height; y++) { const gem = board[y * width + x]; if (gem) stack.push(gem); } const offset = height - stack.length; stack.forEach((gem, i) => { result[(offset + i) * width + x] = gem; }); }

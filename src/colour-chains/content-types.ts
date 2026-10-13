@@ -1,6 +1,28 @@
 import type { ChallengeGoal, Colour, Gem, Orientation, WitnessStep } from './types.js';
 
+/** One authored text in English and Japanese.
+ *
+ * @example
+ * ```ts
+ * import type { LocalizedText } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: LocalizedText = {en:"A small puzzle",ja:"小さいパズル"};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface LocalizedText { readonly en: string; readonly ja: string }
+/** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import type { ChainDifficultyMetrics } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const level=levelManifest[0];
+ * const value: ChainDifficultyMetrics = level.rawMetrics;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainDifficultyMetrics {
   readonly placementProbes: number;
   readonly legalPlacements: number;
@@ -61,6 +83,18 @@ export interface ChainDifficultyMetrics {
   /** Number of committed pair placements in the supplied winning plan. */
   readonly planningLength: number;
 }
+/** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import type { ChainCampaignLevel } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const level=levelManifest[0];
+ * const value: ChainCampaignLevel = level;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainCampaignLevel {
   readonly id: string;
   readonly number: number;
@@ -89,6 +123,17 @@ export interface ChainCampaignLevel {
   readonly rawDifficultyScore?: number;
   readonly normalizationCategory?: string;
 }
+/** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
+ *
+ * @example
+ * ```ts
+ * import type { NatureChainCampaignLevel } from "@johnmorrisdotca/houseki/colour-chains";
+ * import { shizenLevelManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: NatureChainCampaignLevel = shizenLevelManifest[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface NatureChainCampaignLevel extends ChainCampaignLevel {
   readonly objective: LocalizedText;
   readonly nature: true;
@@ -96,6 +141,17 @@ export interface NatureChainCampaignLevel extends ChainCampaignLevel {
   readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
   readonly weatherTrace?: readonly Readonly<Record<string, unknown>>[];
 }
+/** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
+ *
+ * @example
+ * ```ts
+ * import type { ChainCampaignManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import { campaignManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: ChainCampaignManifest = campaignManifest;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainCampaignManifest {
   readonly count: number;
   readonly candidatePoolCount: number;
@@ -109,9 +165,54 @@ export interface ChainCampaignManifest {
   readonly checksum: string;
   readonly levels: readonly ChainCampaignLevel[];
 }
+/** An inclusive one-based range in a measured native nature-campaign difficulty band.
+ *
+ * @example
+ * ```ts
+ * import type { NatureCampaignBand } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: NatureCampaignBand = {id:"entry",count:1,first:1,last:1};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface NatureCampaignBand { readonly id: 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert'; readonly count: number; readonly first: number; readonly last: number }
+/** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
+ *
+ * @example
+ * ```ts
+ * import type { NatureChainCampaignManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import { shizenCampaignManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: NatureChainCampaignManifest = shizenCampaignManifest;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface NatureChainCampaignManifest extends Omit<ChainCampaignManifest, 'levels'> { readonly levels: readonly NatureChainCampaignLevel[]; readonly bands?: readonly NatureCampaignBand[] }
+/** One bilingual native lesson instruction and the corresponding action or tick step.
+ *
+ * @example
+ * ```ts
+ * import { tutorialManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import type { ChainTutorialStep } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const lesson=tutorialManifest[0];
+ * const value: ChainTutorialStep = lesson.steps[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainTutorialStep { readonly instruction: LocalizedText; readonly action: string }
+/** One bilingual native lesson with its authored setup, teaching steps and winning witness.
+ *
+ * @example
+ * ```ts
+ * import { tutorialManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ * import type { ChainTutorialDefinition } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const lesson=tutorialManifest[0];
+ * const value: ChainTutorialDefinition = lesson;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainTutorialDefinition {
   readonly id: string;
   readonly title: LocalizedText;
@@ -120,5 +221,16 @@ export interface ChainTutorialDefinition {
   readonly steps: readonly ChainTutorialStep[];
   readonly tags: readonly string[];
 }
+/** The stored native Colour Chains campaign, lessons and optional Shizen/Arashi campaigns.
+ *
+ * @example
+ * ```ts
+ * import type { ChainContentData } from "@johnmorrisdotca/houseki/colour-chains";
+ * import { campaignManifest, tutorialManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const value: ChainContentData = {campaign:campaignManifest,tutorials:tutorialManifest};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface ChainContentData { readonly campaign: ChainCampaignManifest; readonly tutorials: readonly ChainTutorialDefinition[]; readonly shizen?: NatureChainCampaignManifest; readonly arashi?: NatureChainCampaignManifest }
 export type { Colour, Orientation, WitnessStep, ChallengeGoal };

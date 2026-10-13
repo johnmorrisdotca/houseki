@@ -1,6 +1,18 @@
 import type { Bond, Colour, CreateOptions, Floor, FloorSchedule, Gem, Goal, Mode } from './types.js';
 import { calmGravity } from './physics.js';
 
+/** A typed native magnetic-block setup validation error.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { MagneticBlocksOptionsError } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const error=new MagneticBlocksOptionsError("docs-example","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class MagneticBlocksOptionsError extends RangeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'MagneticBlocksOptionsError'; this.code = code; }

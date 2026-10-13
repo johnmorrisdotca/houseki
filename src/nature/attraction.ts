@@ -74,7 +74,18 @@ function movePair(board: (NatureEntity | null)[], state: NatureState, pair: Retu
   return deepFreeze({ ids, axis: pair.axis, emptyGap: pair.gap, midpoint: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, ...(pair.a.anchored || pair.b.anchored ? { anchoredId: pair.a.anchored ? pair.a.id : pair.b.id } : {}), moves: localMoves });
 }
 
-/** Preview one bounded deterministic attraction pulse without mutating the state. */
+/** Preview one bounded deterministic attraction pulse without mutating the state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Preview one bounded deterministic attraction pulse without mutating the state.
+ * @example
+ * ```ts
+ * import { createNatureState, previewMagneticPulse } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(previewMagneticPulse(state).moves.length);
+ * ```
+ */
 export function previewMagneticPulse(state: NatureState): MagneticPreview {
   validateState(state);
   if (!state.rules.magneticEnabled) return deepFreeze({ pairs: [], moves: [], cells: state.cells });
@@ -83,7 +94,18 @@ export function previewMagneticPulse(state: NatureState): MagneticPreview {
   return deepFreeze({ pairs, moves, cells: board });
 }
 
-/** Apply one attraction pulse. Disabled nature rules preserve the exact state reference and consume no random state. */
+/** Apply one attraction pulse. Disabled nature rules preserve the exact state reference and consume no random state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Apply one attraction pulse. Disabled nature rules preserve the exact state reference and consume no random state.
+ * @example
+ * ```ts
+ * import { applyMagneticPulse, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(applyMagneticPulse(state).accepted);
+ * ```
+ */
 export function applyMagneticPulse(state: NatureState): NatureTransition {
   const preview = previewMagneticPulse(state);
   if (!state.rules.magneticEnabled || preview.moves.length === 0) return { state, accepted: true, events: [], preview };

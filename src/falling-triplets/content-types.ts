@@ -1,6 +1,28 @@
 import type { ChallengeGoal, ChallengeHint, Colour, Gem, Triplet } from './types.js';
 
+/** One authored text in English and Japanese.
+ *
+ * @example
+ * ```ts
+ * import type { LocalizedText } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const value: LocalizedText = {en:"A small puzzle",ja:"小さいパズル"};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface LocalizedText { readonly en: string; readonly ja: string }
+/** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import type { DifficultyMetrics } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const level=levelManifest[0];
+ * const value: DifficultyMetrics = level.rawMetrics;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface DifficultyMetrics {
   readonly seededGoalSuccesses: number;
   readonly seededGoalSamples: number;
@@ -15,6 +37,18 @@ export interface DifficultyMetrics {
   readonly witnessPlanningLength: number;
   readonly payoffDirections: number;
 }
+/** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import type { CampaignLevel } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const level=levelManifest[0];
+ * const value: CampaignLevel = level;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface CampaignLevel {
   readonly id: string;
   readonly seed: string;
@@ -37,6 +71,17 @@ export interface CampaignLevel {
   readonly proofStatus: 'engine-witness-verified';
   readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
 }
+/** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
+ *
+ * @example
+ * ```ts
+ * import type { CampaignManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import { campaignManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const value: CampaignManifest = campaignManifest;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface CampaignManifest {
   readonly count: number;
   readonly candidatePoolCount: number;
@@ -50,7 +95,31 @@ export interface CampaignManifest {
   readonly checksum: string;
   readonly levels: readonly CampaignLevel[];
 }
+/** One bilingual native lesson instruction and the corresponding action or tick step.
+ *
+ * @example
+ * ```ts
+ * import { tutorialManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import type { TutorialStep } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const lesson=tutorialManifest[0];
+ * const value: TutorialStep = lesson.steps[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface TutorialStep { readonly instruction: LocalizedText; readonly action: string }
+/** One bilingual native lesson with its authored setup, teaching steps and winning witness.
+ *
+ * @example
+ * ```ts
+ * import { tutorialManifest } from "@johnmorrisdotca/houseki/falling-triplets";
+ * import type { TutorialDefinition } from "@johnmorrisdotca/houseki/falling-triplets";
+ *
+ * const lesson=tutorialManifest[0];
+ * const value: TutorialDefinition = lesson;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface TutorialDefinition {
   readonly id: string;
   readonly title: LocalizedText;

@@ -3,7 +3,19 @@ import { freezeNatureState } from './state.js';
 import { nextNatureUnit } from './random.js';
 import type { MarkingOptions, NatureEvent, NatureState, NatureTransition } from './types.js';
 
-/** Deterministically assign magnetic markings to settled stones without changing their IDs or colours. */
+/** Deterministically assign magnetic markings to settled stones without changing their IDs or colours.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Deterministically assign magnetic markings to settled stones without changing their IDs or colours.
+ * @example
+ * ```ts
+ * import { createNatureState, markMagneticStones } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(markMagneticStones(state,{probability:0.25,maximum:2}).accepted);
+ * ```
+ */
 export function markMagneticStones(state: NatureState, options: MarkingOptions): NatureTransition {
   validateState(state); validateMarkingOptions(options);
   if (!state.rules.magneticEnabled || options.maximum === 0 || options.probability === 0) return { state, accepted: true, events: [] };

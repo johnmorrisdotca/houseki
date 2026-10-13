@@ -1,7 +1,18 @@
 import type { ChallengeGoal, Colour, CreateOptions, Mode, Preset, Settings } from './types.js';
 const PRESETS: Readonly<Record<Preset, readonly [number, number]>> = { narrow: [5, 12], standard: [6, 12], wide: [8, 12], tall: [6, 16], extraWide: [12, 12], deep: [8, 32], large: [12, 32] };
 const COLOURS: readonly Colour[] = ['red', 'blue', 'green', 'gold', 'purple', 'teal'];
-/** Typed setup and authored challenge error. */
+/** Typed setup and authored challenge error.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { StoneChainsOptionsError } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const error=new StoneChainsOptionsError("docs-example","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class StoneChainsOptionsError extends RangeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'StoneChainsOptionsError'; this.code = code; }

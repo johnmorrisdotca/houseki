@@ -4,7 +4,18 @@ const PRESETS: Readonly<Record<BoardPreset, readonly [number, number]>> = {
   compact: [6, 8], standard: [8, 10], wide: [10, 8], tall: [6, 12], extraWide: [16, 10], deep: [8, 32], large: [12, 32],
 };
 
-/** Typed public-settings validation error. */
+/** Typed public-settings validation error.
+ *
+ * @param code - The native stable error code used by callers to distinguish setup or replay failures.
+ * @param message - The human-readable diagnostic accompanying the native code.
+ * @example
+ * ```ts
+ * import { StoneCollapseOptionsError } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const error=new StoneCollapseOptionsError("docs-example","Invalid example setup");
+ * console.log(error.name,error.code,error.message);
+ * ```
+ */
 export class StoneCollapseOptionsError extends RangeError {
   readonly code: string;
   constructor(code: string, message: string) { super(message); this.name = 'StoneCollapseOptionsError'; this.code = code; }

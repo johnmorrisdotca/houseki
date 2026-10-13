@@ -58,10 +58,32 @@ function replay(settings: Settings, actions: readonly unknown[], elapsedTicks: n
   return state;
 }
 
-/** Restarts the same seed, custom starting board, fixed queue, rules and floor options. */
+/** Restarts the same seed, custom starting board, fixed queue, rules and floor options.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Restarts the same seed, custom starting board, fixed queue, rules and floor options.
+ * @example
+ * ```ts
+ * import { createGame, restartGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(restartGame(state).phase);
+ * ```
+ */
 export function restartGame(state: GameState): GameState { return createFromSettings(state.settings); }
 
-/** Encodes canonical settings, accepted tick-stamped actions and a verified replay checkpoint. */
+/** Encodes canonical settings, accepted tick-stamped actions and a verified replay checkpoint.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Encodes canonical settings, accepted tick-stamped actions and a verified replay checkpoint.
+ * @example
+ * ```ts
+ * import { createGame, encodeGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(encodeGame(state).length);
+ * ```
+ */
 export function encodeGame(state: GameState): string {
   if (!Number.isSafeInteger(state.elapsedTicks) || state.elapsedTicks < 0 || state.elapsedTicks > MAX_TICKS || state.recording.length > MAX_ACTIONS) throw new RangeError('Run exceeds replay limits');
   const derived = replay(state.settings, state.recording, state.elapsedTicks);
@@ -71,7 +93,18 @@ export function encodeGame(state: GameState): string {
   return text;
 }
 
-/** Replays bounded canonical input and verifies every saved checkpoint field. */
+/** Replays bounded canonical input and verifies every saved checkpoint field.
+ *
+ * @param text - A saved JSON recording from this entry’s encodeGame; malformed or inconsistent saves throw.
+ * @returns Replays bounded canonical input and verifies every saved checkpoint field.
+ * @example
+ * ```ts
+ * import { createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(decodeGame(encodeGame(state)).phase);
+ * ```
+ */
 export function decodeGame(text: string): GameState {
   if (typeof text !== 'string' || new TextEncoder().encode(text).byteLength > MAX_SAVE_BYTES) throw new RangeError('Save must be text no larger than 2 MiB');
   let value: { format?: number; game?: string; rules?: string; settings?: Settings; actions?: unknown[]; elapsedTicks?: number; checkpoint?: GameState };

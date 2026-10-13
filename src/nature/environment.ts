@@ -3,19 +3,131 @@ import { freezeNatureState } from './state.js';
 import { NatureOptionsError, validateState } from './validation.js';
 import type { NatureEntity, NatureMove, NatureState } from './types.js';
 
+/** The native fault, jumble or combined earthquake mode.
+ *
+ * @example
+ * ```ts
+ * import type { EarthquakeKind } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const value: EarthquakeKind = "fault";
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type EarthquakeKind = 'fault' | 'jumble' | 'combined';
+/** A periodic, one-turn or authored list of environment trigger turns.
+ *
+ * @example
+ * ```ts
+ * import type { EnvironmentSchedule } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const value: EnvironmentSchedule = {kind:"authored",turns:[2,4]};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type EnvironmentSchedule = { readonly kind: 'frequent' } | { readonly kind: 'rare' } | { readonly kind: 'midlevel'; readonly turn: number } | { readonly kind: 'authored'; readonly turns: readonly number[] };
+/** The earthquake mode and optional enabled flag.
+ *
+ * @example
+ * ```ts
+ * import type { EarthquakeOptions } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const value: EarthquakeOptions = {kind:"fault"};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface EarthquakeOptions { readonly kind: EarthquakeKind; readonly enabled?: boolean }
+/** Lightning enablement and explicit columns or a bounded column count.
+ *
+ * @example
+ * ```ts
+ * import type { LightningOptions } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const value: LightningOptions = {columns:[0]};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface LightningOptions { readonly enabled?: boolean; readonly columns?: readonly number[]; readonly columnCount?: 1 | 2 | 3 }
+/** A pure earthquake fault path, removed ids and resulting occupants/passability mask.
+ *
+ * @example
+ * ```ts
+ * import { createNatureState, previewFault } from "@johnmorrisdotca/houseki/nature";
+ * import type { FaultPreview } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: FaultPreview = previewFault(state);
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface FaultPreview { readonly path: readonly number[]; readonly fracturedCells: readonly number[]; readonly removedIds: readonly number[]; readonly cells: readonly (NatureEntity | null)[]; readonly activeCells: readonly boolean[]; readonly randomStateAfter: number }
+/** A pure eligible-patch shuffle and resulting occupants; reason explains when no patch exists.
+ *
+ * @example
+ * ```ts
+ * import { createNatureState, previewJumble } from "@johnmorrisdotca/houseki/nature";
+ * import type { JumblePreview } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: JumblePreview = previewJumble(state);
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface JumblePreview { readonly patchCells: readonly number[]; readonly moves: readonly NatureMove[]; readonly changed: boolean; readonly reason?: 'no-eligible-patch'; readonly cells: readonly (NatureEntity | null)[]; readonly randomStateAfter: number }
 export interface EarthquakePreview { readonly kind: EarthquakeKind; readonly fault?: FaultPreview; readonly jumble?: JumblePreview; readonly cells: readonly (NatureEntity | null)[]; readonly activeCells: readonly boolean[]; readonly randomStateAfter: number }
+/** A pure selected-column removal and resulting occupants/random state.
+ *
+ * @example
+ * ```ts
+ * import { createNatureState, previewLightning } from "@johnmorrisdotca/houseki/nature";
+ * import type { LightningPreview } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: LightningPreview = previewLightning(state,{columns:[0]});
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface LightningPreview { readonly columns: readonly number[]; readonly removedCells: readonly number[]; readonly removedIds: readonly number[]; readonly cells: readonly (NatureEntity | null)[]; readonly randomStateAfter: number }
+/** A native earthquake or lightning preview before it is committed.
+ *
+ * @example
+ * ```ts
+ * import { createNatureState, previewLightning } from "@johnmorrisdotca/houseki/nature";
+ * import type { EnvironmentPreview } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: EnvironmentPreview = previewLightning(state,{columns:[0]});
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type EnvironmentPreview = EarthquakePreview | LightningPreview;
+/** A committed earthquake or lightning event with its native preview fields.
+ *
+ * @example
+ * ```ts
+ * import { applyLightning, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ * import type { EnvironmentEvent } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: EnvironmentEvent = applyLightning(state,{columns:[0]}).events[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type EnvironmentEvent =
   | { readonly type: 'fault-opened'; readonly path: readonly number[]; readonly fracturedCells: readonly number[]; readonly removedIds: readonly number[] }
   | { readonly type: 'jumble-completed'; readonly changed: boolean; readonly reason?: 'no-eligible-patch'; readonly patchCells: readonly number[]; readonly moves: readonly NatureMove[] }
   | { readonly type: 'lightning-struck'; readonly columns: readonly number[]; readonly removedCells: readonly number[]; readonly removedIds: readonly number[] };
+/** The committed environment state, event list and pure preview.
+ *
+ * @example
+ * ```ts
+ * import { applyLightning, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ * import type { EnvironmentTransition } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * const value: EnvironmentTransition = applyLightning(state,{columns:[0]});
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface EnvironmentTransition { readonly state: NatureState; readonly accepted: true; readonly events: readonly EnvironmentEvent[]; readonly preview: EnvironmentPreview }
 
 const at = (x: number, y: number, width: number): number => y * width + x;
@@ -30,7 +142,18 @@ function drawBelow(state: number, bound: number): readonly [number, number] {
   const [next, value] = nextNatureUint32(state);
   return [next, value % bound];
 }
-/** Pure one-based schedule lookup: frequent is every second turn; rare is every eighth turn. */
+/** Pure one-based schedule lookup: frequent is every second turn; rare is every eighth turn.
+ *
+ * @param turn - The committed placement/turn number tested against the environment schedule.
+ * @param schedule - The native schedule with its authored or periodic trigger settings.
+ * @returns Pure one-based schedule lookup: frequent is every second turn; rare is every eighth turn.
+ * @example
+ * ```ts
+ * import { isEnvironmentTurnScheduled } from "@johnmorrisdotca/houseki/nature";
+ *
+ * console.log(isEnvironmentTurnScheduled(2,{kind:"authored",turns:[2,4]}));
+ * ```
+ */
 export function isEnvironmentTurnScheduled(turn: number, schedule: EnvironmentSchedule): boolean {
   if (!Number.isSafeInteger(turn) || turn < 1 || turn > 10_000_000 || !schedule || typeof schedule !== 'object' || Array.isArray(schedule)) throw new NatureOptionsError('invalid-nature-options', 'Schedule turn and policy must be valid');
   if (schedule.kind === 'frequent' || schedule.kind === 'rare') {
@@ -88,7 +211,18 @@ function faultPath(state: NatureState): readonly [readonly number[], number] {
   return [path, randomState];
 }
 
-/** Preview a bounded top-to-bottom fracture. The path keeps at least one column active on each side. */
+/** Preview a bounded top-to-bottom fracture. The path keeps at least one column active on each side.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Preview a bounded top-to-bottom fracture. The path keeps at least one column active on each side.
+ * @example
+ * ```ts
+ * import { createNatureState, previewFault } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(previewFault(state).removedIds.length);
+ * ```
+ */
 export function previewFault(state: NatureState): FaultPreview {
   validateState(state);
   const [path, randomStateAfter] = faultPath(state);
@@ -120,7 +254,18 @@ function candidatePatches(state: NatureState): readonly Patch[] {
   return patches;
 }
 
-/** Preview one seeded, nontrivial stone permutation inside a fully active connected rectangle no larger than 3×3. */
+/** Preview one seeded, nontrivial stone permutation inside a fully active connected rectangle no larger than 3×3.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Preview one seeded, nontrivial stone permutation inside a fully active connected rectangle no larger than 3×3.
+ * @example
+ * ```ts
+ * import { createNatureState, previewJumble } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(previewJumble(state).changed);
+ * ```
+ */
 export function previewJumble(state: NatureState): JumblePreview {
   validateState(state);
   const candidates = candidatePatches(state);
@@ -147,7 +292,19 @@ export function previewJumble(state: NatureState): JumblePreview {
   return deepFreeze({ patchCells: patch.cells, moves, changed: moves.length > 0, cells, randomStateAfter: randomState });
 }
 
-/** Preview an earthquake, with Combined always fracturing before its one jumble attempt. */
+/** Preview an earthquake, with Combined always fracturing before its one jumble attempt.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Preview an earthquake, with Combined always fracturing before its one jumble attempt.
+ * @example
+ * ```ts
+ * import { createNatureState, previewEarthquake } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(previewEarthquake(state,{kind:"fault"}).kind);
+ * ```
+ */
 export function previewEarthquake(state: NatureState, options: EarthquakeOptions): EarthquakePreview {
   validateState(state); validateEarthquakeOptions(options);
   if (options.enabled === false) return deepFreeze({ kind: options.kind, cells: state.cells, activeCells: state.activeCells, randomStateAfter: state.randomState });
@@ -163,7 +320,19 @@ export function previewEarthquake(state: NatureState, options: EarthquakeOptions
   return deepFreeze({ kind: options.kind, ...(fault ? { fault } : {}), ...(jumble ? { jumble } : {}), cells, activeCells, randomStateAfter });
 }
 
-/** Commit one bounded environmental resolution; matching, gravity and score remain the host game's job. */
+/** Commit one bounded environmental resolution; matching, gravity and score remain the host game's job.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Commit one bounded environmental resolution; matching, gravity and score remain the host game's job.
+ * @example
+ * ```ts
+ * import { applyEarthquake, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(applyEarthquake(state,{kind:"fault"}).accepted);
+ * ```
+ */
 export function applyEarthquake(state: NatureState, options: EarthquakeOptions): EnvironmentTransition {
   const preview = previewEarthquake(state, options);
   if (options.enabled === false) return { state, accepted: true, events: [], preview };
@@ -192,7 +361,19 @@ function chooseColumns(state: NatureState, options: LightningOptions): readonly 
   return [pool.slice(0, count).sort((a, b) => a - b), randomState];
 }
 
-/** Preview seeded or explicitly selected columns; a mask gap or obstacle blocks the strike below it. */
+/** Preview seeded or explicitly selected columns; a mask gap or obstacle blocks the strike below it.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Preview seeded or explicitly selected columns; a mask gap or obstacle blocks the strike below it.
+ * @example
+ * ```ts
+ * import { createNatureState, previewLightning } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(previewLightning(state,{columns:[0]}).columns);
+ * ```
+ */
 export function previewLightning(state: NatureState, options: LightningOptions = {}): LightningPreview {
   validateState(state); validateLightningOptions(options, state.width);
   if (options.enabled === false) return deepFreeze({ columns: [], removedCells: [], removedIds: [], cells: state.cells, randomStateAfter: state.randomState });
@@ -209,7 +390,19 @@ export function previewLightning(state: NatureState, options: LightningOptions =
   return deepFreeze({ columns, removedCells, removedIds, cells, randomStateAfter });
 }
 
-/** Commit one lightning strike. It removes exposed stones only and consumes no scores or tools. */
+/** Commit one lightning strike. It removes exposed stones only and consumes no scores or tools.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Commit one lightning strike. It removes exposed stones only and consumes no scores or tools.
+ * @example
+ * ```ts
+ * import { applyLightning, createNatureState } from "@johnmorrisdotca/houseki/nature";
+ *
+ * const state=createNatureState({width:4,height:4,seed:"docs"});
+ * console.log(applyLightning(state,{columns:[0]}).accepted);
+ * ```
+ */
 export function applyLightning(state: NatureState, options: LightningOptions = {}): EnvironmentTransition {
   const preview = previewLightning(state, options);
   if (options.enabled === false) return { state, accepted: true, events: [], preview };

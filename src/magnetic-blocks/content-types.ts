@@ -1,6 +1,28 @@
 import type { Action, Colour, CreateOptions, Floor, GameState, Gem } from './types.js';
 
+/** One authored text in English and Japanese.
+ *
+ * @example
+ * ```ts
+ * import type { LocalizedText } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const value: LocalizedText = {en:"A small puzzle",ja:"小さいパズル"};
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface LocalizedText { readonly en: string; readonly ja: string }
+/** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ * import type { MagneticDifficultyMetrics } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const level=levelManifest[0];
+ * const value: MagneticDifficultyMetrics = level.metrics;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface MagneticDifficultyMetrics {
   readonly legalPlacementChoices: number;
   readonly setupPlacementChoices: number;
@@ -26,6 +48,18 @@ export interface MagneticDifficultyMetrics {
   readonly minimumPlanSearch?: { readonly status: 'exact' | 'unknown'; readonly nodeBudget: number; readonly nodesVisited: number; readonly lowerBound: number; readonly upperBound?: number };
 }
 export type MagneticDifficultyBand = 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert';
+/** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
+ *
+ * @example
+ * ```ts
+ * import { levelManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ * import type { MagneticCampaignLevel } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const level=levelManifest[0];
+ * const value: MagneticCampaignLevel = level;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface MagneticCampaignLevel {
   readonly id: string;
   readonly number: number;
@@ -47,6 +81,17 @@ export interface MagneticCampaignLevel {
   readonly counterfactual?: { readonly kind: 'floor-choice' | 'floor-schedule' | 'floor-switch'; readonly alternative: string; readonly result: 'won' | 'lost' | 'finished' };
   readonly impactEvidence?: { readonly removedSupportCount: number; readonly disabledImpactResult: 'won' };
 }
+/** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
+ *
+ * @example
+ * ```ts
+ * import type { MagneticCampaignManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ * import { campaignManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const value: MagneticCampaignManifest = campaignManifest;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface MagneticCampaignManifest {
   readonly count: number;
   readonly currentCount?: number;
@@ -61,6 +106,17 @@ export interface MagneticCampaignManifest {
   readonly levels: readonly MagneticCampaignLevel[];
   readonly bands?: readonly { readonly id: MagneticDifficultyBand; readonly count: number; readonly first: number; readonly last: number }[];
 }
+/** One bilingual native lesson with its authored setup, teaching steps and winning witness.
+ *
+ * @example
+ * ```ts
+ * import type { MagneticLesson } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ * import { lessonManifest } from "@johnmorrisdotca/houseki/magnetic-blocks";
+ *
+ * const value: MagneticLesson = lessonManifest[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface MagneticLesson {
   readonly id: string;
   readonly title: LocalizedText;

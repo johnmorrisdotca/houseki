@@ -9,6 +9,17 @@ export function freezeNatureState(state: NatureState): NatureState {
   return Object.freeze({ ...state, cells, activeCells, rules });
 }
 
+/** Create a validated seeded native environment grid with fixed masks and mechanic switches.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Create a validated seeded native environment grid with fixed masks and mechanic switches.
+ * @example
+ * ```ts
+ * import { createNatureState } from "@johnmorrisdotca/houseki/nature";
+ *
+ * console.log(createNatureState({width:4,height:4,seed:"docs"}).width);
+ * ```
+ */
 export function createNatureState(options: NatureOptions): NatureState {
   validateNatureOptions(options);
   const cells = options.cells ?? Array(options.width * options.height).fill(null) as (NatureEntity | null)[];

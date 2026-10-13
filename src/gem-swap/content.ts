@@ -1,16 +1,123 @@
 import type { Action, CreateOptions, ReplayOperation } from './types.js';
 
+/** The existing campaign’s human-review-pending status; an engine witness is not human review.
+ *
+ * @example
+ * ```ts
+ * import type { GemSwapReviewStatus } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const value: GemSwapReviewStatus = "human-review-pending";
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type GemSwapReviewStatus = 'human-review-pending';
+/** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
+ *
+ * @example
+ * ```ts
+ * import { GEM_SWAP_CAMPAIGN } from "@johnmorrisdotca/houseki/gem-swap";
+ * import type { GemSwapCampaignLevel } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const level=GEM_SWAP_CAMPAIGN[0];
+ * const value: GemSwapCampaignLevel = level;
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface GemSwapCampaignLevel { readonly id: string; readonly number: number; readonly title: { readonly en: string; readonly ja: string }; readonly options: CreateOptions; readonly width: number; readonly height: number; readonly colourCount: number; readonly seed: number; readonly challenge: NonNullable<CreateOptions['challenge']>; readonly witness: readonly ReplayOperation[]; readonly canonicalKeyHash: string; readonly tags: readonly string[]; readonly rawMetrics: Readonly<Record<string, number>>; readonly difficultyScore: number; readonly difficultyMarks: number; readonly gradingVersion: string; readonly proofStatus: 'engine-witness-verified'; readonly reviewStatus: GemSwapReviewStatus }
+/** One bilingual native lesson instruction and the corresponding action or tick step.
+ *
+ * @example
+ * ```ts
+ * import type { GemSwapLessonStep } from "@johnmorrisdotca/houseki/gem-swap";
+ * import { GEM_SWAP_LESSONS } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const value: GemSwapLessonStep = GEM_SWAP_LESSONS[0].steps[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export type GemSwapLessonStep = { readonly kind: 'action'; readonly id: string; readonly action: Action; readonly accepted: boolean; readonly reason?: string; readonly event?: string; readonly cell?: number; readonly text: { readonly en: string; readonly ja: string } } | { readonly kind: 'ticks'; readonly id: string; readonly count: number; readonly event?: string; readonly outcome?: string; readonly cell?: number; readonly text: { readonly en: string; readonly ja: string } };
+/** One bilingual native lesson with its authored setup, teaching steps and winning witness.
+ *
+ * @example
+ * ```ts
+ * import type { GemSwapLesson } from "@johnmorrisdotca/houseki/gem-swap";
+ * import { GEM_SWAP_LESSONS } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * const value: GemSwapLesson = GEM_SWAP_LESSONS[0];
+ * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
+ * ```
+ */
 export interface GemSwapLesson { readonly id: string; readonly title: { readonly en: string; readonly ja: string }; readonly initial: CreateOptions; readonly steps: readonly GemSwapLessonStep[]; readonly witness: readonly ReplayOperation[]; readonly reviewStatus: GemSwapReviewStatus }
 function freezeContent<T>(value: T): T { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.freeze(value); for (const item of Object.values(value as Record<string, unknown>)) freezeContent(item); } return value; }
+/** The stored Gem Swap campaign generation revision.
+ *
+ * @example
+ * ```ts
+ * import { GENERATION_REVISION } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(GENERATION_REVISION);
+ * ```
+ */
 export const GENERATION_REVISION = "gem-swap-campaign-1.3.0";
+/** The measurement/normalization revision used to grade Gem Swap challenges.
+ *
+ * @example
+ * ```ts
+ * import { GRADING_VERSION } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(GRADING_VERSION);
+ * ```
+ */
 export const GRADING_VERSION = "swap-choice-forgiveness-1";
+/** The fixed number of seeded playout samples used in the stored Gem Swap grading.
+ *
+ * @example
+ * ```ts
+ * import { SAMPLE_BUDGET } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(SAMPLE_BUDGET);
+ * ```
+ */
 export const SAMPLE_BUDGET = 24;
+/** The bounded Gem Swap metric weights used in the recorded grading formula.
+ *
+ * @example
+ * ```ts
+ * import { GRADING_WEIGHTS } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(Object.keys(GRADING_WEIGHTS));
+ * ```
+ */
 export const GRADING_WEIGHTS = freezeContent({"seededPlayoutDifficulty":30,"choiceDifficulty":18,"objectiveCoordination":12,"chainDepth":10,"witnessLength":25,"specialCombination":5});
+/** The stored Gem Swap campaign content fingerprint.
+ *
+ * @example
+ * ```ts
+ * import { CAMPAIGN_CHECKSUM } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(CAMPAIGN_CHECKSUM);
+ * ```
+ */
 export const CAMPAIGN_CHECKSUM = "eb7c54a583db428d596b8fbdab0d63a9ad39ad5b9e39948dc4ccab84ba1196aa";
+/** The number of stored Gem Swap campaign challenges.
+ *
+ * @example
+ * ```ts
+ * import { CAMPAIGN_COUNT } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(CAMPAIGN_COUNT);
+ * ```
+ */
 export const CAMPAIGN_COUNT = 50;
+/** The frozen measured Gem Swap challenges with stable ids, setups, witnesses and review status.
+ *
+ * @example
+ * ```ts
+ * import { GEM_SWAP_CAMPAIGN } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(GEM_SWAP_CAMPAIGN.length);
+ * ```
+ */
 export const GEM_SWAP_CAMPAIGN: readonly GemSwapCampaignLevel[] = freezeContent<GemSwapCampaignLevel[]>([
   {"id":"swap-03d5fd388b09","number":1,"title":{"en":"Clear Horizon","ja":"晴れた地平"},"options":{"mode":"challenge","preset":"compact","seed":11,"challenge":{"moveLimit":1,"goals":[{"kind":"score","target":30}]}},"width":6,"height":6,"colourCount":5,"seed":11,"challenge":{"moveLimit":1,"goals":[{"kind":"score","target":30}]},"witness":[{"kind":"action","action":{"kind":"swap","from":26,"to":27}},{"kind":"ticks","count":3600}],"canonicalKeyHash":"25637ca705ea4e9aef83f2b58b5944c49cb8fa5dee8f3f3a3cc7b00bd45d5a1d","tags":["score"],"rawMetrics":{"legalSwapCount":8,"initiallyProgressingSwaps":8,"initialProgressingShare":1,"seededPlayoutSamples":24,"seededPlayoutSuccessRate":1,"objectiveCount":1,"requiredChainDepth":1,"sealLayers":0,"witnessMoves":1,"planningLength":1,"specialCreations":0,"specialActivations":0,"specialCombinations":0,"difficultyScore":0},"difficultyScore":0,"difficultyMarks":1,"gradingVersion":"swap-choice-forgiveness-1","proofStatus":"engine-witness-verified","reviewStatus":"human-review-pending"},
   {"id":"swap-a0f21f37725a","number":2,"title":{"en":"Quiet Current","ja":"静かな流れ"},"options":{"mode":"challenge","preset":"compact","seed":0,"challenge":{"moveLimit":1,"goals":[{"kind":"score","target":30}]}},"width":6,"height":6,"colourCount":5,"seed":0,"challenge":{"moveLimit":1,"goals":[{"kind":"score","target":30}]},"witness":[{"kind":"action","action":{"kind":"swap","from":22,"to":23}},{"kind":"ticks","count":3600}],"canonicalKeyHash":"18c1e827e012b7e7b86959c46cab081fa0ceec239ddc35d40bc23463c83d17c1","tags":["score"],"rawMetrics":{"legalSwapCount":10,"initiallyProgressingSwaps":10,"initialProgressingShare":1,"seededPlayoutSamples":24,"seededPlayoutSuccessRate":1,"objectiveCount":1,"requiredChainDepth":1,"sealLayers":0,"witnessMoves":1,"planningLength":1,"specialCreations":0,"specialActivations":0,"specialCombinations":0,"difficultyScore":0},"difficultyScore":0,"difficultyMarks":1,"gradingVersion":"swap-choice-forgiveness-1","proofStatus":"engine-witness-verified","reviewStatus":"human-review-pending"},
@@ -63,6 +170,15 @@ export const GEM_SWAP_CAMPAIGN: readonly GemSwapCampaignLevel[] = freezeContent<
   {"id":"swap-454ad7e8d1bd","number":49,"title":{"en":"Final Echo","ja":"最後の反響"},"options":{"mode":"challenge","preset":"compact","seed":57,"challenge":{"moveLimit":6,"goals":[{"kind":"chain","target":6}]}},"width":6,"height":6,"colourCount":5,"seed":57,"challenge":{"moveLimit":6,"goals":[{"kind":"chain","target":6}]},"witness":[{"kind":"action","action":{"kind":"swap","from":20,"to":21}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":16,"to":17}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":27,"to":28}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":22,"to":23}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":18,"to":24}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":20,"to":26}},{"kind":"ticks","count":3600}],"canonicalKeyHash":"72cd52768321ddfa4ac2b40a347fd8597f157dba1c3e961c946e60a8ac2795e9","tags":["chain","multi-move-planning","cascade","special-creation","special-combination"],"rawMetrics":{"legalSwapCount":8,"initiallyProgressingSwaps":8,"initialProgressingShare":1,"seededPlayoutSamples":24,"seededPlayoutSuccessRate":0.041667,"objectiveCount":1,"requiredChainDepth":6,"sealLayers":0,"witnessMoves":6,"planningLength":6,"specialCreations":4,"specialActivations":1,"specialCombinations":1,"difficultyScore":68.75},"difficultyScore":68.75,"difficultyMarks":4,"gradingVersion":"swap-choice-forgiveness-1","proofStatus":"engine-witness-verified","reviewStatus":"human-review-pending"},
   {"id":"swap-4c6462480f21","number":50,"title":{"en":"Final Marks","ja":"最後の印"},"options":{"mode":"challenge","preset":"compact","seed":18,"challenge":{"moveLimit":5,"goals":[{"kind":"seals"}],"seals":[{"cell":26,"layers":1},{"cell":32,"layers":1},{"cell":33,"layers":1}]}},"width":6,"height":6,"colourCount":5,"seed":18,"challenge":{"moveLimit":5,"goals":[{"kind":"seals"}],"seals":[{"cell":26,"layers":1},{"cell":32,"layers":1},{"cell":33,"layers":1}]},"witness":[{"kind":"action","action":{"kind":"swap","from":18,"to":19}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":2,"to":8}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":31,"to":32}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":1,"to":2}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":19,"to":20}},{"kind":"ticks","count":3600}],"canonicalKeyHash":"db177c8ae220211fc4624a140687c5f1dc1f4b128d2c958123de3d564ce98904","tags":["seals","multi-move-planning","cascade","special-creation"],"rawMetrics":{"legalSwapCount":11,"initiallyProgressingSwaps":1,"initialProgressingShare":0.09090909090909091,"seededPlayoutSamples":24,"seededPlayoutSuccessRate":0.041667,"objectiveCount":1,"requiredChainDepth":1,"sealLayers":3,"witnessMoves":5,"planningLength":5,"specialCreations":2,"specialActivations":0,"specialCombinations":0,"difficultyScore":71.11},"difficultyScore":71.11,"difficultyMarks":4,"gradingVersion":"swap-choice-forgiveness-1","proofStatus":"engine-witness-verified","reviewStatus":"human-review-pending"}
 ]);
+/** The frozen bilingual Gem Swap lessons with setup, teaching steps and witnesses.
+ *
+ * @example
+ * ```ts
+ * import { GEM_SWAP_LESSONS } from "@johnmorrisdotca/houseki/gem-swap";
+ *
+ * console.log(GEM_SWAP_LESSONS.length);
+ * ```
+ */
 export const GEM_SWAP_LESSONS: readonly GemSwapLesson[] = freezeContent<GemSwapLesson[]>([
   {"id":"gem-swap-lesson-basics","title":{"en":"Make a match","ja":"マッチを作る"},"initial":{"preset":"compact","seed":8001},"steps":[{"kind":"action","id":"invalid-return","action":{"kind":"swap","from":0,"to":1},"accepted":false,"reason":"swap-makes-no-match","text":{"en":"This pair makes no line of three, so it returns unchanged.","ja":"3つ並ばないため、この交換は元に戻ります。"}},{"kind":"action","id":"first-match","action":{"kind":"swap","from":1,"to":7},"accepted":true,"event":"match-marked","text":{"en":"Swap neighbouring gems to make a line of three.","ja":"隣り合う宝石を交換して、3つ並べましょう。"}},{"kind":"ticks","id":"watch-refill","count":3600,"text":{"en":"Watch the cleared cells refill before the next turn.","ja":"次の手の前に、消えた場所が補充される様子を見ましょう。"}}],"witness":[{"kind":"action","action":{"kind":"swap","from":1,"to":7}},{"kind":"ticks","count":3600}],"reviewStatus":"human-review-pending"},
   {"id":"gem-swap-lesson-beam","title":{"en":"Create and use a beam","ja":"ビームを作って使う"},"initial":{"preset":"compact","seed":1},"steps":[{"kind":"action","id":"plan-beam","action":{"kind":"swap","from":26,"to":32},"accepted":true,"event":"special-planned","text":{"en":"A line of four plans a beam at its marked anchor.","ja":"4つの列がそろうと、印の位置にビームが作られます。"}},{"kind":"ticks","id":"create-beam","count":3600,"event":"special-created","text":{"en":"Let the clear finish; the beam stays on the board.","ja":"消去が終わると、ビームが盤面に残ります。"}},{"kind":"action","id":"activate-beam","action":{"kind":"swap","from":15,"to":21},"accepted":true,"event":"match-marked","text":{"en":"Make a match that reaches the beam to clear its line.","ja":"ビームに届くマッチを作り、その列を消しましょう。"}},{"kind":"ticks","id":"finish-beam","count":3600,"event":"special-activated","text":{"en":"Watch the beam clear its line and the board refill.","ja":"ビームが列を消し、盤面が補充される様子を見ましょう。"}}],"witness":[{"kind":"action","action":{"kind":"swap","from":26,"to":32}},{"kind":"ticks","count":3600},{"kind":"action","action":{"kind":"swap","from":15,"to":21}},{"kind":"ticks","count":3600}],"reviewStatus":"human-review-pending"},

@@ -90,7 +90,17 @@ function baseState(settings: Settings, board: readonly (Stone | null)[], randomS
     selectedTool: null, toolTarget: null, toolPreview: Object.freeze([]),
   };
 }
-/** Creates a seeded full board; an all-singleton draw retries before using a checked adjacent pair. */
+/** Creates a seeded full board; an all-singleton draw retries before using a checked adjacent pair.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a seeded full board; an all-singleton draw retries before using a checked adjacent pair.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * console.log(createGame({seed:"docs"}).phase);
+ * ```
+ */
 export function createGame(options: CreateOptions = {}): GameState {
   const valid = optionsFor(options); // All settings are checked before drawing any random values.
   let randomState = hashSeed(`stone-collapse|${RULES}|${String(valid.seed)}`);
@@ -115,7 +125,18 @@ export function createGame(options: CreateOptions = {}): GameState {
   return { ...state, nextId };
 }
 
-/** Creates a fixed witnessed challenge after validating its board, objective, move budget, and every witness group. */
+/** Creates a fixed witnessed challenge after validating its board, objective, move budget, and every witness group.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a fixed witnessed challenge after validating its board, objective, move budget, and every witness group.
+ * @example
+ * ```ts
+ * import { createChallenge, levelManifest } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const level=levelManifest[0];
+ * console.log(createChallenge({id:level.id,seed:level.seed,width:level.width,height:level.height,colourCount:level.colourCount,initialBoard:level.board,goal:level.goal,moveLimit:level.moveLimit,witness:level.witness}).phase);
+ * ```
+ */
 export function createChallenge(options: ChallengeOptions): GameState {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new StoneCollapseOptionsError('invalid-challenge', 'Challenge options must be an object');
   const allowedKeys = ['id', 'width', 'height', 'colourCount', 'seed', 'mask', 'initialBoard', 'goal', 'moveLimit', 'witness'];
@@ -354,15 +375,63 @@ function applyCore(state: GameState, action: Action): Transition {
   return confirmSelected(state);
 }
 
-/** Applies a selection, confirmation, or cancellation without mutating its input. */
+/** Applies a selection, confirmation, or cancellation without mutating its input.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param action - One native action for this entry point; inspect accepted and reason on the result.
+ * @returns Applies a selection, confirmation, or cancellation without mutating its input.
+ * @example
+ * ```ts
+ * import { applyAction, createGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ * import type { Action } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * const action: Action={kind:"hint"};
+ * console.log(applyAction(state,action).accepted);
+ * ```
+ */
 export function applyAction(state: GameState, action: Action): Transition { return applyCore(state, action); }
 
-/** Selects the next supplied witness group only while the run still matches its path; accepted hints mark the run assisted. */
+/** Selects the next supplied witness group only while the run still matches its path; accepted hints mark the run assisted.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Selects the next supplied witness group only while the run still matches its path; accepted hints mark the run assisted.
+ * @example
+ * ```ts
+ * import { createGame, requestHint } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(requestHint(state).accepted);
+ * ```
+ */
 export function requestHint(state: GameState): Transition { return applyCore(state, { kind: 'hint' }); }
-/** Restores the full pre-move state in Relaxed or Challenge practice and permanently marks the attempt assisted. */
+/** Restores the full pre-move state in Relaxed or Challenge practice and permanently marks the attempt assisted.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Restores the full pre-move state in Relaxed or Challenge practice and permanently marks the attempt assisted.
+ * @example
+ * ```ts
+ * import { createGame, undo } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(undo(state).accepted);
+ * ```
+ */
 export function undo(state: GameState): Transition { return undoCore(state); }
 
-/** Advances the observable 7/6/9 tick removal and gravity stages, bounded to 3600 ticks. */
+/** Advances the observable 7/6/9 tick removal and gravity stages, bounded to 3600 ticks.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param ticks - The nonnegative number of fixed 60 Hz logical ticks to advance.
+ * @returns Advances the observable 7/6/9 tick removal and gravity stages, bounded to 3600 ticks.
+ * @example
+ * ```ts
+ * import { advanceTicks, createGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTicks(state,1).state.phase);
+ * ```
+ */
 export function advanceTicks(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   if (state.elapsedTicks + ticks > MAX_RECORDED_TICKS) throw new RangeError('recording exceeds 10,000,000 logical ticks');
@@ -397,7 +466,18 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
   return { state: current, events: Object.freeze(events), accepted: true };
 }
 
-/** Lists every selection and confirmation currently accepted by the rules. */
+/** Lists every selection and confirmation currently accepted by the rules.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Lists every selection and confirmation currently accepted by the rules.
+ * @example
+ * ```ts
+ * import { createGame, legalActions } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(legalActions(state).length);
+ * ```
+ */
 export function legalActions(state: GameState): readonly Action[] {
   if (state.phase === 'won' || state.phase === 'finished' || state.phase === 'lost') return canUndo(state) ? [{ kind: 'undo' }] : [];
   if (state.phase !== 'ready') return [];
@@ -423,7 +503,18 @@ export function legalActions(state: GameState): readonly Action[] {
   return actions;
 }
 
-/** Returns the stable public game status and the remaining-stone count. */
+/** Returns the stable public game status and the remaining-stone count.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns the stable public game status and the remaining-stone count.
+ * @example
+ * ```ts
+ * import { createGame, statusOf } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(statusOf(state).phase);
+ * ```
+ */
 export function statusOf(state: GameState): GameStatus {
   return { mode: state.settings.mode, phase: state.phase, score: state.score, moves: state.moves, removed: state.removed, remaining: state.board.filter(Boolean).length, previewScore: state.previewScore, usedFallback: state.usedFallback, assisted: state.assisted, inventory: state.inventory, toolProgress: state.toolProgress, toolAwardCursor: state.toolAwardCursor, selectedTool: state.selectedTool, toolTarget: state.toolTarget, toolPreview: state.toolPreview, ...(state.settings.goal ? { goal: state.settings.goal } : {}), ...(state.reason ? { reason: state.reason } : {}) };
 }

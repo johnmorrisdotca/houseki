@@ -246,7 +246,21 @@ function applyCore(state: GameState, action: Action): Transition {
     }
   }
 }
-/** Applies one immutable accepted action and records its logical-tick position. */
+/** Applies one immutable accepted action and records its logical-tick position.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param action - One native action for this entry point; inspect accepted and reason on the result.
+ * @returns Applies one immutable accepted action and records its logical-tick position.
+ * @example
+ * ```ts
+ * import { applyAction, createGame } from "@johnmorrisdotca/houseki/colour-chains";
+ * import type { Action } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * const action: Action={kind:"left"};
+ * console.log(applyAction(state,action).accepted);
+ * ```
+ */
 export function applyAction(state: GameState, action: Action): Transition {
   const result = applyCore(state, action); if (!result.accepted) return result;
   const previous = state.recording.at(-1); const ordinal = previous?.tick === state.elapsedTicks ? previous.ordinal + 1 : 0;
@@ -285,7 +299,19 @@ function advanceResolution(state: GameState): Transition {
 function lockGrounded(state: GameState): Transition {
   return lock(state, rigidLanding(state, state.active!));
 }
-/** Advances deterministic 60 Hz simulation and resolution; Relaxed and Challenges do not force a falling clock. */
+/** Advances deterministic 60 Hz simulation and resolution; Relaxed and Challenges do not force a falling clock.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @param ticks - The nonnegative number of fixed 60 Hz logical ticks to advance.
+ * @returns Advances deterministic 60 Hz simulation and resolution; Relaxed and Challenges do not force a falling clock.
+ * @example
+ * ```ts
+ * import { advanceTicks, createGame } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(advanceTicks(state,1).state.phase);
+ * ```
+ */
 export function advanceTicks(state: GameState, ticks: number): Transition {
   if (!Number.isInteger(ticks) || ticks < 0 || ticks > 3600) throw new RangeError('ticks must be an integer from 0 to 3600');
   let current = state; const events: GameEvent[] = [];
@@ -311,7 +337,18 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
   }
   return { state: current, events, accepted: true };
 }
-/** Lists only actions accepted by the current game state. */
+/** Lists only actions accepted by the current game state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Lists only actions accepted by the current game state.
+ * @example
+ * ```ts
+ * import { createGame, legalActions } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(legalActions(state).length);
+ * ```
+ */
 export function legalActions(state: GameState): readonly Action[] {
   if (state.phase === 'paused') return [{ kind: 'resume' }];
   if (['clear-mark', 'clear-remove', 'gravity'].includes(state.phase)) return [{ kind: 'pause' }];
@@ -326,7 +363,18 @@ export function legalActions(state: GameState): readonly Action[] {
   if (state.settings.witness?.[state.completedPairs] && state.witnessIndex === state.completedPairs) actions.push({ kind: 'hint' });
   actions.push({ kind: 'pause' }); return actions;
 }
-/** Returns the exact independent landing cells for the current rigid pair without consuming random values. */
+/** Returns the exact independent landing cells for the current rigid pair without consuming random values.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns the exact independent landing cells for the current rigid pair without consuming random values. Returns null when there is no active piece or applicable preview.
+ * @example
+ * ```ts
+ * import { createGame, landingCells } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(landingCells(state));
+ * ```
+ */
 export function landingCells(state: GameState): Landing | null {
   if (!state.active) return null;
   const pair = rigidLanding(state, state.active); const board = [...state.board];
@@ -341,6 +389,16 @@ export function landingCells(state: GameState): Landing | null {
  * gap then fall, so `settledCells` is where each stone of the pair comes to rest in the board the hard drop commits,
  * before any clear: draw a ghost from it. Both carry the pair's stable stone ids, and both are checked against
  * `applyAction` with a `hard-drop` over many played boards.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns the Shizen hard-drop landing and one-step rebound preview without changing state. Returns null when there is no active piece or applicable preview.
+ * @example
+ * ```ts
+ * import { createGame, powerDropPreview } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(powerDropPreview(state));
+ * ```
  */
 export function powerDropPreview(state: GameState): ChainsPowerDropPreview | null {
   if (!state.settings.nature || state.settings.mode === 'relaxed' || !state.active) return null;
@@ -353,7 +411,18 @@ export function powerDropPreview(state: GameState): ChainsPowerDropPreview | nul
     : preview.finalCells;
   return Object.freeze({ ...preview, settledCells: Object.freeze(settledCells) });
 }
-/** Returns score, mode, chain and completion fields derived from state. */
+/** Returns score, mode, chain and completion fields derived from state.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Returns score, mode, chain and completion fields derived from state.
+ * @example
+ * ```ts
+ * import { createGame, statusOf } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(statusOf(state).phase);
+ * ```
+ */
 export function statusOf(state: GameState): GameStatus { return { mode: state.settings.mode, phase: state.phase, score: state.score, maxChain: state.maxChain, allClears: state.allClears, completedPairs: state.completedPairs, assisted: state.assisted, ...(state.reason ? { reason: state.reason } : {}) }; }
 /** Creates a base challenge state with a previously validated visible board and pair queue. @internal */
 export function initialChallengeState(settings: Settings, visibleBoard: readonly (Gem | null)[], queue: readonly (readonly [Colour, Colour])[]): GameState {
@@ -365,7 +434,17 @@ export function initialChallengeState(settings: Settings, visibleBoard: readonly
   const nextMagnetic = settings.nature ? queue.slice(1, 4).map((_, index) => settings.magneticQueue?.[index + 1] ?? [false, false] as const) : undefined;
   return { ...base, active, ...(nextMagnetic ? { nextMagnetic: Object.freeze(nextMagnetic) } : {}), nextId: maxId + 3 };
 }
-/** Creates a deterministic seeded game with one active pair and three previews. */
+/** Creates a deterministic seeded game with one active pair and three previews.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Creates a deterministic seeded game with one active pair and three previews.
+ * @example
+ * ```ts
+ * import { createGame } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * console.log(createGame({seed:"docs"}).phase);
+ * ```
+ */
 export function createGame(options: CreateOptions = {}): GameState {
   const valid = normalizeOptions(options); let state: GameState = { game: 'colour-chains', rules: RULES, settings: valid, board: Array(valid.width * (valid.height + HIDDEN)).fill(null), phase: 'falling', active: null, next: [], bag: [], randomState: seedState(`colour-chains|${RULES}|${valid.seed}`), nextId: 1, score: 0, maxChain: 0, allClears: 0, completedPairs: 0, resolutionTick: 0, waves: [], clearCells: [], gravityBoard: null, resolutionHadClear: false, elapsedTicks: 0, assisted: false, witnessIndex: -1, recording: [], ...(valid.weather ? { weatherResolvedPairs: 0 } : {}) };
   const first = drawPair(state); state = { ...state, bag: first[1], randomState: first[2] }; const active = makePair(state, first[0], valid.nature ? magneticFlags(valid.seed, 0, first[0]) : undefined); state = { ...state, active, nextId: 3 };

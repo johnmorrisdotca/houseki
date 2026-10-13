@@ -21,7 +21,18 @@ function groupAt(board: readonly (Stone | null)[], settings: GameState['settings
   while (pending.length) for (const next of neighbors(pending.pop()!)) if (!found.has(next) && board[next]?.colour === stone.colour) { found.add(next); pending.push(next); }
   return [...found].sort((a, b) => a - b);
 }
-/** Starts a fresh attempt from the identical seeded board or preserved challenge definition. */
+/** Starts a fresh attempt from the identical seeded board or preserved challenge definition.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Starts a fresh attempt from the identical seeded board or preserved challenge definition.
+ * @example
+ * ```ts
+ * import { createGame, restartGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(restartGame(state).phase);
+ * ```
+ */
 export function restartGame(state: GameState): GameState {
   if (state.settings.mode === 'challenge') return createChallenge(state.challenge!);
   if (state.settings.mode === 'daily') return createGame({ mode: 'daily', dailyDate: state.settings.dailyDate });
@@ -30,7 +41,18 @@ export function restartGame(state: GameState): GameState {
   return createGame({ mode, colourCount: settings.colourCount, seed: settings.seed, tools: settings.tools, ...(settings.shape ? { shape: settings.shape } : { width: settings.width, height: settings.height, ...(settings.mask.every(Boolean) ? {} : { mask: settings.mask }) }) });
 }
 
-/** Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint. */
+/** Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Encodes the canonical initial configuration, accepted replay actions, and a derived checkpoint.
+ * @example
+ * ```ts
+ * import { createGame, encodeGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(encodeGame(state).length);
+ * ```
+ */
 export function encodeGame(state: GameState): string {
   // Undo frames are derived by replaying committed actions; storing their full board snapshots scales poorly on deep boards.
   const { history: _history, ...checkpoint } = state;
@@ -73,7 +95,18 @@ function stateFromInitial(settings: Settings, challenge: ChallengeDefinition | n
   return state;
 }
 
-/** Reconstructs and validates a bounded replay before accepting its checkpoint. */
+/** Reconstructs and validates a bounded replay before accepting its checkpoint.
+ *
+ * @param text - A saved JSON recording from this entry’s encodeGame; malformed or inconsistent saves throw.
+ * @returns Reconstructs and validates a bounded replay before accepting its checkpoint.
+ * @example
+ * ```ts
+ * import { createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/stone-collapse";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(decodeGame(encodeGame(state)).phase);
+ * ```
+ */
 export function decodeGame(text: string): GameState {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > 2 * 1024 * 1024) throw new RangeError('Save must be text no larger than 2 MiB');
   let value: { format?: number; game?: string; rules?: string; settings?: Settings; challenge?: ChallengeDefinition | null; actions?: unknown[]; checkpoint?: GameState };

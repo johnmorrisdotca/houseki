@@ -24,16 +24,49 @@ function createFromSettings(settings: Settings): GameState {
   if (stable(state.settings) !== stable(settings)) throw new TypeError('Save settings are not canonical');
   return state;
 }
-/** Restarts the same seed/date or original witnessed challenge board and queue. */
+/** Restarts the same seed/date or original witnessed challenge board and queue.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Restarts the same seed/date or original witnessed challenge board and queue.
+ * @example
+ * ```ts
+ * import { createGame, restartGame } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(restartGame(state).phase);
+ * ```
+ */
 export function restartGame(state: GameState): GameState { return createFromSettings(state.settings); }
-/** Encodes canonical initial settings, accepted ordinal actions and a derived checkpoint. */
+/** Encodes canonical initial settings, accepted ordinal actions and a derived checkpoint.
+ *
+ * @param state - The immutable native state to read or transition; the input is retained.
+ * @returns Encodes canonical initial settings, accepted ordinal actions and a derived checkpoint.
+ * @example
+ * ```ts
+ * import { createGame, encodeGame } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(encodeGame(state).length);
+ * ```
+ */
 export function encodeGame(state: GameState): string {
   if (!Number.isSafeInteger(state.elapsedTicks) || state.elapsedTicks < 0 || state.elapsedTicks > MAX_TICKS || state.recording.length > MAX_ACTIONS) throw new RangeError('Run exceeds replay limits');
   const text = JSON.stringify({ format: 1, game: state.game, rules: state.rules, settings: state.settings, elapsedTicks: state.elapsedTicks, actions: state.recording, checkpoint: state });
   if (new TextEncoder().encode(text).byteLength > MAX_SAVE_BYTES) throw new RangeError('Save exceeds 2 MiB');
   return text;
 }
-/** Reconstructs a bounded action replay and rejects any checkpoint that differs from replay. */
+/** Reconstructs a bounded action replay and rejects any checkpoint that differs from replay.
+ *
+ * @param text - A saved JSON recording from this entry’s encodeGame; malformed or inconsistent saves throw.
+ * @returns Reconstructs a bounded action replay and rejects any checkpoint that differs from replay.
+ * @example
+ * ```ts
+ * import { createGame, decodeGame, encodeGame } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const state=createGame({seed:"docs"});
+ * console.log(decodeGame(encodeGame(state)).phase);
+ * ```
+ */
 export function decodeGame(text: string): GameState {
   if (typeof text !== 'string' || new TextEncoder().encode(text).byteLength > MAX_SAVE_BYTES) throw new RangeError('Save must be text no larger than 2 MiB');
   let value: { format?: number; game?: string; rules?: string; settings?: Settings; elapsedTicks?: number; actions?: unknown[]; checkpoint?: GameState };

@@ -40,7 +40,18 @@ function solveWitness(start: GameState, witness: readonly WitnessStep[]): GameSt
   if (state.phase !== 'won') throw new StoneChainsOptionsError('witness-does-not-win', 'Witness does not complete the challenge goal within its finite queue');
   return state;
 }
-/** Validates and creates a finite witnessed challenge. Hints use only the supplied verified pair placements. */
+/** Validates and creates a finite witnessed challenge. Hints use only the supplied verified pair placements.
+ *
+ * @param options - Validated native creation, authored challenge, or environment options described by this signature.
+ * @returns Validates and creates a finite witnessed challenge. Hints use only the supplied verified pair placements.
+ * @example
+ * ```ts
+ * import { createChallenge, levelManifest } from "@johnmorrisdotca/houseki/colour-chains";
+ *
+ * const level=levelManifest[0];
+ * console.log(createChallenge({id:level.id,seed:level.seed,width:level.width,height:level.height,colourCount:level.colourCount,board:level.board,queue:level.queue,goal:level.goal,witness:level.witness}).phase);
+ * ```
+ */
 export function createChallenge(options: ChallengeOptions): GameState {
   if (!options || typeof options !== 'object' || Array.isArray(options)) throw new StoneChainsOptionsError('invalid-challenge', 'Challenge options must be an object');
   const allowed = ['id', 'width', 'height', 'colourCount', 'seed', 'board', 'queue', 'magneticQueue', 'nature', 'weather', 'goal', 'witness'];
