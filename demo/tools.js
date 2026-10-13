@@ -132,7 +132,7 @@ function cellClick(cell) {
 }
 function render() {
  const previous=positions($('#grid'));
- const t=text[lang];document.documentElement.lang=lang;
+ const t=text[lang];document.documentElement.lang=lang;refreshAppearanceLanguage(lang);
  document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=t[e.dataset.i];});
  $('#title').textContent=state.game==='gem-swap'?'Gem Swap':'Stone Collapse';$('#score').textContent=state.score;$('#moves').textContent=state.moves;
  $('#instructions').textContent=state.game==='gem-swap'?t.swap:t.collapse;

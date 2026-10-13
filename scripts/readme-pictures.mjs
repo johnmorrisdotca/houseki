@@ -9,7 +9,8 @@ const campaign = (prefix, number) => async page => {
   await page.locator('#new').click();
 };
 await takePictures({ shots: [
-  { subject: 'hero', views: ['desk', 'phone'], ready: '.game-screen .gem:not(.ghost)' },
+  { subject: 'hero', views: ['desk'], url: '/tools.html?lang=en', ready: '.game-screen .gem:not(.ghost)' },
+  { subject: 'hero', views: ['phone'], url: '/tools.html?lang=ja', target: '.game-screen', ready: '.game-screen .gem:not(.ghost)' },
   gameShot('falling-triplets', '/index.html'),
   gameShot('colour-chains', '/chains.html'),
   gameShot('stone-collapse', '/tools.html', async page => { await page.locator('#game').selectOption('stone-collapse'); await page.locator('#new').click(); }),

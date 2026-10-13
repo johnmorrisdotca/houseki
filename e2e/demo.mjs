@@ -45,6 +45,6 @@ export async function start(page) {
 export async function open(page, file = "index.html") {
   const errors = await start(page);
   await page.goto(`${ORIGIN}/${file}`);
-  await page.waitForSelector("header h1");
+  await page.waitForSelector(file === "api.html" ? "main h1" : "header h1");
   return errors;
 }

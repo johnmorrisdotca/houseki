@@ -3,10 +3,10 @@ import { expect, test } from "@playwright/test";
 import { ORIGIN, open, start } from "./demo.mjs";
 
 const PAGES = [
-  { file: "index.html", title: "Houseki · gem and stone puzzle games", current: "Falling Triplets", play: "#well" },
-  { file: "chains.html", title: "Houseki · Colour Chains", current: "Colour Chains", play: "#well" },
-  { file: "tools.html", title: "Houseki · Gem Swap and Stone Collapse", current: "Gem Swap & Stone Collapse", play: "#grid" },
-  { file: "blocks.html", title: "Houseki · Magnetic Blocks", current: "Magnetic Blocks", play: "#well" },
+  { file: "index.html", title: "Houseki 宝石 — Match-3 gem puzzles", current: "Falling Triplets", play: "#well" },
+  { file: "chains.html", title: "Houseki 宝石 — Match-3 gem puzzles · Colour Chains", current: "Colour Chains", play: "#well" },
+  { file: "tools.html", title: "Houseki 宝石 — Match-3 gem puzzles · Gem Swap and Stone Collapse", current: "Gem Swap & Stone Collapse", play: "#grid" },
+  { file: "blocks.html", title: "Houseki 宝石 — Match-3 gem puzzles · Magnetic Blocks", current: "Magnetic Blocks", play: "#well" },
 ];
 
 for (const { file, title, current, play } of PAGES) {
@@ -88,6 +88,8 @@ test("the API reference lists every entry point, in the family's header and foot
     await expect(page.locator("main").getByText(`@johnmorrisdotca/houseki/${entry}`).first()).toBeVisible();
   }
   expect(await page.locator("article").count()).toBeGreaterThan(100);
+  await page.locator("#falling-triplets-createGame h3 a").click();
+  await expect(page.locator("main pre").first()).toContainText("@johnmorrisdotca/houseki/falling-triplets");
   await expect(page.locator('footer .family a[aria-current="page"]')).toHaveText("Houseki");
   expect(errors).toEqual([]);
 });

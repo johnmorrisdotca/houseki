@@ -1,4 +1,4 @@
-<h1 align="center">Houseki <sub>宝石</sub></h1>
+<h1 align="center">Houseki <sub>宝石</sub> — Match-3 gem puzzles</h1>
 
 <p align="center"><strong>Five original gem and stone puzzle games for JavaScript and TypeScript.</strong><br>
 Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable, seeded rules engine that runs anywhere, with graded challenges and lessons, saves that replay to the same board, and a keyboard, keypad and touch player in the demo. Magnetic Blocks adds bonded squares, a magnetic floor and its own campaign. Shizen and Arashi each add a separate Colour Chains campaign. In English and Japanese. No dependencies.</p>
@@ -9,6 +9,8 @@ Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable,
   <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-2f5d4a">
+  <a href="https://johnmorrisdotca.github.io/houseki/docs/api/main/index.html"><img alt="179.1 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-179.1%20kB-2f5d4a"></a>
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/houseki#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
 <table align="center">
@@ -16,7 +18,7 @@ Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable,
 <td align="center" valign="top">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-desk-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page header with its language chooser, the API reference link, five cloth patches and the Help switch, the page chooser (Falling Triplets, Colour Chains, Gem Swap and Stone Collapse chosen, Magnetic Blocks), the settings column, and Gem Swap on green felt: an eight by eight board of red, blue, green, gold and purple gems with a permanent symbol on each, and the tool tray beside it with Bomb, Row clear and Colour clear" width="600">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page header with its language chooser, the Docs and API reference links, five cloth patches and the Help switch, the page chooser (Falling Triplets, Colour Chains, Gem Swap and Stone Collapse chosen, Magnetic Blocks), the settings column, and Gem Swap on green felt: an eight by eight board of red, blue, green, gold and purple gems with a permanent symbol on each, and the tool tray beside it with Bomb, Row clear and Colour clear" width="600">
 </picture>
 <br><em>The demo on a desk: Gem Swap with its tool tray.</em>
 </td>
@@ -30,6 +32,8 @@ Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable,
 </tr>
 </table>
 
+
+<p align="center"><a href="https://johnmorrisdotca.github.io/houseki/docs/">Documentation</a> · <a href="https://johnmorrisdotca.github.io/houseki/docs/guides/getting-started.html">Getting started</a> · <a href="https://johnmorrisdotca.github.io/houseki/api.html">API reference</a></p>
 
 Houseki is a set of match-style puzzle games made to be dropped into a page or a server. Every game is a set of plain functions on plain data: a state in, a new state out, nothing read from the page, the clock or the network. The demo's players draw those states, and a person can play them with the keyboard, a keypad or a finger.
 
@@ -172,6 +176,17 @@ Each picture is the real game, drawn by the demo's player from the package's eng
 </table>
 
 ## Use it in your project
+
+### Install under another name
+
+```sh
+npm install match-3@npm:@johnmorrisdotca/houseki
+```
+
+```ts no-check
+import { fallingTriplets } from "match-3";
+console.log(fallingTriplets.createGame({seed:"docs"}).phase);
+```
 
 ### Install
 
@@ -550,6 +565,8 @@ setInterval(() => {                                  // the page owns the clock;
 
 ## API
 
+The [documentation](https://johnmorrisdotca.github.io/houseki/docs/) has paired guides, local search and checked examples. The [API index](https://johnmorrisdotca.github.io/houseki/api.html) retains existing export anchors.
+
 Every export of every entry point is in the [API reference](https://johnmorrisdotca.github.io/houseki/api.html), made from the source when the demo is built, with each signature and doc comment. A test fails when a public export has no doc comment.
 
 ### Entry points
@@ -617,77 +634,7 @@ Physical-device feel testing, a fluent Japanese review and human difficulty revi
 
 ## Architecture
 
-```text
-src/
-├── colour-chains/
-│   ├── challenge.ts
-│   ├── content-data.ts
-│   ├── content-types.ts
-│   ├── content.ts
-│   ├── engine.ts
-│   ├── input.ts
-│   ├── match.ts
-│   ├── persistence.ts
-│   ├── random.ts
-│   ├── types.ts
-│   └── validation.ts
-├── colour-chains.ts
-├── falling-triplets/
-│   ├── content-data.ts
-│   ├── content-types.ts
-│   ├── content.ts
-│   ├── engine.ts
-│   ├── input.ts
-│   ├── match.ts
-│   ├── random.ts
-│   └── types.ts
-├── falling-triplets.ts
-├── gem-swap/
-│   ├── black-hole.ts
-│   ├── board.ts
-│   ├── content.ts
-│   ├── engine.ts
-│   ├── persistence.ts
-│   ├── practice.ts
-│   ├── random.ts
-│   ├── specials.ts
-│   ├── tools.ts
-│   └── types.ts
-├── gem-swap.ts
-├── index.ts
-├── magnetic-blocks/
-│   ├── content-data.ts
-│   ├── content-types.ts
-│   ├── content.ts
-│   ├── engine.ts
-│   ├── persistence.ts
-│   ├── physics.ts
-│   ├── random.ts
-│   ├── types.ts
-│   └── validation.ts
-├── magnetic-blocks.ts
-├── nature/
-│   ├── attraction.ts
-│   ├── environment.ts
-│   ├── marking.ts
-│   ├── random.ts
-│   ├── rebound.ts
-│   ├── state.ts
-│   ├── types.ts
-│   └── validation.ts
-├── nature.ts
-├── stone-collapse/
-│   ├── content-data.ts
-│   ├── content-types.ts
-│   ├── content.ts
-│   ├── engine.ts
-│   ├── persistence.ts
-│   ├── types.ts
-│   └── validation.ts
-└── stone-collapse.ts
-```
-
-The [design pack](docs/design/README.md) specifies the rules, controls, materials, accessibility, level generation, grading, persistence and acceptance checks of every game; [level generation](docs/design/LEVEL-GENERATION.md) follows a deliberate complete count: generate and prove original boards, remove duplicates, grade the decisions a player faces, then sort and number from easy to hard.
+The [architecture guide](docs/guides/architecture.md) preserves the complete source tree and design explanation. Each native engine keeps its own types, immutable transitions, content and replay boundary.
 
 ## The name
 
@@ -767,7 +714,10 @@ pnpm install
 pnpm check              # lint, types and tests: every game's rules, every campaign's recorded wins
 pnpm test:package       # pack it as npm does, install it in an empty project, import every entry
 pnpm test:demo          # build the demo and play it in a real browser, at a phone's width and a desk's
-pnpm site               # build the demo and the API reference into site/
+pnpm site               # build the native demo into site/
+pnpm docs:site          # add guides, API pages, search and llms files
+pnpm docs:check         # check public documentation and run its examples
+pnpm size --write       # refresh the measured bundle size and README badge
 pnpm test:readme        # run every example in this README against the built package
 pnpm screenshots:readme # take the README's pictures from the built demo, in light and dark
 ```

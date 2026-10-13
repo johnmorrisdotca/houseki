@@ -3,6 +3,8 @@
 All notable changes to this package are written here, newest first, in the form of [Keep a Changelog](https://keepachangelog.com), and this package follows [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
 ### Added
 
 - Share a package-independent embed builder for option controls, preview adapters, code tabs and shareable links.

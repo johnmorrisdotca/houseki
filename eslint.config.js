@@ -11,7 +11,7 @@ const browser = {
 
 export default tseslint.config(
   { ignores: ["dist/", "site/", "node_modules/", "test-results/", "playwright-report/"] },
-  { ignores: [".readme-examples/"] },
+  { ignores: [".readme-examples/", ".docs-examples/"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   // A name that starts with an underscore says it is left out on purpose: a rest sibling dropped from a copy, a parameter a signature must keep.

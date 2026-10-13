@@ -3,3 +3,6 @@
 :root[data-pieces="flat"] .gem{background:var(--gem-solid);border-radius:22%;box-shadow:none}
 :root[data-pieces="matte"] .gem.magnetic,:root[data-pieces="flat"] .gem.magnetic{outline:2px solid #b9c2c9;outline-offset:-2px}
 .cloth{flex-shrink:0}nav .lang{flex-shrink:0}
+
+header nav a[data-say="pageDocs"] { inline-size: 8rem; justify-content: center; flex: none; }
+header nav a[data-say="pageApi"] { inline-size: 9.5rem; justify-content: center; flex: none; }

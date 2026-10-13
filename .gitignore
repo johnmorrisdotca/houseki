@@ -8,3 +8,4 @@ playwright-report/
 
 test-output/
 .readme-examples/
+.docs-examples/

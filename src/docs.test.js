@@ -126,7 +126,7 @@ describe("the demo", () => {
   it("has each page's markup, its script and its title and description in the family's form", () => {
     for (const [key, page] of Object.entries(PAGES)) {
       expect(existsSync(`demo/${page.file}`), key).toBe(true);
-      expect(page.title, key).toMatch(/^Houseki · \S/);
+      expect(page.title, key).toMatch(/^Houseki 宝石 — Match-3 gem puzzles/);
       expect(page.description.length, key).toBeGreaterThan(80);
       const html = readFileSync(`demo/${page.file}`, "utf8");
       for (const marker of ["family:head", "family:header", "family:pages", "family:unreviewed", "family:footer", "family:scripts"]) expect(html, `${key} ${marker}`).toContain(`<!--${marker}`);

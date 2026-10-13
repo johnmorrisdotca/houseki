@@ -27,7 +27,7 @@ function render(key) {
   const html = readFileSync(`demo/${page.file}`, "utf8");
   return withAppearance(html
     .replace("<!--family:head-->", `${familyHead({ id, title: page.title, description: page.description })}\n  <link rel="icon" href="${ICON}">`)
-    .replace("<!--family:header-->", `${familyHeader({ id, links: [{ href: "api.html", say: "pageApi" }] })}\n  <p class="fam-fine" data-say="status"></p>`)
+    .replace("<!--family:header-->", `${familyHeader({ id, links: [{ href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }] })}\n  <p class="fam-fine" data-say="status"></p>`)
     .replace("<!--family:pages-->", pages(key))
     .replace("<!--family:unreviewed-->", familyUnreviewed({ id }))
     .replace("<!--family:footer-->", familyFooter({ id }))
