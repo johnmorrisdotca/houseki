@@ -86,11 +86,11 @@ describe("the README's promises", () => {
 
   it("lists every package of the family, with its kana, as the demo's footer does", () => {
     const template = readFileSync("scripts/family-template.mjs", "utf8");
-    const family = [...template.matchAll(/\{ id: "([\w-]+)", name: "(\w+)", kana: "([^"]+)" \}/g)].map((match) => ({ id: match[1], name: match[2], kana: match[3] }));
-    expect(family.length).toBe(24);
+    const family = [...template.matchAll(/\{ id: "([\w-]+)", name: "([\w ]+)", kana: "([^"]+)" \}/g)].map((match) => ({ id: match[1], name: match[2], kana: match[3] }));
+    expect(family.length).toBe(26);
     const block = readme.slice(readme.indexOf("### The family"), readme.indexOf("\n## ", readme.indexOf("### The family")));
     for (const { id, name, kana } of family) expect(block, id).toContain(`- [${name}](https://github.com/johnmorrisdotca/${id}) (${kana}`);
-    expect(block).toContain("one of twenty-four packages");
+    expect(block).toContain("one of twenty-six packages");
     expect([...block.matchAll(/^- \[/gm)]).toHaveLength(family.length);
   });
 
