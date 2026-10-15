@@ -2,10 +2,10 @@
 title: チャレンジとレッスンを開く
 section: how-to
 order: 6
-description: 固定の id、解答の手順、確認の状態を問題と一緒に保ちます。
+description: 固定のid、解答の手順、確認の状態を問題と一緒に保ちます。
 ---
 
-## 固定の id で探す
+## 固定のidで探す
 
 ```ts
 import { levelManifest,getLevel,getTutorial,tutorialManifest,createLevel } from "@johnmorrisdotca/houseki/falling-triplets";
@@ -13,7 +13,7 @@ const level=levelManifest[0];
 console.log(getLevel(level.id)?.number,getTutorial(tutorialManifest[0].id)?.title.en,createLevel(level.id).phase);
 ```
 
-配列は0から、表示の番号は1からです。今後並び順が変わることがあるため、表示番号より固定の id を保存します。`getLevel`、`getTutorial`、`getLesson` は見つからないと undefined です。作成の関数では、見つからない問題を拒否します。
+配列は0から、表示の番号は1からです。今後並び順が変わることがあるため、表示番号より固定のidを保存します。`getLevel`、`getTutorial`、`getLesson`は見つからないとundefinedです。作成の関数では、見つからない問題を拒否します。
 
 ## 解答の確認と人の確認を区別する
 

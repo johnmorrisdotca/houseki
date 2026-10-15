@@ -4,19 +4,21 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
-- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+## [0.4.2] - 2026-10-14
 
-- Keep complete resource catalogues on the documentation entry index and the active resource beside core navigation; render valid default imports in HTML and Markdown.
+Nothing that was exported has changed. The package has an English and Japanese documentation site with a checked example for every export.
 
-- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
 ### Added
 
-- Share a package-independent embed builder for option controls, preview adapters, code tabs and shareable links.
+- Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
 
 ### Changed
 
+- The API link in the header reads "API" in English, so that the header takes the same number of rows in English and in Japanese on a phone, as the demo's test of a language change asks.
+- Synchronize documentation tooling for repository layouts, generated type references, Node entry points and repository-specific README links.
+- Keep complete resource catalogues on the documentation entry index and the active resource beside core navigation; render valid default imports in HTML and Markdown.
+- The demo's smoke test counts thirty-three links in the family footer, after the sports packages joined the list, and the family test counts thirty-two packages.
 - Group the package family by kind, alphabetize each group, and include the geography packages and REST in Pieces in the shared footer and README.
-
 - Update the shared family description for addresses in all seven supported countries, including France and Germany.
 
 ## [0.4.1] - 2026-10-07
@@ -119,7 +121,8 @@ Nothing that was exported has changed. The README is the family's one layout, in
 - An experimental Magnetic Blocks engine with bonded squares, magnetic floor schedules, a Floor Switch and impact drops.
 - Typed entry points, a generated API reference, an MIT licence and reproducible package checks.
 
-[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/johnmorrisdotca/houseki/compare/v0.4.1...v0.4.2
 [0.3.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/johnmorrisdotca/houseki/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/johnmorrisdotca/houseki/compare/v0.1.1...v0.2.0

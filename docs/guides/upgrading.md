@@ -7,7 +7,7 @@ description: Keep native entries and saves while adopting the docs site.
 
 ## Adopt the documentation pages
 
-This rollout keeps the existing seven import paths, six namespaces, types, game rules and content. `api.html` remains an anchor index. New individual reference pages show imports, signatures and checked examples; local search works without a hosted service. Root `llms.txt` links the overview and `llms-full.txt` includes the full English pages. No version or release is cut by this branch.
+The seven import paths, six namespaces, types, game rules and content are unchanged. `api.html` remains an anchor index. New individual reference pages show imports, signatures and checked examples; local search works without a hosted service. Root `llms.txt` links the overview and `llms-full.txt` includes the full English pages.
 
 ## Move from another puzzle engine
 

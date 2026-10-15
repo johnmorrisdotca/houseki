@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/houseki",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Houseki 宝石 — Match-3 gem puzzles: five gem and stone puzzle engines, 684 measured challenges, bilingual lessons, deterministic saves, magnetic floors, Shizen and Arashi campaigns. TypeScript. Zero dependencies.",
   "keywords": [
     "accessible",

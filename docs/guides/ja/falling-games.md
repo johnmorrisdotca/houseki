@@ -27,4 +27,4 @@ const [next,rest,transitions]=processInputTick(game,input,applyAction,advanceTic
 console.log(next.phase,Object.keys(rest),transitions.length);
 ```
 
-フォーカスを失ったとき、ポインターを取り消したとき、一時停止したときは入力を解除します。標準の入力処理を使い、横移動・回転・落下を決まった順番にします。動く石がないと `landingY` と `landingCells` は null です。着地予告は乱数の状態を進めません。
+フォーカスを失ったとき、ポインターを取り消したとき、一時停止したときは入力を解除します。標準の入力処理を使い、横移動・回転・落下を決まった順番にします。動く石がないと`landingY`と`landingCells`はnullです。着地予告は乱数の状態を進めません。

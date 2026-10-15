@@ -651,7 +651,7 @@ Using Houseki in something? Open an *Add my project* issue and we will add you.
 ### The family
 
 <!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
-Houseki is one of twenty-eight packages, each made for the same site, each at
+Houseki is one of thirty-two packages, each made for the same site, each at
 [github.com/johnmorrisdotca](https://github.com/johnmorrisdotca) or [github.com/spxis](https://github.com/spxis). The code of every one is MIT.
 
 **Games — board**
@@ -699,12 +699,19 @@ Houseki is one of twenty-eight packages, each made for the same site, each at
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
 
+**Sports**
+
+- [Dougu Sports](https://github.com/johnmorrisdotca/dougu-sports) (道具): sports emblems as SVG: trophies, medals, crests, and the ball and gear of every sport, with optional 3D turning. [Demo](https://johnmorrisdotca.github.io/dougu-sports/).
+- [Kyogijo Stadiums](https://github.com/johnmorrisdotca/kyogijo-stadiums) (競技場): sports fields, rinks, courts and ballparks drawn to scale as SVG, with each team and the score on them. [Demo](https://johnmorrisdotca.github.io/kyogijo-stadiums/).
+- [Senshu Jerseys](https://github.com/johnmorrisdotca/senshu-jerseys) (選手): sports jerseys, sweaters, kits, caps, helmets and retired-number banners as SVG, front and back, with optional 2.5D turning. [Demo](https://johnmorrisdotca.github.io/senshu-jerseys/).
+- [Taisen Brackets](https://github.com/johnmorrisdotca/taisen-brackets) (対戦): a sport-agnostic tournament bracket, drawn as SVG, from a list of ties. [Demo](https://johnmorrisdotca.github.io/taisen-brackets/).
+
 **Developer tools**
 
 - [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシーズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
 
 
-**This package is Houseki.** The demos of all twenty-eight share one header and footer, so each links the rest.
+**This package is Houseki.** The demos of all thirty-two share one header and footer, so each links the rest.
 <!-- family:end -->
 
 ## Development
@@ -728,7 +735,7 @@ Ideas, bug reports and pull requests are welcome in the [issues](https://github.
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.3.0, makes Magnetic Blocks show a level's fixed rules as soon as the level is chosen and give free play its own choices back, makes Space do what the ghost showed, lets a big board be scrolled from the keyboard on all three falling players, and adds `settledCells` to the Shizen hard-drop preview.
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.4.2, adds no code: it adds the documentation site, with a checked example for every export, in English and Japanese.
 
 ## Licence
 

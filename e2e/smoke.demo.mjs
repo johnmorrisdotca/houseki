@@ -29,7 +29,7 @@ for (const { file, title, current, play } of PAGES) {
     await expect(page.locator('header a[href="api.html"]')).toHaveCount(1);
     // The footer names the whole family, each by its demo, this one marked.
     const family = page.locator("footer .family a");
-    expect(await family.count()).toBe(29);
+    expect(await family.count()).toBe(33);
     await expect(page.locator('footer .family a[aria-current="page"]')).toHaveText("Houseki");
     await expect(page.locator('footer .family a[href="https://johnmorrisdotca.github.io/karakuri/"]')).toHaveText("Karakuri");
     // The page chooser marks the page being read.

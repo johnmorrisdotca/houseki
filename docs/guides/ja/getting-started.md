@@ -14,13 +14,13 @@ const moved=fallingTriplets.applyAction(state,{kind:"left"});
 console.log(state.phase,moved.accepted,moved.state.active?.x);
 ```
 
-主な入口には6つの名前空間があります。5つは三つの宝石、色の連鎖、ストーンコラプス、ジェムスワップ、磁石ブロックです。`nature` は、磁石・跳ね返り・天候の共通の仕組みです。状態、操作、設定はゲームごとに異なり、交換して使えません。
+主な入口には6つの名前空間があります。5つは三つの宝石、色の連鎖、ストーンコラプス、ジェムスワップ、磁石ブロックです。`nature`は、磁石・跳ね返り・天候の共通の仕組みです。状態、操作、設定はゲームごとに異なり、交換して使えません。
 
-## 1つの仕組みを import する
+## 1つの仕組みをimportする
 
 ```ts
 import { createGame,statusOf } from "@johnmorrisdotca/houseki/gem-swap";
 console.log(statusOf(createGame({seed:"small-example"})).legalMoveCount);
 ```
 
-元の7つの入口を保ちます。npm の別名は import の名前を変えますが、API は変えません。[落ちるゲーム](falling-games.md)、[盤面いっぱいのゲーム](full-board-games.md)、[表示の作り方](host-ui.md)へ進めます。これらの仕組みの import に DOM やブラウザーは必要ありません。
+元の7つの入口を保ちます。npmの別名はimportの名前を変えますが、APIは変えません。[落ちるゲーム](falling-games.md)、[盤面いっぱいのゲーム](full-board-games.md)、[表示の作り方](host-ui.md)へ進めます。これらの仕組みのimportにDOMやブラウザーは必要ありません。

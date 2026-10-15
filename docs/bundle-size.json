@@ -3,31 +3,31 @@
   "entries": {
     ".": {
       "minified": 1861977,
-      "gzip": 179129
+      "gzip": 179110
     },
     "./falling-triplets": {
       "minified": 175092,
-      "gzip": 21826
+      "gzip": 21788
     },
     "./colour-chains": {
       "minified": 1019080,
-      "gzip": 76372
+      "gzip": 75909
     },
     "./stone-collapse": {
       "minified": 206875,
-      "gzip": 32622
+      "gzip": 32521
     },
     "./gem-swap": {
       "minified": 106226,
-      "gzip": 20929
+      "gzip": 20988
     },
     "./nature": {
       "minified": 21730,
-      "gzip": 6936
+      "gzip": 6967
     },
     "./magnetic-blocks": {
       "minified": 353234,
-      "gzip": 28235
+      "gzip": 28237
     }
   }
 }

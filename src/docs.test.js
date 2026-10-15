@@ -87,10 +87,10 @@ describe("the README's promises", () => {
 
   it("lists every package of the family, with its kana, as the demo's footer does", () => {
     const family = FAMILY;
-    expect(family.length).toBe(28);
+    expect(family.length).toBe(32);
     const block = readme.slice(readme.indexOf("### The family"), readme.indexOf("\n## ", readme.indexOf("### The family")));
     for (const { id, name, kana } of family) expect(block, id).toContain(`- [${name}](${familyRepo(id)}) (${kana}`);
-    expect(block).toContain("one of twenty-eight packages");
+    expect(block).toContain("one of thirty-two packages");
     expect([...block.matchAll(/^- \[/gm)]).toHaveLength(family.length);
   });
 

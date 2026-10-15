@@ -41,7 +41,7 @@ const SHARED = {
     name: "Houseki (宝石) is Japanese for a gem or precious stone.",
     nameLink: "The name",
     pageDocs: "Docs",
-    pageApi: "API reference",
+    pageApi: "API",
     games: "Game",
   },
   ja: {
@@ -49,7 +49,7 @@ const SHARED = {
     name: "宝石（ほうせき）は、宝石や貴石を意味する日本語です。",
     nameLink: "名前について",
     pageDocs: "ドキュメント",
-    pageApi: "API リファレンス",
+    pageApi: "APIリファレンス",
     games: "ゲーム",
   },
 };
