@@ -1,6 +1,6 @@
 import { expect,test } from '@playwright/test';
 import { start,ORIGIN } from './demo.mjs';
-for(const file of ['index.html','chains.html','tools.html','blocks.html']){
+for(const file of ['index.html','chains.html','tools.html','blocks.html','tsumiki.html']){
  test(`Docs follows initial and live language on ${file}`,async({page})=>{
   const errors=await start(page);
   await page.goto(`${ORIGIN}/${file}?lang=ja`);

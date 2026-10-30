@@ -1,0 +1,20 @@
+/* Tsumiki's own: an eight by eight board that fits a phone, and a tray of three shapes under it. */
+.tsumiki-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; width: min(100%, 26rem); margin: 0.75rem auto; aspect-ratio: 1; touch-action: manipulation; }
+.tsumiki-cell { appearance: none; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: 4px; background: color-mix(in srgb, currentColor 7%, transparent); padding: 0; aspect-ratio: 1; cursor: pointer; }
+.tsumiki-cell[data-fits="false"] { cursor: default; }
+.tsumiki-cell[data-fits="true"] { outline: 2px solid color-mix(in srgb, currentColor 45%, transparent); outline-offset: -2px; }
+.tsumiki-cell[data-colour="red"], .tsumiki-mark[data-colour="red"] { background: #c8423f; }
+.tsumiki-cell[data-colour="blue"], .tsumiki-mark[data-colour="blue"] { background: #3a6fc4; }
+.tsumiki-cell[data-colour="green"], .tsumiki-mark[data-colour="green"] { background: #3d9a5a; }
+.tsumiki-cell[data-colour="gold"], .tsumiki-mark[data-colour="gold"] { background: #d4a032; }
+.tsumiki-cell[data-colour="purple"], .tsumiki-mark[data-colour="purple"] { background: #8450b4; }
+.tsumiki-cell[data-colour="teal"], .tsumiki-mark[data-colour="teal"] { background: #2f9c9c; }
+.tsumiki-cell[data-stone="true"] { box-shadow: inset 0 0 0 3px rgb(0 0 0 / 45%); }
+.tsumiki-tray { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; width: min(100%, 26rem); min-height: 6.5rem; margin: 0 auto 0.5rem; }
+.tsumiki-slot { appearance: none; display: grid; place-items: center; min-height: 6.5rem; padding: 0.35rem; border: 1px solid color-mix(in srgb, currentColor 22%, transparent); border-radius: 8px; background: transparent; color: inherit; cursor: pointer; }
+.tsumiki-slot[aria-pressed="true"] { border-color: currentColor; box-shadow: inset 0 0 0 2px currentColor; }
+.tsumiki-slot:disabled { cursor: default; opacity: 0.45; }
+.tsumiki-shape { display: grid; gap: 2px; }
+.tsumiki-mark { display: block; width: 0.95rem; height: 0.95rem; border-radius: 2px; }
+.tsumiki-mark[data-empty="true"] { background: transparent; }
+.tsumiki-objective { font-size: 0.85rem; }

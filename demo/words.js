@@ -33,6 +33,14 @@ export const PAGES = {
     foot: { en: "Magnetic Blocks · relaxed planning · arcade timing · Calm and Pull floor rules", ja: "磁石ブロック · じっくり考える · 時間で落ちる · 「穏やか」と「引き寄せ」の床" },
     status: { en: "128 graded challenges · five difficulty groups.", ja: "128のチャレンジ · 5つの難易度グループ。" },
   },
+  tsumiki: {
+    file: "tsumiki.html",
+    link: { en: "Tsumiki", ja: "積み木" },
+    title: "Houseki 宝石 — Match-3 gem puzzles · Tsumiki",
+    description: "Play Tsumiki: three shapes in a tray, laid on an eight by eight board, every full row and column clearing, with a daily, graded levels and lessons. In English and Japanese, free and open source.",
+    foot: { en: "Tsumiki · three shapes in a tray · full rows and columns clear · no clock", ja: "積み木 · トレイの3つの形 · そろった行と列が消える · 時間制限なし" },
+    status: { en: "64 graded challenges · three lessons.", ja: "64のチャレンジ · 3つのレッスン。" },
+  },
 };
 
 const SHARED = {

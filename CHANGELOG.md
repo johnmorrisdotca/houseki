@@ -6,6 +6,7 @@ All notable changes to this package are written here, newest first, in the form 
 
 ### Added
 
+- The demo has a Tsumiki page, in English and Japanese, played at a phone's width and a desk's, with its own browser test.
 - **Tsumiki 積み木**, a sixth game (`@johnmorrisdotca/houseki/tsumiki`): three shapes in a tray, laid on an eight by eight board, every full row and column clearing together. 64 levels with recorded winning plays, three lessons, a Daily and free play, with an immutable engine and saves that are replayed from their moves.
 
 ## [0.4.2] - 2026-10-14

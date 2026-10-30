@@ -7,6 +7,7 @@ const PAGES = [
   { file: "chains.html", title: "Houseki 宝石 — Match-3 gem puzzles · Colour Chains", current: "Colour Chains", play: "#well" },
   { file: "tools.html", title: "Houseki 宝石 — Match-3 gem puzzles · Gem Swap and Stone Collapse", current: "Gem Swap & Stone Collapse", play: "#grid" },
   { file: "blocks.html", title: "Houseki 宝石 — Match-3 gem puzzles · Magnetic Blocks", current: "Magnetic Blocks", play: "#well" },
+  { file: "tsumiki.html", title: "Houseki 宝石 — Match-3 gem puzzles · Tsumiki", current: "Tsumiki", play: "#grid" },
 ];
 
 for (const { file, title, current, play } of PAGES) {
@@ -56,7 +57,7 @@ test("the language chooser speaks Japanese in the header, the footer and the pag
   expect(errors).toEqual([]);
 });
 
-for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "api.html"]) {
+for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "tsumiki.html", "api.html"]) {
   test(`${file} does not scroll sideways at the width it is made for`, async ({ page }) => {
     await open(page, file);
     const { over, wide } = await page.evaluate(() => {

@@ -544,7 +544,7 @@ falling { kind: 'clear-targets', targetIds: [ 1, 2, 3 ] } frequent
 
 ### A page that plays a level with the keyboard
 
-The demo's players are the worked example of drawing the states: `demo/chains.js`, `demo/blocks.js`, `demo/tools.js` and `demo/demo.js` are plain DOM, with the keyboard and keypad scheduled through `createInputScheduler`, which turns held keys into actions on a count of ticks.
+The demo's players are the worked example of drawing the states: `demo/chains.js`, `demo/blocks.js`, `demo/tsumiki.js`, `demo/tools.js` and `demo/demo.js` are plain DOM, with the keyboard and keypad scheduled through `createInputScheduler`, which turns held keys into actions on a count of ticks.
 
 ```ts no-run
 import { actionsForTick, advanceTicks, applyAction, createInputScheduler, createLevel, queueInputEdge } from "@johnmorrisdotca/houseki/falling-triplets";
