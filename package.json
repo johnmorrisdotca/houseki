@@ -70,6 +70,11 @@
       "import": "./dist/colour-chains.js",
       "default": "./dist/colour-chains.js"
     },
+    "./tsumiki": {
+      "types": "./dist/tsumiki.d.ts",
+      "import": "./dist/tsumiki.js",
+      "default": "./dist/tsumiki.js"
+    },
     "./stone-collapse": {
       "types": "./dist/stone-collapse.d.ts",
       "import": "./dist/stone-collapse.js",

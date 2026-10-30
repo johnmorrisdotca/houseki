@@ -6,7 +6,7 @@ Automated checks verify rules and exercised browser flows. They do not claim phy
 | --- | --- | --- |
 | Four original engines | Immutable states, deterministic seeds, legal actions, independent rule fixtures, gravity and special effects | Human play and difficulty review |
 | Modes and persistence | Daily canonical starts; challenge witness checks; timed play; replay-authoritative saves, restart and assistance | Human play review |
-| Campaigns | Falling Triplets 100; Colour Chains 50; Stone Collapse 100; Gem Swap 50; Magnetic Blocks 128; Shizen 128; Arashi 128 (684 total); original boards, regeneration, independent witnessed wins and measured ordering | Human difficulty review |
+| Campaigns | Falling Triplets 100; Colour Chains 50; Stone Collapse 100; Gem Swap 50; Magnetic Blocks 128; Shizen 128; Arashi 128; Tsumiki 64 (748 total); original boards, regeneration, independent witnessed wins and measured ordering | Human difficulty review |
 | Shared players | Desktop and phone controls, keyboard/keypad, tool preview/spend/cancel, ordinary animation preference and reduced motion | Hosted regression and human feel review |
 | Nature primitives | Seeded magnetic marking, stable IDs, midpoint attraction, anchors, obstacles, one bounded power rebound | Human feel review; Fault/Combined remain utility-level previews |
 | Magnetic Blocks | Bonded/split gravity, floor schedules, impact support removal, 128 finite witnessed challenges, three lessons and canonical replay | Human feel and difficulty review |

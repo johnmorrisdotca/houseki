@@ -4,6 +4,10 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+### Added
+
+- **Tsumiki 積み木**, a sixth game (`@johnmorrisdotca/houseki/tsumiki`): three shapes in a tray, laid on an eight by eight board, every full row and column clearing together. 64 levels with recorded winning plays, three lessons, a Daily and free play, with an immutable engine and saves that are replayed from their moves.
+
 ## [0.4.2] - 2026-10-14
 
 Nothing that was exported has changed. The package has an English and Japanese documentation site with a checked example for every export.

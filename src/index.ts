@@ -5,3 +5,4 @@ export * as colourChains from './colour-chains.js';
 export * as gemSwap from './gem-swap.js';
 export * as nature from './nature.js';
 export * as magneticBlocks from './magnetic-blocks.js';
+export * as tsumiki from './tsumiki.js';

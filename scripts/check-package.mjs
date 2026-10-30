@@ -75,7 +75,7 @@ ${entries.map((entry, i) => `import * as m${i} from ${JSON.stringify(entry)};`).
 const names = ${JSON.stringify(entries)};
 [${entries.map((_, i) => `m${i}`).join(", ")}].forEach((m, i) => { if (Object.keys(m).length === 0) throw new Error(names[i] + " exports nothing"); });
 const collection = m0;
-for (const [entry, name] of [["falling-triplets", "fallingTriplets"], ["stone-collapse", "stoneCollapse"], ["colour-chains", "colourChains"], ["gem-swap", "gemSwap"], ["magnetic-blocks", "magneticBlocks"]]) {
+for (const [entry, name] of [["falling-triplets", "fallingTriplets"], ["stone-collapse", "stoneCollapse"], ["colour-chains", "colourChains"], ["gem-swap", "gemSwap"], ["magnetic-blocks", "magneticBlocks"], ["tsumiki", "tsumiki"]]) {
   const engine = await import(${JSON.stringify(`${pkg.name}/`)} + entry);
   assert.equal(collection[name].createGame, engine.createGame);
   const game = engine.createGame({ seed: "installed-package" });
