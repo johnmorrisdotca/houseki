@@ -79,7 +79,7 @@ for (let number = 1; number <= LEVELS; number += 1) {
   if (made === null) throw new Error(`level ${number} was not won by the bot`);
   const title =
     goal.kind === "lines"
-      ? { en: `Clear ${goal.target} lines`, ja: `${goal.target}列を消す` }
+      ? { en: `Clear ${goal.target} lines`, ja: `${goal.target}本を消す` }
       : goal.kind === "score"
         ? { en: `Score ${goal.target}`, ja: `${goal.target}点を取る` }
         : { en: `Clear ${stones.length} stones`, ja: `石を${stones.length}個消す` };
@@ -96,17 +96,17 @@ const lesson = (id, title, objective, goal, stones, steps) => {
 };
 
 const tutorials = [
-  lesson("first-line", { en: "Your first line", ja: "はじめての列" }, { en: "Fill a row or a column to clear it.", ja: "行か列を埋めると消えます。" }, { kind: "lines", target: 1 }, [], [
+  lesson("first-line", { en: "Your first line", ja: "はじめての1本" }, { en: "Fill a row or a column to clear it.", ja: "行か列を埋めると消えます。" }, { kind: "lines", target: 1 }, [], [
     { instruction: { en: "Choose a shape in the tray, then a square on the board: its top left goes there.", ja: "トレーの形を選び、盤のマスを選びます。形の左上がそこに置かれます。" } },
     { instruction: { en: "Fill a whole row or column, and it clears.", ja: "行か列を1本埋めると、消えます。" } },
   ]),
   lesson("two-together", { en: "Two at once", ja: "同時に2本" }, { en: "Clear several lines together: they are worth far more.", ja: "何本かを同時に消すと、ずっと高い点になります。" }, { kind: "score", target: 60 }, [], [
-    { instruction: { en: "Lines cleared together score more than lines cleared one by one.", ja: "同時に消した列は、1本ずつ消すより高い点になります。" } },
-    { instruction: { en: "When all three shapes are laid, three more come.", ja: "3つの形をすべて置くと、次の3つが来ます。" } },
+    { instruction: { en: "Lines cleared together score more than lines cleared one by one.", ja: "同時に消した行や列は、1本ずつ消すより高い点になります。" } },
+    { instruction: { en: "When all three shapes are laid, three more come.", ja: "3つの形をすべて置くと、次の3つが出ます。" } },
   ]),
-  lesson("clear-the-stones", { en: "Clear the stones", ja: "石を消す" }, { en: "Stones go like anything else: fill the lines they are in.", ja: "石もほかと同じように消えます。石のある列を埋めます。" }, { kind: "clear-stones" }, [27, 28, 35, 36], [
+  lesson("clear-the-stones", { en: "Clear the stones", ja: "石を消す" }, { en: "Stones go like anything else: fill the lines they are in.", ja: "石もほかと同じように消えます。石のある行や列を埋めます。" }, { kind: "clear-stones" }, [27, 28, 35, 36], [
     { instruction: { en: "A stone is gold. Fill the row or column it is in, and it clears.", ja: "石は金色です。その行か列を埋めると消えます。" } },
-    { instruction: { en: "The game ends when none of the shapes in the tray will fit: keep room for them.", ja: "トレーのどの形も置けなくなると終わりです。置く場所を残します。" } },
+    { instruction: { en: "The game ends when none of the shapes in the tray will fit: keep room for them.", ja: "トレーのどの形も置けなくなると終わりです。置く場所を残しておきましょう。" } },
   ]),
 ];
 

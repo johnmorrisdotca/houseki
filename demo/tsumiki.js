@@ -15,10 +15,10 @@ const text = {
     goalScore: 'Reach {n} points.', goalLines: 'Clear {n} lines.', goalStones: 'Clear every stone.', cell: 'Row {row}, column {column}', filled: 'filled', empty: 'empty', stone: 'stone', slot: 'Shape {n}', spent: 'Shape {n}, already laid',
   },
   ja: {
-    settings: '設定', mode: 'モード', relaxed: 'じっくり', daily: '毎日', campaign: 'キャンペーン', lessonLabel: 'レッスン', freePlay: 'フリープレイ', noLesson: 'レッスンなし',
-    new: '新しいゲーム', restart: 'やり直す', help: 'トレイの形を選び、その左上を置くマスを押します。行か列がそろうと消えます。', sound: '効果音',
-    title: '積み木', score: '得点', lines: '列', placed: '配置数', choose: 'トレイの形を選びます。', place: '左上を置くマスを押します。', blocked: 'その形はそこに置けません。',
-    goalScore: '{n}点に届かせます。', goalLines: '{n}列を消します。', goalStones: '石をすべて消します。', cell: '{row}行{column}列', filled: '埋まっています', empty: '空きです', stone: '石', slot: '形{n}', spent: '形{n}は置きました',
+    settings: '設定', mode: 'モード', relaxed: 'ゆったり', daily: 'デイリー', campaign: 'キャンペーン', lessonLabel: 'レッスン', freePlay: 'フリープレイ', noLesson: 'レッスンなし',
+    new: '新しいゲーム', restart: 'やり直す', help: 'トレーの形を選び、形の左上が入るマスを押します。行か列がそろうと消えます。', sound: '効果音',
+    title: '積み木', score: '得点', lines: '消した本数', placed: '手数', choose: 'トレーの形を選びます。', place: '形の左上が入るマスを押します。', blocked: 'その形はそこに置けません。',
+    goalScore: '{n}点をめざします。', goalLines: '{n}本を消します。', goalStones: '石をすべて消します。', cell: '{row}行{column}列', filled: '埋まっています', empty: '空きです', stone: '石', slot: '形{n}', spent: '形{n}は置きました',
   },
 };
 

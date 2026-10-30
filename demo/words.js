@@ -38,7 +38,7 @@ export const PAGES = {
     link: { en: "Tsumiki", ja: "積み木" },
     title: "Houseki 宝石 — Match-3 gem puzzles · Tsumiki",
     description: "Play Tsumiki: three shapes in a tray, laid on an eight by eight board, every full row and column clearing, with a daily, graded levels and lessons. In English and Japanese, free and open source.",
-    foot: { en: "Tsumiki · three shapes in a tray · full rows and columns clear · no clock", ja: "積み木 · トレイの3つの形 · そろった行と列が消える · 時間制限なし" },
+    foot: { en: "Tsumiki · three shapes in a tray · full rows and columns clear · no clock", ja: "積み木 · トレーの3つの形 · そろった行と列が消える · 時間制限なし" },
     status: { en: "64 graded challenges · three lessons.", ja: "64のチャレンジ · 3つのレッスン。" },
   },
 };
