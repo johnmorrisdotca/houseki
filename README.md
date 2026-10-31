@@ -735,7 +735,7 @@ Ideas, bug reports and pull requests are welcome in the [issues](https://github.
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.4.2, adds no code: it adds the documentation site, with a checked example for every export, in English and Japanese.
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.4.3, changes nothing a player sees.
 
 ## Licence
 
