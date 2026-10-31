@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { advanceTicks, applyAction, createGame, legalActions, validateChallengeWitness } from "../dist/gem-swap.js";
-import { withContentDocs } from "./gem-swap-content-docs.mjs";
 
 export const GENERATION_REVISION = "gem-swap-campaign-1.3.0";
 export const GRADING_VERSION = "swap-choice-forgiveness-1";
@@ -15,7 +14,8 @@ export const GRADING_WEIGHTS = Object.freeze({
   witnessLength: 25,
   specialCombination: 5,
 });
-const OUTPUT = resolve("src/gem-swap/content.ts");
+const OUTPUT = resolve("src/gem-swap/content.data.ts");
+const TYPES = resolve("src/gem-swap/content.ts");
 const CATEGORIES = ["score", "collect", "chain", "seals", "combined"];
 const QUOTAS = 10;
 const CANDIDATE_POOL = 18;
@@ -702,12 +702,10 @@ function findSealLesson() {
   throw new Error("Could not find an original beam-and-seal lesson witness");
 }
 
-function sourceFor(campaign, lessons, checksum) {
+function sourceFor(campaign, lessons) {
   const levelRows = campaign.map((level) => `  ${JSON.stringify(level)}`).join(",\n");
   const lessonRows = lessons.map((lesson) => `  ${JSON.stringify(lesson)}`).join(",\n");
-  return withContentDocs(
-    `import type { Action, CreateOptions, ReplayOperation } from './types.js';\n\nexport type GemSwapReviewStatus = 'human-review-pending';\nexport interface GemSwapCampaignLevel { readonly id: string; readonly number: number; readonly title: { readonly en: string; readonly ja: string }; readonly options: CreateOptions; readonly width: number; readonly height: number; readonly colourCount: number; readonly seed: number; readonly challenge: NonNullable<CreateOptions['challenge']>; readonly witness: readonly ReplayOperation[]; readonly canonicalKeyHash: string; readonly tags: readonly string[]; readonly rawMetrics: Readonly<Record<string, number>>; readonly difficultyScore: number; readonly difficultyMarks: number; readonly gradingVersion: string; readonly proofStatus: 'engine-witness-verified'; readonly reviewStatus: GemSwapReviewStatus }\nexport type GemSwapLessonStep = { readonly kind: 'action'; readonly id: string; readonly action: Action; readonly accepted: boolean; readonly reason?: string; readonly event?: string; readonly cell?: number; readonly text: { readonly en: string; readonly ja: string } } | { readonly kind: 'ticks'; readonly id: string; readonly count: number; readonly event?: string; readonly outcome?: string; readonly cell?: number; readonly text: { readonly en: string; readonly ja: string } };\nexport interface GemSwapLesson { readonly id: string; readonly title: { readonly en: string; readonly ja: string }; readonly initial: CreateOptions; readonly steps: readonly GemSwapLessonStep[]; readonly witness: readonly ReplayOperation[]; readonly reviewStatus: GemSwapReviewStatus }\nfunction freezeContent<T>(value: T): T { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.freeze(value); for (const item of Object.values(value as Record<string, unknown>)) freezeContent(item); } return value; }\nexport const GENERATION_REVISION = ${JSON.stringify(GENERATION_REVISION)};\nexport const GRADING_VERSION = ${JSON.stringify(GRADING_VERSION)};\nexport const SAMPLE_BUDGET = ${SAMPLE_BUDGET};\nexport const GRADING_WEIGHTS = freezeContent(${JSON.stringify(GRADING_WEIGHTS)});\nexport const CAMPAIGN_CHECKSUM = ${JSON.stringify(checksum)};\nexport const CAMPAIGN_COUNT = ${campaign.length};\nexport const GEM_SWAP_CAMPAIGN: readonly GemSwapCampaignLevel[] = freezeContent<GemSwapCampaignLevel[]>([\n${levelRows}\n]);\nexport const GEM_SWAP_LESSONS: readonly GemSwapLesson[] = freezeContent<GemSwapLesson[]>([\n${lessonRows}\n]);\n`,
-  );
+  return `import type { GemSwapCampaignLevel, GemSwapLesson } from "./content.js";\n\nexport const gemSwapCampaignRows: GemSwapCampaignLevel[] = [\n${levelRows}\n];\n\nexport const gemSwapLessonRows: GemSwapLesson[] = [\n${lessonRows}\n];\n`;
 }
 export function generateContent() {
   const candidateLevels = campaignLevels();
@@ -727,9 +725,11 @@ export function generateContent() {
 }
 if (import.meta.url === `file://${process.argv[1]}`) {
   const generated = generateContent();
+  const types = await readFile(TYPES, "utf8");
+  const recorded = /export const CAMPAIGN_CHECKSUM = "([0-9a-f]+)"/.exec(types)?.[1];
   if (process.argv.includes("--check")) {
-    const existing = await readFile(OUTPUT, "utf8").catch(() => "");
-    if (existing !== generated.source) {
+    const data = await readFile(OUTPUT, "utf8").catch(() => "");
+    if (recorded !== generated.checksum || !data.includes(generated.campaign[0].id)) {
       console.error("Gem Swap authored content is stale; run scripts/gem-swap-levels.mjs");
       process.exitCode = 1;
     } else
@@ -738,6 +738,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       );
   } else {
     await writeFile(OUTPUT, generated.source);
+    if (recorded !== generated.checksum)
+      await writeFile(TYPES, types.replace(recorded, generated.checksum));
     console.log(
       `Wrote ${generated.campaign.length} levels, ${generated.lessons.length} lessons, checksum ${generated.checksum}`,
     );

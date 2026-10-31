@@ -3828,7 +3828,7 @@ export function generateContent() {
 if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
   const data = generateContent();
   await writeFile(
-    new URL("../src/colour-chains/content-data.ts", import.meta.url),
+    new URL("../src/colour-chains/content.data.ts", import.meta.url),
     `import type { ChainContentData } from './content-types.js';\n\nexport const contentData: ChainContentData = ${JSON.stringify(data, null, 2)};\n`,
   );
   process.stdout.write(

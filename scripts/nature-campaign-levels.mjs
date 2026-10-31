@@ -1184,7 +1184,7 @@ if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
     "import type { ChainContentData } from './content-types.js';\n\nexport const contentData: ChainContentData = " +
     JSON.stringify(data, null, 2) +
     ";\n";
-  await writeFile(new URL("../src/colour-chains/content-data.ts", import.meta.url), output);
+  await writeFile(new URL("../src/colour-chains/content.data.ts", import.meta.url), output);
   process.stdout.write(
     "Shizen " +
       data.shizen.count +

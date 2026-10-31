@@ -1,4 +1,4 @@
-import { contentData } from "./content-data.js";
+import { contentData } from "./content.data.js";
 import type { MagneticCampaignLevel, MagneticCampaignManifest, MagneticLesson } from "./content-types.js";
 import { createGame } from "./engine.js";
 import type { GameState } from "./types.js";

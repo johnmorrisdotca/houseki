@@ -1,4 +1,4 @@
-import { contentData } from "./content-data.js";
+import { contentData } from "./content.data.js";
 import type { CollapseCampaignLevel, CollapseCampaignManifest, CollapseTutorialDefinition } from "./content-types.js";
 import { createChallenge } from "./engine.js";
 import type { GameState } from "./types.js";

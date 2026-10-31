@@ -11,9 +11,11 @@ description: Read the original complete source tree and engine design.
 src/
 ├── colour-chains/
 │   ├── challenge.ts
-│   ├── content-data.ts
+│   ├── content.data.ts
 │   ├── content-types.ts
 │   ├── content.ts
+│   ├── engine-actions.ts
+│   ├── engine-board.ts
 │   ├── engine.ts
 │   ├── input.ts
 │   ├── match.ts
@@ -23,9 +25,13 @@ src/
 │   └── validation.ts
 ├── colour-chains.ts
 ├── falling-triplets/
-│   ├── content-data.ts
+│   ├── content.data.ts
 │   ├── content-types.ts
 │   ├── content.ts
+│   ├── engine-codec.ts
+│   ├── engine-play.ts
+│   ├── engine-setup.ts
+│   ├── engine-waves.ts
 │   ├── engine.ts
 │   ├── input.ts
 │   ├── match.ts
@@ -35,7 +41,12 @@ src/
 ├── gem-swap/
 │   ├── black-hole.ts
 │   ├── board.ts
+│   ├── content.data.ts
 │   ├── content.ts
+│   ├── engine-actions.ts
+│   ├── engine-create.ts
+│   ├── engine-setup.ts
+│   ├── engine-ticks.ts
 │   ├── engine.ts
 │   ├── persistence.ts
 │   ├── practice.ts
@@ -46,9 +57,10 @@ src/
 ├── gem-swap.ts
 ├── index.ts
 ├── magnetic-blocks/
-│   ├── content-data.ts
+│   ├── content.data.ts
 │   ├── content-types.ts
 │   ├── content.ts
+│   ├── engine-core.ts
 │   ├── engine.ts
 │   ├── persistence.ts
 │   ├── physics.ts
@@ -67,9 +79,11 @@ src/
 │   └── validation.ts
 ├── nature.ts
 ├── stone-collapse/
-│   ├── content-data.ts
+│   ├── content.data.ts
 │   ├── content-types.ts
 │   ├── content.ts
+│   ├── engine-resolve.ts
+│   ├── engine-setup.ts
 │   ├── engine.ts
 │   ├── persistence.ts
 │   ├── types.ts

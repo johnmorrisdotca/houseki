@@ -751,7 +751,7 @@ export function tutorialDefinitions() {
   ];
 }
 
-export async function writeCampaign(path = resolve("src/falling-triplets/content-data.ts")) {
+export async function writeCampaign(path = resolve("src/falling-triplets/content.data.ts")) {
   const campaign = generateCampaign(100);
   const tutorials = tutorialDefinitions();
   const literal = JSON.stringify({ campaign, tutorials }, null, 2);

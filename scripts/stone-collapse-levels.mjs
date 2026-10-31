@@ -587,7 +587,7 @@ export function generateCampaign(count = COUNT) {
 export function tutorialDefinitions() {
   return tutorials();
 }
-export async function writeCampaign(path = resolve("src/stone-collapse/content-data.ts")) {
+export async function writeCampaign(path = resolve("src/stone-collapse/content.data.ts")) {
   const data = { campaign: campaign(COUNT), tutorials: tutorials() };
   await writeFile(
     path,
