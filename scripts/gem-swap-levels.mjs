@@ -738,8 +738,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       );
   } else {
     await writeFile(OUTPUT, generated.source);
-    if (recorded !== generated.checksum)
-      await writeFile(TYPES, types.replace(recorded, generated.checksum));
+    if (recorded !== generated.checksum) await writeFile(TYPES, types.replace(recorded, generated.checksum));
     console.log(
       `Wrote ${generated.campaign.length} levels, ${generated.lessons.length} lessons, checksum ${generated.checksum}`,
     );
