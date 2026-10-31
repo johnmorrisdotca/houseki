@@ -1,10 +1,16 @@
-import { contentData } from './content-data.js';
-import { createChallenge } from './challenge.js';
-import type { ChainCampaignLevel, ChainCampaignManifest, ChainTutorialDefinition, NatureChainCampaignLevel, NatureChainCampaignManifest } from './content-types.js';
-import type { GameState } from './types.js';
+import { contentData } from "./content-data.js";
+import { createChallenge } from "./challenge.js";
+import type {
+  ChainCampaignLevel,
+  ChainCampaignManifest,
+  ChainTutorialDefinition,
+  NatureChainCampaignLevel,
+  NatureChainCampaignManifest,
+} from "./content-types.js";
+import type { GameState } from "./types.js";
 
 function deepFreeze<T>(value: T): T {
-  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
     Object.freeze(value);
     for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
   }
@@ -40,7 +46,9 @@ export const levelManifest: readonly ChainCampaignLevel[] = campaignManifest.lev
  * console.log(tutorialManifest.length);
  * ```
  */
-export const tutorialManifest: readonly ChainTutorialDefinition[] = deepFreeze(contentData.tutorials as ChainTutorialDefinition[]);
+export const tutorialManifest: readonly ChainTutorialDefinition[] = deepFreeze(
+  contentData.tutorials as ChainTutorialDefinition[],
+);
 /** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
  *
  * @example
@@ -50,7 +58,14 @@ export const tutorialManifest: readonly ChainTutorialDefinition[] = deepFreeze(c
  * console.log(shizenCampaignManifest.count);
  * ```
  */
-export const shizenCampaignManifest: NatureChainCampaignManifest = deepFreeze((contentData.shizen ?? { ...contentData.campaign, count: 0, levels: [], checksum: '' }) as NatureChainCampaignManifest);
+export const shizenCampaignManifest: NatureChainCampaignManifest = deepFreeze(
+  (contentData.shizen ?? {
+    ...contentData.campaign,
+    count: 0,
+    levels: [],
+    checksum: "",
+  }) as NatureChainCampaignManifest,
+);
 /** The frozen ordered native levels; array indices start at zero and display numbers start at one.
  *
  * @example
@@ -70,7 +85,14 @@ export const shizenLevelManifest: readonly NatureChainCampaignLevel[] = shizenCa
  * console.log(arashiCampaignManifest.count);
  * ```
  */
-export const arashiCampaignManifest: NatureChainCampaignManifest = deepFreeze((contentData.arashi ?? { ...contentData.campaign, count: 0, levels: [], checksum: '' }) as NatureChainCampaignManifest);
+export const arashiCampaignManifest: NatureChainCampaignManifest = deepFreeze(
+  (contentData.arashi ?? {
+    ...contentData.campaign,
+    count: 0,
+    levels: [],
+    checksum: "",
+  }) as NatureChainCampaignManifest,
+);
 /** The frozen ordered native levels; array indices start at zero and display numbers start at one.
  *
  * @example
@@ -94,8 +116,9 @@ export const arashiLevelManifest: readonly NatureChainCampaignLevel[] = arashiCa
  * ```
  */
 export function getLevel(id: string | number): ChainCampaignLevel | undefined {
-  if (typeof id === 'number') return Number.isInteger(id) ? levelManifest.find(level => level.number === id) : undefined;
-  return levelManifest.find(level => level.id === id);
+  if (typeof id === "number")
+    return Number.isInteger(id) ? levelManifest.find((level) => level.number === id) : undefined;
+  return levelManifest.find((level) => level.id === id);
 }
 
 /** Create a fresh engine-validated challenge from a stable content ID or display number.
@@ -112,11 +135,34 @@ export function getLevel(id: string | number): ChainCampaignLevel | undefined {
 export function createLevel(id: string | number): GameState {
   const level = getLevel(id);
   if (!level) throw new RangeError(`Unknown Colour Chains level: ${String(id)}`);
-  return createChallenge({ id: level.id, seed: level.seed, width: level.width, height: level.height, colourCount: level.colourCount, board: level.board, queue: level.queue, goal: level.goal, witness: level.witness });
+  return createChallenge({
+    id: level.id,
+    seed: level.seed,
+    width: level.width,
+    height: level.height,
+    colourCount: level.colourCount,
+    board: level.board,
+    queue: level.queue,
+    goal: level.goal,
+    witness: level.witness,
+  });
 }
 
 function createNatureLevel(level: NatureChainCampaignLevel): GameState {
-  return createChallenge({ id: level.id, seed: level.seed, width: level.width, height: level.height, colourCount: level.colourCount, board: level.board, queue: level.queue, goal: level.goal, witness: level.witness, nature: true, ...(level.weather ? { weather: level.weather } : {}), ...(level.magneticQueue ? { magneticQueue: level.magneticQueue } : {}) });
+  return createChallenge({
+    id: level.id,
+    seed: level.seed,
+    width: level.width,
+    height: level.height,
+    colourCount: level.colourCount,
+    board: level.board,
+    queue: level.queue,
+    goal: level.goal,
+    witness: level.witness,
+    nature: true,
+    ...(level.weather ? { weather: level.weather } : {}),
+    ...(level.magneticQueue ? { magneticQueue: level.magneticQueue } : {}),
+  });
 }
 /** Find a native Shizen challenge by stable id or one-based display number.
  *
@@ -129,7 +175,11 @@ function createNatureLevel(level: NatureChainCampaignLevel): GameState {
  * console.log(getShizenLevel(1)?.id);
  * ```
  */
-export function getShizenLevel(id: string | number): NatureChainCampaignLevel | undefined { return typeof id === 'number' ? shizenLevelManifest.find(level => level.number === id) : shizenLevelManifest.find(level => level.id === id); }
+export function getShizenLevel(id: string | number): NatureChainCampaignLevel | undefined {
+  return typeof id === "number"
+    ? shizenLevelManifest.find((level) => level.number === id)
+    : shizenLevelManifest.find((level) => level.id === id);
+}
 /** Create a validated native Shizen challenge using its stored setup and winning witness.
  *
  * @param id - A stable content id, or the one-based display number when numbers are accepted.
@@ -141,7 +191,11 @@ export function getShizenLevel(id: string | number): NatureChainCampaignLevel | 
  * console.log(createShizenLevel(1).phase);
  * ```
  */
-export function createShizenLevel(id: string | number): GameState { const level = getShizenLevel(id); if (!level) throw new RangeError(`Unknown Shizen Colour Chains level: ${String(id)}`); return createNatureLevel(level); }
+export function createShizenLevel(id: string | number): GameState {
+  const level = getShizenLevel(id);
+  if (!level) throw new RangeError(`Unknown Shizen Colour Chains level: ${String(id)}`);
+  return createNatureLevel(level);
+}
 /** Find a native Arashi challenge by stable id or one-based display number.
  *
  * @param id - A stable content id, or the one-based display number when numbers are accepted.
@@ -153,7 +207,11 @@ export function createShizenLevel(id: string | number): GameState { const level 
  * console.log(getArashiLevel(1)?.id);
  * ```
  */
-export function getArashiLevel(id: string | number): NatureChainCampaignLevel | undefined { return typeof id === 'number' ? arashiLevelManifest.find(level => level.number === id) : arashiLevelManifest.find(level => level.id === id); }
+export function getArashiLevel(id: string | number): NatureChainCampaignLevel | undefined {
+  return typeof id === "number"
+    ? arashiLevelManifest.find((level) => level.number === id)
+    : arashiLevelManifest.find((level) => level.id === id);
+}
 /** Create a validated native Arashi challenge using its stored setup and winning witness.
  *
  * @param id - A stable content id, or the one-based display number when numbers are accepted.
@@ -165,7 +223,11 @@ export function getArashiLevel(id: string | number): NatureChainCampaignLevel | 
  * console.log(createArashiLevel(1).phase);
  * ```
  */
-export function createArashiLevel(id: string | number): GameState { const level = getArashiLevel(id); if (!level) throw new RangeError(`Unknown Arashi Colour Chains level: ${String(id)}`); return createNatureLevel(level); }
+export function createArashiLevel(id: string | number): GameState {
+  const level = getArashiLevel(id);
+  if (!level) throw new RangeError(`Unknown Arashi Colour Chains level: ${String(id)}`);
+  return createNatureLevel(level);
+}
 
 /** Find a persistent interactive lesson by its stable ID.
  *
@@ -178,4 +240,6 @@ export function createArashiLevel(id: string | number): GameState { const level 
  * console.log(getTutorial(tutorialManifest[0].id)?.id);
  * ```
  */
-export function getTutorial(id: string): ChainTutorialDefinition | undefined { return tutorialManifest.find(tutorial => tutorial.id === id); }
+export function getTutorial(id: string): ChainTutorialDefinition | undefined {
+  return tutorialManifest.find((tutorial) => tutorial.id === id);
+}

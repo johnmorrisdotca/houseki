@@ -23,7 +23,12 @@ const rows = (text) =>
   text
     .split("\n")
     .filter((line) => line.startsWith("|") && !/^\|[\s|:-]+\|$/.test(line))
-    .map((line) => line.split(/(?<!\\)\|/).slice(1, -1).map((cell) => cell.replace(/\\\|/g, "|").trim()));
+    .map((line) =>
+      line
+        .split(/(?<!\\)\|/)
+        .slice(1, -1)
+        .map((cell) => cell.replace(/\\\|/g, "|").trim()),
+    );
 
 describe("the documents", () => {
   it("say the version package.json says, in the changelog (under Unreleased until it is released)", () => {
@@ -32,7 +37,9 @@ describe("the documents", () => {
   });
 
   it("name in the README every entry package.json exports, and no other", () => {
-    const exported = Object.keys(pkg.exports).filter((key) => key !== ".").map((key) => `${pkg.name}/${key.slice(2)}`);
+    const exported = Object.keys(pkg.exports)
+      .filter((key) => key !== ".")
+      .map((key) => `${pkg.name}/${key.slice(2)}`);
     for (const entry of exported) expect(readme, entry).toContain(`${entry}`);
     const named = new Set([...readme.matchAll(/@johnmorrisdotca\/houseki\/([a-z-]+)/g)].map((match) => match[1]));
     for (const name of named) expect(exported, name).toContain(`${pkg.name}/${name}`);
@@ -64,7 +71,25 @@ describe("the package.json a visitor reads", () => {
 
 describe("the README's promises", () => {
   it("has the sections a package of this family has, each with something in it", () => {
-    for (const heading of ["In 30 seconds", "Who it is for", "Features", "Use it in your project", "API", "Theming", "Limits", "Browser support", "Languages", "Roadmap", "Architecture", "The name", "Where it comes from", "Development", "Contributing", "Changes", "Licence"]) {
+    for (const heading of [
+      "In 30 seconds",
+      "Who it is for",
+      "Features",
+      "Use it in your project",
+      "API",
+      "Theming",
+      "Limits",
+      "Browser support",
+      "Languages",
+      "Roadmap",
+      "Architecture",
+      "The name",
+      "Where it comes from",
+      "Development",
+      "Contributing",
+      "Changes",
+      "Licence",
+    ]) {
       expect(section(heading).length, heading).toBeGreaterThan(heading.length + 40);
     }
   });
@@ -82,13 +107,17 @@ describe("the README's promises", () => {
     const targets = [...readme.matchAll(/\]\((?!https?:|#|mailto:)([^)\s#]+)/g)].map((match) => match[1]);
     expect(targets.length).toBeGreaterThan(5);
     for (const target of targets) expect(existsSync(target), target).toBe(true);
-    for (const [, src] of readme.matchAll(/<img [^>]*src="(?!https?:)([^"]+)"/g)) expect(existsSync(src), src).toBe(true);
+    for (const [, src] of readme.matchAll(/<img [^>]*src="(?!https?:)([^"]+)"/g))
+      expect(existsSync(src), src).toBe(true);
   });
 
   it("lists every package of the family, with its kana, as the demo's footer does", () => {
     const family = FAMILY;
     expect(family.length).toBe(32);
-    const block = readme.slice(readme.indexOf("### The family"), readme.indexOf("\n## ", readme.indexOf("### The family")));
+    const block = readme.slice(
+      readme.indexOf("### The family"),
+      readme.indexOf("\n## ", readme.indexOf("### The family")),
+    );
     for (const { id, name, kana } of family) expect(block, id).toContain(`- [${name}](${familyRepo(id)}) (${kana}`);
     expect(block).toContain("one of thirty-two packages");
     expect([...block.matchAll(/^- \[/gm)]).toHaveLength(family.length);
@@ -109,16 +138,36 @@ describe("the README's promises", () => {
     }
     const chains = await import("./colour-chains.ts");
     const blocks = await import("./magnetic-blocks.ts");
-    for (const [name, count] of [["Magnetic Blocks", blocks.levelManifest.length], ["Shizen", chains.shizenLevelManifest.length], ["Arashi", chains.arashiLevelManifest.length]]) {
-      expect(table.find(cells => cells[0] === name)?.[4], name).toBe(String(count));
+    for (const [name, count] of [
+      ["Magnetic Blocks", blocks.levelManifest.length],
+      ["Shizen", chains.shizenLevelManifest.length],
+      ["Arashi", chains.arashiLevelManifest.length],
+    ]) {
+      expect(table.find((cells) => cells[0] === name)?.[4], name).toBe(String(count));
       expect(count, name).toBe(128);
     }
-    expect(Object.values(counts).reduce((sum, count) => sum + count, 0) + blocks.levelManifest.length + chains.shizenLevelManifest.length + chains.arashiLevelManifest.length).toBe(684);
+    expect(
+      Object.values(counts).reduce((sum, count) => sum + count, 0) +
+        blocks.levelManifest.length +
+        chains.shizenLevelManifest.length +
+        chains.arashiLevelManifest.length,
+    ).toBe(684);
     expect(table.find((cells) => cells[1] === "`magnetic-blocks`")).toBeDefined();
   });
 
   it("has the files a visitor looks for: the package's own issue templates, its security policy, and the rest of what its README links", () => {
-    for (const file of [".github/ISSUE_TEMPLATE/report-a-bug.md", ".github/ISSUE_TEMPLATE/suggest-a-feature.md", ".github/ISSUE_TEMPLATE/fix-a-translation.md", ".github/ISSUE_TEMPLATE/add-my-project.md", ".github/ISSUE_TEMPLATE/config.yml", "SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "LICENSE"]) expect(existsSync(file), file).toBe(true);
+    for (const file of [
+      ".github/ISSUE_TEMPLATE/report-a-bug.md",
+      ".github/ISSUE_TEMPLATE/suggest-a-feature.md",
+      ".github/ISSUE_TEMPLATE/fix-a-translation.md",
+      ".github/ISSUE_TEMPLATE/add-my-project.md",
+      ".github/ISSUE_TEMPLATE/config.yml",
+      "SECURITY.md",
+      "CODE_OF_CONDUCT.md",
+      "CONTRIBUTING.md",
+      "LICENSE",
+    ])
+      expect(existsSync(file), file).toBe(true);
   });
 });
 
@@ -129,7 +178,15 @@ describe("the demo", () => {
       expect(page.title, key).toMatch(/^Houseki 宝石 — Match-3 gem puzzles/);
       expect(page.description.length, key).toBeGreaterThan(80);
       const html = readFileSync(`demo/${page.file}`, "utf8");
-      for (const marker of ["family:head", "family:header", "family:pages", "family:unreviewed", "family:footer", "family:scripts"]) expect(html, `${key} ${marker}`).toContain(`<!--${marker}`);
+      for (const marker of [
+        "family:head",
+        "family:header",
+        "family:pages",
+        "family:unreviewed",
+        "family:footer",
+        "family:scripts",
+      ])
+        expect(html, `${key} ${marker}`).toContain(`<!--${marker}`);
       expect(html, key).not.toMatch(/id="theme"|id="language"/);
     }
   });
@@ -155,12 +212,14 @@ describe("the demo", () => {
   });
 
   it("never reaches for crypto.randomUUID outside the seed helper, which falls back on a page served over plain http", () => {
-    for (const file of ["demo.js", "chains.js", "tools.js", "blocks.js"]) expect(readFileSync(`demo/${file}`, "utf8"), file).not.toContain("randomUUID");
+    for (const file of ["demo.js", "chains.js", "tools.js", "blocks.js"])
+      expect(readFileSync(`demo/${file}`, "utf8"), file).not.toContain("randomUUID");
   });
 });
 
 describe("the community files", () => {
   it("keep SECURITY.md and CODE_OF_CONDUCT.md equal to the family's master text, a copy of which is kept in scripts/community", () => {
-    for (const file of ["SECURITY.md", "CODE_OF_CONDUCT.md"]) expect(readFileSync(file, "utf8"), file).toBe(readFileSync(`scripts/community/${file}`, "utf8"));
+    for (const file of ["SECURITY.md", "CODE_OF_CONDUCT.md"])
+      expect(readFileSync(file, "utf8"), file).toBe(readFileSync(`scripts/community/${file}`, "utf8"));
   });
 });

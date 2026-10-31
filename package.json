@@ -102,12 +102,13 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint .",
+    "lint": "biome check .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm build && vitest run",
     "test:package": "pnpm build && node scripts/check-package.mjs",
     "family:readme": "node scripts/family-readme.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "format": "biome check --write .",
     "prepublishOnly": "pnpm check && pnpm build",
     "site": "pnpm build && node scripts/site.mjs",
     "test:demo": "pnpm site && node scripts/docs-site.mjs build && playwright test && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
@@ -119,11 +120,9 @@
     "size": "node scripts/docs-site.mjs size"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@biomejs/biome": "2.6.4",
     "@playwright/test": "^1.63.0",
-    "eslint": "^9.0.0",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.0.0",
     "vitest": "^5.0.0",
     "pagefind": "^1.5.2",
     "marked": "^18.0.0",

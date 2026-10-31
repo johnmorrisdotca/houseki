@@ -8,7 +8,7 @@
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type HorizontalDirection = 'left' | 'right';
+export type HorizontalDirection = "left" | "right";
 /** Whether rebound prefers recent input/alternation or the seeded random source.
  *
  * @example
@@ -19,7 +19,7 @@ export type HorizontalDirection = 'left' | 'right';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type ReboundDirectionMode = 'input-or-alternate' | 'seeded';
+export type ReboundDirectionMode = "input-or-alternate" | "seeded";
 /** A counterclockwise, unchanged or clockwise quarter-turn chosen by the host.
  *
  * @example
@@ -44,7 +44,7 @@ export type QuarterTurn = -1 | 0 | 1;
  */
 export interface NatureEntity {
   readonly id: number;
-  readonly kind: 'stone' | 'obstacle';
+  readonly kind: "stone" | "obstacle";
   readonly colour?: string;
   readonly magnetic?: boolean;
   readonly anchored?: boolean;
@@ -60,7 +60,7 @@ export interface NatureEntity {
  * ```
  */
 export interface NaturePieceCell extends NatureEntity {
-  readonly kind: 'stone';
+  readonly kind: "stone";
   readonly x: number;
   readonly y: number;
 }
@@ -153,7 +153,7 @@ export interface NatureMove {
  */
 export interface AttractionPairPreview {
   readonly ids: readonly [number, number];
-  readonly axis: 'horizontal' | 'vertical';
+  readonly axis: "horizontal" | "vertical";
   readonly emptyGap: number;
   readonly midpoint: { readonly x: number; readonly y: number };
   readonly anchoredId?: number;
@@ -246,9 +246,21 @@ export interface PowerDropPreview {
  * ```
  */
 export type NatureEvent =
-  | { readonly type: 'magnetic-pulse'; readonly pairs: readonly AttractionPairPreview[]; readonly moves: readonly NatureMove[] }
-  | { readonly type: 'magnetic-stones-marked'; readonly ids: readonly number[]; readonly randomState: number }
-  | { readonly type: 'power-drop-landed'; readonly power: boolean; readonly rebound: boolean; readonly direction?: HorizontalDirection; readonly quarterTurn: QuarterTurn; readonly moves: readonly NatureMove[]; readonly ids: readonly number[] };
+  | {
+      readonly type: "magnetic-pulse";
+      readonly pairs: readonly AttractionPairPreview[];
+      readonly moves: readonly NatureMove[];
+    }
+  | { readonly type: "magnetic-stones-marked"; readonly ids: readonly number[]; readonly randomState: number }
+  | {
+      readonly type: "power-drop-landed";
+      readonly power: boolean;
+      readonly rebound: boolean;
+      readonly direction?: HorizontalDirection;
+      readonly quarterTurn: QuarterTurn;
+      readonly moves: readonly NatureMove[];
+      readonly ids: readonly number[];
+    };
 /** The native environment result, emitted events and optional pure preview.
  *
  * @example
@@ -278,7 +290,11 @@ export interface NatureTransition {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface MarkingOptions { readonly probability: number; readonly maximum?: number; readonly anchoredProbability?: number }
+export interface MarkingOptions {
+  readonly probability: number;
+  readonly maximum?: number;
+  readonly anchoredProbability?: number;
+}
 /** Stable native validation codes for grid, cell, marking and power-drop failures.
  *
  * @example
@@ -289,4 +305,14 @@ export interface MarkingOptions { readonly probability: number; readonly maximum
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type NatureErrorCode = 'invalid-nature-options' | 'invalid-grid-size' | 'invalid-seed' | 'invalid-mask' | 'invalid-cell' | 'duplicate-id' | 'invalid-marking-options' | 'invalid-power-drop' | 'piece-collision' | 'invalid-piece-position';
+export type NatureErrorCode =
+  | "invalid-nature-options"
+  | "invalid-grid-size"
+  | "invalid-seed"
+  | "invalid-mask"
+  | "invalid-cell"
+  | "duplicate-id"
+  | "invalid-marking-options"
+  | "invalid-power-drop"
+  | "piece-collision"
+  | "invalid-piece-position";

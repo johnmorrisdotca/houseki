@@ -1,4 +1,4 @@
-import type { ChallengeGoal, ChallengeHint, Colour, Gem, Triplet } from './types.js';
+import type { ChallengeGoal, ChallengeHint, Colour, Gem, Triplet } from "./types.js";
 
 /** One authored text in English and Japanese.
  *
@@ -10,7 +10,10 @@ import type { ChallengeGoal, ChallengeHint, Colour, Gem, Triplet } from './types
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface LocalizedText { readonly en: string; readonly ja: string }
+export interface LocalizedText {
+  readonly en: string;
+  readonly ja: string;
+}
 /** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
  *
  * @example
@@ -68,8 +71,8 @@ export interface CampaignLevel {
   readonly score: number;
   readonly marks: 1 | 2 | 3 | 4 | 5;
   readonly gradingVersion: string;
-  readonly proofStatus: 'engine-witness-verified';
-  readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
+  readonly proofStatus: "engine-witness-verified";
+  readonly reviewStatus: "human-review-pending" | "human-reviewed";
 }
 /** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
  *
@@ -107,7 +110,10 @@ export interface CampaignManifest {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface TutorialStep { readonly instruction: LocalizedText; readonly action: string }
+export interface TutorialStep {
+  readonly instruction: LocalizedText;
+  readonly action: string;
+}
 /** One bilingual native lesson with its authored setup, teaching steps and winning witness.
  *
  * @example

@@ -1,4 +1,4 @@
-import type { ChallengeGoal, Stone, StoneColour } from './types.js';
+import type { ChallengeGoal, Stone, StoneColour } from "./types.js";
 
 /** One authored text in English and Japanese.
  *
@@ -10,7 +10,10 @@ import type { ChallengeGoal, Stone, StoneColour } from './types.js';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface LocalizedText { readonly en: string; readonly ja: string }
+export interface LocalizedText {
+  readonly en: string;
+  readonly ja: string;
+}
 /** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
  *
  * @example
@@ -66,8 +69,8 @@ export interface CollapseCampaignLevel {
   readonly score: number;
   readonly marks: 1 | 2 | 3 | 4 | 5;
   readonly gradingVersion: string;
-  readonly proofStatus: 'engine-witness-verified';
-  readonly reviewStatus: 'human-review-pending';
+  readonly proofStatus: "engine-witness-verified";
+  readonly reviewStatus: "human-review-pending";
 }
 /** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
  *
@@ -105,7 +108,10 @@ export interface CollapseCampaignManifest {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface CollapseTutorialStep { readonly instruction: LocalizedText; readonly action: string }
+export interface CollapseTutorialStep {
+  readonly instruction: LocalizedText;
+  readonly action: string;
+}
 /** One bilingual native lesson with its authored setup, teaching steps and winning witness.
  *
  * @example
@@ -122,9 +128,20 @@ export interface CollapseTutorialDefinition {
   readonly id: string;
   readonly title: LocalizedText;
   readonly objective: LocalizedText;
-  readonly setup: { readonly width: number; readonly height: number; readonly colourCount: 4; readonly board: readonly (Stone | null)[]; readonly goal: ChallengeGoal; readonly moveLimit?: number; readonly witness: readonly (readonly number[])[] };
+  readonly setup: {
+    readonly width: number;
+    readonly height: number;
+    readonly colourCount: 4;
+    readonly board: readonly (Stone | null)[];
+    readonly goal: ChallengeGoal;
+    readonly moveLimit?: number;
+    readonly witness: readonly (readonly number[])[];
+  };
   readonly steps: readonly CollapseTutorialStep[];
   readonly tags: readonly string[];
 }
-export interface CollapseContentData { readonly campaign: CollapseCampaignManifest; readonly tutorials: readonly CollapseTutorialDefinition[] }
+export interface CollapseContentData {
+  readonly campaign: CollapseCampaignManifest;
+  readonly tutorials: readonly CollapseTutorialDefinition[];
+}
 export type { ChallengeGoal, Stone, StoneColour };

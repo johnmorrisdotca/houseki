@@ -8,7 +8,7 @@
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GemColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
+export type GemColour = "red" | "blue" | "green" | "gold" | "purple" | "teal";
 /** A Gem Swap beam, bomb or colour-burst special retained at its chosen anchor.
  *
  * @example
@@ -19,7 +19,7 @@ export type GemColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type SpecialKind = 'row-beam' | 'column-beam' | 'bomb' | 'colour-burst';
+export type SpecialKind = "row-beam" | "column-beam" | "bomb" | "colour-burst";
 /** A Gem Swap stored tool or advanced Black Hole selection.
  *
  * @example
@@ -30,7 +30,7 @@ export type SpecialKind = 'row-beam' | 'column-beam' | 'bomb' | 'colour-burst';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type ToolKind = 'bomb' | 'row-clear' | 'colour-clear' | 'black-hole';
+export type ToolKind = "bomb" | "row-clear" | "colour-clear" | "black-hole";
 /** A Gem Swap stored tool excluding the separately charged Black Hole.
  *
  * @example
@@ -41,7 +41,7 @@ export type ToolKind = 'bomb' | 'row-clear' | 'colour-clear' | 'black-hole';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type OrdinaryToolKind = Exclude<ToolKind, 'black-hole'>;
+export type OrdinaryToolKind = Exclude<ToolKind, "black-hole">;
 /** The native remaining counts of stored tools.
  *
  * @example
@@ -81,7 +81,11 @@ export interface BlackHolePortal {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Gem { readonly id: number; readonly colour: GemColour; readonly kind?: SpecialKind }
+export interface Gem {
+  readonly id: number;
+  readonly colour: GemColour;
+  readonly kind?: SpecialKind;
+}
 /** The native Gem Swap cell and special kind planned for the end of a clear wave.
  *
  * @example
@@ -92,7 +96,10 @@ export interface Gem { readonly id: number; readonly colour: GemColour; readonly
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface PlannedSpecial { readonly cell: number; readonly kind: SpecialKind }
+export interface PlannedSpecial {
+  readonly cell: number;
+  readonly kind: SpecialKind;
+}
 /** A named native board geometry; custom dimensions remain a separate option.
  *
  * @example
@@ -103,7 +110,7 @@ export interface PlannedSpecial { readonly cell: number; readonly kind: SpecialK
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
+export type BoardPreset = "compact" | "standard" | "wide" | "tall" | "extraWide" | "deep" | "large";
 /** A native shaped active-cell layout applied to the row-major board.
  *
  * @example
@@ -114,7 +121,7 @@ export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide'
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type BoardShape = 'heart' | 'star' | 'hexagon';
+export type BoardShape = "heart" | "star" | "hexagon";
 /** The native ready, resolution and ending phases.
  *
  * @example
@@ -127,7 +134,7 @@ export type BoardShape = 'heart' | 'star' | 'hexagon';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'refill' | 'finished';
+export type GamePhase = "ready" | "clear-mark" | "clear-remove" | "gravity" | "refill" | "finished";
 /** The native free, timed, daily or authored-challenge game mode.
  *
  * @example
@@ -138,7 +145,7 @@ export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'r
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type GameMode = "relaxed" | "arcade" | "daily" | "challenge";
 /** The terminal outcome; null means the run has no terminal outcome yet.
  *
  * @example
@@ -151,7 +158,7 @@ export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GameOutcome = 'won' | 'lost' | 'finished' | null;
+export type GameOutcome = "won" | "lost" | "finished" | null;
 /** The native authored goal; its discriminant selects the required collection or clearing condition.
  *
  * @example
@@ -163,10 +170,10 @@ export type GameOutcome = 'won' | 'lost' | 'finished' | null;
  * ```
  */
 export type Goal =
-  | { readonly kind: 'score'; readonly target: number }
-  | { readonly kind: 'collect'; readonly colour: GemColour; readonly target: number }
-  | { readonly kind: 'chain'; readonly target: number }
-  | { readonly kind: 'seals' };
+  | { readonly kind: "score"; readonly target: number }
+  | { readonly kind: "collect"; readonly colour: GemColour; readonly target: number }
+  | { readonly kind: "chain"; readonly target: number }
+  | { readonly kind: "seals" };
 /** A Gem Swap row-major seal cell and its remaining layers.
  *
  * @example
@@ -177,7 +184,10 @@ export type Goal =
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Seal { readonly cell: number; readonly layers: number }
+export interface Seal {
+  readonly cell: number;
+  readonly layers: number;
+}
 /** Gem Swap authored goals, optional move budget and seal layout.
  *
  * @example
@@ -188,7 +198,11 @@ export interface Seal { readonly cell: number; readonly layers: number }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeRules { readonly goals: readonly Goal[]; readonly moveLimit?: number; readonly seals?: readonly Seal[] }
+export interface ChallengeRules {
+  readonly goals: readonly Goal[];
+  readonly moveLimit?: number;
+  readonly seals?: readonly Seal[];
+}
 /** One native Gem Swap action, fixed-tick advance or elapsed-time replay operation.
  *
  * @example
@@ -199,7 +213,10 @@ export interface ChallengeRules { readonly goals: readonly Goal[]; readonly move
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type ReplayOperation = { readonly kind: 'action'; readonly action: Action } | { readonly kind: 'ticks'; readonly count: number } | { readonly kind: 'time'; readonly milliseconds: number };
+export type ReplayOperation =
+  | { readonly kind: "action"; readonly action: Action }
+  | { readonly kind: "ticks"; readonly count: number }
+  | { readonly kind: "time"; readonly milliseconds: number };
 /** Validated settings fixed at native game creation.
  *
  * @example
@@ -235,8 +252,8 @@ export interface Settings {
  * ```
  */
 export interface GameState {
-  readonly game: 'gem-swap';
-  readonly rules: 'swap-1';
+  readonly game: "gem-swap";
+  readonly rules: "swap-1";
   readonly settings: Settings;
   readonly initialOptions: CreateOptions;
   readonly mode: GameMode;
@@ -289,7 +306,11 @@ export interface GameState {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface SwapAction { readonly kind: 'swap'; readonly from: number; readonly to: number }
+export interface SwapAction {
+  readonly kind: "swap";
+  readonly from: number;
+  readonly to: number;
+}
 /** Selects a stored Gem Swap tool without committing its target.
  *
  * @example
@@ -300,7 +321,10 @@ export interface SwapAction { readonly kind: 'swap'; readonly from: number; read
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface SelectToolAction { readonly kind: 'select-tool'; readonly tool: ToolKind }
+export interface SelectToolAction {
+  readonly kind: "select-tool";
+  readonly tool: ToolKind;
+}
 /** Previews a selected Gem Swap tool on one row-major cell.
  *
  * @example
@@ -311,7 +335,10 @@ export interface SelectToolAction { readonly kind: 'select-tool'; readonly tool:
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface TargetToolAction { readonly kind: 'target-tool'; readonly cell: number }
+export interface TargetToolAction {
+  readonly kind: "target-tool";
+  readonly cell: number;
+}
 /** Commits the currently selected Gem Swap tool and target.
  *
  * @example
@@ -322,7 +349,9 @@ export interface TargetToolAction { readonly kind: 'target-tool'; readonly cell:
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ConfirmToolAction { readonly kind: 'confirm-tool' }
+export interface ConfirmToolAction {
+  readonly kind: "confirm-tool";
+}
 /** Clears the current Gem Swap tool preview.
  *
  * @example
@@ -333,7 +362,9 @@ export interface ConfirmToolAction { readonly kind: 'confirm-tool' }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface CancelToolAction { readonly kind: 'cancel-tool' }
+export interface CancelToolAction {
+  readonly kind: "cancel-tool";
+}
 /** Requests restoration of the prior Gem Swap move.
  *
  * @example
@@ -344,7 +375,9 @@ export interface CancelToolAction { readonly kind: 'cancel-tool' }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface UndoAction { readonly kind: 'undo' }
+export interface UndoAction {
+  readonly kind: "undo";
+}
 /** Requests a native Gem Swap hint and marks assisted play.
  *
  * @example
@@ -355,7 +388,9 @@ export interface UndoAction { readonly kind: 'undo' }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface HintAction { readonly kind: 'hint' }
+export interface HintAction {
+  readonly kind: "hint";
+}
 /** Requests a native Gem Swap recovery shuffle.
  *
  * @example
@@ -366,7 +401,9 @@ export interface HintAction { readonly kind: 'hint' }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ReshuffleAction { readonly kind: 'reshuffle' }
+export interface ReshuffleAction {
+  readonly kind: "reshuffle";
+}
 /** A native player action accepted or rejected according to the current phase and rules.
  *
  * @example
@@ -378,7 +415,15 @@ export interface ReshuffleAction { readonly kind: 'reshuffle' }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Action = SwapAction | SelectToolAction | TargetToolAction | ConfirmToolAction | CancelToolAction | UndoAction | HintAction | ReshuffleAction;
+export type Action =
+  | SwapAction
+  | SelectToolAction
+  | TargetToolAction
+  | ConfirmToolAction
+  | CancelToolAction
+  | UndoAction
+  | HintAction
+  | ReshuffleAction;
 /** An event emitted by one native transition; type selects the event’s additional fields.
  *
  * @example
@@ -389,7 +434,10 @@ export type Action = SwapAction | SelectToolAction | TargetToolAction | ConfirmT
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
+export interface GameEvent {
+  readonly type: string;
+  readonly [key: string]: unknown;
+}
 /** The resulting native state, emitted events and acceptance decision; rejected actions preserve the input.
  *
  * @example
@@ -403,7 +451,12 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
+export interface Transition {
+  readonly state: GameState;
+  readonly events: readonly GameEvent[];
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
 /** Creation settings for this native engine; dimensions, mode, seed and optional mechanics are validated together.
  *
  * @example
@@ -463,6 +516,12 @@ export interface GameStatus {
   readonly elapsedMs: number;
   readonly remainingMs: number | null;
   readonly goals: readonly Goal[];
-  readonly goalProgress: readonly { readonly kind: Goal['kind']; readonly current: number; readonly target: number; readonly colour?: GemColour; readonly complete: boolean }[];
+  readonly goalProgress: readonly {
+    readonly kind: Goal["kind"];
+    readonly current: number;
+    readonly target: number;
+    readonly colour?: GemColour;
+    readonly complete: boolean;
+  }[];
   readonly bestChain: number;
 }

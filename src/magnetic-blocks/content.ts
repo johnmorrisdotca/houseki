@@ -1,10 +1,10 @@
-import { contentData } from './content-data.js';
-import { createGame } from './engine.js';
-import type { MagneticCampaignLevel, MagneticCampaignManifest, MagneticLesson } from './content-types.js';
-import type { GameState } from './types.js';
+import { contentData } from "./content-data.js";
+import { createGame } from "./engine.js";
+import type { MagneticCampaignLevel, MagneticCampaignManifest, MagneticLesson } from "./content-types.js";
+import type { GameState } from "./types.js";
 
 function deepFreeze<T>(value: T): T {
-  if (value && typeof value === 'object' && !Object.isFrozen(value)) {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
     Object.freeze(value);
     for (const child of Object.values(value as Record<string, unknown>)) deepFreeze(child);
   }
@@ -64,8 +64,9 @@ export const lessonManifest = tutorialManifest;
  * ```
  */
 export function getLevel(id: string | number): MagneticCampaignLevel | undefined {
-  if (typeof id === 'number') return Number.isInteger(id) ? levelManifest.find(level => level.number === id) : undefined;
-  return levelManifest.find(level => level.id === id);
+  if (typeof id === "number")
+    return Number.isInteger(id) ? levelManifest.find((level) => level.number === id) : undefined;
+  return levelManifest.find((level) => level.id === id);
 }
 
 /** Creates a fresh game with the authored rules, board, queue, and finite move budget.
@@ -96,7 +97,9 @@ export function createLevel(id: string | number): GameState {
  * console.log(getLesson(lessonManifest[0].id)?.id);
  * ```
  */
-export function getLesson(id: string): MagneticLesson | undefined { return tutorialManifest.find(lesson => lesson.id === id); }
+export function getLesson(id: string): MagneticLesson | undefined {
+  return tutorialManifest.find((lesson) => lesson.id === id);
+}
 /** Find a magnetic-block lesson by stable id; returns undefined when no lesson has that id.
  *
  * @param id - A stable content id, or the one-based display number when numbers are accepted.

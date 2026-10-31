@@ -1,4 +1,4 @@
-import type { NaturePieceCell, PowerDropPreview } from '../nature/types.js';
+import type { NaturePieceCell, PowerDropPreview } from "../nature/types.js";
 /** A gem colour used by Colour Chains.
  *
  * @example
@@ -9,7 +9,7 @@ import type { NaturePieceCell, PowerDropPreview } from '../nature/types.js';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
+export type Colour = "red" | "blue" | "green" | "gold" | "purple" | "teal";
 /** A settled or active stone with a stable run-local identity.
  *
  * @example
@@ -20,7 +20,11 @@ export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Gem { readonly id: number; readonly colour: Colour; readonly magnetic?: true }
+export interface Gem {
+  readonly id: number;
+  readonly colour: Colour;
+  readonly magnetic?: true;
+}
 /** Authored challenge layouts can include explicit Shizen-marked stones.
  *
  * @example
@@ -42,7 +46,7 @@ export type ChallengeGem = Gem;
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Orientation = 'up' | 'right' | 'down' | 'left';
+export type Orientation = "up" | "right" | "down" | "left";
 /** A visible or hidden board coordinate.
  *
  * @example
@@ -53,7 +57,10 @@ export type Orientation = 'up' | 'right' | 'down' | 'left';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Cell { readonly x: number; readonly y: number }
+export interface Cell {
+  readonly x: number;
+  readonly y: number;
+}
 /** The active rigid pair. The pivot always retains its own gem identity.
  *
  * @example
@@ -66,7 +73,16 @@ export interface Cell { readonly x: number; readonly y: number }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Pair { readonly pivot: Cell; readonly orientation: Orientation; readonly gems: readonly [Gem, Gem]; readonly level: number; readonly gravityTicks: number; readonly groundedTicks: number; readonly resetCount: number; readonly groundedStarted: boolean }
+export interface Pair {
+  readonly pivot: Cell;
+  readonly orientation: Orientation;
+  readonly gems: readonly [Gem, Gem];
+  readonly level: number;
+  readonly gravityTicks: number;
+  readonly groundedTicks: number;
+  readonly resetCount: number;
+  readonly groundedStarted: boolean;
+}
 /** Supported well presets.
  *
  * @example
@@ -77,7 +93,7 @@ export interface Pair { readonly pivot: Cell; readonly orientation: Orientation;
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Preset = 'narrow' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
+export type Preset = "narrow" | "standard" | "wide" | "tall" | "extraWide" | "deep" | "large";
 /** The native game mode; authored challenges have fixed setup and queue rules.
  *
  * @example
@@ -88,7 +104,7 @@ export type Preset = 'narrow' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'de
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type Mode = "relaxed" | "arcade" | "daily" | "challenge";
 /** The native frequent or rare weather schedule for Colour Chains.
  *
  * @example
@@ -99,7 +115,7 @@ export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type WeatherSchedule = 'frequent' | 'rare';
+export type WeatherSchedule = "frequent" | "rare";
 /** Creation settings for this native engine; dimensions, mode, seed and optional mechanics are validated together.
  *
  * @example
@@ -110,7 +126,18 @@ export type WeatherSchedule = 'frequent' | 'rare';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly dailyDate?: string; readonly preset?: Preset; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pairLimit?: number; readonly nature?: boolean; readonly weather?: WeatherSchedule }
+export interface CreateOptions {
+  readonly mode?: Exclude<Mode, "challenge">;
+  readonly seed?: string;
+  readonly dailyDate?: string;
+  readonly preset?: Preset;
+  readonly width?: number;
+  readonly height?: number;
+  readonly colourCount?: 4 | 5 | 6;
+  readonly pairLimit?: number;
+  readonly nature?: boolean;
+  readonly weather?: WeatherSchedule;
+}
 /** Run settings fixed at game creation.
  *
  * @example
@@ -123,7 +150,23 @@ export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; rea
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly date?: string; readonly pairLimit?: number; readonly nature?: true; readonly weather?: WeatherSchedule; readonly challengeId?: string; readonly goal?: ChallengeGoal; readonly initialBoard?: readonly (ChallengeGem | null)[]; readonly queue?: readonly (readonly [Colour, Colour])[]; readonly magneticQueue?: readonly (readonly [boolean, boolean])[]; readonly witness?: readonly WitnessStep[] }
+export interface Settings {
+  readonly mode: Mode;
+  readonly width: number;
+  readonly height: number;
+  readonly colourCount: 4 | 5 | 6;
+  readonly seed: string;
+  readonly date?: string;
+  readonly pairLimit?: number;
+  readonly nature?: true;
+  readonly weather?: WeatherSchedule;
+  readonly challengeId?: string;
+  readonly goal?: ChallengeGoal;
+  readonly initialBoard?: readonly (ChallengeGem | null)[];
+  readonly queue?: readonly (readonly [Colour, Colour])[];
+  readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
+  readonly witness?: readonly WitnessStep[];
+}
 /** Challenge objective; target IDs refer to the visible starting board.
  *
  * @example
@@ -134,7 +177,10 @@ export interface Settings { readonly mode: Mode; readonly width: number; readonl
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type ChallengeGoal = { readonly kind: 'clear-targets'; readonly targetIds: readonly number[] } | { readonly kind: 'minimum-chain'; readonly chain: number } | { readonly kind: 'empty-board' };
+export type ChallengeGoal =
+  | { readonly kind: "clear-targets"; readonly targetIds: readonly number[] }
+  | { readonly kind: "minimum-chain"; readonly chain: number }
+  | { readonly kind: "empty-board" };
 /** One witnessed Colour Chains pair placement using pivot column and orientation.
  *
  * @example
@@ -145,7 +191,10 @@ export type ChallengeGoal = { readonly kind: 'clear-targets'; readonly targetIds
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface WitnessStep { readonly pivotX: number; readonly orientation: Orientation }
+export interface WitnessStep {
+  readonly pivotX: number;
+  readonly orientation: Orientation;
+}
 /** Authored challenge inputs including the starting board, finite goal and supplied witness.
  *
  * @example
@@ -158,7 +207,20 @@ export interface WitnessStep { readonly pivotX: number; readonly orientation: Or
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeOptions { readonly id: string; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly seed?: string; readonly board: readonly (ChallengeGem | null)[]; readonly queue: readonly (readonly [Colour, Colour])[]; readonly magneticQueue?: readonly (readonly [boolean, boolean])[]; readonly nature?: boolean; readonly weather?: WeatherSchedule; readonly goal: ChallengeGoal; readonly witness?: readonly WitnessStep[] }
+export interface ChallengeOptions {
+  readonly id: string;
+  readonly width?: number;
+  readonly height?: number;
+  readonly colourCount?: 4 | 5 | 6;
+  readonly seed?: string;
+  readonly board: readonly (ChallengeGem | null)[];
+  readonly queue: readonly (readonly [Colour, Colour])[];
+  readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
+  readonly nature?: boolean;
+  readonly weather?: WeatherSchedule;
+  readonly goal: ChallengeGoal;
+  readonly witness?: readonly WitnessStep[];
+}
 /** Observable game phases.
  *
  * @example
@@ -171,7 +233,7 @@ export interface ChallengeOptions { readonly id: string; readonly width?: number
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'paused' | 'won' | 'lost' | 'finished';
+export type Phase = "falling" | "clear-mark" | "clear-remove" | "gravity" | "paused" | "won" | "lost" | "finished";
 /** A scored simultaneous match wave.
  *
  * @example
@@ -182,7 +244,12 @@ export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'pau
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Wave { readonly chain: number; readonly cells: readonly number[]; readonly ids: readonly number[]; readonly points: number }
+export interface Wave {
+  readonly chain: number;
+  readonly cells: readonly number[];
+  readonly ids: readonly number[];
+  readonly points: number;
+}
 /** One native Colour Chains player command, including pause and hint commands.
  *
  * @example
@@ -194,7 +261,17 @@ export interface Wave { readonly chain: number; readonly cells: readonly number[
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type PlayAction = { readonly kind: 'left' } | { readonly kind: 'right' } | { readonly kind: 'down' } | { readonly kind: 'rotate-clockwise' } | { readonly kind: 'rotate-anticlockwise' } | { readonly kind: 'hard-drop' } | { readonly kind: 'place' } | { readonly kind: 'pause' } | { readonly kind: 'resume' } | { readonly kind: 'hint' };
+export type PlayAction =
+  | { readonly kind: "left" }
+  | { readonly kind: "right" }
+  | { readonly kind: "down" }
+  | { readonly kind: "rotate-clockwise" }
+  | { readonly kind: "rotate-anticlockwise" }
+  | { readonly kind: "hard-drop" }
+  | { readonly kind: "place" }
+  | { readonly kind: "pause" }
+  | { readonly kind: "resume" }
+  | { readonly kind: "hint" };
 /** A native player action accepted or rejected according to the current phase and rules.
  *
  * @example
@@ -217,7 +294,7 @@ export type Action = PlayAction;
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type HeldControl = 'left' | 'right' | 'soft-drop';
+export type HeldControl = "left" | "right" | "soft-drop";
 /** A native held-control change or one-shot edge command for Colour Chains.
  *
  * @example
@@ -228,7 +305,15 @@ export type HeldControl = 'left' | 'right' | 'soft-drop';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type InputCommand = { readonly kind: 'hold'; readonly control: HeldControl; readonly pressed: boolean } | { readonly kind: 'edge'; readonly action: Extract<PlayAction, { kind: 'rotate-clockwise' | 'rotate-anticlockwise' | 'hard-drop' | 'place' | 'pause' | 'resume' }> };
+export type InputCommand =
+  | { readonly kind: "hold"; readonly control: HeldControl; readonly pressed: boolean }
+  | {
+      readonly kind: "edge";
+      readonly action: Extract<
+        PlayAction,
+        { kind: "rotate-clockwise" | "rotate-anticlockwise" | "hard-drop" | "place" | "pause" | "resume" }
+      >;
+    };
 /** A native action recording with the logical position needed for deterministic replay.
  *
  * @example
@@ -240,7 +325,11 @@ export type InputCommand = { readonly kind: 'hold'; readonly control: HeldContro
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface RecordedAction { readonly tick: number; readonly ordinal: number; readonly action: PlayAction }
+export interface RecordedAction {
+  readonly tick: number;
+  readonly ordinal: number;
+  readonly action: PlayAction;
+}
 /** An immutable Colour Chains rules state. Board rows include the three hidden rows above the well.
  *
  * @example
@@ -254,15 +343,36 @@ export interface RecordedAction { readonly tick: number; readonly ordinal: numbe
  * ```
  */
 export interface GameState {
-  readonly game: 'colour-chains'; readonly rules: 'chains-1'; readonly settings: Settings;
-  readonly board: readonly (Gem | null)[]; readonly phase: Phase; readonly pausedPhase?: Exclude<Phase, 'paused'>; readonly active: Pair | null;
-  readonly next: readonly (readonly [Colour, Colour])[]; readonly bag: readonly Colour[]; readonly randomState: number;
-  readonly nextMagnetic?: readonly (readonly [boolean, boolean])[]; readonly lastHorizontalDirection?: 'left' | 'right'; readonly naturePulsePending?: boolean;
+  readonly game: "colour-chains";
+  readonly rules: "chains-1";
+  readonly settings: Settings;
+  readonly board: readonly (Gem | null)[];
+  readonly phase: Phase;
+  readonly pausedPhase?: Exclude<Phase, "paused">;
+  readonly active: Pair | null;
+  readonly next: readonly (readonly [Colour, Colour])[];
+  readonly bag: readonly Colour[];
+  readonly randomState: number;
+  readonly nextMagnetic?: readonly (readonly [boolean, boolean])[];
+  readonly lastHorizontalDirection?: "left" | "right";
+  readonly naturePulsePending?: boolean;
   readonly weatherResolvedPairs?: number;
-  readonly nextId: number; readonly score: number; readonly maxChain: number; readonly allClears: number; readonly completedPairs: number;
-  readonly resolutionTick: number; readonly resolutionLevel?: number; readonly waves: readonly Wave[]; readonly clearCells: readonly number[];
-  readonly gravityBoard: readonly (Gem | null)[] | null; readonly resolutionHadClear: boolean; readonly elapsedTicks: number;
-  readonly assisted: boolean; readonly witnessIndex: number; readonly recording: readonly RecordedAction[]; readonly reason?: string;
+  readonly nextId: number;
+  readonly score: number;
+  readonly maxChain: number;
+  readonly allClears: number;
+  readonly completedPairs: number;
+  readonly resolutionTick: number;
+  readonly resolutionLevel?: number;
+  readonly waves: readonly Wave[];
+  readonly clearCells: readonly number[];
+  readonly gravityBoard: readonly (Gem | null)[] | null;
+  readonly resolutionHadClear: boolean;
+  readonly elapsedTicks: number;
+  readonly assisted: boolean;
+  readonly witnessIndex: number;
+  readonly recording: readonly RecordedAction[];
+  readonly reason?: string;
 }
 /** A deterministic transition; rejected actions retain the exact input state.
  *
@@ -277,7 +387,12 @@ export interface GameState {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
+export interface Transition {
+  readonly state: GameState;
+  readonly events: readonly GameEvent[];
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
 /** A domain event emitted by one transition.
  *
  * @example
@@ -288,7 +403,10 @@ export interface Transition { readonly state: GameState; readonly events: readon
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
+export interface GameEvent {
+  readonly type: string;
+  readonly [key: string]: unknown;
+}
 /** Compact player status derived from the current state.
  *
  * @example
@@ -301,7 +419,16 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameStatus { readonly mode: Mode; readonly phase: Phase; readonly score: number; readonly maxChain: number; readonly allClears: number; readonly completedPairs: number; readonly assisted: boolean; readonly reason?: string }
+export interface GameStatus {
+  readonly mode: Mode;
+  readonly phase: Phase;
+  readonly score: number;
+  readonly maxChain: number;
+  readonly allClears: number;
+  readonly completedPairs: number;
+  readonly assisted: boolean;
+  readonly reason?: string;
+}
 /** Destination cells for the two independently settled ghost stones.
  *
  * @example
@@ -327,4 +454,6 @@ export type Landing = readonly [Cell, Cell];
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChainsPowerDropPreview extends PowerDropPreview { readonly settledCells: readonly NaturePieceCell[] }
+export interface ChainsPowerDropPreview extends PowerDropPreview {
+  readonly settledCells: readonly NaturePieceCell[];
+}

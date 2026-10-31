@@ -5,20 +5,30 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml" };
+const TYPES = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".svg": "image/svg+xml",
+};
 
 export const ORIGIN = "http://houseki.test/houseki";
 
 /** Serve `site/` to a page at http://houseki.test/. */
 export async function serve(page) {
-  if (!existsSync(join(site, "index.html"))) throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
+  if (!existsSync(join(site, "index.html")))
+    throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
   await page.route(`${new URL(ORIGIN).origin}/**`, (route) => {
     const { pathname } = new URL(route.request().url());
-    if(!pathname.startsWith("/houseki/"))return route.fulfill({status:404,body:""});
-    const relative=pathname.slice("/houseki".length);
+    if (!pathname.startsWith("/houseki/")) return route.fulfill({ status: 404, body: "" });
+    const relative = pathname.slice("/houseki".length);
     const file = join(site, relative.endsWith("/") ? `${relative}index.html` : relative);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
-    return route.fulfill({ body: readFileSync(file), contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream" });
+    return route.fulfill({
+      body: readFileSync(file),
+      contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream",
+    });
   });
 }
 
@@ -29,7 +39,11 @@ function listen(page) {
   page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
   page.on("requestfailed", (request) => errors.push(`Failed resource: ${request.url()}`));
   page.on("response", (response) => {
-    if (response.status() >= 400 && ["script", "stylesheet", "document", "font", "image"].includes(response.request().resourceType())) errors.push(`HTTP ${response.status()}: ${response.url()}`);
+    if (
+      response.status() >= 400 &&
+      ["script", "stylesheet", "document", "font", "image"].includes(response.request().resourceType())
+    )
+      errors.push(`HTTP ${response.status()}: ${response.url()}`);
   });
   return errors;
 }

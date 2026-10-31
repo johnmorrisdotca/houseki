@@ -8,7 +8,7 @@
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
+export type Colour = "red" | "blue" | "green" | "gold" | "purple" | "teal";
 /** A settled or active gem with a stable run-local identity.
  *
  * @example
@@ -19,7 +19,11 @@ export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Gem { readonly id: number; readonly colour: Colour; readonly target?: boolean }
+export interface Gem {
+  readonly id: number;
+  readonly colour: Colour;
+  readonly target?: boolean;
+}
 /** The native game mode; authored challenges have fixed setup and queue rules.
  *
  * @example
@@ -30,7 +34,7 @@ export interface Gem { readonly id: number; readonly colour: Colour; readonly ta
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type Mode = "relaxed" | "arcade" | "daily" | "challenge";
 /** The native falling, resolution, pause and ending phases.
  *
  * @example
@@ -43,7 +47,7 @@ export type Mode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'paused' | 'won' | 'lost' | 'finished';
+export type Phase = "falling" | "clear-mark" | "clear-remove" | "gravity" | "paused" | "won" | "lost" | "finished";
 /** The native falling triplet with stable gem ids, orientation, descent and lock counters.
  *
  * @example
@@ -56,7 +60,17 @@ export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'pau
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Piece { readonly gems: readonly [Gem, Gem, Gem]; readonly x: number; readonly y: number; readonly orientation: 0 | 1 | 2; readonly level: number; readonly descent: number; readonly lockTicks: number; readonly lockResets: number; readonly lockStarted: boolean }
+export interface Piece {
+  readonly gems: readonly [Gem, Gem, Gem];
+  readonly x: number;
+  readonly y: number;
+  readonly orientation: 0 | 1 | 2;
+  readonly level: number;
+  readonly descent: number;
+  readonly lockTicks: number;
+  readonly lockResets: number;
+  readonly lockStarted: boolean;
+}
 /** Validated settings fixed at native game creation.
  *
  * @example
@@ -69,7 +83,20 @@ export interface Piece { readonly gems: readonly [Gem, Gem, Gem]; readonly x: nu
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Settings { readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string; readonly pieceLimit?: number; readonly goal?: 'targets' | 'chain' | 'empty'; readonly targetIds?: readonly number[]; readonly minimumChain?: number; readonly challengeBoard?: readonly (Gem | null)[]; readonly challengeQueue?: readonly Triplet[]; readonly witness?: readonly ChallengeHint[] }
+export interface Settings {
+  readonly mode: Mode;
+  readonly width: number;
+  readonly height: number;
+  readonly colourCount: 4 | 5 | 6;
+  readonly seed: string;
+  readonly pieceLimit?: number;
+  readonly goal?: "targets" | "chain" | "empty";
+  readonly targetIds?: readonly number[];
+  readonly minimumChain?: number;
+  readonly challengeBoard?: readonly (Gem | null)[];
+  readonly challengeQueue?: readonly Triplet[];
+  readonly witness?: readonly ChallengeHint[];
+}
 /** Three ordered gem colours composing one falling triplet.
  *
  * @example
@@ -91,7 +118,10 @@ export type Triplet = readonly [Colour, Colour, Colour];
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeGoalTargets { readonly type: 'targets'; readonly targetIds: readonly number[] }
+export interface ChallengeGoalTargets {
+  readonly type: "targets";
+  readonly targetIds: readonly number[];
+}
 /** A Falling Triplets objective requiring at least the supplied chain depth.
  *
  * @example
@@ -102,7 +132,10 @@ export interface ChallengeGoalTargets { readonly type: 'targets'; readonly targe
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeGoalChain { readonly type: 'chain'; readonly minimumChain: number }
+export interface ChallengeGoalChain {
+  readonly type: "chain";
+  readonly minimumChain: number;
+}
 /** A Falling Triplets objective requiring an empty board.
  *
  * @example
@@ -113,7 +146,9 @@ export interface ChallengeGoalChain { readonly type: 'chain'; readonly minimumCh
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeGoalEmpty { readonly type: 'empty' }
+export interface ChallengeGoalEmpty {
+  readonly type: "empty";
+}
 /** A native authored challenge objective; its discriminant selects target, chain, empty-board or score requirements.
  *
  * @example
@@ -135,7 +170,10 @@ export type ChallengeGoal = ChallengeGoalTargets | ChallengeGoalChain | Challeng
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeHint { readonly x: number; readonly orientation: 0 | 1 | 2 }
+export interface ChallengeHint {
+  readonly x: number;
+  readonly orientation: 0 | 1 | 2;
+}
 /** The fixed Falling Triplets challenge settings with the original board and finite triplet queue.
  *
  * @example
@@ -148,7 +186,12 @@ export interface ChallengeHint { readonly x: number; readonly orientation: 0 | 1
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeSettings extends Settings { readonly mode: 'challenge'; readonly goal: ChallengeGoal['type']; readonly challengeBoard: readonly (Gem | null)[]; readonly challengeQueue: readonly Triplet[] }
+export interface ChallengeSettings extends Settings {
+  readonly mode: "challenge";
+  readonly goal: ChallengeGoal["type"];
+  readonly challengeBoard: readonly (Gem | null)[];
+  readonly challengeQueue: readonly Triplet[];
+}
 /** One simultaneous native match wave, its cleared cells and chain score.
  *
  * @example
@@ -159,7 +202,12 @@ export interface ChallengeSettings extends Settings { readonly mode: 'challenge'
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Wave { readonly clearedIds: readonly number[]; readonly cells: readonly number[]; readonly chain: number; readonly points: number }
+export interface Wave {
+  readonly clearedIds: readonly number[];
+  readonly cells: readonly number[];
+  readonly chain: number;
+  readonly points: number;
+}
 /** The immutable authoritative native game state, including its board, random state and recording.
  *
  * @example
@@ -172,7 +220,36 @@ export interface Wave { readonly clearedIds: readonly number[]; readonly cells: 
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameState { readonly game: 'falling-triplets'; readonly rules: 'triplets-1'; readonly settings: Settings; readonly board: readonly (Gem | null)[]; readonly phase: Phase; readonly pausedPhase?: Phase; readonly active: Piece | null; readonly next: readonly Triplet[]; readonly bag: readonly Colour[]; readonly randomState: number; readonly nextId: number; readonly score: number; readonly maxChain: number; readonly completedPieces: number; readonly elapsedTicks: number; readonly pieceTicks: number; readonly resolutionTick: number; readonly waves: readonly Wave[]; readonly assisted: boolean; readonly hintsUsed: number; readonly witnessPathMatches: boolean; readonly challengeIndex?: number; readonly pendingClear?: readonly number[]; readonly gravityBoard?: readonly (Gem | null)[]; readonly resolutionChain?: number; readonly resolutionLevel?: number; readonly recording: readonly RecordedAction[]; readonly reason?: string }
+export interface GameState {
+  readonly game: "falling-triplets";
+  readonly rules: "triplets-1";
+  readonly settings: Settings;
+  readonly board: readonly (Gem | null)[];
+  readonly phase: Phase;
+  readonly pausedPhase?: Phase;
+  readonly active: Piece | null;
+  readonly next: readonly Triplet[];
+  readonly bag: readonly Colour[];
+  readonly randomState: number;
+  readonly nextId: number;
+  readonly score: number;
+  readonly maxChain: number;
+  readonly completedPieces: number;
+  readonly elapsedTicks: number;
+  readonly pieceTicks: number;
+  readonly resolutionTick: number;
+  readonly waves: readonly Wave[];
+  readonly assisted: boolean;
+  readonly hintsUsed: number;
+  readonly witnessPathMatches: boolean;
+  readonly challengeIndex?: number;
+  readonly pendingClear?: readonly number[];
+  readonly gravityBoard?: readonly (Gem | null)[];
+  readonly resolutionChain?: number;
+  readonly resolutionLevel?: number;
+  readonly recording: readonly RecordedAction[];
+  readonly reason?: string;
+}
 /** A native player action accepted or rejected according to the current phase and rules.
  *
  * @example
@@ -184,7 +261,20 @@ export interface GameState { readonly game: 'falling-triplets'; readonly rules: 
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Action = { readonly kind: 'left' | 'right' | 'soft-drop' | 'hard-drop' | 'place' | 'cycle-forward' | 'cycle-backward' | 'pause' | 'resume' | 'hint' | 'tick' };
+export type Action = {
+  readonly kind:
+    | "left"
+    | "right"
+    | "soft-drop"
+    | "hard-drop"
+    | "place"
+    | "cycle-forward"
+    | "cycle-backward"
+    | "pause"
+    | "resume"
+    | "hint"
+    | "tick";
+};
 /** The resulting native state, emitted events and acceptance decision; rejected actions preserve the input.
  *
  * @example
@@ -198,7 +288,12 @@ export type Action = { readonly kind: 'left' | 'right' | 'soft-drop' | 'hard-dro
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
+export interface Transition {
+  readonly state: GameState;
+  readonly events: readonly GameEvent[];
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
 /** One accepted canonical action and its logical tick position.
  *
  * @example
@@ -210,7 +305,11 @@ export interface Transition { readonly state: GameState; readonly events: readon
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface RecordedAction { readonly tick: number; readonly ordinal: number; readonly action: Exclude<Action, { readonly kind: 'tick' }> }
+export interface RecordedAction {
+  readonly tick: number;
+  readonly ordinal: number;
+  readonly action: Exclude<Action, { readonly kind: "tick" }>;
+}
 /** An event emitted by one native transition; type selects the event’s additional fields.
  *
  * @example
@@ -221,7 +320,10 @@ export interface RecordedAction { readonly tick: number; readonly ordinal: numbe
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
+export interface GameEvent {
+  readonly type: string;
+  readonly [key: string]: unknown;
+}
 /** Creation settings for this native engine; dimensions, mode, seed and optional mechanics are validated together.
  *
  * @example
@@ -232,7 +334,15 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; readonly seed?: string; readonly preset?: 'compact' | 'narrow' | 'standard' | 'wide' | 'extraWide' | 'tall' | 'deep' | 'large'; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly pieceLimit?: number }
+export interface CreateOptions {
+  readonly mode?: Exclude<Mode, "challenge">;
+  readonly seed?: string;
+  readonly preset?: "compact" | "narrow" | "standard" | "wide" | "extraWide" | "tall" | "deep" | "large";
+  readonly width?: number;
+  readonly height?: number;
+  readonly colourCount?: 4 | 5 | 6;
+  readonly pieceLimit?: number;
+}
 /** Authored challenge inputs including the starting board, finite goal and supplied witness.
  *
  * @example
@@ -245,4 +355,13 @@ export interface CreateOptions { readonly mode?: Exclude<Mode, 'challenge'>; rea
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChallengeOptions { readonly seed?: string; readonly width?: number; readonly height?: number; readonly colourCount?: 4 | 5 | 6; readonly board: readonly (Gem | null)[]; readonly queue: readonly Triplet[]; readonly goal: ChallengeGoal; readonly witness?: readonly ChallengeHint[] }
+export interface ChallengeOptions {
+  readonly seed?: string;
+  readonly width?: number;
+  readonly height?: number;
+  readonly colourCount?: 4 | 5 | 6;
+  readonly board: readonly (Gem | null)[];
+  readonly queue: readonly Triplet[];
+  readonly goal: ChallengeGoal;
+  readonly witness?: readonly ChallengeHint[];
+}

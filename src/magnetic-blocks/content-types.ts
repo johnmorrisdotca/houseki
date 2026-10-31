@@ -1,4 +1,4 @@
-import type { Action, Colour, CreateOptions, Floor, GameState, Gem } from './types.js';
+import type { Action, Colour, CreateOptions, Floor, GameState, Gem } from "./types.js";
 
 /** One authored text in English and Japanese.
  *
@@ -10,7 +10,10 @@ import type { Action, Colour, CreateOptions, Floor, GameState, Gem } from './typ
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface LocalizedText { readonly en: string; readonly ja: string }
+export interface LocalizedText {
+  readonly en: string;
+  readonly ja: string;
+}
 /** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
  *
  * @example
@@ -41,13 +44,24 @@ export interface MagneticDifficultyMetrics {
   readonly setupDecisionPressure?: number;
   readonly interactingDependencyDepth?: number;
   readonly necessaryFloorDecisionShare?: number;
-  readonly setupDecisionEvidence?: readonly { readonly step: number; readonly legalChoices: number; readonly preservingChoices: number; readonly pressure: number }[];
+  readonly setupDecisionEvidence?: readonly {
+    readonly step: number;
+    readonly legalChoices: number;
+    readonly preservingChoices: number;
+    readonly pressure: number;
+  }[];
   readonly targetIdsClearedByPlacement?: readonly number[];
   readonly targetIdsRemainingAfterPlacement?: readonly number[];
   readonly targetIdsMovedByPlacement?: readonly number[];
-  readonly minimumPlanSearch?: { readonly status: 'exact' | 'unknown'; readonly nodeBudget: number; readonly nodesVisited: number; readonly lowerBound: number; readonly upperBound?: number };
+  readonly minimumPlanSearch?: {
+    readonly status: "exact" | "unknown";
+    readonly nodeBudget: number;
+    readonly nodesVisited: number;
+    readonly lowerBound: number;
+    readonly upperBound?: number;
+  };
 }
-export type MagneticDifficultyBand = 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert';
+export type MagneticDifficultyBand = "entry" | "easy" | "intermediate" | "hard" | "expert";
 /** One authored native challenge with its stable id, setup, winning witness, measurements and review status.
  *
  * @example
@@ -67,7 +81,7 @@ export interface MagneticCampaignLevel {
   readonly objective: LocalizedText;
   readonly options: CreateOptions;
   readonly witness: readonly Action[];
-  readonly witnessResult: 'won';
+  readonly witnessResult: "won";
   readonly metrics: MagneticDifficultyMetrics;
   readonly marks: 1 | 2 | 3 | 4 | 5;
   readonly tags: readonly string[];
@@ -75,11 +89,15 @@ export interface MagneticCampaignLevel {
   readonly canonicalKeyHash: string;
   readonly score: number;
   readonly gradingVersion: string;
-  readonly proofStatus: 'engine-witness-verified';
-  readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
+  readonly proofStatus: "engine-witness-verified";
+  readonly reviewStatus: "human-review-pending" | "human-reviewed";
   readonly band?: MagneticDifficultyBand;
-  readonly counterfactual?: { readonly kind: 'floor-choice' | 'floor-schedule' | 'floor-switch'; readonly alternative: string; readonly result: 'won' | 'lost' | 'finished' };
-  readonly impactEvidence?: { readonly removedSupportCount: number; readonly disabledImpactResult: 'won' };
+  readonly counterfactual?: {
+    readonly kind: "floor-choice" | "floor-schedule" | "floor-switch";
+    readonly alternative: string;
+    readonly result: "won" | "lost" | "finished";
+  };
+  readonly impactEvidence?: { readonly removedSupportCount: number; readonly disabledImpactResult: "won" };
 }
 /** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
  *
@@ -104,7 +122,12 @@ export interface MagneticCampaignManifest {
   readonly checksum: string;
   readonly orderingPolicy: string;
   readonly levels: readonly MagneticCampaignLevel[];
-  readonly bands?: readonly { readonly id: MagneticDifficultyBand; readonly count: number; readonly first: number; readonly last: number }[];
+  readonly bands?: readonly {
+    readonly id: MagneticDifficultyBand;
+    readonly count: number;
+    readonly first: number;
+    readonly last: number;
+  }[];
 }
 /** One bilingual native lesson with its authored setup, teaching steps and winning witness.
  *

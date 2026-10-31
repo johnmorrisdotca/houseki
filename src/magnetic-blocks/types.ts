@@ -8,7 +8,7 @@
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
+export type Colour = "red" | "blue" | "green" | "gold" | "purple" | "teal";
 /** The native calm or magnetic floor used when settling blocks.
  *
  * @example
@@ -19,7 +19,7 @@ export type Colour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Floor = 'calm' | 'magnetic';
+export type Floor = "calm" | "magnetic";
 /** A fixed, periodic or authored schedule selecting the floor for committed block placements.
  *
  * @example
@@ -31,12 +31,12 @@ export type Floor = 'calm' | 'magnetic';
  * ```
  */
 export type FloorSchedule =
-  | { readonly kind: 'frequent' }
-  | { readonly kind: 'occasional' }
-  | { readonly kind: 'infrequent' }
-  | { readonly kind: 'mid-level'; readonly placement: number }
-  | { readonly kind: 'fixed'; readonly floor: Floor }
-  | { readonly kind: 'authored'; readonly magneticPlacements: readonly number[]; readonly defaultFloor?: Floor };
+  | { readonly kind: "frequent" }
+  | { readonly kind: "occasional" }
+  | { readonly kind: "infrequent" }
+  | { readonly kind: "mid-level"; readonly placement: number }
+  | { readonly kind: "fixed"; readonly floor: Floor }
+  | { readonly kind: "authored"; readonly magneticPlacements: readonly number[]; readonly defaultFloor?: Floor };
 /** The native game mode; authored challenges have fixed setup and queue rules.
  *
  * @example
@@ -47,7 +47,7 @@ export type FloorSchedule =
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Mode = 'relaxed' | 'arcade';
+export type Mode = "relaxed" | "arcade";
 /** The native falling, resolution, pause and ending phases.
  *
  * @example
@@ -60,7 +60,7 @@ export type Mode = 'relaxed' | 'arcade';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'paused' | 'won' | 'lost' | 'finished';
+export type Phase = "falling" | "clear-mark" | "clear-remove" | "gravity" | "paused" | "won" | "lost" | "finished";
 /** A native gem with a stable run-local id and colour.
  *
  * @example
@@ -71,7 +71,10 @@ export type Phase = 'falling' | 'clear-mark' | 'clear-remove' | 'gravity' | 'pau
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Gem { readonly id: number; readonly colour: Colour }
+export interface Gem {
+  readonly id: number;
+  readonly colour: Colour;
+}
 /** An undirected stable-id connection between two gems in a magnetic block.
  *
  * @example
@@ -82,7 +85,10 @@ export interface Gem { readonly id: number; readonly colour: Colour }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Bond { readonly a: number; readonly b: number }
+export interface Bond {
+  readonly a: number;
+  readonly b: number;
+}
 /** The native active 2×2 block, orientation and fixed-tick descent/lock counters.
  *
  * @example
@@ -95,7 +101,16 @@ export interface Bond { readonly a: number; readonly b: number }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Block { readonly x: number; readonly y: number; readonly orientation: 0 | 1 | 2 | 3; readonly gems: readonly [Gem, Gem, Gem, Gem]; readonly descent: number; readonly lockTicks: number; readonly lockResets: number; readonly lockStarted: boolean }
+export interface Block {
+  readonly x: number;
+  readonly y: number;
+  readonly orientation: 0 | 1 | 2 | 3;
+  readonly gems: readonly [Gem, Gem, Gem, Gem];
+  readonly descent: number;
+  readonly lockTicks: number;
+  readonly lockResets: number;
+  readonly lockStarted: boolean;
+}
 /** The native authored goal; its discriminant selects the required collection or clearing condition.
  *
  * @example
@@ -106,7 +121,9 @@ export interface Block { readonly x: number; readonly y: number; readonly orient
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type Goal = { readonly kind: 'clear-all' } | { readonly kind: 'clear-targets'; readonly targetIds: readonly number[] };
+export type Goal =
+  | { readonly kind: "clear-all" }
+  | { readonly kind: "clear-targets"; readonly targetIds: readonly number[] };
 /** Creation settings for this native engine; dimensions, mode, seed and optional mechanics are validated together.
  *
  * @example
@@ -146,10 +163,20 @@ export interface CreateOptions {
  * ```
  */
 export interface Settings {
-  readonly mode: Mode; readonly width: number; readonly height: number; readonly colourCount: 4 | 5 | 6; readonly seed: string | number;
-  readonly mask: readonly boolean[]; readonly schedule: FloorSchedule; readonly floorSwitch: boolean;
-  readonly magneticImpact: boolean; readonly pieceLimit: number; readonly initialBoard: readonly (Gem | null)[]; readonly bonds: readonly Bond[];
-  readonly initialQueue?: readonly (readonly [Colour, Colour, Colour, Colour])[]; readonly goal?: Goal;
+  readonly mode: Mode;
+  readonly width: number;
+  readonly height: number;
+  readonly colourCount: 4 | 5 | 6;
+  readonly seed: string | number;
+  readonly mask: readonly boolean[];
+  readonly schedule: FloorSchedule;
+  readonly floorSwitch: boolean;
+  readonly magneticImpact: boolean;
+  readonly pieceLimit: number;
+  readonly initialBoard: readonly (Gem | null)[];
+  readonly bonds: readonly Bond[];
+  readonly initialQueue?: readonly (readonly [Colour, Colour, Colour, Colour])[];
+  readonly goal?: Goal;
 }
 /** The immutable authoritative native game state, including its board, random state and recording.
  *
@@ -164,13 +191,33 @@ export interface Settings {
  * ```
  */
 export interface GameState {
-  readonly game: 'magnetic-blocks'; readonly rules: 'magnetic-blocks-1'; readonly settings: Settings;
-  readonly board: readonly (Gem | null)[]; readonly bonds: readonly Bond[]; readonly active: Block | null;
-  readonly queue: readonly (readonly [Colour, Colour, Colour, Colour])[]; readonly randomState: number; readonly nextId: number;
-  readonly phase: Phase; readonly pausedPhase?: Exclude<Phase, 'paused'>; readonly score: number; readonly moves: number; readonly placements: number; readonly chain: number; readonly maxChain: number;
-  readonly floor: Floor; readonly nextFloor: Floor; readonly floorSwitchCharges: 0 | 1; readonly pendingFloorOverride: Floor | null;
-  readonly pendingClear: readonly number[]; readonly gravityBoard: readonly (Gem | null)[] | null; readonly resolutionTick: number;
-  readonly impactRemovedIds: readonly number[]; readonly elapsedTicks: number; readonly recording: readonly RecordedAction[]; readonly reason?: string;
+  readonly game: "magnetic-blocks";
+  readonly rules: "magnetic-blocks-1";
+  readonly settings: Settings;
+  readonly board: readonly (Gem | null)[];
+  readonly bonds: readonly Bond[];
+  readonly active: Block | null;
+  readonly queue: readonly (readonly [Colour, Colour, Colour, Colour])[];
+  readonly randomState: number;
+  readonly nextId: number;
+  readonly phase: Phase;
+  readonly pausedPhase?: Exclude<Phase, "paused">;
+  readonly score: number;
+  readonly moves: number;
+  readonly placements: number;
+  readonly chain: number;
+  readonly maxChain: number;
+  readonly floor: Floor;
+  readonly nextFloor: Floor;
+  readonly floorSwitchCharges: 0 | 1;
+  readonly pendingFloorOverride: Floor | null;
+  readonly pendingClear: readonly number[];
+  readonly gravityBoard: readonly (Gem | null)[] | null;
+  readonly resolutionTick: number;
+  readonly impactRemovedIds: readonly number[];
+  readonly elapsedTicks: number;
+  readonly recording: readonly RecordedAction[];
+  readonly reason?: string;
 }
 /** A native player action accepted or rejected according to the current phase and rules.
  *
@@ -184,10 +231,17 @@ export interface GameState {
  * ```
  */
 export type Action =
-  | { readonly kind: 'left' } | { readonly kind: 'right' } | { readonly kind: 'soft-drop' }
-  | { readonly kind: 'rotate-clockwise' } | { readonly kind: 'rotate-anticlockwise' }
-  | { readonly kind: 'hard-drop' } | { readonly kind: 'land' } | { readonly kind: 'pause' } | { readonly kind: 'resume' }
-  | { readonly kind: 'set-floor-override'; readonly floor: Floor } | { readonly kind: 'cancel-floor-override' };
+  | { readonly kind: "left" }
+  | { readonly kind: "right" }
+  | { readonly kind: "soft-drop" }
+  | { readonly kind: "rotate-clockwise" }
+  | { readonly kind: "rotate-anticlockwise" }
+  | { readonly kind: "hard-drop" }
+  | { readonly kind: "land" }
+  | { readonly kind: "pause" }
+  | { readonly kind: "resume" }
+  | { readonly kind: "set-floor-override"; readonly floor: Floor }
+  | { readonly kind: "cancel-floor-override" };
 /** A native action recording with the logical position needed for deterministic replay.
  *
  * @example
@@ -199,7 +253,11 @@ export type Action =
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface RecordedAction { readonly tick: number; readonly ordinal: number; readonly action: Action }
+export interface RecordedAction {
+  readonly tick: number;
+  readonly ordinal: number;
+  readonly action: Action;
+}
 /** An event emitted by one native transition; type selects the event’s additional fields.
  *
  * @example
@@ -210,7 +268,10 @@ export interface RecordedAction { readonly tick: number; readonly ordinal: numbe
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
+export interface GameEvent {
+  readonly type: string;
+  readonly [key: string]: unknown;
+}
 /** The resulting native state, emitted events and acceptance decision; rejected actions preserve the input.
  *
  * @example
@@ -224,7 +285,12 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
+export interface Transition {
+  readonly state: GameState;
+  readonly events: readonly GameEvent[];
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
 /** A compact native status derived from the authoritative state for a host’s labels.
  *
  * @example
@@ -237,4 +303,15 @@ export interface Transition { readonly state: GameState; readonly events: readon
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameStatus { readonly phase: Phase; readonly score: number; readonly moves: number; readonly placements: number; readonly floor: Floor; readonly nextFloor: Floor; readonly floorSwitchCharges: number; readonly pendingFloorOverride: Floor | null; readonly maxChain: number; readonly reason?: string }
+export interface GameStatus {
+  readonly phase: Phase;
+  readonly score: number;
+  readonly moves: number;
+  readonly placements: number;
+  readonly floor: Floor;
+  readonly nextFloor: Floor;
+  readonly floorSwitchCharges: number;
+  readonly pendingFloorOverride: Floor | null;
+  readonly maxChain: number;
+  readonly reason?: string;
+}

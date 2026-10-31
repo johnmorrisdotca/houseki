@@ -5,7 +5,9 @@ import { open } from "./demo.mjs";
 
 // Off, the page is as it was; on, every option row says in one line what it does, in the page's language, and every control in it has hover words.
 for (const file of ["index.html", "chains.html", "tools.html", "blocks.html"]) {
-  test(`${file}: Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area`, async ({ page }) => {
+  test(`${file}: Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area`, async ({
+    page,
+  }) => {
     const errors = await open(page, file);
     const lines = page.locator(".fam-help");
     const rows = page.locator("[data-help-en]");
@@ -19,8 +21,16 @@ for (const file of ["index.html", "chains.html", "tools.html", "blocks.html"]) {
     for (const row of await rows.all()) {
       if (await row.isVisible()) {
         const shown = await row.evaluate((el) => {
-          const line = el.classList.contains("fam-seg") || el.hasAttribute("data-help-after") ? el.nextElementSibling : el.querySelector(":scope > .fam-help");
-          return line !== null && line.classList.contains("fam-help") && window.getComputedStyle(line).display !== "none" && line.textContent.length > 10;
+          const line =
+            el.classList.contains("fam-seg") || el.hasAttribute("data-help-after")
+              ? el.nextElementSibling
+              : el.querySelector(":scope > .fam-help");
+          return (
+            line !== null &&
+            line.classList.contains("fam-help") &&
+            window.getComputedStyle(line).display !== "none" &&
+            line.textContent.length > 10
+          );
         });
         expect(shown).toBe(true);
       }

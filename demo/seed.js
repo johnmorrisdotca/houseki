@@ -6,6 +6,7 @@ export function newSeed() {
   if (asked !== null && asked !== "") return asked.slice(0, 128);
   const crypto = globalThis.crypto;
   if (typeof crypto?.randomUUID === "function") return crypto.randomUUID();
-  if (typeof crypto?.getRandomValues === "function") return [...crypto.getRandomValues(new Uint8Array(16))].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  if (typeof crypto?.getRandomValues === "function")
+    return [...crypto.getRandomValues(new Uint8Array(16))].map((byte) => byte.toString(16).padStart(2, "0")).join("");
   return `seed-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }

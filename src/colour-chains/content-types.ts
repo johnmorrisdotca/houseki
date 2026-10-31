@@ -1,4 +1,4 @@
-import type { ChallengeGoal, Colour, Gem, Orientation, WitnessStep } from './types.js';
+import type { ChallengeGoal, Colour, Gem, Orientation, WitnessStep } from "./types.js";
 
 /** One authored text in English and Japanese.
  *
@@ -10,7 +10,10 @@ import type { ChallengeGoal, Colour, Gem, Orientation, WitnessStep } from './typ
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface LocalizedText { readonly en: string; readonly ja: string }
+export interface LocalizedText {
+  readonly en: string;
+  readonly ja: string;
+}
 /** The bounded engine measurements used to grade this campaign; they do not claim human difficulty.
  *
  * @example
@@ -69,7 +72,7 @@ export interface ChainDifficultyMetrics {
   readonly weatherEventCount?: number;
   readonly weatherDependency?: number;
   readonly mechanicOffCounterfactualWon?: boolean;
-  readonly mechanicOffCounterfactualKind?: 'nature' | 'magnetism' | 'weather';
+  readonly mechanicOffCounterfactualKind?: "nature" | "magnetism" | "weather";
   readonly mechanicOffCounterfactualPhase?: string;
   readonly rawDifficultyScore?: number;
   readonly requiredChainDepth: number;
@@ -101,7 +104,7 @@ export interface ChainCampaignLevel {
   readonly title: LocalizedText;
   readonly objective?: LocalizedText;
   readonly nature?: true;
-  readonly weather?: 'frequent';
+  readonly weather?: "frequent";
   readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
   readonly canonicalKeyHash: string;
   readonly width: number;
@@ -117,9 +120,9 @@ export interface ChainCampaignLevel {
   readonly score: number;
   readonly marks: 1 | 2 | 3 | 4 | 5;
   readonly gradingVersion: string;
-  readonly proofStatus: 'engine-witness-verified';
-  readonly reviewStatus: 'human-review-pending' | 'human-reviewed';
-  readonly band?: 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert';
+  readonly proofStatus: "engine-witness-verified";
+  readonly reviewStatus: "human-review-pending" | "human-reviewed";
+  readonly band?: "entry" | "easy" | "intermediate" | "hard" | "expert";
   readonly rawDifficultyScore?: number;
   readonly normalizationCategory?: string;
 }
@@ -137,7 +140,7 @@ export interface ChainCampaignLevel {
 export interface NatureChainCampaignLevel extends ChainCampaignLevel {
   readonly objective: LocalizedText;
   readonly nature: true;
-  readonly weather?: 'frequent';
+  readonly weather?: "frequent";
   readonly magneticQueue?: readonly (readonly [boolean, boolean])[];
   readonly weatherTrace?: readonly Readonly<Record<string, unknown>>[];
 }
@@ -175,7 +178,12 @@ export interface ChainCampaignManifest {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface NatureCampaignBand { readonly id: 'entry' | 'easy' | 'intermediate' | 'hard' | 'expert'; readonly count: number; readonly first: number; readonly last: number }
+export interface NatureCampaignBand {
+  readonly id: "entry" | "easy" | "intermediate" | "hard" | "expert";
+  readonly count: number;
+  readonly first: number;
+  readonly last: number;
+}
 /** The ordered native campaign, its generation/grading revisions, checksum and measured levels.
  *
  * @example
@@ -187,7 +195,10 @@ export interface NatureCampaignBand { readonly id: 'entry' | 'easy' | 'intermedi
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface NatureChainCampaignManifest extends Omit<ChainCampaignManifest, 'levels'> { readonly levels: readonly NatureChainCampaignLevel[]; readonly bands?: readonly NatureCampaignBand[] }
+export interface NatureChainCampaignManifest extends Omit<ChainCampaignManifest, "levels"> {
+  readonly levels: readonly NatureChainCampaignLevel[];
+  readonly bands?: readonly NatureCampaignBand[];
+}
 /** One bilingual native lesson instruction and the corresponding action or tick step.
  *
  * @example
@@ -200,7 +211,10 @@ export interface NatureChainCampaignManifest extends Omit<ChainCampaignManifest,
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChainTutorialStep { readonly instruction: LocalizedText; readonly action: string }
+export interface ChainTutorialStep {
+  readonly instruction: LocalizedText;
+  readonly action: string;
+}
 /** One bilingual native lesson with its authored setup, teaching steps and winning witness.
  *
  * @example
@@ -217,7 +231,12 @@ export interface ChainTutorialDefinition {
   readonly id: string;
   readonly title: LocalizedText;
   readonly objective: LocalizedText;
-  readonly setup: { readonly board: readonly (Gem | null)[]; readonly queue: readonly (readonly [Colour, Colour])[]; readonly goal: ChallengeGoal; readonly witness: readonly WitnessStep[] };
+  readonly setup: {
+    readonly board: readonly (Gem | null)[];
+    readonly queue: readonly (readonly [Colour, Colour])[];
+    readonly goal: ChallengeGoal;
+    readonly witness: readonly WitnessStep[];
+  };
   readonly steps: readonly ChainTutorialStep[];
   readonly tags: readonly string[];
 }
@@ -232,5 +251,10 @@ export interface ChainTutorialDefinition {
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ChainContentData { readonly campaign: ChainCampaignManifest; readonly tutorials: readonly ChainTutorialDefinition[]; readonly shizen?: NatureChainCampaignManifest; readonly arashi?: NatureChainCampaignManifest }
+export interface ChainContentData {
+  readonly campaign: ChainCampaignManifest;
+  readonly tutorials: readonly ChainTutorialDefinition[];
+  readonly shizen?: NatureChainCampaignManifest;
+  readonly arashi?: NatureChainCampaignManifest;
+}
 export type { Colour, Orientation, WitnessStep, ChallengeGoal };

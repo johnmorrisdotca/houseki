@@ -8,7 +8,7 @@
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type StoneColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
+export type StoneColour = "red" | "blue" | "green" | "gold" | "purple" | "teal";
 /** A stone keeps its run-local identity as it falls or changes column.
  *
  * @example
@@ -19,7 +19,10 @@ export type StoneColour = 'red' | 'blue' | 'green' | 'gold' | 'purple' | 'teal';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Stone { readonly id: number; readonly colour: StoneColour }
+export interface Stone {
+  readonly id: number;
+  readonly colour: StoneColour;
+}
 /** A named native board geometry; custom dimensions remain a separate option.
  *
  * @example
@@ -30,7 +33,7 @@ export interface Stone { readonly id: number; readonly colour: StoneColour }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide' | 'deep' | 'large';
+export type BoardPreset = "compact" | "standard" | "wide" | "tall" | "extraWide" | "deep" | "large";
 /** A native shaped active-cell layout applied to the row-major board.
  *
  * @example
@@ -41,7 +44,7 @@ export type BoardPreset = 'compact' | 'standard' | 'wide' | 'tall' | 'extraWide'
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type BoardShape = 'heart' | 'star' | 'hexagon';
+export type BoardShape = "heart" | "star" | "hexagon";
 /** The native free, timed, daily or authored-challenge game mode.
  *
  * @example
@@ -52,7 +55,7 @@ export type BoardShape = 'heart' | 'star' | 'hexagon';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
+export type GameMode = "relaxed" | "arcade" | "daily" | "challenge";
 /** A stored Stone Collapse tool selected from the native Bomb and Pick tray.
  *
  * @example
@@ -63,7 +66,7 @@ export type GameMode = 'relaxed' | 'arcade' | 'daily' | 'challenge';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type StoredTool = 'bomb' | 'pick';
+export type StoredTool = "bomb" | "pick";
 /** The native remaining counts of stored tools.
  *
  * @example
@@ -76,7 +79,10 @@ export type StoredTool = 'bomb' | 'pick';
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface ToolInventory { readonly bomb: number; readonly pick: number }
+export interface ToolInventory {
+  readonly bomb: number;
+  readonly pick: number;
+}
 /** The native ready, resolution and ending phases.
  *
  * @example
@@ -89,7 +95,7 @@ export interface ToolInventory { readonly bomb: number; readonly pick: number }
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'won' | 'lost' | 'finished';
+export type GamePhase = "ready" | "clear-mark" | "clear-remove" | "gravity" | "won" | "lost" | "finished";
 /** A native authored challenge objective; its discriminant selects target, chain, empty-board or score requirements.
  *
  * @example
@@ -101,9 +107,9 @@ export type GamePhase = 'ready' | 'clear-mark' | 'clear-remove' | 'gravity' | 'w
  * ```
  */
 export type ChallengeGoal =
-  | { readonly kind: 'clear-all' }
-  | { readonly kind: 'clear-targets'; readonly targetIds: readonly number[] }
-  | { readonly kind: 'score-target'; readonly minimumScore: number };
+  | { readonly kind: "clear-all" }
+  | { readonly kind: "clear-targets"; readonly targetIds: readonly number[] }
+  | { readonly kind: "score-target"; readonly minimumScore: number };
 /** Validated settings fixed at native game creation.
  *
  * @example
@@ -198,14 +204,14 @@ export interface UndoFrame {
  * ```
  */
 export type RecordedAction =
-  | { readonly kind: 'remove'; readonly move: number; readonly stoneId: number }
-  | { readonly kind: 'select-tool'; readonly tool: StoredTool }
-  | { readonly kind: 'target-tool'; readonly cell: number }
-  | { readonly kind: 'confirm-tool'; readonly move: number }
-  | { readonly kind: 'cancel-tool' }
-  | { readonly kind: 'undo'; readonly move: number }
-  | { readonly kind: 'hint'; readonly witnessIndex: number }
-  | { readonly kind: 'ticks'; readonly count: number };
+  | { readonly kind: "remove"; readonly move: number; readonly stoneId: number }
+  | { readonly kind: "select-tool"; readonly tool: StoredTool }
+  | { readonly kind: "target-tool"; readonly cell: number }
+  | { readonly kind: "confirm-tool"; readonly move: number }
+  | { readonly kind: "cancel-tool" }
+  | { readonly kind: "undo"; readonly move: number }
+  | { readonly kind: "hint"; readonly witnessIndex: number }
+  | { readonly kind: "ticks"; readonly count: number };
 /** The immutable authoritative native game state, including its board, random state and recording.
  *
  * @example
@@ -219,8 +225,8 @@ export type RecordedAction =
  * ```
  */
 export interface GameState {
-  readonly game: 'stone-collapse';
-  readonly rules: 'collapse-2';
+  readonly game: "stone-collapse";
+  readonly rules: "collapse-2";
   readonly settings: Settings;
   readonly challenge: ChallengeDefinition | null;
   readonly initialBoard: readonly (Stone | null)[];
@@ -270,15 +276,15 @@ export interface GameState {
  * ```
  */
 export type Action =
-  | { readonly kind: 'select'; readonly stoneId: number }
-  | { readonly kind: 'confirm' }
-  | { readonly kind: 'cancel' }
-  | { readonly kind: 'undo' }
-  | { readonly kind: 'hint' }
-  | { readonly kind: 'select-tool'; readonly tool: StoredTool }
-  | { readonly kind: 'target-tool'; readonly cell: number }
-  | { readonly kind: 'confirm-tool' }
-  | { readonly kind: 'cancel-tool' };
+  | { readonly kind: "select"; readonly stoneId: number }
+  | { readonly kind: "confirm" }
+  | { readonly kind: "cancel" }
+  | { readonly kind: "undo" }
+  | { readonly kind: "hint" }
+  | { readonly kind: "select-tool"; readonly tool: StoredTool }
+  | { readonly kind: "target-tool"; readonly cell: number }
+  | { readonly kind: "confirm-tool" }
+  | { readonly kind: "cancel-tool" };
 /** An event emitted by one native transition; type selects the event’s additional fields.
  *
  * @example
@@ -289,7 +295,10 @@ export type Action =
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface GameEvent { readonly type: string; readonly [key: string]: unknown }
+export interface GameEvent {
+  readonly type: string;
+  readonly [key: string]: unknown;
+}
 /** The resulting native state, emitted events and acceptance decision; rejected actions preserve the input.
  *
  * @example
@@ -303,7 +312,12 @@ export interface GameEvent { readonly type: string; readonly [key: string]: unkn
  * console.log(value == null ? value : typeof value === "object" ? Object.keys(value).slice(0,6) : value);
  * ```
  */
-export interface Transition { readonly state: GameState; readonly events: readonly GameEvent[]; readonly accepted: boolean; readonly reason?: string }
+export interface Transition {
+  readonly state: GameState;
+  readonly events: readonly GameEvent[];
+  readonly accepted: boolean;
+  readonly reason?: string;
+}
 /** Creation settings for this native engine; dimensions, mode, seed and optional mechanics are validated together.
  *
  * @example
@@ -315,7 +329,7 @@ export interface Transition { readonly state: GameState; readonly events: readon
  * ```
  */
 export interface CreateOptions {
-  readonly mode?: Exclude<GameMode, 'challenge'>;
+  readonly mode?: Exclude<GameMode, "challenge">;
   readonly preset?: BoardPreset;
   readonly width?: number;
   readonly height?: number;

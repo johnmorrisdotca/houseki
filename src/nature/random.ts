@@ -8,7 +8,9 @@ export function seedNatureState(seed: string): number {
 }
 export function nextNatureUint32(state: number): readonly [number, number] {
   let next = state >>> 0;
-  next ^= next << 13; next ^= next >>> 17; next ^= next << 5;
+  next ^= next << 13;
+  next ^= next >>> 17;
+  next ^= next << 5;
   return [next >>> 0, next >>> 0];
 }
 export function nextNatureUnit(state: number): readonly [number, number] {

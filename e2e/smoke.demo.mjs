@@ -4,13 +4,30 @@ import { ORIGIN, open, start } from "./demo.mjs";
 
 const PAGES = [
   { file: "index.html", title: "Houseki 宝石 — Match-3 gem puzzles", current: "Falling Triplets", play: "#well" },
-  { file: "chains.html", title: "Houseki 宝石 — Match-3 gem puzzles · Colour Chains", current: "Colour Chains", play: "#well" },
-  { file: "tools.html", title: "Houseki 宝石 — Match-3 gem puzzles · Gem Swap and Stone Collapse", current: "Gem Swap & Stone Collapse", play: "#grid" },
-  { file: "blocks.html", title: "Houseki 宝石 — Match-3 gem puzzles · Magnetic Blocks", current: "Magnetic Blocks", play: "#well" },
+  {
+    file: "chains.html",
+    title: "Houseki 宝石 — Match-3 gem puzzles · Colour Chains",
+    current: "Colour Chains",
+    play: "#well",
+  },
+  {
+    file: "tools.html",
+    title: "Houseki 宝石 — Match-3 gem puzzles · Gem Swap and Stone Collapse",
+    current: "Gem Swap & Stone Collapse",
+    play: "#grid",
+  },
+  {
+    file: "blocks.html",
+    title: "Houseki 宝石 — Match-3 gem puzzles · Magnetic Blocks",
+    current: "Magnetic Blocks",
+    play: "#well",
+  },
 ];
 
 for (const { file, title, current, play } of PAGES) {
-  test(`${file} opens with no complaint, under the family's header and footer, with its game drawn`, async ({ page }) => {
+  test(`${file} opens with no complaint, under the family's header and footer, with its game drawn`, async ({
+    page,
+  }) => {
     const errors = await open(page, file);
     await expect(page).toHaveTitle(title);
     // The shared head: a description, an icon, the viewport, Open Graph.
@@ -24,14 +41,18 @@ for (const { file, title, current, play } of PAGES) {
     await expect(page.locator("header [data-lang]")).toHaveCount(2);
     await expect(page.locator("header [data-cloth]")).toHaveCount(5);
     await expect(page.locator("header [data-help-switch]")).toHaveCount(1);
-    await expect(page.locator('header a[href$="/npm" i], header a[href*="npmjs.com/package/@johnmorrisdotca/houseki"]')).toHaveCount(1);
+    await expect(
+      page.locator('header a[href$="/npm" i], header a[href*="npmjs.com/package/@johnmorrisdotca/houseki"]'),
+    ).toHaveCount(1);
     await expect(page.locator('header a[href="https://github.com/johnmorrisdotca/houseki"]')).toHaveCount(1);
     await expect(page.locator('header a[href="api.html"]')).toHaveCount(1);
     // The footer names the whole family, each by its demo, this one marked.
     const family = page.locator("footer .family a");
     expect(await family.count()).toBe(33);
     await expect(page.locator('footer .family a[aria-current="page"]')).toHaveText("Houseki");
-    await expect(page.locator('footer .family a[href="https://johnmorrisdotca.github.io/karakuri/"]')).toHaveText("Karakuri");
+    await expect(page.locator('footer .family a[href="https://johnmorrisdotca.github.io/karakuri/"]')).toHaveText(
+      "Karakuri",
+    );
     // The page chooser marks the page being read.
     await expect(page.locator('.pages a[aria-current="page"]')).toHaveText(current);
     await expect(page.locator(play)).toBeVisible();
@@ -39,7 +60,9 @@ for (const { file, title, current, play } of PAGES) {
   });
 }
 
-test("the language chooser speaks Japanese in the header, the footer and the page, and the choice survives a reload", async ({ page }) => {
+test("the language chooser speaks Japanese in the header, the footer and the page, and the choice survives a reload", async ({
+  page,
+}) => {
   const errors = await open(page, "chains.html");
   await page.locator('header [data-lang="ja"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
@@ -62,15 +85,24 @@ for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "a
     const { over, wide } = await page.evaluate(() => {
       const width = document.documentElement.clientWidth;
       // What reaches past the right edge, so that a failure names the thing and not only the number of pixels.
-      const reach = (el) => Math.max(el.getBoundingClientRect().right, el.getBoundingClientRect().left + el.scrollWidth);
-      const wide = [...document.querySelectorAll("html, body *")].filter((el) => reach(el) > width + 0.5).slice(0, 8).map((el) => `${el.tagName.toLowerCase()}.${el.className} reach=${reach(el).toFixed(1)} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
+      const reach = (el) =>
+        Math.max(el.getBoundingClientRect().right, el.getBoundingClientRect().left + el.scrollWidth);
+      const wide = [...document.querySelectorAll("html, body *")]
+        .filter((el) => reach(el) > width + 0.5)
+        .slice(0, 8)
+        .map(
+          (el) =>
+            `${el.tagName.toLowerCase()}.${el.className} reach=${reach(el).toFixed(1)} "${(el.textContent ?? "").trim().slice(0, 30)}"`,
+        );
       return { over: document.documentElement.scrollWidth - width, wide };
     });
     expect(over, wide.join("; ")).toBeLessThanOrEqual(0);
   });
 }
 
-test("dark mode follows the device: the page's background and ink change, and nothing goes unreadable", async ({ page }) => {
+test("dark mode follows the device: the page's background and ink change, and nothing goes unreadable", async ({
+  page,
+}) => {
   await page.emulateMedia({ colorScheme: "light" });
   await open(page, "index.html");
   const light = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
@@ -84,7 +116,14 @@ test("dark mode follows the device: the page's background and ink change, and no
 test("the API reference lists every entry point, in the family's header and footer", async ({ page }) => {
   const errors = await open(page, "api.html");
   await expect(page).toHaveTitle(/Houseki/);
-  for (const entry of ["falling-triplets", "colour-chains", "stone-collapse", "gem-swap", "nature", "magnetic-blocks"]) {
+  for (const entry of [
+    "falling-triplets",
+    "colour-chains",
+    "stone-collapse",
+    "gem-swap",
+    "nature",
+    "magnetic-blocks",
+  ]) {
     await expect(page.locator("main").getByText(`@johnmorrisdotca/houseki/${entry}`).first()).toBeVisible();
   }
   expect(await page.locator("article").count()).toBeGreaterThan(100);
