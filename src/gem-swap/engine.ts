@@ -1,9 +1,9 @@
-import { COLOURS, PRESETS, findMatches, listLegalSwaps, neighbors } from "./board.js";
+import { consumePortal, contactCells, placementCells } from "./black-hole.js";
+import { COLOURS, findMatches, listLegalSwaps, neighbors, PRESETS } from "./board.js";
+import { hintTransition, reshuffleTransition, undoTransition } from "./practice.js";
 import { drawColour, nextInt, seedState } from "./random.js";
 import { isValidSpecialSwap, materializeSpecials, planWave } from "./specials.js";
 import { previewTool } from "./tools.js";
-import { consumePortal, contactCells, placementCells } from "./black-hole.js";
-import { hintTransition, reshuffleTransition, undoTransition } from "./practice.js";
 import type {
   Action,
   BoardPreset,

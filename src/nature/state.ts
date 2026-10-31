@@ -1,6 +1,6 @@
-import { NatureOptionsError, validateNatureOptions } from "./validation.js";
 import { seedNatureState } from "./random.js";
 import type { NatureEntity, NatureOptions, NatureState } from "./types.js";
+import { NatureOptionsError, validateNatureOptions } from "./validation.js";
 
 export function freezeNatureState(state: NatureState): NatureState {
   const cells = Object.freeze(state.cells.map((entity) => (entity ? Object.freeze({ ...entity }) : null)));

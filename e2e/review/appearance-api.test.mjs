@@ -1,10 +1,12 @@
-import { serve, ORIGIN } from "../demo.mjs";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
+import { ORIGIN, serve } from "../demo.mjs";
+
 const screenshotDir = resolve(process.env.HOUSEKI_SCREENSHOT_DIR ?? "test-output");
 await mkdir(screenshotDir, { recursive: true });
-import { chromium } from "@playwright/test";
+
 import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
 
 const url = ORIGIN;
 const browser = await chromium.launch();
@@ -32,8 +34,8 @@ try {
       assert.equal(await page.locator("html").getAttribute("data-cloth"), colour);
       assert.equal(await page.locator(`button[data-cloth="${colour}"]`).getAttribute("aria-checked"), "true");
     }
-    const board = page.locator("#well,#grid"),
-      before = await board.boundingBox();
+    const board = page.locator("#well,#grid");
+    const before = await board.boundingBox();
     await page.locator("#pieces").selectOption("flat");
     assert.equal(await page.locator("html").getAttribute("data-pieces"), "flat");
     const after = await board.boundingBox();
@@ -93,7 +95,9 @@ try {
   await page.goto(`${url}/api.html`);
   assert.equal(await page.locator('head link[rel="icon"]').count(), 1);
   assert.ok((await page.locator('head link[rel="icon"]').getAttribute("href")).startsWith("data:image/svg+xml,"));
+  // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
   assert.equal(await page.locator("main h1").innerText(), "Houseki API: every export");
+  // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
   const text = await page.locator("body").innerText();
   for (const wrong of ['/colourChains"', '/fallingTriplets"', '/gemSwap"', '/stoneCollapse"', '/magneticBlocks"'])
     assert.equal(text.includes(wrong), false);

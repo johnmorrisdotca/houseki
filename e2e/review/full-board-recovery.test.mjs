@@ -1,6 +1,6 @@
-import { serve, ORIGIN } from "../demo.mjs";
-import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+import { ORIGIN, serve } from "../demo.mjs";
 
 const url = ORIGIN;
 const browser = await chromium.launch();

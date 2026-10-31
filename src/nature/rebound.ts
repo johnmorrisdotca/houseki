@@ -1,6 +1,5 @@
 import { nextNatureUint32 } from "./random.js";
 import { freezeNatureState } from "./state.js";
-import { NatureOptionsError, validatePowerDropRequest, validateState } from "./validation.js";
 import type {
   HorizontalDirection,
   NatureEntity,
@@ -13,6 +12,7 @@ import type {
   QuarterTurn,
   ReboundAttemptPreview,
 } from "./types.js";
+import { NatureOptionsError, validatePowerDropRequest, validateState } from "./validation.js";
 
 function at(state: NatureState, x: number, y: number): number {
   return y * state.width + x;
@@ -48,8 +48,8 @@ function turnAroundPivot(
   if (quarterTurn === 0) return piece.map((cell) => ({ ...cell }));
   const pivot = piece.find((cell) => cell.id === pivotId)!;
   return piece.map((cell) => {
-    const dx = cell.x - pivot.x,
-      dy = cell.y - pivot.y;
+    const dx = cell.x - pivot.x;
+    const dy = cell.y - pivot.y;
     return { ...cell, x: pivot.x + (quarterTurn === 1 ? -dy : dy), y: pivot.y + (quarterTurn === 1 ? dx : -dx) };
   });
 }

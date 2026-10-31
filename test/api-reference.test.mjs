@@ -1,7 +1,7 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
-import ts from "typescript";
 import { readFileSync } from "node:fs";
+import ts from "typescript";
+import { test } from "vitest";
 import { apiOf, apiPage } from "../scripts/api.mjs";
 
 const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));

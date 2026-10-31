@@ -1,6 +1,6 @@
-import { serve, ORIGIN } from "../demo.mjs";
-import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+import { ORIGIN, serve } from "../demo.mjs";
 
 const url = ORIGIN;
 const browser = await chromium.launch();
@@ -150,8 +150,8 @@ try {
 
   const lostSave = await page.evaluate(async () => {
     const m = await import("./dist/magnetic-blocks.js");
-    const width = 8,
-      height = 16;
+    const width = 8;
+    const height = 16;
     const initialBoard = Array.from({ length: width * height }, (_, index) => ({
       id: index + 1,
       colour: ((index % width) + Math.floor(index / width)) % 2 ? "red" : "blue",

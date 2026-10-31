@@ -1,6 +1,6 @@
 import { contentData } from "./content-data.js";
-import { createChallenge } from "./engine.js";
 import type { CollapseCampaignLevel, CollapseCampaignManifest, CollapseTutorialDefinition } from "./content-types.js";
+import { createChallenge } from "./engine.js";
 import type { GameState } from "./types.js";
 
 function deepFreeze<T>(value: T): T {

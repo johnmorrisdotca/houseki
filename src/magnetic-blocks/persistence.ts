@@ -57,8 +57,8 @@ function createFromSettings(settings: Settings): GameState {
 }
 function replay(settings: Settings, actions: readonly unknown[], elapsedTicks: number): GameState {
   let state = createFromSettings(settings);
-  let previousTick = -1,
-    previousOrdinal = -1;
+  let previousTick = -1;
+  let previousOrdinal = -1;
   for (let index = 0; index < actions.length; index++) {
     const raw = actions[index];
     if (!raw || typeof raw !== "object" || Array.isArray(raw))
@@ -184,8 +184,7 @@ export function decodeGame(text: string): GameState {
     throw new TypeError("Save is not valid JSON");
   }
   if (
-    !value ||
-    value.format !== 1 ||
+    value?.format !== 1 ||
     value.game !== "magnetic-blocks" ||
     value.rules !== RULES ||
     !value.settings ||

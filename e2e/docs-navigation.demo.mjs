@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { start, ORIGIN } from "./demo.mjs";
+import { ORIGIN, start } from "./demo.mjs";
+
 for (const file of ["index.html", "chains.html", "tools.html", "blocks.html"]) {
   test(`Docs follows initial and live language on ${file}`, async ({ page }) => {
     const errors = await start(page);

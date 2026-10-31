@@ -1,4 +1,5 @@
 import type { Action, GameState, HeldControl, Transition } from "./types.js";
+
 type EdgeAction = Extract<
   Action,
   { kind: "rotate-clockwise" | "rotate-anticlockwise" | "hard-drop" | "place" | "pause" | "resume" }
@@ -70,8 +71,8 @@ export function queueInputEdge(state: InputSchedulerState, action: EdgeAction): 
  * console.log(releaseAllInput(input));
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the public signature takes the state a caller holds, though nothing of it is kept
 export function releaseAllInput(state: InputSchedulerState): InputSchedulerState {
+  void state;
   return createInputScheduler();
 }
 /** Resolves this tick's inputs in lateral, rotation, drop, soft-drop, pause order.

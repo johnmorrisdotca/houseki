@@ -28,8 +28,8 @@ export function readFreeSettings() {
 export function restoreFreeSettings(values) {
   if (!values || typeof values !== "object" || Array.isArray(values)) return;
   for (const id of ids) {
-    const element = field(id),
-      next = values[id];
+    const element = field(id);
+    const next = values[id];
     if (!element || next === undefined) continue;
     if (element.type === "checkbox") {
       if (typeof next !== "boolean") continue;
@@ -52,7 +52,9 @@ export function syncAuthoredSettings(config, lang = "en") {
       if (id !== "mode" || element.value === previous.lockedMode) assign(element, previous.value);
       element.disabled = previous.disabled;
       delete element.dataset.authoredLock;
-      element.querySelectorAll("option[data-authored]").forEach((option) => option.remove());
+      element.querySelectorAll("option[data-authored]").forEach((option) => {
+        option.remove();
+      });
     }
     snapshots.clear();
     document.getElementById("fixed-settings-note")?.remove();
@@ -111,7 +113,7 @@ export function syncAuthoredSettings(config, lang = "en") {
     : field("level")?.value
       ? field("level").selectedOptions[0]
       : null;
-  const heading = option ? option.textContent + " — " : "";
+  const heading = option ? `${option.textContent} — ` : "";
   note.textContent =
     heading +
     (daily

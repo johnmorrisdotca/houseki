@@ -1,7 +1,7 @@
-import { validateMarkingOptions, validateState } from "./validation.js";
-import { freezeNatureState } from "./state.js";
 import { nextNatureUnit } from "./random.js";
+import { freezeNatureState } from "./state.js";
 import type { MarkingOptions, NatureEvent, NatureState, NatureTransition } from "./types.js";
+import { validateMarkingOptions, validateState } from "./validation.js";
 
 /** Deterministically assign magnetic markings to settled stones without changing their IDs or colours.
  *
@@ -27,7 +27,7 @@ export function markMagneticStones(state: NatureState, options: MarkingOptions):
   let marked = 0;
   const ids: number[] = [];
   const cells = state.cells.map((entity) => {
-    if (!entity || entity.kind !== "stone" || entity.magnetic || marked >= maximum) return entity;
+    if (entity?.kind !== "stone" || entity.magnetic || marked >= maximum) return entity;
     let sample: number;
     [randomState, sample] = nextNatureUnit(randomState);
     if (sample >= options.probability) return entity;

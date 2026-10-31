@@ -1,16 +1,16 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
-import {
-  createGame,
-  applyAction,
-  advanceTicks,
-  legalActions,
-  statusOf,
-  GemSwapOptionsError,
-} from "../dist/gem-swap.js";
+import { test } from "vitest";
 import { findMatches } from "../dist/gem-swap/board.js";
 import { fallbackBoardForTest } from "../dist/gem-swap/engine.js";
 import { planWave } from "../dist/gem-swap/specials.js";
+import {
+  advanceTicks,
+  applyAction,
+  createGame,
+  GemSwapOptionsError,
+  legalActions,
+  statusOf,
+} from "../dist/gem-swap.js";
 
 const colours = ["red", "blue", "green", "gold", "purple", "teal"];
 const freezeBoard = (cells) =>
@@ -93,8 +93,18 @@ function comboOracle(after, action) {
   const bk = b.kind;
   const cells = new Set([p, q]);
   const active = after.board.flatMap((gem, i) => (mask[i] && gem ? [i] : []));
-  const addRow = (y) => active.filter((i) => Math.floor(i / width) === y).forEach((i) => cells.add(i));
-  const addColumn = (x) => active.filter((i) => i % width === x).forEach((i) => cells.add(i));
+  const addRow = (y) =>
+    active
+      .filter((i) => Math.floor(i / width) === y)
+      .forEach((i) => {
+        cells.add(i);
+      });
+  const addColumn = (x) =>
+    active
+      .filter((i) => i % width === x)
+      .forEach((i) => {
+        cells.add(i);
+      });
   const addBomb = (centre) =>
     active
       .filter(
@@ -102,9 +112,14 @@ function comboOracle(after, action) {
           Math.abs((i % width) - (centre % width)) <= 1 &&
           Math.abs(Math.floor(i / width) - Math.floor(centre / width)) <= 1,
       )
-      .forEach((i) => cells.add(i));
+      .forEach((i) => {
+        cells.add(i);
+      });
   const burst = ak === "colour-burst" ? a : bk === "colour-burst" ? b : null;
-  if (ak === "colour-burst" && bk === "colour-burst") active.forEach((i) => cells.add(i));
+  if (ak === "colour-burst" && bk === "colour-burst")
+    active.forEach((i) => {
+      cells.add(i);
+    });
   else if (burst && ak && bk) {
     const power = ak === "colour-burst" ? bk : ak;
     const beam = power === "row-beam" || power === "column-beam";
@@ -125,7 +140,9 @@ function comboOracle(after, action) {
       .filter(
         (i) => Math.abs((i % width) - (q % width)) <= 2 && Math.abs(Math.floor(i / width) - Math.floor(q / width)) <= 2,
       )
-      .forEach((i) => cells.add(i));
+      .forEach((i) => {
+        cells.add(i);
+      });
   } else if ((ak === "row-beam" || ak === "column-beam") && (bk === "row-beam" || bk === "column-beam")) {
     addRow(Math.floor(q / width));
     addColumn(q % width);
@@ -335,7 +352,7 @@ test("500 seeded starts satisfy an independent matcher and legal-action oracle",
             [0, 1],
           ].some(([dx, dy]) => {
             let length = 1;
-            for (let sign of [-1, 1])
+            for (const sign of [-1, 1])
               for (let step = 1; step < 3; step++) {
                 const nx = x + dx * step * sign;
                 const ny = y + dy * step * sign;

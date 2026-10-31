@@ -1,7 +1,8 @@
 // A preview is a promise about the committed move, so these tests hold it to the move: over many played boards, the
 // cells a preview names are compared with the board the real action leaves, never with another preview helper.
-import { test } from "vitest";
+
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import * as chains from "../dist/colour-chains.js";
 import * as fall from "../dist/falling-triplets.js";
 import * as blocks from "../dist/magnetic-blocks.js";
@@ -9,7 +10,10 @@ import * as blocks from "../dist/magnetic-blocks.js";
 /** A small seeded generator, so a failure is the same failure on every machine. */
 function random(seed) {
   let state = seed >>> 0 || 1;
-  return () => (state = (Math.imul(state, 1664525) + 1013904223) >>> 0) / 2 ** 32;
+  return () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    return state / 2 ** 32;
+  };
 }
 /** Plays `games` boards with `moves`, calling `visit` on every state that has a piece falling. */
 function play(engine, options, moves, visit, games = 24) {

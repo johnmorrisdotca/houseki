@@ -1,8 +1,8 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
-  applyAction,
   advanceTicks,
+  applyAction,
   campaignManifest,
   createChallenge,
   createLevel,
@@ -15,14 +15,14 @@ import { generateCampaign, tutorialDefinitions } from "../scripts/falling-triple
 
 function independentAxes(state) {
   if (state.phase !== "clear-mark" || !state.pendingClear?.length) return [];
-  const marked = new Set(state.pendingClear),
-    axes = new Set(),
-    width = state.settings.width;
+  const marked = new Set(state.pendingClear);
+  const axes = new Set();
+  const width = state.settings.width;
   for (const index of marked) {
     const colour = state.board[index]?.colour;
     if (!colour) continue;
-    const x = index % width,
-      y = Math.floor(index / width);
+    const x = index % width;
+    const y = Math.floor(index / width);
     for (const [axis, [dx, dy]] of [
       [0, [1, 0]],
       [1, [0, 1]],
@@ -31,8 +31,8 @@ function independentAxes(state) {
     ]) {
       let count = 1;
       for (const sign of [-1, 1]) {
-        let nx = x + dx * sign,
-          ny = y + dy * sign;
+        let nx = x + dx * sign;
+        let ny = y + dy * sign;
         while (
           nx >= 0 &&
           nx < width &&
@@ -64,8 +64,8 @@ function independentMatches(board, width, height) {
         [1, -1],
       ]) {
         const cells = [y * width + x, (y + dy) * width + x + dx, (y + 2 * dy) * width + x + 2 * dx];
-        const endX = x + 2 * dx,
-          endY = y + 2 * dy;
+        const endX = x + 2 * dx;
+        const endY = y + 2 * dy;
         if (endX < 0 || endX >= width || endY < 0 || endY >= height) continue;
         if (cells.every((index) => board[index]?.colour === colour)) for (const index of cells) matches.add(index);
       }

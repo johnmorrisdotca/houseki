@@ -1,3 +1,4 @@
+import { advanceTicks, applyAction, createChallenge, createGame, requestHint, undo } from "./engine.js";
 import type {
   ChallengeDefinition,
   CreateOptions,
@@ -7,7 +8,6 @@ import type {
   Stone,
   Transition,
 } from "./types.js";
-import { advanceTicks, applyAction, createChallenge, createGame, requestHint, undo } from "./engine.js";
 
 const RULES = "collapse-2" as const;
 const MAX_RECORDED_ACTIONS = 100_000;
@@ -210,8 +210,7 @@ export function decodeGame(text: string): GameState {
     throw new TypeError("Save is not valid JSON");
   }
   if (
-    !value ||
-    value.format !== 1 ||
+    value?.format !== 1 ||
     value.game !== "stone-collapse" ||
     value.rules !== RULES ||
     !value.settings ||
@@ -300,8 +299,10 @@ export function decodeGame(text: string): GameState {
     } else if (entry.kind === "ticks") {
       if (Object.keys(entry).some((key) => !["kind", "count"].includes(key)))
         throw new TypeError(`Tick record ${index + 1} contains unsupported fields`);
-      if (!Number.isSafeInteger(entry.count) || entry.count < 1 || (totalTicks += entry.count) > MAX_RECORDED_TICKS)
+      if (!Number.isSafeInteger(entry.count) || entry.count < 1)
         throw new RangeError(`Invalid tick record ${index + 1}`);
+      totalTicks += entry.count;
+      if (totalTicks > MAX_RECORDED_TICKS) throw new RangeError(`Invalid tick record ${index + 1}`);
       let remaining = entry.count;
       while (remaining > 0) {
         const amount = Math.min(3600, remaining);

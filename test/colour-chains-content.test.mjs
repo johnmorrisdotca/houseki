@@ -1,24 +1,24 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { test } from "vitest";
 import {
-  applyAction,
   advanceTicks,
-  campaignManifest,
-  shizenCampaignManifest,
+  applyAction,
   arashiCampaignManifest,
+  campaignManifest,
   createChallenge,
   createLevel,
   getLevel,
   getTutorial,
   levelManifest,
+  shizenCampaignManifest,
   tutorialManifest,
 } from "../dist/colour-chains.js";
 
-const WIDTH = 6,
-  HEIGHT = 12;
+const WIDTH = 6;
+const HEIGHT = 12;
 function goalReached(state, goal) {
   if (goal.kind === "clear-targets") return goal.targetIds.every((id) => !state.board.some((gem) => gem?.id === id));
   if (goal.kind === "minimum-chain") return state.maxChain >= goal.chain;
@@ -40,15 +40,15 @@ function oracleGroups(board, width, height) {
   let count = 0;
   for (let index = 0; index < board.length; index++) {
     if (!board[index] || seen.has(index)) continue;
-    const colour = board[index].colour,
-      pending = [index];
+    const colour = board[index].colour;
+    const pending = [index];
     seen.add(index);
     let size = 0;
     while (pending.length) {
       const at = pending.pop();
       size++;
-      const x = at % width,
-        y = Math.floor(at / width);
+      const x = at % width;
+      const y = Math.floor(at / width);
       for (const [nx, ny] of [
         [x - 1, y],
         [x + 1, y],
@@ -67,25 +67,26 @@ function oracleGroups(board, width, height) {
   return count;
 }
 function executePlacement(state, step) {
+  let current = state;
   const events = [];
   const act = (kind) => {
-    const result = applyAction(state, { kind });
+    const result = applyAction(current, { kind });
     assert.equal(result.accepted, true, `${kind} must be accepted`);
-    state = result.state;
+    current = result.state;
     events.push(...result.events);
   };
-  while (state.active.pivot.x !== step.pivotX) act(state.active.pivot.x < step.pivotX ? "right" : "left");
+  while (current.active.pivot.x !== step.pivotX) act(current.active.pivot.x < step.pivotX ? "right" : "left");
   const turns = { up: 0, right: 1, down: 2, left: 3 }[step.orientation];
   for (let i = 0; i < turns; i++) act("rotate-clockwise");
   act("hard-drop");
   let budget = 0;
-  while (["clear-mark", "clear-remove", "gravity"].includes(state.phase) && budget < 100_000) {
-    const tick = advanceTicks(state, 3600);
-    state = tick.state;
+  while (["clear-mark", "clear-remove", "gravity"].includes(current.phase) && budget < 100_000) {
+    const tick = advanceTicks(current, 3600);
+    current = tick.state;
     events.push(...tick.events);
     budget += 3600;
   }
-  return { state, events };
+  return { state: current, events };
 }
 function independentCanonical(level) {
   const cell = (x, y) => y * level.width + y * 0 + x;
@@ -113,9 +114,9 @@ function independentCanonical(level) {
             kind: "clear-targets",
             targets: level.goal.targetIds
               .map((id) => {
-                const at = level.board.findIndex((gem) => gem?.id === id),
-                  x = at % level.width,
-                  y = Math.floor(at / level.width);
+                const at = level.board.findIndex((gem) => gem?.id === id);
+                const x = at % level.width;
+                const y = Math.floor(at / level.width);
                 return y * level.width + (mirror ? level.width - 1 - x : x);
               })
               .sort((a, b) => a - b),
@@ -271,7 +272,7 @@ test("three bilingual tutorials prove rotation with a wall kick, split landing a
     });
     assert.equal(oracleGroups(state.board, WIDTH, HEIGHT + 3), 0, `${id} starts without a match`);
     let solved = state;
-    let events = [];
+    const events = [];
     for (const step of tutorial.setup.witness) {
       const result = executePlacement(solved, step);
       solved = result.state;

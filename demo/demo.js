@@ -1,28 +1,29 @@
+import { animationEnabled, positions, setAnimations, settle } from "./animation.js";
 import { preferredLanguage, refreshAppearanceLanguage } from "./appearance.js";
-import { syncAuthoredSettings, readFreeSettings, restoreFreeSettings } from "./settings.js";
-import { updateEnding } from "./ending.js";
-import { soundEnabled, setSound, unlockSound, playTone } from "./audio.js";
-import { positions, settle, animationEnabled, setAnimations } from "./animation.js";
+import { playTone, setSound, soundEnabled, unlockSound } from "./audio.js";
 import {
-  restartGame,
-  createChallenge,
-  tutorialManifest,
-  createLevel,
-  levelManifest,
-  createGame,
-  applyAction,
+  actionsForTick,
   advanceTicks,
+  applyAction,
+  createChallenge,
+  createGame,
+  createInputScheduler,
+  createLevel,
   decodeGame,
   encodeGame,
   landingY,
-  createInputScheduler,
-  setHeldAction,
+  levelManifest,
   queueInputEdge,
-  actionsForTick,
   releaseAllActions,
+  restartGame,
+  setHeldAction,
+  tutorialManifest,
 } from "./dist/falling-triplets.js";
-import { pageWords } from "./words.js";
+import { updateEnding } from "./ending.js";
 import { newSeed } from "./seed.js";
+import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from "./settings.js";
+import { pageWords } from "./words.js";
+
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: "●", blue: "◆", green: "▲", gold: "■", purple: "+", teal: "☾" };
 const words = {
@@ -304,7 +305,9 @@ function render() {
     const goal = selectedLevel.goal;
     const ids = goal.targetIds;
     const chain = goal.minimumChain ?? goal.chain;
-    let target, current, label;
+    let target;
+    let current;
+    let label;
     if (ids) {
       target = ids.length;
       const remaining = new Set(game.board.filter(Boolean).map((gem) => gem.id));
@@ -330,8 +333,8 @@ function render() {
   $("#score").textContent = String(game.score);
   $("#chain").textContent = String(game.maxChain);
   if (!selectedLevel && game.settings.pieceLimit) {
-    const total = game.settings.pieceLimit,
-      placed = game.completedPieces;
+    const total = game.settings.pieceLimit;
+    const placed = game.completedPieces;
     $("#goal-text").textContent = `${lang === "ja" ? "置いた石" : "Pieces placed"}: ${placed}/${total}`;
     $("#goal-progress").max = total;
     $("#goal-progress").value = placed;
@@ -397,9 +400,9 @@ function render() {
   $(".resume").hidden = game.phase !== "paused";
   $(".resume").disabled = false;
   $("#well").parentElement.className = `well-wrap material-${$("#material").value}`;
-  document
-    .querySelectorAll("[data-lang]")
-    .forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.lang === lang)));
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+  });
   const nextLevel =
     selectedLevel && !selectedLevel.lesson
       ? levelManifest[levelManifest.findIndex((level) => level.id === selectedLevel.id) + 1]
@@ -538,9 +541,9 @@ function bindHeld(button, action) {
   button.addEventListener("pointercancel", release);
   button.addEventListener("lostpointercapture", release);
 }
-document
-  .querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]')
-  .forEach((button) => bindHeld(button, button.dataset.action));
+document.querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]').forEach((button) => {
+  bindHeld(button, button.dataset.action);
+});
 document.querySelectorAll("[data-action]").forEach((button) => {
   if (["left", "right", "soft-drop", "resume"].includes(button.dataset.action)) return;
   button.addEventListener("click", () => {
@@ -570,14 +573,14 @@ $("#sound").addEventListener("change", (event) => {
   setSound(event.target.checked);
   writePreferences();
 });
-document.querySelectorAll("[data-lang]").forEach((button) =>
+document.querySelectorAll("[data-lang]").forEach((button) => {
   button.addEventListener("click", () => {
     lang = button.dataset.lang;
     syncSetup();
     render();
     writePreferences();
-  }),
-);
+  });
+});
 const keypadKeys = {
   Numpad4: "arrowleft",
   Numpad6: "arrowright",
@@ -617,7 +620,7 @@ document.addEventListener("keydown", (event) => {
   event.preventDefault();
   if (event.repeat) return;
   if (key === "escape") {
-    if (game.phase === "paused") resumeCountdown();
+    if (game.phase === "paused") void resumeCountdown();
     else input = queueInputEdge(input, { kind: "pause" });
     return;
   }

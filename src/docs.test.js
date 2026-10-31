@@ -1,11 +1,9 @@
-import { FAMILY, familyRepo } from "../scripts/family-template.mjs";
 // The documents and the demo, held to the source. Plain JavaScript, so that reading files needs no Node types.
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
-
 import { describe, expect, it } from "vitest";
-
 import { PAGES, pageWords } from "../demo/words.js";
+import { FAMILY, familyRepo } from "../scripts/family-template.mjs";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const readme = readFileSync("README.md", "utf8");

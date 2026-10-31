@@ -1,4 +1,4 @@
-import { advanceTime, advanceTicks, applyAction, createGame } from "./engine.js";
+import { advanceTicks, advanceTime, applyAction, createGame } from "./engine.js";
 import type { Action, CreateOptions, GameState, ReplayOperation } from "./types.js";
 
 const FORMAT = "gem-swap-replay-1";
@@ -108,7 +108,7 @@ function execute(initial: CreateOptions, operations: readonly ReplayOperation[])
  * ```
  */
 export function encodeGame(state: GameState): string {
-  if (!state || state.game !== "gem-swap" || state.history.length > MAX_OPERATIONS)
+  if (state?.game !== "gem-swap" || state.history.length > MAX_OPERATIONS)
     throw new ReplayError("invalid-state", "State is invalid or exceeds the operation limit");
   const operations = state.history.map(validateOperation);
   const replayed = execute(state.initialOptions, operations);

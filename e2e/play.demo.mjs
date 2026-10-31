@@ -366,6 +366,7 @@ test("Magnetic Blocks draws square cells, rotates the block, switches the floor 
     geometry.every((cell) => cell.height >= 24 && Math.abs(cell.height - cell.width) < 1),
     "every configured row retains square cells, including empty rows",
   );
+  // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
   assert.equal((await page.locator("body").innerText()).includes("{n}"), false);
   assert.ok(
     Math.abs((await page.locator("#well").boundingBox()).width - (geometry[0].width * 8 + 24)) < 1,

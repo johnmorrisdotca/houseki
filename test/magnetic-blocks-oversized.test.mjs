@@ -1,12 +1,12 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
-  createGame,
   applyAction,
-  encodeGame,
+  createGame,
   decodeGame,
-  restartGame,
+  encodeGame,
   MagneticBlocksOptionsError,
+  restartGame,
 } from "../dist/magnetic-blocks.js";
 
 test("16×32 / 512-cell boards construct, play, restart, and replay canonically", () => {

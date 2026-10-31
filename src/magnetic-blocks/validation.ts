@@ -1,5 +1,5 @@
-import type { Bond, Colour, CreateOptions, Floor, FloorSchedule, Gem, Goal, Mode } from "./types.js";
 import { calmGravity } from "./physics.js";
+import type { Bond, Colour, CreateOptions, Floor, FloorSchedule, Gem, Goal, Mode } from "./types.js";
 
 /** A typed native magnetic-block setup validation error.
  *
@@ -129,8 +129,8 @@ export function validateOptions(options: CreateOptions = {}): ValidatedOptions {
   const mode = options.mode ?? "relaxed";
   if (mode !== "relaxed" && mode !== "arcade")
     throw new MagneticBlocksOptionsError("invalid-mode", "Mode must be relaxed or arcade");
-  const width = options.width ?? 10,
-    height = options.height ?? 20;
+  const width = options.width ?? 10;
+  const height = options.height ?? 20;
   if (
     !Number.isInteger(width) ||
     width < 4 ||
@@ -159,13 +159,13 @@ export function validateOptions(options: CreateOptions = {}): ValidatedOptions {
     mask.filter(Boolean).length > 512
   )
     throw new MagneticBlocksOptionsError("invalid-mask", "Mask must contain 16–512 active cells");
-  const active = mask.flatMap((on, i) => (on ? [i] : [])),
-    connected = new Set([active[0]!]),
-    pending = [active[0]!];
+  const active = mask.flatMap((on, i) => (on ? [i] : []));
+  const connected = new Set([active[0]!]);
+  const pending = [active[0]!];
   while (pending.length) {
-    const at = pending.pop()!,
-      x = at % width,
-      y = Math.floor(at / width);
+    const at = pending.pop()!;
+    const x = at % width;
+    const y = Math.floor(at / width);
     for (const next of [
       x ? at - 1 : -1,
       x + 1 < width ? at + 1 : -1,
@@ -181,8 +181,8 @@ export function validateOptions(options: CreateOptions = {}): ValidatedOptions {
     throw new MagneticBlocksOptionsError("disconnected-mask", "Mask active cells must be connected");
   if (
     active.some((at) => {
-      const x = at % width,
-        y = Math.floor(at / width);
+      const x = at % width;
+      const y = Math.floor(at / width);
       return ![
         x ? at - 1 : -1,
         x + 1 < width ? at + 1 : -1,
@@ -244,8 +244,8 @@ export function validateOptions(options: CreateOptions = {}): ValidatedOptions {
   });
   if (
     bonds.some((edge) => {
-      const a = idCells.get(edge.a)!,
-        b = idCells.get(edge.b)!;
+      const a = idCells.get(edge.a)!;
+      const b = idCells.get(edge.b)!;
       return Math.abs((a % width) - (b % width)) + Math.abs(Math.floor(a / width) - Math.floor(b / width)) !== 1;
     })
   )

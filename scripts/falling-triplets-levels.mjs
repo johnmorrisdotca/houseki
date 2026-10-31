@@ -1,14 +1,14 @@
 import { createHash } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { applyAction, advanceTicks, createChallenge, findMatches } from "../dist/falling-triplets.js";
+import { advanceTicks, applyAction, createChallenge, findMatches } from "../dist/falling-triplets.js";
 
 export const GENERATION_REVISION = "houseki-triplets-campaign-1.4";
 export const GRADING_VERSION = "triplets-choice-grade-2";
 export const SAMPLE_BUDGET = 64;
-const WIDTH = 6,
-  HEIGHT = 13,
-  COLOURS = ["red", "blue", "green", "gold", "purple"];
+const WIDTH = 6;
+const HEIGHT = 13;
+const COLOURS = ["red", "blue", "green", "gold", "purple"];
 const MOTIFS = ["vertical", "horizontal", "diagonal", "crossing", "cascade"];
 
 function rng(seed) {
@@ -273,9 +273,9 @@ function actionsToPlacement(state, x, orientation) {
 }
 function markedAxes(state) {
   if (state.phase !== "clear-mark" || !state.pendingClear?.length) return new Set();
-  const width = state.settings.width,
-    totalHeight = state.settings.height + 3,
-    marked = new Set(state.pendingClear);
+  const width = state.settings.width;
+  const totalHeight = state.settings.height + 3;
+  const marked = new Set(state.pendingClear);
   const directions = [
     [1, 0],
     [0, 1],
@@ -284,16 +284,16 @@ function markedAxes(state) {
   ];
   const axes = new Set();
   for (const index of marked) {
-    const x = index % width,
-      y = Math.floor(index / width),
-      colour = state.board[index]?.colour;
+    const x = index % width;
+    const y = Math.floor(index / width);
+    const colour = state.board[index]?.colour;
     if (!colour) continue;
     for (let direction = 0; direction < directions.length; direction++) {
       const [dx, dy] = directions[direction];
       let count = 1;
       for (const sign of [-1, 1]) {
-        let nx = x + dx * sign,
-          ny = y + dy * sign;
+        let nx = x + dx * sign;
+        let ny = y + dy * sign;
         while (
           nx >= 0 &&
           nx < width &&
@@ -338,8 +338,8 @@ function simulateWitness(level, pieces) {
     queue: level.queue,
     goal: level.goal,
   });
-  let directions = 0,
-    targetCrossing = false;
+  let directions = 0;
+  let targetCrossing = false;
   const steps = [];
   for (let i = 0; i < pieces; i++) {
     const result = actionsToPlacement(state, level.witness[i].x, level.witness[i].orientation);
@@ -374,9 +374,9 @@ function probedChoiceMetrics(level) {
   let forced = 0;
   for (let i = 0; i < level.witness.length; i++) {
     const state = playWitnessPrefix(level, i);
-    if (!state || state.phase !== "falling") break;
-    let legal = 0,
-      wins = 0;
+    if (state?.phase !== "falling") break;
+    let legal = 0;
+    let wins = 0;
     for (let x = 0; x < level.width; x++)
       for (let orientation = 0; orientation < 3; orientation++) {
         const result = actionsToPlacement(state, x, orientation);
@@ -466,8 +466,8 @@ export function generateCandidates(count = 100) {
       Math.floor(poolCount / MOTIFS.length) + (index < poolCount % MOTIFS.length ? 1 : 0),
     ]),
   );
-  let serial = 0,
-    attempts = 0;
+  let serial = 0;
+  let attempts = 0;
   while (selected.length < poolCount && attempts < 10_000) {
     const motif = MOTIFS[serial % MOTIFS.length];
     const ordinal = counters[motif]++;
@@ -512,8 +512,7 @@ export function generateCandidates(count = 100) {
     if (motif === "cascade") {
       const run = simulateWitness(provisional, witness.length);
       if (
-        !run ||
-        run.steps.length !== 2 ||
+        run?.steps.length !== 2 ||
         run.steps[0].state.phase !== "falling" ||
         run.steps[0].state.maxChain !== 0 ||
         run.steps[0].waves.length !== 0 ||

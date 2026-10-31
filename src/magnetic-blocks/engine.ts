@@ -1,19 +1,18 @@
-import { nextInt, seedState } from "./random.js";
 import {
   allMatchedCells,
   blockBonds,
   blockCells,
   canPlace,
+  GRAVITY_TICKS,
   impactSupportIds,
   landingY,
+  MARK_TICKS,
   matchGroups,
+  REMOVE_TICKS,
   removeIds,
   settle,
-  MARK_TICKS,
-  REMOVE_TICKS,
-  GRAVITY_TICKS,
 } from "./physics.js";
-import { COLOURS, validateOptions } from "./validation.js";
+import { nextInt, seedState } from "./random.js";
 import type {
   Action,
   Block,
@@ -27,6 +26,7 @@ import type {
   RecordedAction,
   Transition,
 } from "./types.js";
+import { COLOURS, validateOptions } from "./validation.js";
 
 function floorAt(schedule: FloorSchedule, placement: number): Floor {
   switch (schedule.kind) {
@@ -99,8 +99,8 @@ function spawn(state: GameState): readonly [GameState, readonly GameEvent[]] {
       [{ type: "run-ended", result, reason: "queue-exhausted", score: state.score }],
     ];
   }
-  const [colours, ...rest] = state.queue,
-    gems = colours!.map((colour, index) => ({ id: state.nextId + index, colour })) as unknown as Block["gems"];
+  const [colours, ...rest] = state.queue;
+  const gems = colours!.map((colour, index) => ({ id: state.nextId + index, colour })) as unknown as Block["gems"];
   const block = freezeBlock({
     x: Math.floor(state.settings.width / 2) - 1,
     y: 0,
@@ -152,8 +152,8 @@ function spawn(state: GameState): readonly [GameState, readonly GameEvent[]] {
   ];
 }
 function startMatchOrSpawn(state: GameState): readonly [GameState, readonly GameEvent[]] {
-  const groups = matchGroups(state.board, state.settings.width, state.settings.height, state.settings.mask),
-    cells = allMatchedCells(groups);
+  const groups = matchGroups(state.board, state.settings.width, state.settings.height, state.settings.mask);
+  const cells = allMatchedCells(groups);
   if (cells.length)
     return [
       {
@@ -180,9 +180,9 @@ function place(state: GameState, action: Extract<Action, { kind: "hard-drop" | "
   const { width, height, mask, magneticImpact } = state.settings;
   const landing = { ...active, y: landingY(active, state.board, width, height, mask) };
   const floor = state.pendingFloorOverride ?? state.floor;
-  let board = [...state.board],
-    bonds = [...state.bonds],
-    impactIds: readonly number[] = Object.freeze([]);
+  let board = [...state.board];
+  let bonds = [...state.bonds];
+  let impactIds: readonly number[] = Object.freeze([]);
   const events: GameEvent[] = [];
   if (floor === "magnetic" && magneticImpact && hardDrop) {
     impactIds = impactSupportIds(landing, board, width, height, mask);
@@ -201,8 +201,8 @@ function place(state: GameState, action: Extract<Action, { kind: "hard-drop" | "
   for (const { index, gem } of blockCells(landing, width)) board[index] = gem;
   bonds = floor === "calm" ? [...bonds, ...blockBonds(landing)] : [];
   const settled = settle(board, bonds, floor, width, height, mask);
-  const placements = state.placements + 1,
-    charges = state.pendingFloorOverride && state.floorSwitchCharges ? 0 : state.floorSwitchCharges;
+  const placements = state.placements + 1;
+  const charges = state.pendingFloorOverride && state.floorSwitchCharges ? 0 : state.floorSwitchCharges;
   const next: GameState = {
     ...state,
     board: Object.freeze(board),
@@ -295,8 +295,8 @@ function core(state: GameState, action: Action): Transition {
       accepted: true,
     };
   }
-  const active = state.active,
-    { width, height, mask } = state.settings;
+  const active = state.active;
+  const { width, height, mask } = state.settings;
   if (action.kind === "hard-drop") {
     let landed = active;
     while (canPlace({ ...landed, y: landed.y + 1 }, state.board, width, height, mask))
@@ -318,8 +318,8 @@ function core(state: GameState, action: Action): Transition {
     return { state: next, events: [{ type: "piece-moved", direction: "down", y: next.active!.y }], accepted: true };
   }
   if (action.kind === "left" || action.kind === "right") {
-    const x = active.x + (action.kind === "left" ? -1 : 1),
-      moved = { ...active, x };
+    const x = active.x + (action.kind === "left" ? -1 : 1);
+    const moved = { ...active, x };
     if (!canPlace(moved, state.board, width, height, mask)) return empty(state, "blocked");
     const grounded = !canPlace({ ...active, y: active.y + 1 }, state.board, width, height, mask);
     const reset = state.settings.mode === "arcade" && grounded && active.lockResets < 8;
@@ -380,7 +380,8 @@ function core(state: GameState, action: Action): Transition {
  */
 export function createGame(options: import("./types.js").CreateOptions = {}): GameState {
   const valid = validateOptions(options);
-  let randomState: number, queue: readonly (readonly [Colour, Colour, Colour, Colour])[];
+  let randomState: number;
+  let queue: readonly (readonly [Colour, Colour, Colour, Colour])[];
   if (valid.queue) {
     queue = valid.queue;
     randomState = seedState(`magnetic-blocks|magnetic-blocks-1|${String(valid.seed)}`);
@@ -490,14 +491,14 @@ export function advanceTicks(state: GameState, ticks: number): Transition {
     current = { ...current, elapsedTicks: current.elapsedTicks + 1 };
     if (current.phase === "falling") {
       if (current.settings.mode === "relaxed" || !current.active) continue;
-      const active = current.active,
-        grounded = !canPlace(
-          { ...active, y: active.y + 1 },
-          current.board,
-          current.settings.width,
-          current.settings.height,
-          current.settings.mask,
-        );
+      const active = current.active;
+      const grounded = !canPlace(
+        { ...active, y: active.y + 1 },
+        current.board,
+        current.settings.width,
+        current.settings.height,
+        current.settings.mask,
+      );
       if (grounded) {
         const lockTicks = active.lockStarted ? active.lockTicks + 1 : 0;
         current = { ...current, active: freezeBlock({ ...active, lockStarted: true, lockTicks }) };

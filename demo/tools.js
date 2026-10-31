@@ -1,12 +1,13 @@
+import { animationEnabled, positions, setAnimations, settle } from "./animation.js";
 import { refreshAppearanceLanguage } from "./appearance.js";
-import { updateEnding } from "./ending.js";
-import { soundEnabled, setSound, unlockSound, playTone } from "./audio.js";
-import { positions, settle, animationEnabled, setAnimations } from "./animation.js";
-import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from "./settings.js";
+import { playTone, setSound, soundEnabled, unlockSound } from "./audio.js";
 import * as swap from "./dist/gem-swap.js";
 import * as collapse from "./dist/stone-collapse.js";
-import { pageWords } from "./words.js";
+import { updateEnding } from "./ending.js";
 import { newSeed } from "./seed.js";
+import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from "./settings.js";
+import { pageWords } from "./words.js";
+
 const $ = (selector) => document.querySelector(selector);
 const engines = {
   "gem-swap": {
@@ -131,9 +132,9 @@ const text = {
     small: "石が小さい盤面です。Compactでは石が大きくなります。",
   },
 };
-let selectedLevel = null,
-  pendingLevel = null,
-  saveTimer = 0;
+let selectedLevel = null;
+let pendingLevel = null;
+let saveTimer = 0;
 const family = familyLanguage({
   id: "houseki",
   words: pageWords("tools"),
@@ -147,17 +148,17 @@ const family = familyLanguage({
     render();
   },
 });
-let lang = family.lang,
-  state,
-  engine,
-  startOptions,
-  activeUi = null,
-  freePreferences = null,
-  selectedCell = null,
-  focusCell = 0,
-  notice = "",
-  lastFrame = 0,
-  remainder = 0;
+let lang = family.lang;
+let state;
+let engine;
+let startOptions;
+let activeUi = null;
+let freePreferences = null;
+let selectedCell = null;
+let focusCell = 0;
+let notice = "";
+let lastFrame = 0;
+let remainder = 0;
 const presetSizes = {
   compact: [6, 6],
   standard: [8, 8],
@@ -600,8 +601,8 @@ function render() {
   $("#score").textContent = state.score;
   $("#moves").textContent = state.moves;
   $("#instructions").textContent = state.game === "gem-swap" ? t.swap : t.collapse;
-  const grid = $("#grid"),
-    { width, height, mask } = state.settings;
+  const grid = $("#grid");
+  const { width, height, mask } = state.settings;
   const activeFocus = document.activeElement?.closest("[data-cell]");
   const restoreFocus = activeFocus ? Number(activeFocus.dataset.cell) : null;
   grid.dataset.phase = state.phase;
@@ -642,7 +643,7 @@ function render() {
     button.setAttribute("aria-disabled", String(!gem || state.phase !== "ready"));
     button.setAttribute(
       "aria-label",
-      `${portal ? `${t["black-hole"]}, ${state.blackHole.capacityRemaining} ${t.charges}` : gem ? `${gem.colour}${gem.kind ? " " + gem.kind : ""}` : "Empty"}, ${Math.floor(cell / width) + 1}, ${(cell % width) + 1}${preview.has(cell) ? " · " + t.preview : ""}`,
+      `${portal ? `${t["black-hole"]}, ${state.blackHole.capacityRemaining} ${t.charges}` : gem ? `${gem.colour}${gem.kind ? ` ${gem.kind}` : ""}` : "Empty"}, ${Math.floor(cell / width) + 1}, ${(cell % width) + 1}${preview.has(cell) ? ` · ${t.preview}` : ""}`,
     );
   });
   settle(grid, previous);
@@ -699,7 +700,8 @@ function render() {
   const goals = status.goalProgress ?? [];
   if (selectedLevel && state.game === "stone-collapse") {
     const goal = selectedLevel.goal;
-    let target, current;
+    let target;
+    let current;
     if (goal.kind === "score-target") {
       target = goal.minimumScore;
       current = state.score;
@@ -735,7 +737,7 @@ function render() {
   $("#objectives").innerHTML = goals
     .map(
       (goal) =>
-        `<p>${labels[goal.kind] ?? goal.kind}${goal.colour ? " · " + goal.colour : ""}: ${goal.current} / ${goal.target}</p><progress aria-label="${labels[goal.kind] ?? goal.kind}" max="${goal.target || 1}" value="${Math.min(goal.current, goal.target)}"></progress>`,
+        `<p>${labels[goal.kind] ?? goal.kind}${goal.colour ? ` · ${goal.colour}` : ""}: ${goal.current} / ${goal.target}</p><progress aria-label="${labels[goal.kind] ?? goal.kind}" max="${goal.target || 1}" value="${Math.min(goal.current, goal.target)}"></progress>`,
     )
     .join("");
   const remainingMoves =

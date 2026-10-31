@@ -1,15 +1,15 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
+import { findMatches } from "../dist/gem-swap/board.js";
 import {
   applyAction,
   createGame,
   decodeGame,
   encodeGame,
+  GemSwapOptionsError,
   legalActions,
   restartGame,
-  GemSwapOptionsError,
 } from "../dist/gem-swap.js";
-import { findMatches } from "../dist/gem-swap/board.js";
 
 const presets = [
   ["extraWide", 16, 10],

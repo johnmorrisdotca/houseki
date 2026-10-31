@@ -1,6 +1,6 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
-import { createGame, applyAction, advanceTicks, legalActions, statusOf } from "../dist/gem-swap.js";
+import { test } from "vitest";
+import { advanceTicks, applyAction, createGame, legalActions, statusOf } from "../dist/gem-swap.js";
 
 const makeBoard = (width, height, colourAt, kindAt = () => undefined) =>
   Object.freeze(

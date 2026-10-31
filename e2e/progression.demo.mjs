@@ -1,10 +1,11 @@
-import { test, expect } from "@playwright/test";
-import { start, ORIGIN } from "./demo.mjs";
+import { expect, test } from "@playwright/test";
 import * as chains from "../dist/colour-chains.js";
 import * as blocks from "../dist/magnetic-blocks.js";
-const counts = [32, 32, 32, 24, 8],
-  english = ["Entry level", "Easy", "Intermediate", "Hard", "Expert"],
-  japanese = ["入門", "初級", "中級", "上級", "最上級"];
+import { ORIGIN, start } from "./demo.mjs";
+
+const counts = [32, 32, 32, 24, 8];
+const english = ["Entry level", "Easy", "Intermediate", "Hard", "Expert"];
+const japanese = ["入門", "初級", "中級", "上級", "最上級"];
 for (const campaign of ["shizen", "arashi", "blocks"])
   test(`${campaign}: all 128 levels display measured scores in five bilingual groups`, async ({ page }) => {
     const errors = await start(page);

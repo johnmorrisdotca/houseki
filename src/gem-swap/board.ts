@@ -1,4 +1,4 @@
-import type { Gem, GemColour, GameState, Settings } from "./types.js";
+import type { GameState, Gem, GemColour, Settings } from "./types.js";
 
 export const COLOURS: readonly GemColour[] = ["red", "blue", "green", "gold", "purple", "teal"];
 export const PRESETS = {

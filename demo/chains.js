@@ -1,34 +1,35 @@
-import { fillCampaignSelector, levelText } from "./campaigns.js";
+import { animationEnabled, positions, setAnimations, settle } from "./animation.js";
 import { refreshAppearanceLanguage } from "./appearance.js";
-import { updateEnding } from "./ending.js";
-import { soundEnabled, setSound, unlockSound, playTone } from "./audio.js";
-import { positions, settle, animationEnabled, setAnimations } from "./animation.js";
-import { syncAuthoredSettings, readFreeSettings, restoreFreeSettings } from "./settings.js";
-import { pageWords } from "./words.js";
-import { newSeed } from "./seed.js";
+import { playTone, setSound, soundEnabled, unlockSound } from "./audio.js";
+import { fillCampaignSelector, levelText } from "./campaigns.js";
 import {
-  restartGame,
-  createChallenge,
-  tutorialManifest,
-  createLevel,
-  levelManifest,
-  shizenLevelManifest,
-  createShizenLevel,
+  actionsForTick,
+  advanceTicks,
+  applyAction,
   arashiLevelManifest,
   createArashiLevel,
+  createChallenge,
   createGame,
-  applyAction,
-  advanceTicks,
+  createInputScheduler,
+  createLevel,
+  createShizenLevel,
   decodeGame,
   encodeGame,
   landingCells,
+  levelManifest,
   powerDropPreview,
-  createInputScheduler,
-  setHeldInput as setHeldAction,
   queueInputEdge,
-  actionsForTick,
   releaseAllInput as releaseAllActions,
+  restartGame,
+  setHeldInput as setHeldAction,
+  shizenLevelManifest,
+  tutorialManifest,
 } from "./dist/colour-chains.js";
+import { updateEnding } from "./ending.js";
+import { newSeed } from "./seed.js";
+import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from "./settings.js";
+import { pageWords } from "./words.js";
+
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: "●", blue: "◆", green: "▲", gold: "■", purple: "+", teal: "☾" };
 const words = {
@@ -376,8 +377,8 @@ function render() {
     const offsets = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] };
     const [dx, dy] = offsets[game.active.orientation];
     game.active.gems.forEach((gem, i) => {
-      const x = game.active.pivot.x + (i ? dx : 0),
-        y = game.active.pivot.y + (i ? dy : 0);
+      const x = game.active.pivot.x + (i ? dx : 0);
+      const y = game.active.pivot.y + (i ? dy : 0);
       const at = (y + 3) * w + x;
       if (at >= 0 && at < cells.length) cells[at] = gemMarkup(gem, "active");
     });
@@ -400,9 +401,10 @@ function render() {
   const clearCells = new Set(game.clearCells ?? []);
   const markup = cells
     .map((content, index) => {
+      let current = content;
       if (clearCells.has(index) && game.board[index])
-        content = gemMarkup(game.board[index], game.phase === "clear-remove" ? "removing" : "marked");
-      return `<div class="cell${index < w * 3 ? " hidden-row" : ""}" data-cell="${index}" aria-label="${cellLabel(index, w, content)}">${content}</div>`;
+        current = gemMarkup(game.board[index], game.phase === "clear-remove" ? "removing" : "marked");
+      return `<div class="cell${index < w * 3 ? " hidden-row" : ""}" data-cell="${index}" aria-label="${cellLabel(index, w, current)}">${current}</div>`;
     })
     .join("");
   if (well.dataset.markup !== markup) {
@@ -420,7 +422,9 @@ function render() {
     const goal = selectedLevel.goal;
     const ids = goal.targetIds;
     const chain = goal.minimumChain ?? goal.chain;
-    let target, current, label;
+    let target;
+    let current;
+    let label;
     if (ids) {
       target = ids.length;
       const remaining = new Set(game.board.filter(Boolean).map((gem) => gem.id));
@@ -568,6 +572,7 @@ function updateBoardScroll() {
   $(".scroll-position").setAttribute("aria-label", `${words[lang].scrollLabel}: ${percent}%`);
 }
 function markBoardRegion(oversized) {
+  let current = oversized;
   const area = $(".well-scroll");
   const fitWide = game.settings.mode === "challenge" && game.settings.width > 12 && game.settings.height <= 20;
   area.dataset.authoredFit = String(fitWide);
@@ -578,10 +583,10 @@ function markBoardRegion(oversized) {
       `${Math.max(12, Math.min(32, (available - 2 * (game.settings.width - 1)) / game.settings.width))}px`,
     );
   }
-  oversized = oversized && !fitWide;
-  area.dataset.oversized = String(oversized);
-  $(".board-nav").hidden = !oversized;
-  if (oversized) {
+  current = current && !fitWide;
+  area.dataset.oversized = String(current);
+  $(".board-nav").hidden = !current;
+  if (current) {
     area.setAttribute("tabindex", "0");
     area.setAttribute("role", "region");
     area.setAttribute("aria-label", words[lang].boardLabel);
@@ -690,9 +695,9 @@ function bindHeld(button, action) {
   button.addEventListener("pointercancel", release);
   button.addEventListener("lostpointercapture", release);
 }
-document
-  .querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]')
-  .forEach((button) => bindHeld(button, button.dataset.action));
+document.querySelectorAll('[data-action="left"],[data-action="right"],[data-action="soft-drop"]').forEach((button) => {
+  bindHeld(button, button.dataset.action);
+});
 document.querySelectorAll("[data-action]").forEach((button) => {
   if (["left", "right", "soft-drop", "resume"].includes(button.dataset.action)) return;
   button.addEventListener("click", () => {
@@ -757,7 +762,7 @@ document.addEventListener("keydown", (event) => {
   event.preventDefault();
   if (event.repeat) return;
   if (key === "escape") {
-    if (game.phase === "paused") resumeCountdown();
+    if (game.phase === "paused") void resumeCountdown();
     else input = queueInputEdge(input, { kind: "pause" });
     return;
   }

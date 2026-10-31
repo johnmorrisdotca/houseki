@@ -1,23 +1,23 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { test } from "vitest";
 import {
-  createGame,
-  createChallenge,
-  restartGame,
-  applyAction,
+  actionsForTick,
   advanceTicks,
+  applyAction,
+  createChallenge,
+  createGame,
+  createInputScheduler,
   decodeGame,
   encodeGame,
   findMatches,
   landingY,
   legalActions,
-  createInputScheduler,
-  setHeldAction,
-  queueInputEdge,
-  actionsForTick,
-  releaseAllActions,
   nextUint32,
+  queueInputEdge,
+  releaseAllActions,
+  restartGame,
+  setHeldAction,
 } from "../dist/falling-triplets.js";
 
 const fixtureDoc = JSON.parse(
@@ -45,14 +45,17 @@ function oracleMatches(board, width, height) {
         [1, -1],
       ]) {
         const line = [];
-        let nx = x,
-          ny = y;
+        let nx = x;
+        let ny = y;
         while (nx >= 0 && nx < width && ny >= 0 && ny < height && board[ny * width + nx]?.colour === colour) {
           line.push(ny * width + nx);
           nx += dx;
           ny += dy;
         }
-        if (line.length >= 3) line.forEach((index) => marked.add(index));
+        if (line.length >= 3)
+          line.forEach((index) => {
+            marked.add(index);
+          });
       }
     }
   return [...marked].sort((a, b) => a - b);
@@ -222,11 +225,11 @@ test("clear, removal, gravity, and next-wave phases expose intermediate board sn
   const base = createGame({ width: 6, height: 12, mode: "relaxed", seed: "phase-fixture" });
   const board = Array(6 * 15).fill(null);
   let id = 100;
-  fixture.board.forEach((row, y) =>
+  fixture.board.forEach((row, y) => {
     [...row].forEach((char, x) => {
       if (char !== ".") board[(y + 3) * 6 + x] = { id: id++, colour: code[char] };
-    }),
-  );
+    });
+  });
   const piece = {
     ...base.active,
     x: 5,

@@ -1,15 +1,15 @@
 import { createHash } from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { applyAction, advanceTicks, createChallenge } from "../dist/colour-chains.js";
 import { initialChallengeState } from "../dist/colour-chains/engine.js";
+import { advanceTicks, applyAction, createChallenge } from "../dist/colour-chains.js";
 import {
   advancedShizenPrototypes,
   arashiCausalPrototype,
-  arashiThreeTargetPrototype,
   arashiConstructionBlueprints,
   arashiGuardGatePrototypes,
   arashiTallTowerPrototypes,
+  arashiThreeTargetPrototype,
   arashiWideGuardPrototypes,
   shizenConstructionBlueprints,
   shizenFourWaveLayouts,
@@ -23,9 +23,9 @@ export const NATURE_GRADING_VERSION = "chains-nature-decision-evidence-7";
 export const SAMPLE_BUDGET = 64;
 export const GRADING_FORMULA =
   "raw=0.18*(1-fullPlanSuccessRate)+0.28*consequentialDecisionShare+0.30*setupDeviationLossShare+0.12*goalCoordinationShare+0.06*cascadeShare+0.06*weatherDependency; score=clamp(1+round(99*raw),1,100)";
-const WIDTH = 6,
-  HEIGHT = 12,
-  COLOURS = ["red", "blue", "green", "gold"];
+const WIDTH = 6;
+const HEIGHT = 12;
+const COLOURS = ["red", "blue", "green", "gold"];
 const SHAPES = [
   {
     tag: "horizontal-link",
@@ -164,9 +164,9 @@ function weatherTrace(events, source) {
   });
 }
 function playRandomLegalPlan(start, random) {
-  let state = start,
-    placements = 0,
-    maxChainDepth = 1;
+  let state = start;
+  let placements = 0;
+  let maxChainDepth = 1;
   const width = state.settings.width;
   const choices = Array.from({ length: width * 4 }, (_, index) => ({
     pivotX: Math.floor(index / 4),
@@ -223,8 +223,8 @@ function canonicalNatureKey(level) {
             kind: "clear-targets",
             targets: level.goal.targetIds
               .map((id) => {
-                const at = level.board.findIndex((gem) => gem?.id === id),
-                  x = at % level.width;
+                const at = level.board.findIndex((gem) => gem?.id === id);
+                const x = at % level.width;
                 return Math.floor(at / level.width) * level.width + (mirror ? level.width - 1 - x : x);
               })
               .sort((a, b) => a - b),
@@ -259,9 +259,9 @@ function targetComponentCount(source) {
     const colour = source.board[queue[0]]?.colour;
     remaining.delete(queue[0]);
     while (queue.length) {
-      const at = queue.pop(),
-        x = at % source.width,
-        y = Math.floor(at / source.width);
+      const at = queue.pop();
+      const x = at % source.width;
+      const y = Math.floor(at / source.width);
       for (const [nx, ny] of [
         [x - 1, y],
         [x + 1, y],
@@ -321,18 +321,18 @@ function natureMetrics(source, options, witness, events, scoreData = {}) {
       return null;
     }
   })();
-  let legalPlacements = 0,
-    wins = 0;
-  let requiredSetupPairs = 0,
-    setupDependencyProbes = 0,
-    setupDependencyFails = 0,
-    setupDeviationProbes = 0,
-    setupDeviationLosses = 0;
-  let deviationProbes = 0,
-    deviationWins = 0,
-    branchingPoints = 0,
-    forcedSafeSteps = 0,
-    deadEndDeviations = 0;
+  let legalPlacements = 0;
+  let wins = 0;
+  let requiredSetupPairs = 0;
+  let setupDependencyProbes = 0;
+  let setupDependencyFails = 0;
+  let setupDeviationProbes = 0;
+  let setupDeviationLosses = 0;
+  let deviationProbes = 0;
+  let deviationWins = 0;
+  let branchingPoints = 0;
+  let forcedSafeSteps = 0;
+  let deadEndDeviations = 0;
   if (initial)
     for (let index = 0; index < witness.length; index++) {
       let prefix = initial;
@@ -344,9 +344,9 @@ function natureMetrics(source, options, witness, events, scoreData = {}) {
         }
         prefix = placed.state;
       }
-      if (!prefix || prefix.phase !== "falling") continue;
-      let alternatives = 0,
-        alternativeWins = 0;
+      if (prefix?.phase !== "falling") continue;
+      let alternatives = 0;
+      let alternativeWins = 0;
       for (const placement of placements) {
         if (placement.pivotX === witness[index].pivotX && placement.orientation === witness[index].orientation)
           continue;
@@ -386,9 +386,9 @@ function natureMetrics(source, options, witness, events, scoreData = {}) {
       }
     }
   const random = rng(`${NATURE_GENERATION_REVISION}|full-plans|${measurementId}`);
-  let successes = 0,
-    fullPlanPlacements = 0,
-    observedPotentialChainDepth = 1;
+  let successes = 0;
+  let fullPlanPlacements = 0;
+  let observedPotentialChainDepth = 1;
   const witnessedChainDepth = Math.max(
     1,
     ...events.filter((event) => event.type === "cells-cleared").map((event) => event.chain ?? 1),
@@ -428,8 +428,8 @@ function natureMetrics(source, options, witness, events, scoreData = {}) {
     source.goal.kind === "minimum-chain"
       ? Math.min(1, Math.max(0, (source.goal.chain - 1) / 3))
       : Math.min(1, Math.max(0, (goalComponents - 1) / 2));
-  const occupiedCells = options.board.filter(Boolean).length,
-    usableCells = source.width * source.height;
+  const occupiedCells = options.board.filter(Boolean).length;
+  const usableCells = source.width * source.height;
   const requiredChainDepth =
     source.goal.kind === "minimum-chain" ? source.goal.chain : (scoreData.requiredChainDepth ?? 1);
   const cascadeShare = Math.min(1, Math.max(0, (requiredChainDepth - 1) / 2));
@@ -566,8 +566,8 @@ function initialBoard(serial) {
   const targetColumns = new Set([...targets].map((at) => at % WIDTH));
   const openApproaches = new Set();
   for (const at of targets) {
-    const x = at % WIDTH,
-      y = Math.floor(at / WIDTH);
+    const x = at % WIDTH;
+    const y = Math.floor(at / WIDTH);
     for (const [nx, ny] of [
       [x - 1, y],
       [x + 1, y],
@@ -603,15 +603,15 @@ function hasInitialMatch(board) {
   const seen = new Set();
   for (let index = 0; index < board.length; index++) {
     if (!board[index] || seen.has(index)) continue;
-    const queue = [index],
-      colour = board[index],
-      cells = [];
+    const queue = [index];
+    const colour = board[index];
+    const cells = [];
     seen.add(index);
     while (queue.length) {
       const at = queue.pop();
       cells.push(at);
-      const x = at % WIDTH,
-        y = Math.floor(at / WIDTH);
+      const x = at % WIDTH;
+      const y = Math.floor(at / WIDTH);
       for (const [nx, ny] of [
         [x - 1, y],
         [x + 1, y],
@@ -864,8 +864,8 @@ function splitCandidate(serial) {
   } catch {
     return null;
   }
-  const legal = [],
-    wins = [];
+  const legal = [];
+  const wins = [];
   for (let pivotX = 0; pivotX < WIDTH; pivotX++)
     for (const orientation of ["up", "right", "down", "left"]) {
       const placement = { pivotX, orientation };
@@ -988,12 +988,12 @@ function chainCandidate(serial) {
   } catch {
     return null;
   }
-  const legal = [],
-    wins = [];
+  const legal = [];
+  const wins = [];
   for (let pivotX = 0; pivotX < WIDTH; pivotX++)
     for (const orientation of ["up", "right", "down", "left"]) {
-      const placement = { pivotX, orientation },
-        outcome = playPlacement(start, placement);
+      const placement = { pivotX, orientation };
+      const outcome = playPlacement(start, placement);
       if (!outcome) continue;
       legal.push(outcome);
       if (outcome.state.phase === "won") wins.push({ placement, outcome });
@@ -1144,8 +1144,8 @@ export function multiPairCandidate(serial) {
     if (invalidatingChange) dependencyIndices.push(i);
   }
   if (dependencyIndices.length !== 2) return null;
-  let placementProbes = 0,
-    legalPlacements = 0;
+  let placementProbes = 0;
+  let legalPlacements = 0;
   let finalWinningChoices = 0;
   for (const [stepIndex, start] of stateAtDecision.entries()) {
     for (let pivotX = 0; pivotX < WIDTH; pivotX++)
@@ -1233,7 +1233,9 @@ function tutorials() {
     [0, 11],
     [1, 11],
     [2, 11],
-  ].forEach(([x, y], i) => (lessonRotation[cell(x, y)] = { id: i + 1, colour: "red" }));
+  ].forEach(([x, y], i) => {
+    lessonRotation[cell(x, y)] = { id: i + 1, colour: "red" };
+  });
   const rotationQueue = [
     ["red", "blue"],
     ["gold", "green"],
@@ -1485,7 +1487,7 @@ export function gradeNatureConstructionBlueprints(manifest, campaign) {
       objective: prior.objective,
     };
     const proof = playAuthored(options, source, prior.witness);
-    if (!proof || proof.state.phase !== "won") continue;
+    if (proof?.state.phase !== "won") continue;
     const disabled = playCounterfactual(options, source, prior.witness, campaign === "arashi" ? "weather" : "nature");
     if (disabled?.state.phase === "won") continue;
     if (
@@ -1531,8 +1533,8 @@ export function shizenHorizontalOpeningCandidates() {
   const levels = new Map();
   const height = 12;
   for (const width of [5, 6, 7, 8]) {
-    const board = Array(width * height).fill(null),
-      targetIds = [1, 2, 3];
+    const board = Array(width * height).fill(null);
+    const targetIds = [1, 2, 3];
     for (const [id, x, y] of [
       [1, 2, 11],
       [2, 3, 11],
@@ -1540,10 +1542,10 @@ export function shizenHorizontalOpeningCandidates() {
     ])
       board[y * width + x] = { id, colour: "red" };
     const queue = [
-        ["red", "red"],
-        ["blue", "gold"],
-      ],
-      witness = [{ pivotX: 0, orientation: "up" }];
+      ["red", "red"],
+      ["blue", "gold"],
+    ];
+    const witness = [{ pivotX: 0, orientation: "up" }];
     const source = {
       id: `shizen-horizontal-red-link-${width}`,
       width,
@@ -1570,8 +1572,7 @@ export function shizenHorizontalOpeningCandidates() {
     };
     const proof = playAuthored(options, source, witness);
     if (
-      !proof ||
-      proof.state.phase !== "won" ||
+      proof?.state.phase !== "won" ||
       !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound)
     )
       continue;
@@ -1584,8 +1585,8 @@ export function shizenHorizontalOpeningCandidates() {
 }
 
 export function shizenPairOpeningCandidates() {
-  const levels = new Map(),
-    height = 12;
+  const levels = new Map();
+  const height = 12;
   for (const width of [5, 6, 7, 8])
     for (const geometry of ["horizontal", "vertical"]) {
       const positions =
@@ -1601,8 +1602,8 @@ export function shizenPairOpeningCandidates() {
               ]
             : [position.slice(0, 2), position.slice(2, 4)];
         if (cells.some(([x]) => x >= width)) continue;
-        const board = Array(width * height).fill(null),
-          targetIds = [];
+        const board = Array(width * height).fill(null);
+        const targetIds = [];
         cells.forEach(([x, y], index) => {
           const id = index + 1;
           board[y * width + x] = { id, colour: "red" };
@@ -1610,10 +1611,10 @@ export function shizenPairOpeningCandidates() {
         });
         const orientation = cells[0][0] <= 2 ? "up" : "right";
         const queue = [
-            ["red", "red"],
-            ["blue", "gold"],
-          ],
-          witness = [{ pivotX: 0, orientation }];
+          ["red", "red"],
+          ["blue", "gold"],
+        ];
+        const witness = [{ pivotX: 0, orientation }];
         const source = {
           id: `shizen-two-target-${geometry}-${width}-${cells[0][0]}-${cells[0][1]}`,
           width,
@@ -1640,8 +1641,7 @@ export function shizenPairOpeningCandidates() {
         };
         const proof = playAuthored(options, source, witness);
         if (
-          !proof ||
-          proof.state.phase !== "won" ||
+          proof?.state.phase !== "won" ||
           !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound)
         )
           continue;
@@ -1656,14 +1656,14 @@ export function shizenPairOpeningCandidates() {
 }
 
 export function shizenSupportedTargetCandidates() {
-  const levels = new Map(),
-    height = 12;
+  const levels = new Map();
+  const height = 12;
   for (const width of [5, 6, 7])
     for (const towerHeight of [2, 3, 4]) {
       const targetX = 2;
       if (targetX + 2 >= width) continue;
-      const board = Array(width * height).fill(null),
-        targetIds = [];
+      const board = Array(width * height).fill(null);
+      const targetIds = [];
       const targetY = height - towerHeight;
       for (let dx = 0; dx < 3; dx++) {
         const targetId = dx + 1;
@@ -1677,10 +1677,10 @@ export function shizenSupportedTargetCandidates() {
         }
       }
       const queue = [
-          ["red", "red"],
-          ["blue", "gold"],
-        ],
-        witness = [{ pivotX: 0, orientation: "up" }];
+        ["red", "red"],
+        ["blue", "gold"],
+      ];
+      const witness = [{ pivotX: 0, orientation: "up" }];
       const source = {
         id: `shizen-supported-row-${width}-${towerHeight}`,
         width,
@@ -1707,8 +1707,7 @@ export function shizenSupportedTargetCandidates() {
       };
       const proof = playAuthored(options, source, witness);
       if (
-        !proof ||
-        proof.state.phase !== "won" ||
+        proof?.state.phase !== "won" ||
         !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound)
       )
         continue;
@@ -1722,20 +1721,20 @@ export function shizenSupportedTargetCandidates() {
 }
 
 export function shizenReboundLaneCandidates() {
-  const levels = new Map(),
-    height = 12;
+  const levels = new Map();
+  const height = 12;
   for (const width of [5, 6, 7, 8])
     for (const guideHeight of [1, 2, 3]) {
-      const board = Array(width * height).fill(null),
-        targetIds = [1, 2, 3];
+      const board = Array(width * height).fill(null);
+      const targetIds = [1, 2, 3];
       for (let dx = 0; dx < 3; dx++) board[11 * width + 2 + dx] = { id: dx + 1, colour: "red" };
       for (let step = 0; step < guideHeight; step++)
         board[(11 - step) * width] = { id: 20 + step, colour: step % 2 ? "green" : "blue" };
       const queue = [
-          ["red", "red"],
-          ["blue", "gold"],
-        ],
-        witness = [{ pivotX: 0, orientation: "up" }];
+        ["red", "red"],
+        ["blue", "gold"],
+      ];
+      const witness = [{ pivotX: 0, orientation: "up" }];
       const source = {
         id: `shizen-rebound-guide-${width}-${guideHeight}`,
         width,
@@ -1762,8 +1761,7 @@ export function shizenReboundLaneCandidates() {
       };
       const proof = playAuthored(options, source, witness);
       if (
-        !proof ||
-        proof.state.phase !== "won" ||
+        proof?.state.phase !== "won" ||
         !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound)
       )
         continue;
@@ -1777,12 +1775,12 @@ export function shizenReboundLaneCandidates() {
 }
 
 export function shizenLedgeOpeningCandidates() {
-  const levels = new Map(),
-    supportHeights = [2, 1, 2, 2, 2],
-    height = 12;
+  const levels = new Map();
+  const supportHeights = [2, 1, 2, 2, 2];
+  const height = 12;
   for (const width of [6, 7]) {
-    const board = Array(width * height).fill(null),
-      targetIds = [1, 2, 3];
+    const board = Array(width * height).fill(null);
+    const targetIds = [1, 2, 3];
     let id = 4;
     for (let x = 0; x < supportHeights.length; x++)
       for (let offset = 0; offset < supportHeights[x]; offset++) {
@@ -1790,10 +1788,10 @@ export function shizenLedgeOpeningCandidates() {
       }
     for (let dx = 0; dx < 3; dx++) board[9 * width + 2 + dx] = { id: dx + 1, colour: "red" };
     const queue = [
-        ["red", "red"],
-        ["blue", "gold"],
-      ],
-      witness = [{ pivotX: 0, orientation: "up" }];
+      ["red", "red"],
+      ["blue", "gold"],
+    ];
+    const witness = [{ pivotX: 0, orientation: "up" }];
     const source = {
       id: `shizen-low-ledge-${width}`,
       width,
@@ -1820,8 +1818,7 @@ export function shizenLedgeOpeningCandidates() {
     };
     const proof = playAuthored(options, source, witness);
     if (
-      !proof ||
-      proof.state.phase !== "won" ||
+      proof?.state.phase !== "won" ||
       !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound)
     )
       continue;
@@ -1835,9 +1832,9 @@ export function shizenLedgeOpeningCandidates() {
 
 export function generateShizenCampaign() {
   const unique = new Map();
-  const width = 6,
-    height = 12,
-    colourCount = 6;
+  const width = 6;
+  const height = 12;
+  const colourCount = 6;
   for (const { level, key } of gradeNatureConstructionBlueprints(shizenConstructionBlueprints, "shizen"))
     unique.set(key, level);
   for (const [key, level] of shizenHorizontalOpeningCandidates()) unique.set(key, level);
@@ -1926,8 +1923,8 @@ export function generateShizenCampaign() {
       ];
       for (const shape of shapes) {
         if (shape.cells.some(([x]) => x >= boardWidth)) continue;
-        const board = Array(boardWidth * height).fill(null),
-          targetIds = [];
+        const board = Array(boardWidth * height).fill(null);
+        const targetIds = [];
         shape.cells.forEach(([x, y], index) => {
           const id = index + 1;
           board[y * boardWidth + x] = { id, colour: "red" };
@@ -1935,10 +1932,10 @@ export function generateShizenCampaign() {
         });
         const orientation = offset >= 3 && shape.name !== "horizontal" ? "right" : "up";
         const queue = [
-            ["red", "red"],
-            [boardWidth > 10 ? "red" : "blue", boardWidth > 10 ? "red" : "gold"],
-          ],
-          witness = [{ pivotX: 0, orientation }];
+          ["red", "red"],
+          [boardWidth > 10 ? "red" : "blue", boardWidth > 10 ? "red" : "gold"],
+        ];
+        const witness = [{ pivotX: 0, orientation }];
         const source = {
           id: `shizen-red-wall-link-${boardWidth}-${offset}-${shape.name}`,
           width: boardWidth,
@@ -1982,8 +1979,8 @@ export function generateShizenCampaign() {
         if (plain?.state.phase === "won") continue;
         if (boardWidth > 10) {
           const wrongFirst = { pivotX: boardWidth - 1, orientation: "up" };
-          const miss = playAuthoredRaw(options, source, [wrongFirst]),
-            recovery = playAuthoredRaw(options, source, [wrongFirst, witness[0]]);
+          const miss = playAuthoredRaw(options, source, [wrongFirst]);
+          const recovery = playAuthoredRaw(options, source, [wrongFirst, witness[0]]);
           if (miss?.state.phase !== "falling" || recovery?.state.phase !== "won") continue;
         }
         const authored = authoredLevel(source, "shizen", 0, options, witness, proof.events);
@@ -2045,8 +2042,8 @@ export function generateShizenCampaign() {
     unique.set(authored.key, authored.level);
   }
   for (const [index, layout] of shizenFourWaveLayouts.entries()) {
-    const board = Array(width * height).fill(null),
-      removed = new Set(layout.remove.map(([x, y]) => cell(x, y)));
+    const board = Array(width * height).fill(null);
+    const removed = new Set(layout.remove.map(([x, y]) => cell(x, y)));
     let gemId = 1;
     for (let y = 0; y < height; y++)
       for (let x = 0; x < width; x++) {
@@ -2074,8 +2071,8 @@ export function generateShizenCampaign() {
         ja: "リバウンドで連鎖の道を戻し、必須の4段連鎖を起こしましょう。",
       },
     };
-    const proof = playAuthored(options, source, layout.witness),
-      plain = playCounterfactual(options, source, layout.witness, "nature");
+    const proof = playAuthored(options, source, layout.witness);
+    const plain = playCounterfactual(options, source, layout.witness, "nature");
     if (
       proof?.state.phase !== "won" ||
       proof.state.maxChain < 4 ||
@@ -2096,8 +2093,8 @@ export function generateShizenCampaign() {
   // Admit a shorter minimum only when its sampled wins or consequential
   // deviations differ from the four-wave objective on the identical board.
   for (const layout of [{ remove: [], witness: shizenFourWaveRestorePrototype.witness }, ...shizenFourWaveLayouts]) {
-    const board = Array(width * height).fill(null),
-      removed = new Set(layout.remove.map(([x, y]) => cell(x, y)));
+    const board = Array(width * height).fill(null);
+    const removed = new Set(layout.remove.map(([x, y]) => cell(x, y)));
     let gemId = 1;
     for (let y = 0; y < height; y++)
       for (let x = 0; x < width; x++) {
@@ -2121,7 +2118,7 @@ export function generateShizenCampaign() {
       tags: ["minimum-chain", "gravity-setup", "setup-dependency"],
     };
     const baselineProof = playAuthored(options, baselineSource, layout.witness);
-    if (!baselineProof || baselineProof.state.phase !== "won") continue;
+    if (baselineProof?.state.phase !== "won") continue;
     const baseline = natureMetrics(baselineSource, options, layout.witness, baselineProof.events);
     for (const chain of [2, 3]) {
       const source = {
@@ -2130,7 +2127,7 @@ export function generateShizenCampaign() {
         goal: { kind: "minimum-chain", chain },
       };
       const proof = playAuthored(options, source, layout.witness);
-      if (!proof || proof.state.phase !== "won" || proof.state.maxChain < chain) continue;
+      if (proof?.state.phase !== "won" || proof.state.maxChain < chain) continue;
       if (
         !proof.events.some((event) => event.type === "power-drop-landed" && event.rebound) ||
         playCounterfactual(options, source, layout.witness, "nature")?.state.phase === "won"
@@ -2185,7 +2182,7 @@ export function generateShizenCampaign() {
     };
     const options = { seed: prototype.seed, board, nature: true, magneticQueue: prototype.magneticQueue };
     let outcome = playAuthored(options, source, prototype.witness);
-    if (!outcome || outcome.state.phase !== "won") continue;
+    if (outcome?.state.phase !== "won") continue;
     const pulseMoves = outcome.events
       .filter((event) => event.type === "magnetic-pulse")
       .flatMap((event) => event.moves ?? []);
@@ -2253,9 +2250,9 @@ export function generateShizenCampaign() {
       for (let shift = 0; shift <= boardWidth - 6; shift++) {
         const board = Array(boardWidth * height).fill(null);
         for (const [at, id, colour, magnetic] of prototype.board) {
-          const oldX = at % 6,
-            y = Math.floor(at / 6),
-            x = oldX + shift;
+          const oldX = at % 6;
+          const y = Math.floor(at / 6);
+          const x = oldX + shift;
           board[y * boardWidth + x] = { id, colour, ...(magnetic ? { magnetic: true } : {}) };
         }
         const witness = prototype.witness.map((step) => ({ ...step, pivotX: step.pivotX + shift }));
@@ -2272,9 +2269,9 @@ export function generateShizenCampaign() {
         };
         const options = { seed: prototype.seed, board, nature: true, magneticQueue: prototype.magneticQueue };
         let outcome = playAuthored(options, source, witness);
-        if (!outcome || outcome.state.phase !== "won") continue;
-        const moved = outcome.events.some((event) => event.type === "magnetic-pulse" && event.moves?.length),
-          rebound = outcome.events.some((event) => event.type === "power-drop-landed" && event.rebound);
+        if (outcome?.state.phase !== "won") continue;
+        const moved = outcome.events.some((event) => event.type === "magnetic-pulse" && event.moves?.length);
+        const rebound = outcome.events.some((event) => event.type === "power-drop-landed" && event.rebound);
         if (!moved && !rebound) continue;
         if (witness.length > 1) {
           const startingIds = new Set(board.filter(Boolean).map((gem) => gem.id));
@@ -2288,8 +2285,8 @@ export function generateShizenCampaign() {
           ];
           if (setupTargets.length > source.goal.targetIds.length) {
             const coordinated = { ...source, goal: { kind: "clear-targets", targetIds: setupTargets } };
-            const coordinatedOutcome = playAuthored(options, coordinated, witness),
-              coordinatedOff = playCounterfactual(options, coordinated, witness, "magnetism");
+            const coordinatedOutcome = playAuthored(options, coordinated, witness);
+            const coordinatedOff = playCounterfactual(options, coordinated, witness, "magnetism");
             if (coordinatedOutcome?.state.phase === "won" && coordinatedOff?.state.phase !== "won") {
               source = coordinated;
               outcome = coordinatedOutcome;
@@ -2360,7 +2357,7 @@ export function generateShizenCampaign() {
     ];
     const options = { seed: `shizen:${NATURE_GENERATION_REVISION}:${serial}`, board, nature: true, magneticQueue };
     const outcome = playAuthored(options, source, witness);
-    if (!outcome || outcome.state.phase !== "won") continue;
+    if (outcome?.state.phase !== "won") continue;
     const rebound = outcome.events.find(
       (event) =>
         event.type === "power-drop-landed" &&
@@ -2401,8 +2398,8 @@ export function generateShizenCampaign() {
 /** Keep only color/queue variants that change the witnessed cascade route and retain the rebound dependency. */
 export function shizenReboundChainCandidatePool(minimum = 8, scoreRange = [81, 100], chainRequirements = [3, 4]) {
   const candidates = new Map();
-  const width = 6,
-    height = 12;
+  const width = 6;
+  const height = 12;
   const baseBoard = Array(width * height).fill(null);
   let id = 1;
   for (let y = 0; y < height; y++)
@@ -2532,12 +2529,12 @@ export function shizenReboundChainCandidatePool(minimum = 8, scoreRange = [81, 1
           secondIndex < mutationCells.length && candidates.size < minimum;
           secondIndex++
         ) {
-          const firstAt = mutationCells[firstIndex],
-            secondAt = mutationCells[secondIndex];
+          const firstAt = mutationCells[firstIndex];
+          const secondAt = mutationCells[secondIndex];
           for (const firstColour of colourNames)
             for (const secondColour of colourNames) {
-              const firstGem = baseBoard[firstAt],
-                secondGem = baseBoard[secondAt];
+              const firstGem = baseBoard[firstAt];
+              const secondGem = baseBoard[secondAt];
               if (firstColour === firstGem.colour || secondColour === secondGem.colour || candidates.size >= minimum)
                 continue;
               const board = baseBoard.map((item, at) =>
@@ -2712,8 +2709,8 @@ export function arashiCausalCandidatePool(minimum = 100) {
         );
         for (let y = 0; y < HEIGHT; y++)
           for (let x = 3; x <= 5; x++) {
-            const position = cell(x, y),
-              target = targetByCell.get(position);
+            const position = cell(x, y);
+            const target = targetByCell.get(position);
             board[position] = target ?? {
               id: id++,
               colour: ["blue", "green", "gold", "purple", "teal"][(2 * x + y) % 5],
@@ -2743,7 +2740,7 @@ export function arashiCausalCandidatePool(minimum = 100) {
               weather: "frequent",
             };
             const proof = playAuthoredRaw(options, source, witness);
-            if (!proof || proof.state.phase !== "won") continue;
+            if (proof?.state.phase !== "won") continue;
             const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed);
             const lightning = proof.events.find((event) => event.type === "lightning-struck");
             if (
@@ -2768,7 +2765,7 @@ export function arashiCausalCandidatePool(minimum = 100) {
                     ja: "2手目の入れ替えで2つの目標を露出させ、4手目まで雷の列を守りましょう。",
                   };
             const verified = playAuthored(options, source, witness);
-            if (!verified || verified.state.phase !== "won") continue;
+            if (verified?.state.phase !== "won") continue;
             const authored = authoredLevel(
               source,
               "arashi",
@@ -2857,7 +2854,7 @@ export function arashiGuardedCandidatePool(minimum = 8) {
           objective,
         };
         const raw = playAuthoredRaw(options, source, witness);
-        if (!raw || raw.state.phase !== "won") continue;
+        if (raw?.state.phase !== "won") continue;
         const clearedGuardIds = new Set(
           raw.events.filter((event) => event.type === "cells-cleared").flatMap((event) => event.ids ?? []),
         );
@@ -2957,12 +2954,12 @@ export function arashiDoubleGuardCandidatePool(minimum = 8) {
           objective,
         };
         const raw = playAuthoredRaw(options, source, witness);
-        if (!raw || raw.state.phase !== "won") continue;
+        if (raw?.state.phase !== "won") continue;
         const cleared = new Set(
           raw.events.filter((event) => event.type === "cells-cleared").flatMap((event) => event.ids ?? []),
         );
-        const jumble = raw.events.find((event) => event.type === "jumble-completed" && event.changed),
-          strike = raw.events.find((event) => event.type === "lightning-struck");
+        const jumble = raw.events.find((event) => event.type === "jumble-completed" && event.changed);
+        const strike = raw.events.find((event) => event.type === "lightning-struck");
         if (
           !guardIds.every((target) => cleared.has(target)) ||
           !targetIds.some((target) => jumble?.moves?.some((move) => move.id === target)) ||
@@ -2989,13 +2986,13 @@ export function arashiDoubleGuardCandidatePool(minimum = 8) {
 }
 
 export function arashiHeadroomEntryCandidates() {
-  const candidates = new Map(),
-    height = 12,
-    colourCount = 6;
+  const candidates = new Map();
+  const height = 12;
+  const colourCount = 6;
   for (const width of [13, 14, 15, 16])
     for (let targetX = 1; targetX < width; targetX++) {
-      const board = Array(width * height).fill(null),
-        targetId = 1;
+      const board = Array(width * height).fill(null);
+      const targetId = 1;
       board[width + targetX] = { id: targetId, colour: "red" };
       for (let y = 2; y < height; y++)
         board[y * width + targetX] = { id: y + 1, colour: y % 2 === 0 ? "purple" : "green" };
@@ -3023,7 +3020,7 @@ export function arashiHeadroomEntryCandidates() {
             : `weather-headroom-${width}-${targetX}-${seedIndex}`;
         const options = { seed, board, nature: true, weather: "frequent", title, objective };
         const proof = playAuthored(options, source, witness);
-        if (!proof || proof.state.phase !== "won") continue;
+        if (proof?.state.phase !== "won") continue;
         const strike = proof.events.find((event) => event.type === "lightning-struck");
         if (!strike?.removedIds?.includes(targetId)) continue;
         if (playCounterfactual(options, source, witness, "weather")?.state.phase === "won") continue;
@@ -3038,9 +3035,9 @@ export function arashiHeadroomEntryCandidates() {
 
 export function generateArashiCampaign() {
   const candidates = new Map();
-  const width = 6,
-    height = 12,
-    colourCount = 6;
+  const width = 6;
+  const height = 12;
+  const colourCount = 6;
   for (const { level, key } of gradeNatureConstructionBlueprints(arashiConstructionBlueprints, "arashi"))
     candidates.set(key, level);
   for (const [key, level] of arashiHeadroomEntryCandidates()) candidates.set(key, level);
@@ -3154,10 +3151,10 @@ export function generateArashiCampaign() {
     };
     const options = { seed: prototype.seed, board: prototype.board, nature: true, weather: prototype.weather };
     const proof = playAuthored(options, source, prototype.witness);
-    if (!proof || proof.state.phase !== "won") continue;
+    if (proof?.state.phase !== "won") continue;
     const targets = new Set(source.goal.targetIds);
-    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed),
-      strike = proof.events.find((event) => event.type === "lightning-struck");
+    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed);
+    const strike = proof.events.find((event) => event.type === "lightning-struck");
     if (
       !jumble?.moves?.some((move) => targets.has(move.id)) ||
       !source.goal.targetIds.every((id) => strike?.removedIds?.includes(id))
@@ -3210,16 +3207,16 @@ export function generateArashiCampaign() {
         ja: "2手目の入れ替えで目標と青緑のガードが動きます。3組目のペアでガード3個を消し、4手目の雷ですべての目標を消しましょう。",
       },
     };
-    const witness = prototype.witness,
-      proof = playAuthored(options, source, witness);
-    if (!proof || proof.state.phase !== "won") continue;
-    const targetIds = new Set(source.goal.targetIds),
-      guardIds = new Set([8001, 8002, 8003]);
-    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed),
-      match = proof.events.find(
-        (event) => event.type === "match-marked" && [...guardIds].every((id) => event.ids?.includes(id)),
-      ),
-      strike = proof.events.find((event) => event.type === "lightning-struck");
+    const witness = prototype.witness;
+    const proof = playAuthored(options, source, witness);
+    if (proof?.state.phase !== "won") continue;
+    const targetIds = new Set(source.goal.targetIds);
+    const guardIds = new Set([8001, 8002, 8003]);
+    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed);
+    const match = proof.events.find(
+      (event) => event.type === "match-marked" && [...guardIds].every((id) => event.ids?.includes(id)),
+    );
+    const strike = proof.events.find((event) => event.type === "lightning-struck");
     if (
       !jumble?.moves?.some((move) => targetIds.has(move.id)) ||
       !jumble.moves.some((move) => guardIds.has(move.id)) ||
@@ -3230,8 +3227,8 @@ export function generateArashiCampaign() {
     if (playCounterfactual(options, source, witness, "weather")?.state.phase === "won") continue;
     const wrongThird = witness.map((step) => ({ ...step }));
     wrongThird[2] = { pivotX: 0, orientation: "up" };
-    const wrong = playAuthoredRaw(options, source, wrongThird),
-      wrongStrike = wrong?.events.find((event) => event.type === "lightning-struck");
+    const wrong = playAuthoredRaw(options, source, wrongThird);
+    const wrongStrike = wrong?.events.find((event) => event.type === "lightning-struck");
     if (
       !wrongStrike ||
       wrong?.state.phase === "won" ||
@@ -3271,16 +3268,16 @@ export function generateArashiCampaign() {
         ja: "2手目の入れ替えで目標と青緑のガードが動きます。3組目をガード列へ置いて3個すべてを消し、4手目の雷ですべての目標を狙います。",
       },
     };
-    const witness = prototype.witness,
-      proof = playAuthored(options, source, witness);
-    if (!proof || proof.state.phase !== "won") continue;
-    const targetIds = new Set(source.goal.targetIds),
-      guardIds = new Set([8001, 8002, 8003]);
-    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed),
-      match = proof.events.find(
-        (event) => event.type === "match-marked" && [...guardIds].every((id) => event.ids?.includes(id)),
-      ),
-      strike = proof.events.find((event) => event.type === "lightning-struck");
+    const witness = prototype.witness;
+    const proof = playAuthored(options, source, witness);
+    if (proof?.state.phase !== "won") continue;
+    const targetIds = new Set(source.goal.targetIds);
+    const guardIds = new Set([8001, 8002, 8003]);
+    const jumble = proof.events.find((event) => event.type === "jumble-completed" && event.changed);
+    const match = proof.events.find(
+      (event) => event.type === "match-marked" && [...guardIds].every((id) => event.ids?.includes(id)),
+    );
+    const strike = proof.events.find((event) => event.type === "lightning-struck");
     if (
       !jumble?.moves?.some((move) => targetIds.has(move.id)) ||
       !jumble.moves.some((move) => guardIds.has(move.id)) ||
@@ -3291,8 +3288,8 @@ export function generateArashiCampaign() {
     if (playCounterfactual(options, source, witness, "weather")?.state.phase === "won") continue;
     const wrongThird = witness.map((step) => ({ ...step }));
     wrongThird[2] = { pivotX: prototype.wrongThirdLane, orientation: witness[2].orientation };
-    const wrong = playAuthoredRaw(options, source, wrongThird),
-      wrongStrike = wrong?.events.find((event) => event.type === "lightning-struck");
+    const wrong = playAuthoredRaw(options, source, wrongThird);
+    const wrongStrike = wrong?.events.find((event) => event.type === "lightning-struck");
     if (
       !wrongStrike ||
       wrong?.state.phase === "won" ||
@@ -3316,8 +3313,8 @@ export function generateArashiCampaign() {
   // side, and only lightning can remove the target. Width/lane are structural.
   for (const boardWidth of [8, 9, 10, 11, 12, 13, 14, 15, 16])
     for (let targetX = 1; targetX < boardWidth; targetX++) {
-      const board = Array(boardWidth * height).fill(null),
-        targetId = 50_001 + boardWidth * 100 + targetX;
+      const board = Array(boardWidth * height).fill(null);
+      const targetId = 50_001 + boardWidth * 100 + targetX;
       board[targetX] = { id: targetId, colour: "red" };
       for (let y = 1; y < height; y++)
         board[y * boardWidth + targetX] = { id: targetId + y, colour: y % 2 ? "green" : "purple" };
@@ -3353,13 +3350,13 @@ export function generateArashiCampaign() {
           objective,
         };
         const raw = playAuthoredRaw(options, source, witness);
-        if (!raw || raw.state.phase !== "won") continue;
+        if (raw?.state.phase !== "won") continue;
         const strike = raw.events.find((event) => event.type === "lightning-struck");
         if (!strike?.columns?.includes(targetX) || !strike.removedIds?.includes(targetId)) continue;
         const withoutWeather = playCounterfactual(options, source, witness, "weather");
         if (withoutWeather?.state.phase === "won") continue;
         const proof = playAuthored(options, source, witness);
-        if (!proof || proof.state.phase !== "won") continue;
+        if (proof?.state.phase !== "won") continue;
         const authored = authoredLevel(source, "arashi", 0, options, witness, proof.events);
         authored.level.tags.push("lightning-dependency", "counterfactual-fail-without-weather");
         if (!candidates.has(authored.key)) candidates.set(authored.key, authored.level);
@@ -3372,17 +3369,17 @@ export function generateArashiCampaign() {
   for (const boardWidth of [8, 9, 10, 11, 12])
     for (let firstX = 1; firstX < boardWidth - 2; firstX++)
       for (let secondX = firstX + 3; secondX < boardWidth; secondX++) {
-        const board = Array(boardWidth * height).fill(null),
-          targetXs = [firstX, secondX],
-          targetIds = targetXs.map((_, index) => 60_001 + boardWidth * 100 + firstX * 10 + secondX + index);
+        const board = Array(boardWidth * height).fill(null);
+        const targetXs = [firstX, secondX];
+        const targetIds = targetXs.map((_, index) => 60_001 + boardWidth * 100 + firstX * 10 + secondX + index);
         let supportId = 1;
         for (const [towerIndex, targetX] of targetXs.entries()) {
           board[targetX] = { id: targetIds[towerIndex], colour: towerIndex ? "gold" : "red" };
           for (let y = 1; y < height; y++)
             board[y * boardWidth + targetX] = { id: supportId++, colour: (y + towerIndex) % 2 ? "green" : "purple" };
         }
-        const queue = Array.from({ length: 4 }, () => ["blue", "gold"]),
-          witness = Array.from({ length: 4 }, () => ({ pivotX: 0, orientation: "up" }));
+        const queue = Array.from({ length: 4 }, () => ["blue", "gold"]);
+        const witness = Array.from({ length: 4 }, () => ({ pivotX: 0, orientation: "up" }));
         const source = {
           id: `arashi-dual-open-lanes-${boardWidth}-${firstX}-${secondX}`,
           width: boardWidth,
@@ -3409,12 +3406,12 @@ export function generateArashiCampaign() {
             objective,
           };
           const raw = playAuthoredRaw(options, source, witness);
-          if (!raw || raw.state.phase !== "won") continue;
+          if (raw?.state.phase !== "won") continue;
           const strike = raw.events.find((event) => event.type === "lightning-struck");
           if (!targetIds.every((id) => strike?.removedIds?.includes(id))) continue;
           if (playCounterfactual(options, source, witness, "weather")?.state.phase === "won") continue;
           const proof = playAuthored(options, source, witness);
-          if (!proof || proof.state.phase !== "won") continue;
+          if (proof?.state.phase !== "won") continue;
           const authored = authoredLevel(source, "arashi", 0, options, witness, proof.events);
           if (authored.level.score < 21 || authored.level.score > 40) continue;
           authored.level.tags.push("lightning-dependency", "dual-strike-lanes", "counterfactual-fail-without-weather");
@@ -3474,7 +3471,7 @@ export function generateArashiCampaign() {
     const seed = `arashi:${NATURE_GENERATION_REVISION}:${serial}`;
     const options = { seed, board, nature: true, weather: "frequent" };
     const outcome = playAuthored(options, source, witness);
-    if (!outcome || outcome.state.phase !== "won") continue;
+    if (outcome?.state.phase !== "won") continue;
     const weather = outcome.events.filter((event) => event.type === "weather-triggered");
     if (
       !weather.some((event) => event.kind === "jumble" && event.turn === 2) ||
@@ -3533,7 +3530,7 @@ export function generateArashiCampaign() {
 
 function prototypeMetricSummary(source, options, witness, campaign) {
   const proof = playAuthored(options, source, witness);
-  if (!proof || proof.state.phase !== "won") return { campaign, valid: false, witnessLength: witness.length };
+  if (proof?.state.phase !== "won") return { campaign, valid: false, witnessLength: witness.length };
   const measured = natureMetrics(source, options, witness, proof.events);
   const counterfactual = playCounterfactual(
     options,
@@ -3745,9 +3742,9 @@ export function generateNaturePrototypeReport() {
       "arashi",
     ),
   );
-  const width = 6,
-    height = 12,
-    board = Array(width * height).fill(null);
+  const width = 6;
+  const height = 12;
+  const board = Array(width * height).fill(null);
   board[8 * width + 5] = { id: 1, colour: "red" };
   board[9 * width + 5] = { id: 10, colour: "blue" };
   board[10 * width + 5] = { id: 11, colour: "green" };
@@ -3823,8 +3820,8 @@ export function generateContent() {
     checksum,
     levels,
   };
-  const shizen = generateShizenCampaign(),
-    arashi = generateArashiCampaign();
+  const shizen = generateShizenCampaign();
+  const arashi = generateArashiCampaign();
   return deepFreeze({ campaign, tutorials: tutorials(), shizen, arashi });
 }
 

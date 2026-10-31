@@ -1,5 +1,3 @@
-import { compactBoard, findGroups } from "./match.js";
-import { drawPair, seedState } from "./random.js";
 import {
   applyEarthquake,
   applyLightning,
@@ -9,7 +7,8 @@ import {
   markMagneticStones,
   previewPowerDrop,
 } from "../nature.js";
-import { normalizeOptions } from "./validation.js";
+import { compactBoard, findGroups } from "./match.js";
+import { drawPair, seedState } from "./random.js";
 import type {
   Action,
   Cell,
@@ -26,8 +25,10 @@ import type {
   Settings,
   Transition,
 } from "./types.js";
+import { normalizeOptions } from "./validation.js";
 
 export { StoneChainsOptionsError } from "./validation.js";
+
 const HIDDEN = 3;
 const RULES = "chains-1" as const;
 const OFFSETS: Readonly<Record<Orientation, readonly [number, number]>> = {
@@ -119,8 +120,8 @@ function magneticFlags(
   return [marked.cells[0]?.magnetic === true, marked.cells[1]?.magnetic === true];
 }
 function natureBoard(state: GameState) {
-  const width = state.settings.width,
-    height = state.settings.height;
+  const width = state.settings.width;
+  const height = state.settings.height;
   const cells = state.board
     .slice(width * HIDDEN)
     .map((gem) =>
@@ -134,8 +135,8 @@ function naturePulse(
   state: GameState,
   board: readonly (Gem | null)[],
 ): { board: readonly (Gem | null)[]; events: readonly GameEvent[] } {
-  const width = state.settings.width,
-    height = state.settings.height;
+  const width = state.settings.width;
+  const height = state.settings.height;
   const cells = board
     .slice(width * HIDDEN)
     .map((gem) =>
@@ -161,8 +162,8 @@ function boardWithNatureCells(
   board: readonly (Gem | null)[],
   cells: readonly ({ id: number; kind: "stone" | "obstacle"; colour?: string; magnetic?: boolean } | null)[],
 ): readonly (Gem | null)[] {
-  const width = state.settings.width,
-    updated = [...board];
+  const width = state.settings.width;
+  const updated = [...board];
   for (let index = 0; index < cells.length; index++) {
     const entity = cells[index];
     updated[index + width * HIDDEN] =
@@ -685,6 +686,10 @@ function applyCore(state: GameState, action: Action): Transition {
         ],
       };
     }
+    case "pause":
+    case "resume":
+    case "hint":
+      return emptyTransition(state, "invalid-action");
   }
 }
 /** Applies one immutable accepted action and records its logical-tick position.

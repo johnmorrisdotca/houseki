@@ -25,8 +25,8 @@ for (const file of ["index.html", "chains.html", "tools.html", "blocks.html"]) {
             el.classList.contains("fam-seg") || el.hasAttribute("data-help-after")
               ? el.nextElementSibling
               : el.querySelector(":scope > .fam-help");
+          if (line === null) return false;
           return (
-            line !== null &&
             line.classList.contains("fam-help") &&
             window.getComputedStyle(line).display !== "none" &&
             line.textContent.length > 10

@@ -1,5 +1,5 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
   applyEarthquake,
   applyLightning,
@@ -75,8 +75,8 @@ test("jumble selects a connected patch no larger than 3×3, makes a nontrivial s
     ],
     { seed: "jumble-fixture" },
   );
-  const first = previewJumble(state),
-    second = previewJumble(state);
+  const first = previewJumble(state);
+  const second = previewJumble(state);
   assert.deepEqual(first, second);
   assert.deepEqual(first.patchCells, [2, 5, 8]);
   assert.deepEqual(
@@ -217,8 +217,8 @@ test("seeded lightning selection is replayable, and disabled operations preserve
     ],
     { seed: "seeded-lightning" },
   );
-  const previewA = previewLightning(state),
-    previewB = previewLightning(state);
+  const previewA = previewLightning(state);
+  const previewB = previewLightning(state);
   assert.deepEqual(previewA, previewB);
   assert.ok(previewA.columns.length >= 1 && previewA.columns.length <= 3);
   assert.equal(new Set(previewA.columns).size, previewA.columns.length);

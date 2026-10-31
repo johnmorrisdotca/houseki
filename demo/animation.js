@@ -9,9 +9,11 @@ try {
 }
 document.documentElement.dataset.animations = enabled ? "on" : "off";
 function cancelEffects() {
-  document
-    .querySelectorAll(".game-screen")
-    .forEach((screen) => screen.getAnimations({ subtree: true }).forEach((effect) => effect.cancel()));
+  document.querySelectorAll(".game-screen").forEach((screen) => {
+    screen.getAnimations({ subtree: true }).forEach((effect) => {
+      effect.cancel();
+    });
+  });
 }
 motion.addEventListener("change", () => {
   if (motion.matches) cancelEffects();
@@ -43,8 +45,8 @@ export function settle(container, previous) {
     const before = previous.get(gem.dataset.id);
     if (!before) continue;
     const rect = gem.getBoundingClientRect();
-    const dx = before.rect.x - rect.x,
-      dy = before.rect.y - rect.y;
+    const dx = before.rect.x - rect.x;
+    const dy = before.rect.y - rect.y;
     const landing = before.active && !gem.classList.contains("active");
     if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && !landing) continue;
     const fall = dy < -1 || landing;

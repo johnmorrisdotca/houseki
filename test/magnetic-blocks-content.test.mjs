@@ -4,10 +4,10 @@ import {
   applyAction,
   campaignManifest,
   createGame,
-  createLevel,
   createLesson,
-  getLevel,
+  createLevel,
   getLesson,
+  getLevel,
   lessonManifest,
   levelManifest,
   tutorialManifest,
@@ -19,9 +19,10 @@ import {
 } from "../scripts/magnetic-blocks-levels.mjs";
 
 function resolve(state) {
-  for (let guard = 0; guard < 12 && ["gravity", "clear-mark", "clear-remove"].includes(state.phase); guard++)
-    state = advanceTicks(state, 60).state;
-  return state;
+  let current = state;
+  for (let guard = 0; guard < 12 && ["gravity", "clear-mark", "clear-remove"].includes(current.phase); guard++)
+    current = advanceTicks(current, 60).state;
+  return current;
 }
 function runWitness(options, witness) {
   let state = createGame(options);

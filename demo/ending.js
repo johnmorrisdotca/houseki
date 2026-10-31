@@ -1,8 +1,8 @@
-let layer,
-  card,
-  badge,
-  signature = "",
-  dismissed = "";
+let layer;
+let card;
+let badge;
+let signature = "";
+let dismissed = "";
 const words = {
   en: {
     over: "Game over",

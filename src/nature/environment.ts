@@ -1,7 +1,7 @@
 import { nextNatureUint32 } from "./random.js";
 import { freezeNatureState } from "./state.js";
-import { NatureOptionsError, validateState } from "./validation.js";
 import type { NatureEntity, NatureMove, NatureState } from "./types.js";
+import { NatureOptionsError, validateState } from "./validation.js";
 
 /** The native fault, jumble or combined earthquake mode.
  *
@@ -250,11 +250,11 @@ export function isEnvironmentTurnScheduled(turn: number, schedule: EnvironmentSc
         "invalid-nature-options",
         "Authored turns must be bounded, positive and strictly increasing",
       );
-    let low = 0,
-      high = schedule.turns.length - 1;
+    let low = 0;
+    let high = schedule.turns.length - 1;
     while (low <= high) {
-      const middle = (low + high) >> 1,
-        candidate = schedule.turns[middle]!;
+      const middle = (low + high) >> 1;
+      const candidate = schedule.turns[middle]!;
       if (candidate === turn) return true;
       if (candidate < turn) low = middle + 1;
       else high = middle - 1;
@@ -348,10 +348,10 @@ function faultPath(state: NatureState): readonly [readonly number[], number] {
 export function previewFault(state: NatureState): FaultPreview {
   validateState(state);
   const [path, randomStateAfter] = faultPath(state);
-  const cells = [...state.cells],
-    activeCells = [...state.activeCells];
-  const removedIds: number[] = [],
-    fracturedCells: number[] = [];
+  const cells = [...state.cells];
+  const activeCells = [...state.activeCells];
+  const removedIds: number[] = [];
+  const fracturedCells: number[] = [];
   for (const index of path) {
     if (!activeCells[index]) continue;
     activeCells[index] = false;
@@ -377,8 +377,8 @@ function candidatePatches(state: NatureState): readonly Patch[] {
       if (width * height < 2) continue;
       for (let top = 0; top <= state.height - height; top++)
         for (let left = 0; left <= state.width - width; left++) {
-          const cells: number[] = [],
-            stones: number[] = [];
+          const cells: number[] = [];
+          const stones: number[] = [];
           let allowed = true;
           for (let dy = 0; dy < height && allowed; dy++)
             for (let dx = 0; dx < width; dx++) {
@@ -448,12 +448,12 @@ export function previewJumble(state: NatureState): JumblePreview {
     );
     [shuffled[first], shuffled[second]] = [shuffled[second]!, shuffled[first]!];
   }
-  const cells = [...state.cells],
-    moves: NatureMove[] = [];
+  const cells = [...state.cells];
+  const moves: NatureMove[] = [];
   for (let index = 0; index < patch.stones.length; index++) {
-    const from = patch.stones[index]!,
-      to = shuffled[index]!,
-      entity = state.cells[from]!;
+    const from = patch.stones[index]!;
+    const to = shuffled[index]!;
+    const entity = state.cells[from]!;
     cells[to] = entity;
     if (from !== to)
       moves.push({
@@ -495,10 +495,11 @@ export function previewEarthquake(state: NatureState, options: EarthquakeOptions
       activeCells: state.activeCells,
       randomStateAfter: state.randomState,
     });
-  let cells: readonly (NatureEntity | null)[] = state.cells,
-    activeCells = state.activeCells,
-    randomStateAfter = state.randomState;
-  let fault: FaultPreview | undefined, jumble: JumblePreview | undefined;
+  let cells: readonly (NatureEntity | null)[] = state.cells;
+  let activeCells = state.activeCells;
+  let randomStateAfter = state.randomState;
+  let fault: FaultPreview | undefined;
+  let jumble: JumblePreview | undefined;
   if (options.kind === "fault" || options.kind === "combined") {
     fault = previewFault(state);
     cells = fault.cells;
@@ -579,8 +580,8 @@ function chooseColumns(state: NatureState, options: LightningOptions): readonly 
   if (options.columns !== undefined) {
     return [[...options.columns].sort((a, b) => a - b), state.randomState];
   }
-  let randomState = state.randomState,
-    count: number;
+  let randomState = state.randomState;
+  let count: number;
   if (options.columnCount !== undefined) count = options.columnCount;
   else {
     let draw: number;
@@ -623,9 +624,9 @@ export function previewLightning(state: NatureState, options: LightningOptions =
       randomStateAfter: state.randomState,
     });
   const [columns, randomStateAfter] = chooseColumns(state, options);
-  const cells = [...state.cells],
-    removedCells: number[] = [],
-    removedIds: number[] = [];
+  const cells = [...state.cells];
+  const removedCells: number[] = [];
+  const removedIds: number[] = [];
   for (const column of columns) {
     let hits = 0;
     for (let y = 0; y < state.height && hits < 2; y++) {

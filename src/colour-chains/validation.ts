@@ -1,4 +1,5 @@
 import type { ChallengeGoal, Colour, CreateOptions, Mode, Preset, Settings } from "./types.js";
+
 const PRESETS: Readonly<Record<Preset, readonly [number, number]>> = {
   narrow: [5, 12],
   standard: [6, 12],

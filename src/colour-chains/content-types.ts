@@ -257,4 +257,4 @@ export interface ChainContentData {
   readonly shizen?: NatureChainCampaignManifest;
   readonly arashi?: NatureChainCampaignManifest;
 }
-export type { Colour, Orientation, WitnessStep, ChallengeGoal };
+export type { ChallengeGoal, Colour, Orientation, WitnessStep };

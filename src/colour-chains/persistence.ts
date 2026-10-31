@@ -1,6 +1,7 @@
 import { createChallenge } from "./challenge.js";
 import { advanceTicks, applyAction, createGame } from "./engine.js";
 import type { ChallengeOptions, CreateOptions, GameState, RecordedAction, Settings } from "./types.js";
+
 const RULES = "chains-1" as const;
 const MAX_SAVE_BYTES = 2 * 1024 * 1024;
 const MAX_ACTIONS = 100_000;
@@ -150,8 +151,7 @@ export function decodeGame(text: string): GameState {
     throw new TypeError("Save is not valid JSON");
   }
   if (
-    !value ||
-    value.format !== 1 ||
+    value?.format !== 1 ||
     value.game !== "colour-chains" ||
     value.rules !== RULES ||
     !value.settings ||

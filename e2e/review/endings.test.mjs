@@ -1,11 +1,12 @@
-import { serve, ORIGIN } from "../demo.mjs";
-import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
-import * as triplets from "../../dist/falling-triplets.js";
+import { chromium } from "@playwright/test";
 import * as chains from "../../dist/colour-chains.js";
-import * as blocks from "../../dist/magnetic-blocks.js";
+import * as triplets from "../../dist/falling-triplets.js";
 import * as swap from "../../dist/gem-swap.js";
+import * as blocks from "../../dist/magnetic-blocks.js";
 import * as collapse from "../../dist/stone-collapse.js";
+import { ORIGIN, serve } from "../demo.mjs";
+
 const terminal = (state) => ["won", "lost", "finished"].includes(state.phase);
 function dropped(engine) {
   let state = engine.createGame({ mode: "relaxed", seed: "ending-review" });
@@ -20,8 +21,8 @@ function dropped(engine) {
 function firstWin(engine) {
   let state = engine.createLevel(1);
   for (const step of engine.levelManifest[0].witness) {
-    const x = state.active.x ?? state.active.pivot.x,
-      goal = step.x ?? step.pivotX;
+    const x = state.active.x ?? state.active.pivot.x;
+    const goal = step.x ?? step.pivotX;
     for (let i = 0; i < Math.abs(goal - x); i++)
       state = engine.applyAction(state, { kind: goal < x ? "left" : "right" }).state;
     const turns =

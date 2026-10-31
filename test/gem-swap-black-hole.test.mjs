@@ -1,15 +1,15 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
+import { findMatches } from "../dist/gem-swap/board.js";
+import { drawColour } from "../dist/gem-swap/random.js";
 import {
-  createGame,
-  applyAction,
   advanceTicks,
+  applyAction,
+  createGame,
+  GemSwapOptionsError,
   legalActions,
   reshuffleGame,
-  GemSwapOptionsError,
 } from "../dist/gem-swap.js";
-import { drawColour } from "../dist/gem-swap/random.js";
-import { findMatches } from "../dist/gem-swap/board.js";
 
 const checkerBoard = (width, height, mask = Array(width * height).fill(true), specialCell = -1) =>
   Object.freeze(

@@ -1,8 +1,9 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
+import { fallbackBoard } from "../dist/stone-collapse/engine.js";
 import {
-  applyAction,
   advanceTicks,
+  applyAction,
   createChallenge,
   createGame,
   decodeGame,
@@ -10,11 +11,10 @@ import {
   legalActions,
   requestHint,
   restartGame,
+  StoneCollapseOptionsError,
   statusOf,
   undo,
-  StoneCollapseOptionsError,
 } from "../dist/stone-collapse.js";
-import { fallbackBoard } from "../dist/stone-collapse/engine.js";
 
 const colour = { R: "red", B: "blue", G: "green", Y: "gold", P: "purple", T: "teal" };
 // Fixture-only constructor: hand-built boards exercise positions the seeded public generator rarely emits.
@@ -66,9 +66,10 @@ function selectAndConfirm(state, stoneId) {
   return committed.state;
 }
 function targetAndConfirmTool(state, tool, cell) {
-  state = applyAction(state, { kind: "select-tool", tool }).state;
-  state = applyAction(state, { kind: "target-tool", cell }).state;
-  return applyAction(state, { kind: "confirm-tool" }).state;
+  let current = state;
+  current = applyAction(current, { kind: "select-tool", tool }).state;
+  current = applyAction(current, { kind: "target-tool", cell }).state;
+  return applyAction(current, { kind: "confirm-tool" }).state;
 }
 function challenge(board, goal, witness, moveLimit) {
   return createChallenge({
@@ -544,9 +545,9 @@ test("stored tools are opt-in for Relaxed and Arcade, unavailable in Daily and a
 });
 
 test("bomb targeting previews occupied active cells clipped to board and mask, with cancel and retarget costing nothing", () => {
-  const width = 5,
-    height = 4,
-    mask = Array(width * height).fill(true);
+  const width = 5;
+  const height = 4;
+  const mask = Array(width * height).fill(true);
   mask[1] = false;
   mask[6] = false;
   mask[18] = false;
@@ -594,9 +595,9 @@ test("bomb targeting previews occupied active cells clipped to board and mask, w
 });
 
 test("confirmed bomb uses exact preview, scores ten per stone and resolves through 7/6/9 phases", () => {
-  const width = 5,
-    height = 4,
-    mask = Array(width * height).fill(true);
+  const width = 5;
+  const height = 4;
+  const mask = Array(width * height).fill(true);
   mask[1] = false;
   mask[6] = false;
   mask[18] = false;

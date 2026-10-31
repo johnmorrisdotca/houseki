@@ -1,9 +1,7 @@
-import { fillCampaignSelector, difficultyText } from "./campaigns.js";
+import { animationEnabled, positions, setAnimations, settle } from "./animation.js";
 import { refreshAppearanceLanguage } from "./appearance.js";
-import { syncAuthoredSettings, readFreeSettings, restoreFreeSettings } from "./settings.js";
-import { updateEnding } from "./ending.js";
-import { soundEnabled, setSound, unlockSound, playTone } from "./audio.js";
-import { positions, settle, animationEnabled, setAnimations } from "./animation.js";
+import { playTone, setSound, soundEnabled, unlockSound } from "./audio.js";
+import { difficultyText, fillCampaignSelector } from "./campaigns.js";
 import {
   advanceTicks,
   applyAction,
@@ -17,8 +15,10 @@ import {
   levelManifest,
   restartGame,
 } from "./dist/magnetic-blocks.js";
-import { pageWords } from "./words.js";
+import { updateEnding } from "./ending.js";
 import { newSeed } from "./seed.js";
+import { readFreeSettings, restoreFreeSettings, syncAuthoredSettings } from "./settings.js";
+import { pageWords } from "./words.js";
 
 const $ = (selector) => document.querySelector(selector);
 const symbols = { red: "●", blue: "◆", green: "▲", gold: "■", purple: "+", teal: "☾" };
@@ -172,16 +172,16 @@ const text = {
 const saveKey = "houseki-magnetic-blocks-save";
 const preferenceKey = "houseki-ui";
 const family = familyLanguage({ id: "houseki", words: pageWords("blocks"), onChange: (next) => setLanguage(next) });
-let lang = family.lang,
-  game,
-  startOptions = null,
-  selectedLevel = null,
-  selectedLesson = null,
-  lastFrame = 0,
-  accumulator = 0,
-  saveTimer = 0;
-let boardKey = "",
-  hudKey = "";
+let lang = family.lang;
+let game;
+let startOptions = null;
+let selectedLevel = null;
+let selectedLesson = null;
+let lastFrame = 0;
+let accumulator = 0;
+let saveTimer = 0;
+let boardKey = "";
+let hudKey = "";
 const capOversized = globalThis.housekiConfig?.oversizedUnlocked === false;
 
 function t(key) {
@@ -195,8 +195,8 @@ function setLanguage(value) {
   writePreferences();
 }
 function populateCampaignSelectors() {
-  const selectedLevelId = $("#level").value,
-    selectedLessonId = $("#lesson").value;
+  const selectedLevelId = $("#level").value;
+  const selectedLessonId = $("#lesson").value;
   fillCampaignSelector($("#level"), levelManifest, lang, t("freePlay"));
   $("#lesson").innerHTML =
     `<option value="">${t("noLesson")}</option>` +
@@ -240,8 +240,8 @@ function presetSize(name) {
   return { standard: [8, 16], extraWide: [16, 16], deep: [8, 32], large: [16, 32] }[name] ?? null;
 }
 function optionsFromControls() {
-  const width = Number($("#width").value),
-    height = Number($("#height").value);
+  const width = Number($("#width").value);
+  const height = Number($("#height").value);
   if (
     !Number.isInteger(width) ||
     !Number.isInteger(height) ||
@@ -275,8 +275,8 @@ function changedSettings() {
   validateSize();
 }
 function validateSize() {
-  const width = Number($("#width").value),
-    height = Number($("#height").value);
+  const width = Number($("#width").value);
+  const height = Number($("#height").value);
   const valid =
     Number.isInteger(width) &&
     Number.isInteger(height) &&
@@ -411,21 +411,21 @@ function currentShownFloor() {
   return game.pendingFloorOverride ?? game.floor;
 }
 function renderBoard(force = false) {
-  const width = game.settings.width,
-    height = game.settings.height;
+  const width = game.settings.width;
+  const height = game.settings.height;
   const board = game.phase === "gravity" && game.gravityBoard ? game.gravityBoard : game.board;
   const blockPreview = previewDrop();
   const hitIds = new Set(blockPreview?.impactRemovedIds ?? []);
   const positionsById = new Map(board.flatMap((gem, index) => (gem ? [[gem.id, index]] : [])));
   const bonds = new Set();
   for (const edge of game.bonds) {
-    const a = positionsById.get(edge.a),
-      b = positionsById.get(edge.b);
+    const a = positionsById.get(edge.a);
+    const b = positionsById.get(edge.b);
     if (a === undefined || b === undefined) continue;
-    const ax = a % width,
-      ay = Math.floor(a / width),
-      bx = b % width,
-      by = Math.floor(b / width);
+    const ax = a % width;
+    const ay = Math.floor(a / width);
+    const bx = b % width;
+    const by = Math.floor(b / width);
     if (bx === ax + 1) {
       bonds.add(`${a}:right`);
       bonds.add(`${b}:left`);
@@ -490,8 +490,8 @@ function renderBoard(force = false) {
   updateBoardScroll();
   const key = `${width}x${height}|${game.phase}|${boardMarkup}|${currentShownFloor()}|${game.pendingClear.join(",")}`;
   if (!force && key === boardKey) return;
-  const well = $("#well"),
-    previous = positions(well);
+  const well = $("#well");
+  const previous = positions(well);
   well.style.setProperty("--cols", String(width));
   well.style.setProperty("--rows", String(height));
   well.dataset.width = String(width);
@@ -589,8 +589,8 @@ function renderHud(force = false) {
   $(".place").hidden = game.settings.mode !== "relaxed";
   $(".drop").hidden = game.settings.mode !== "arcade" && !campaignDrop;
   $(".soft").hidden = game.settings.mode !== "arcade";
-  const level = selectedLevel,
-    lesson = selectedLesson;
+  const level = selectedLevel;
+  const lesson = selectedLesson;
   $("#objective-title").textContent = level ? `${level.number} · ${level.title[lang]}` : (lesson?.title[lang] ?? "");
   $("#objective-marks").hidden = !level;
   $("#objective-marks").textContent = level ? difficultyText(level) : "";

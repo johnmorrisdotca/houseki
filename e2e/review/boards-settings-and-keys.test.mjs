@@ -1,9 +1,10 @@
 // What a player sees and presses on the boards: the rules a level fixes are shown the moment it is chosen and given back
 // on leaving it, a big board can be scrolled from the keyboard without moving the piece, Space does what the ghost showed,
 // and a board keeps the rows and the square cells it was configured with.
-import { serve, ORIGIN } from "../demo.mjs";
-import { chromium } from "@playwright/test";
+
 import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
+import { ORIGIN, serve } from "../demo.mjs";
 
 const browser = await chromium.launch();
 const open = async (path, lang = "en", viewport = { width: 1280, height: 900 }) => {
@@ -160,7 +161,8 @@ try {
         `the region is named for the board: ${name}`,
       );
       const buttons = await page.locator(".board-nav button").allTextContents();
-      (labels[path] ??= {})[lang] = buttons.join("/");
+      if (labels[path] == null) labels[path] = {};
+      labels[path][lang] = buttons.join("/");
       const before = await page.evaluate(() =>
         [...document.querySelectorAll("#well .gem.active")].map((gem) => gem.dataset.id ?? gem.textContent),
       );
@@ -184,8 +186,8 @@ try {
         () =>
           new Promise((done) => {
             const area = document.querySelector(".well-scroll");
-            let last = -1,
-              still = 0;
+            let last = -1;
+            let still = 0;
             const look = () => {
               still = area.scrollTop === last ? still + 1 : 0;
               last = area.scrollTop;

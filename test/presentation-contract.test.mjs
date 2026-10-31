@@ -1,7 +1,9 @@
 // Release presentation rules run as part of pnpm check, including CI.
-import { test } from "vitest";
+
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import { test } from "vitest";
+
 const read = (path) => readFileSync(path, "utf8");
 test("public package metadata declares its license, source and game keywords", () => {
   const pkg = JSON.parse(read("package.json"));

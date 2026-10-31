@@ -1,7 +1,7 @@
-import { test, expect } from "@playwright/test";
-import { start, ORIGIN } from "./demo.mjs";
+import { expect, test } from "@playwright/test";
 import * as chains from "../dist/colour-chains.js";
 import * as blocks from "../dist/magnetic-blocks.js";
+import { ORIGIN, start } from "./demo.mjs";
 
 async function snapshot(page, entry) {
   return page.evaluate(async (entry) => {

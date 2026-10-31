@@ -1,4 +1,5 @@
 import { words } from "./family-appearance.js";
+
 let lastLanguage = "";
 export function preferredLanguage(fallback = "en") {
   const asked = new URLSearchParams(location.search).get("lang");
@@ -19,8 +20,8 @@ export function refreshAppearanceLanguage(lang) {
   const group = document.querySelector(".cloth");
   group?.setAttribute("aria-label", t.cloth);
   for (const button of document.querySelectorAll("button[data-cloth]")) {
-    button.setAttribute("aria-label", t["cloth_" + button.dataset.cloth]);
-    button.title = t["cloth_" + button.dataset.cloth];
+    button.setAttribute("aria-label", t[`cloth_${button.dataset.cloth}`]);
+    button.title = t[`cloth_${button.dataset.cloth}`];
   }
   const label = document.querySelector("[data-piece-label]");
   if (label) label.textContent = lang === "ja" ? "石の見た目" : "Piece appearance";

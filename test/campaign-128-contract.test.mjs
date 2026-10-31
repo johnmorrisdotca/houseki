@@ -1,7 +1,8 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import * as chains from "../dist/colour-chains.js";
 import * as blocks from "../dist/magnetic-blocks.js";
+
 const bands = [
   ["entry", 32],
   ["easy", 32],
@@ -11,23 +12,23 @@ const bands = [
 ];
 const turns = { up: 0, right: 1, down: 2, left: 3 };
 function canonicalGeometry(level) {
-  const options = level.options ?? level,
-    width = options.width,
-    height = options.height,
-    board = options.initialBoard ?? options.board,
-    goal = options.goal;
+  const options = level.options ?? level;
+  const width = options.width;
+  const height = options.height;
+  const board = options.initialBoard ?? options.board;
+  const goal = options.goal;
   const variants = [];
   for (const mirror of [false, true]) {
-    const labels = new Map(),
-      label = (colour) => {
-        if (!labels.has(colour)) labels.set(colour, labels.size);
-        return labels.get(colour);
-      };
+    const labels = new Map();
+    const label = (colour) => {
+      if (!labels.has(colour)) labels.set(colour, labels.size);
+      return labels.get(colour);
+    };
     const rows = [];
     for (let y = 0; y < height; y++)
       for (let px = 0; px < width; px++) {
-        const x = mirror ? width - 1 - px : px,
-          gem = board[y * width + x];
+        const x = mirror ? width - 1 - px : px;
+        const gem = board[y * width + x];
         rows.push(
           gem
             ? [
@@ -68,13 +69,14 @@ function canonicalGeometry(level) {
   return variants.sort()[0];
 }
 function resolve(engine, state) {
+  let current = state;
   let ticks = 0;
-  while (["clear-mark", "clear-remove", "gravity"].includes(state.phase) && ticks < 100_000) {
-    state = engine.advanceTicks(state, 3600).state;
+  while (["clear-mark", "clear-remove", "gravity"].includes(current.phase) && ticks < 100_000) {
+    current = engine.advanceTicks(current, 3600).state;
     ticks += 3600;
   }
-  assert.ok(!["clear-mark", "clear-remove", "gravity"].includes(state.phase));
-  return state;
+  assert.ok(!["clear-mark", "clear-remove", "gravity"].includes(current.phase));
+  return current;
 }
 for (const [name, engine, levels, create] of [
   ["Magnetic Blocks", blocks, blocks.levelManifest, blocks.createLevel],

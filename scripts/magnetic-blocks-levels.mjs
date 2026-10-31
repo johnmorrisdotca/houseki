@@ -1,11 +1,11 @@
-import { writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { createGame, applyAction, advanceTicks } from "../dist/magnetic-blocks.js";
+import { writeFile } from "node:fs/promises";
+import { advanceTicks, applyAction, createGame } from "../dist/magnetic-blocks.js";
 
 const REVISION = "magnetic-blocks-campaign-2";
 const GRADING = "full-plan-and-interaction-evidence-2";
-const WIDTH = 8,
-  HEIGHT = 12;
+const WIDTH = 8;
+const HEIGHT = 12;
 const palette = ["blue", "green", "gold", "purple"];
 function hash(text) {
   return createHash("sha256").update(text).digest("hex");
@@ -21,8 +21,8 @@ function stable(value) {
   return JSON.stringify(value);
 }
 function normalizedColourKey(options) {
-  const width = options.width ?? WIDTH,
-    height = options.height ?? HEIGHT;
+  const width = options.width ?? WIDTH;
+  const height = options.height ?? HEIGHT;
   const variants = [];
   const targets = new Set(options.goal.targetIds);
   for (const reflect of [false, true]) {
@@ -32,9 +32,9 @@ function normalizedColourKey(options) {
       return seen.get(name);
     };
     const board = Array.from({ length: width * height }, (_, index) => {
-      const x = index % width,
-        y = Math.floor(index / width),
-        source = options.initialBoard[y * width + (reflect ? width - 1 - x : x)];
+      const x = index % width;
+      const y = Math.floor(index / width);
+      const source = options.initialBoard[y * width + (reflect ? width - 1 - x : x)];
       return source ? `${colour(source.colour)}:${targets.has(source.id) ? "t" : "g"}` : ".";
     });
     const queue = options.queue.map((piece) =>
@@ -43,14 +43,14 @@ function normalizedColourKey(options) {
     const mask =
       options.mask &&
       Array.from({ length: width * height }, (_, index) => {
-        const x = index % width,
-          y = Math.floor(index / width);
+        const x = index % width;
+        const y = Math.floor(index / width);
         return options.mask[y * width + (reflect ? width - 1 - x : x)];
       });
     const targetGeometry = options.goal.targetIds
       .map((id) => {
-        const i = options.initialBoard.findIndex((g) => g?.id === id),
-          x = i % width;
+        const i = options.initialBoard.findIndex((g) => g?.id === id);
+        const x = i % width;
         return [reflect ? width - 1 - x : x, Math.floor(i / width)];
       })
       .sort((a, b) => a[1] - b[1] || a[0] - b[0]);
@@ -76,9 +76,10 @@ function act(state, action) {
   return result.accepted ? result.state : null;
 }
 function advanceToInput(state) {
-  for (let guard = 0; guard < 8 && ["gravity", "clear-mark", "clear-remove"].includes(state.phase); guard++)
-    state = advanceTicks(state, 60).state;
-  return state;
+  let current = state;
+  for (let guard = 0; guard < 8 && ["gravity", "clear-mark", "clear-remove"].includes(current.phase); guard++)
+    current = advanceTicks(current, 60).state;
+  return current;
 }
 function actionPath(state, x, orientation, floor, resolve = true) {
   const actions = [];
@@ -169,7 +170,7 @@ function prove(options) {
       ? WIDTH - 2
       : 0;
   const setup = actionPath(start, setupX, 0, null, true);
-  if (!setup || setup.state.phase !== "falling")
+  if (setup?.state.phase !== "falling")
     return {
       witness: null,
       legalPlacementChoices: 0,
@@ -203,8 +204,8 @@ function proveWithWitness(options, witness) {
   return advanceToInput(state);
 }
 function openCandidate(serial) {
-  const widths = [4, 5, 6, 7, 8],
-    heights = [6, 8, 10, 12];
+  const widths = [4, 5, 6, 7, 8];
+  const heights = [6, 8, 10, 12];
   const width = widths[Math.floor(serial / 16) % widths.length];
   const height = heights[Math.floor(serial / 80) % heights.length];
   const vertical = Math.floor(serial / 144) % 2 === 1;
@@ -212,8 +213,8 @@ function openCandidate(serial) {
   const extent = vertical ? width : width - 2;
   const targetStart = (serial * 7 + Math.floor(serial / 11)) % (extent + 1);
   const targetY = height - 3;
-  const initialBoard = Array(width * height).fill(null),
-    targetIds = [];
+  const initialBoard = Array(width * height).fill(null);
+  const targetIds = [];
   const targetCells = Array.from({ length: 3 }, (_, i) =>
     vertical ? [targetStart, targetY + i] : [targetStart + i, height - 1],
   );
@@ -255,7 +256,7 @@ function openCandidate(serial) {
   };
   try {
     const proof = prove(options);
-    if (!proof.witness || proof.witness.state.phase !== "won") return null;
+    if (proof.witness?.state.phase !== "won") return null;
     return {
       serial,
       options,
@@ -278,13 +279,13 @@ function openCandidate(serial) {
   }
 }
 function doubleTargetCandidate(serial) {
-  const widths = [4, 6, 8],
-    heights = [10, 12];
-  const width = widths[Math.floor(serial / 8) % widths.length],
-    height = heights[Math.floor(serial / 24) % heights.length];
+  const widths = [4, 6, 8];
+  const heights = [10, 12];
+  const width = widths[Math.floor(serial / 8) % widths.length];
+  const height = heights[Math.floor(serial / 24) % heights.length];
   const targetX = (serial * 3 + Math.floor(serial / 5)) % (width - 1);
-  const initialBoard = Array(width * height).fill(null),
-    targetIds = [];
+  const initialBoard = Array(width * height).fill(null);
+  const targetIds = [];
   let id = 1;
   for (const y of [height - 4, height - 3, height - 2]) {
     const gem = { id: id++, colour: "red" };
@@ -321,7 +322,7 @@ function doubleTargetCandidate(serial) {
   };
   try {
     const proof = prove(options);
-    if (!proof.witness || proof.witness.state.phase !== "won") return null;
+    if (proof.witness?.state.phase !== "won") return null;
     const calmOptions = structuredClone(options);
     calmOptions.schedule = { kind: "fixed", floor: "calm" };
     const calmResult = proveWithWitness(calmOptions, proof.witness.actions).phase;
@@ -352,11 +353,11 @@ function layeredCandidate(serial, requireSwitch = true) {
   const shift = Math.floor(serial / 4) % 2;
   const mirror = Math.floor(serial / 8) % 2 === 1;
   const towerHeight = 4 + (serial % 4);
-  const width = WIDTH,
-    height = HEIGHT,
-    targetX = 3 + shift;
-  const initialBoard = Array(width * height).fill(null),
-    targetIds = [];
+  const width = WIDTH;
+  const height = HEIGHT;
+  const targetX = 3 + shift;
+  const initialBoard = Array(width * height).fill(null);
+  const targetIds = [];
   let id = 1;
   const put = (x, y, colour, target = false) => {
     const gem = { id: id++, colour };
@@ -437,13 +438,13 @@ function layeredCandidate(serial, requireSwitch = true) {
   let finalStart = createGame(options);
   finalStart = applyGroup(finalStart, groups[0]);
   finalStart = applyGroup(finalStart, groups[1]);
-  const finalChoices = choices(finalStart),
-    setupEvidence = measureSetupPressure(options, witness);
-  let causalState = createGame(options),
-    remaining = targetIds.length;
-  const targetIdsClearedByPlacement = [],
-    targetIdsRemainingAfterPlacement = [],
-    targetIdsMovedByPlacement = [];
+  const finalChoices = choices(finalStart);
+  const setupEvidence = measureSetupPressure(options, witness);
+  let causalState = createGame(options);
+  let remaining = targetIds.length;
+  const targetIdsClearedByPlacement = [];
+  const targetIdsRemainingAfterPlacement = [];
+  const targetIdsMovedByPlacement = [];
   for (const actionGroup of groups) {
     const before = new Map(
       targetIds.map((targetId) => [targetId, causalState.board.findIndex((gem) => gem?.id === targetId)]),
@@ -451,8 +452,8 @@ function layeredCandidate(serial, requireSwitch = true) {
     causalState = applyGroup(causalState, actionGroup);
     const after = targetIds.filter((targetId) => causalState.board.some((gem) => gem?.id === targetId)).length;
     const moved = targetIds.filter((targetId) => {
-      const oldIndex = before.get(targetId),
-        newIndex = causalState.board.findIndex((gem) => gem?.id === targetId);
+      const oldIndex = before.get(targetId);
+      const newIndex = causalState.board.findIndex((gem) => gem?.id === targetId);
       return oldIndex >= 0 && newIndex >= 0 && oldIndex !== newIndex;
     }).length;
     targetIdsClearedByPlacement.push(remaining - after);
@@ -497,8 +498,8 @@ function measureSetupPressure(options, witness) {
   for (let step = 0; step < groups.length - 1; step++) {
     let state = createGame(options);
     for (let i = 0; i < step; i++) state = applyGroup(state, groups[i]);
-    const legal = choices(state),
-      suffix = groups.slice(step + 1).flat();
+    const legal = choices(state);
+    const suffix = groups.slice(step + 1).flat();
     let wins = 0;
     for (const choice of legal) {
       let next = choice.state;
@@ -519,14 +520,15 @@ function measureSetupPressure(options, witness) {
   return { pressure: pressures.reduce((sum, value) => sum + value.pressure, 0) / pressures.length, steps: pressures };
 }
 function applyActions(state, actions) {
+  let current = state;
   for (const action of actions) {
-    state = advanceToInput(state);
-    if (state.phase !== "falling") throw new Error(`terminal phase ${state.phase}`);
-    const result = applyAction(state, action);
+    current = advanceToInput(current);
+    if (current.phase !== "falling") throw new Error(`terminal phase ${current.phase}`);
+    const result = applyAction(current, action);
     if (!result.accepted) throw new Error(`rejected ${action.kind}`);
-    state = result.state;
+    current = result.state;
   }
-  return advanceToInput(state);
+  return advanceToInput(current);
 }
 function applyGroup(state, group) {
   return applyActions(state, group);
@@ -556,8 +558,8 @@ function grade(item, canonicalKey) {
   const trials = item.variant === 6 ? 1024 : 128;
   let wins;
   if (item.witnessPlacements === 1) {
-    const legal = choices(createGame(item.options)),
-      random = seededRandom(canonicalKey);
+    const legal = choices(createGame(item.options));
+    const random = seededRandom(canonicalKey);
     wins = 0;
     for (let i = 0; i < trials; i++) if (legal[Math.floor(random() * legal.length)]?.state.phase === "won") wins++;
   } else wins = sampleFullPlans(item.options, trials, canonicalKey);

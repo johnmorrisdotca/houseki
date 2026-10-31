@@ -6,13 +6,13 @@ import { createChallenge } from "../dist/stone-collapse.js";
 export const GENERATION_REVISION = "stone-collapse-campaign-1.0";
 export const GRADING_VERSION = "collapse-order-forgiveness-1";
 export const SAMPLE_BUDGET = 64;
-const PROBE_BUDGET = 6,
-  WIDTH = 6,
-  HEIGHT = 6,
-  COLOURS = ["red", "blue", "green", "gold"];
-const COUNT = 100,
-  SURPLUS = 10,
-  SEARCH_LIMIT = 9000;
+const PROBE_BUDGET = 6;
+const WIDTH = 6;
+const HEIGHT = 6;
+const COLOURS = ["red", "blue", "green", "gold"];
+const COUNT = 100;
+const SURPLUS = 10;
+const SEARCH_LIMIT = 9000;
 const SILHOUETTE = [
   false,
   true,
@@ -46,8 +46,8 @@ function rng(seed) {
 }
 const cell = (x, y, width = WIDTH) => y * width + x;
 function neighbours(index, width, height) {
-  const x = index % width,
-    y = Math.floor(index / width);
+  const x = index % width;
+  const y = Math.floor(index / width);
   return [
     x ? index - 1 : -1,
     x + 1 < width ? index + 1 : -1,
@@ -56,13 +56,13 @@ function neighbours(index, width, height) {
   ].filter((next) => next >= 0);
 }
 function groups(board, width = WIDTH, height = HEIGHT, mask = Array(board.length).fill(true)) {
-  const seen = new Uint8Array(board.length),
-    result = [];
+  const seen = new Uint8Array(board.length);
+  const result = [];
   for (let start = 0; start < board.length; start++) {
     if (seen[start] || board[start] === -1) continue;
-    const colour = board[start],
-      pending = [start],
-      group = [];
+    const colour = board[start];
+    const pending = [start];
+    const group = [];
     seen[start] = 1;
     while (pending.length) {
       const at = pending.pop();
@@ -78,16 +78,16 @@ function groups(board, width = WIDTH, height = HEIGHT, mask = Array(board.length
   return result;
 }
 function removeAndSettle(board, group, width = WIDTH, height = HEIGHT, mask = Array(board.length).fill(true)) {
-  const removed = new Set(group),
-    next = board.map((colour, index) => (removed.has(index) ? -1 : colour));
+  const removed = new Set(group);
+  const next = board.map((colour, index) => (removed.has(index) ? -1 : colour));
   for (let x = 0; x < width; x++) {
     let y = 0;
     while (y < height) {
       while (y < height && !mask[cell(x, y, width)]) y++;
       const start = y;
       while (y < height && mask[cell(x, y, width)]) y++;
-      const end = y,
-        survivors = [];
+      const end = y;
+      const survivors = [];
       for (let row = start; row < end; row++)
         if (next[cell(x, row, width)] !== -1) survivors.push(next[cell(x, row, width)]);
       for (let row = start; row < end; row++)
@@ -140,16 +140,16 @@ function witnessIds(board, path, width = WIDTH, height = HEIGHT, mask = Array(bo
   });
 }
 function settleStoneBoard(board, cells, width = WIDTH, height = HEIGHT, mask = Array(board.length).fill(true)) {
-  const removed = new Set(cells),
-    next = board.map((stone, index) => (removed.has(index) ? null : stone));
+  const removed = new Set(cells);
+  const next = board.map((stone, index) => (removed.has(index) ? null : stone));
   for (let x = 0; x < width; x++) {
     let y = 0;
     while (y < height) {
       while (y < height && !mask[cell(x, y, width)]) y++;
       const start = y;
       while (y < height && mask[cell(x, y, width)]) y++;
-      const end = y,
-        survivors = [];
+      const end = y;
+      const survivors = [];
       for (let row = start; row < end; row++) if (next[cell(x, row, width)]) survivors.push(next[cell(x, row, width)]);
       for (let row = start; row < end; row++)
         next[cell(x, row, width)] =
@@ -176,8 +176,8 @@ function canonicalKey(level) {
     const mask = [];
     for (let y = 0; y < level.height; y++)
       for (let px = 0; px < level.width; px++) {
-        const x = mirror ? level.width - 1 - px : px,
-          at = cell(x, y);
+        const x = mirror ? level.width - 1 - px : px;
+        const at = cell(x, y);
         mask.push(level.mask?.[at] ?? true);
         const stone = level.board[at];
         board.push(stone ? label(stone.colour) : null);
@@ -189,8 +189,8 @@ function canonicalKey(level) {
   return variants.sort()[0];
 }
 function randomFinish(board, movesLeft, random, mask = Array(board.length).fill(true)) {
-  let current = board,
-    remaining = movesLeft;
+  let current = board;
+  let remaining = movesLeft;
   while (remaining > 0 && current.some((value) => value !== -1)) {
     const options = groups(current, WIDTH, HEIGHT, mask);
     if (!options.length) return false;
@@ -213,23 +213,23 @@ function metricsFor(level, colourBoard, witnessCells) {
       )
     )
       successes++;
-  let current = colourBoard,
-    stoneCurrent = level.board,
-    choices = 0,
-    safeShareSum = 0,
-    forced = 0,
-    decisions = 0;
+  let current = colourBoard;
+  let stoneCurrent = level.board;
+  let choices = 0;
+  let safeShareSum = 0;
+  let forced = 0;
+  let decisions = 0;
   for (let move = 0; move < level.witness.length; move++) {
     const legal = groups(current, WIDTH, HEIGHT, mask);
     if (!legal.length) break;
-    const intended = level.witness[move],
-      intendedCells = witnessCells[move],
-      viable = new Set();
+    const intended = level.witness[move];
+    const intendedCells = witnessCells[move];
+    const viable = new Set();
     choices += legal.length;
     decisions++;
     for (const group of legal) {
-      const after = removeAndSettle(current, group, WIDTH, HEIGHT, mask),
-        remaining = level.moveLimit - move - 1;
+      const after = removeAndSettle(current, group, WIDTH, HEIGHT, mask);
+      const remaining = level.moveLimit - move - 1;
       const ids = group.map((index) => stoneCurrent[index]?.id).sort((a, b) => a - b);
       const isWitness = ids.length === intended.length && ids.every((id, index) => id === intended[index]);
       let completions = 0;
@@ -257,8 +257,8 @@ function metricsFor(level, colourBoard, witnessCells) {
   };
 }
 function generateCandidate(serial, shaped) {
-  const random = rng(`${GENERATION_REVISION}|board|${serial}`),
-    mask = shaped ? SILHOUETTE : Array(WIDTH * HEIGHT).fill(true);
+  const random = rng(`${GENERATION_REVISION}|board|${serial}`);
+  const mask = shaped ? SILHOUETTE : Array(WIDTH * HEIGHT).fill(true);
   const colours = mask.map((active) => (active ? Math.floor(random() * COLOURS.length) : -1));
   const solved = solve(colours, `${GENERATION_REVISION}|solve|${serial}`, SEARCH_LIMIT, WIDTH, HEIGHT, mask);
   if (!solved.witness || solved.witness.length < 2) return null;
@@ -283,10 +283,10 @@ function generateCandidate(serial, shaped) {
   } catch {
     return null;
   }
-  const key = canonicalKey({ ...draft, board }),
-    keyHash = hash(key),
-    persistentId = `stone-${keyHash.slice(0, 12)}`,
-    titleCode = keyHash.slice(0, 4).toUpperCase();
+  const key = canonicalKey({ ...draft, board });
+  const keyHash = hash(key);
+  const persistentId = `stone-${keyHash.slice(0, 12)}`;
+  const titleCode = keyHash.slice(0, 4).toUpperCase();
   const level = {
     id: persistentId,
     number: 0,
@@ -318,8 +318,8 @@ function generateCandidate(serial, shaped) {
   return { level, key, solveNodes: solved.nodes };
 }
 function percentile(values, value) {
-  const less = values.filter((item) => item < value).length,
-    equal = values.filter((item) => item === value).length;
+  const less = values.filter((item) => item < value).length;
+  const equal = values.filter((item) => item === value).length;
   return values.length < 2 ? 0 : (less + (equal - 1) / 2) / (values.length - 1);
 }
 function gradeCategory(candidates) {
@@ -353,20 +353,20 @@ function gradeAndOrder(candidates) {
 }
 function campaign(count = COUNT) {
   if (!Number.isInteger(count) || count < 50 || count > 100) throw new RangeError("Campaign count must be 50 or 100");
-  const poolCount = count + SURPLUS,
-    shapedPool = Math.round(poolCount * 0.2),
-    rectanglePool = poolCount - shapedPool,
-    selectedShapeCount = Math.round(count * 0.2),
-    selectedRectCount = count - selectedShapeCount;
-  const keys = new Set(),
-    candidates = [];
+  const poolCount = count + SURPLUS;
+  const shapedPool = Math.round(poolCount * 0.2);
+  const rectanglePool = poolCount - shapedPool;
+  const selectedShapeCount = Math.round(count * 0.2);
+  const selectedRectCount = count - selectedShapeCount;
+  const keys = new Set();
+  const candidates = [];
   let serial = 0;
   for (const [shaped, quota] of [
     [false, rectanglePool],
     [true, shapedPool],
   ]) {
-    let found = 0,
-      categoryAttempts = 0;
+    let found = 0;
+    let categoryAttempts = 0;
     while (found < quota && categoryAttempts++ < 50_000) {
       const candidate = generateCandidate(serial++, shaped);
       if (!candidate || keys.has(candidate.key)) continue;

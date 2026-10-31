@@ -14,6 +14,7 @@ import type {
   Transition,
   Triplet,
 } from "./types.js";
+
 const PRESETS = {
   compact: [5, 13],
   extraWide: [12, 13],
@@ -114,8 +115,8 @@ export function landingY(state: GameState): number | null {
 function advanceBag(
   state: GameState,
 ): readonly [readonly Colour[], number, readonly (readonly [Colour, Colour, Colour])[]] {
-  let bag = state.bag,
-    randomState = state.randomState;
+  let bag = state.bag;
+  let randomState = state.randomState;
   const next: (readonly [Colour, Colour, Colour])[] = [];
   for (let p = 0; p < 3; p++) {
     const draw = drawTriplet({ bag, randomState, settings: state.settings });

@@ -1,5 +1,5 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import * as chains from "../dist/colour-chains.js";
 import * as blocks from "../dist/magnetic-blocks.js";
 
@@ -45,8 +45,8 @@ for (const [name, create, levels] of [
 test("Magnetic Blocks finite campaign stays untimed and rejects play after an exhausted loss", () => {
   assert.equal(blocks.levelManifest.length, 128);
   for (const number of [1, 64, 128]) {
-    const start = blocks.createLevel(number),
-      later = blocks.advanceTicks(start, 3600).state;
+    const start = blocks.createLevel(number);
+    const later = blocks.advanceTicks(start, 3600).state;
     assert.equal(later.phase, "falling");
     assert.deepEqual(later.active, start.active);
     assert.equal(later.placements, 0);

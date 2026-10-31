@@ -1,31 +1,37 @@
-export { MagneticBlocksOptionsError } from "./magnetic-blocks/validation.js";
-export { createGame, applyAction, advanceTicks, legalActions, statusOf } from "./magnetic-blocks/engine.js";
-export { encodeGame, decodeGame, restartGame } from "./magnetic-blocks/persistence.js";
 export {
   campaignManifest,
-  levelManifest,
-  tutorialManifest,
-  lessonManifest,
-  getLevel,
+  createLesson,
   createLevel,
   getLesson,
+  getLevel,
   getTutorial,
-  createLesson,
+  lessonManifest,
+  levelManifest,
+  tutorialManifest,
 } from "./magnetic-blocks/content.js";
+export type {
+  LocalizedText,
+  MagneticCampaignLevel,
+  MagneticCampaignManifest,
+  MagneticDifficultyMetrics,
+  MagneticLesson,
+} from "./magnetic-blocks/content-types.js";
+export { advanceTicks, applyAction, createGame, legalActions, statusOf } from "./magnetic-blocks/engine.js";
+export { decodeGame, encodeGame, restartGame } from "./magnetic-blocks/persistence.js";
 export {
-  blockCells,
-  canPlace,
-  landingY,
-  matchGroups,
-  removeIds,
-  calmGravity,
-  magneticGravity,
-  settle,
-  impactSupportIds,
   blockBonds,
-  MARK_TICKS,
-  REMOVE_TICKS,
+  blockCells,
+  calmGravity,
+  canPlace,
   GRAVITY_TICKS,
+  impactSupportIds,
+  landingY,
+  MARK_TICKS,
+  magneticGravity,
+  matchGroups,
+  REMOVE_TICKS,
+  removeIds,
+  settle,
 } from "./magnetic-blocks/physics.js";
 export type {
   Action,
@@ -46,10 +52,4 @@ export type {
   Settings,
   Transition,
 } from "./magnetic-blocks/types.js";
-export type {
-  LocalizedText,
-  MagneticCampaignLevel,
-  MagneticCampaignManifest,
-  MagneticDifficultyMetrics,
-  MagneticLesson,
-} from "./magnetic-blocks/content-types.js";
+export { MagneticBlocksOptionsError } from "./magnetic-blocks/validation.js";

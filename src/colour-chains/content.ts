@@ -1,5 +1,5 @@
-import { contentData } from "./content-data.js";
 import { createChallenge } from "./challenge.js";
+import { contentData } from "./content-data.js";
 import type {
   ChainCampaignLevel,
   ChainCampaignManifest,

@@ -1,21 +1,21 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
-  advanceTime,
   advanceTicks,
+  advanceTime,
   applyAction,
   createGame,
   decodeGame,
   encodeGame,
+  GemSwapOptionsError,
   hintGame,
   legalActions,
+  ReplayError,
   reshuffleGame,
   restartGame,
   statusOf,
   undoGame,
   validateChallengeWitness,
-  GemSwapOptionsError,
-  ReplayError,
 } from "../dist/gem-swap.js";
 
 function finish(state) {

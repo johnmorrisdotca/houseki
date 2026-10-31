@@ -14,7 +14,7 @@ import type {
   Transition,
   UndoFrame,
 } from "./types.js";
-import { optionsFor, neighbors, StoneCollapseOptionsError } from "./validation.js";
+import { neighbors, optionsFor, StoneCollapseOptionsError } from "./validation.js";
 
 const COLOURS: readonly StoneColour[] = ["red", "blue", "green", "gold", "purple", "teal"];
 const COLOURS_USED: readonly StoneColour[] = COLOURS;
@@ -85,8 +85,8 @@ function previewAt(state: GameState, tool: StoredTool, target: number): readonly
     return [];
   if (tool === "pick") return [target];
   const { width, height, mask } = state.settings;
-  const tx = target % width,
-    ty = Math.floor(target / width);
+  const tx = target % width;
+  const ty = Math.floor(target / width);
   const cells: number[] = [];
   for (let y = Math.max(0, ty - 1); y <= Math.min(height - 1, ty + 1); y++)
     for (let x = Math.max(0, tx - 1); x <= Math.min(width - 1, tx + 1); x++) {

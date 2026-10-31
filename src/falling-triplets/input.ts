@@ -1,4 +1,5 @@
 import type { Action } from "./types.js";
+
 type HoldAction = "left" | "right" | "soft-drop";
 /** Snapshot of deterministic held-input state at a logical tick boundary. */
 export interface InputSchedulerState {
@@ -98,7 +99,7 @@ export function actionsForTick(state: InputSchedulerState): readonly [readonly A
  * console.log(releaseAllActions(input));
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the public signature takes the state a caller holds, though nothing of it is kept
 export function releaseAllActions(state: InputSchedulerState): InputSchedulerState {
+  void state;
   return { held: {}, queued: [] };
 }

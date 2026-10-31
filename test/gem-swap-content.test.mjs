@@ -1,19 +1,19 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { test } from "vitest";
 import {
-  applyAction,
   advanceTicks,
-  createGame,
-  validateChallengeWitness,
+  applyAction,
   CAMPAIGN_CHECKSUM,
   CAMPAIGN_COUNT,
-  GENERATION_REVISION,
+  createGame,
   GEM_SWAP_CAMPAIGN,
   GEM_SWAP_LESSONS,
+  GENERATION_REVISION,
   GRADING_VERSION,
   GRADING_WEIGHTS,
   SAMPLE_BUDGET,
+  validateChallengeWitness,
 } from "../dist/gem-swap.js";
 import { generateContent } from "../scripts/gem-swap-levels.mjs";
 

@@ -1,4 +1,5 @@
 import type { Colour } from "./types.js";
+
 const COLOURS: readonly Colour[] = ["red", "blue", "green", "gold", "purple", "teal"];
 /** Hashes a string seed with UTF-8 FNV-1a and returns a nonzero uint32 state.
  *

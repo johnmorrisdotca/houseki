@@ -1,23 +1,30 @@
-export { StoneCollapseOptionsError } from "./stone-collapse/validation.js";
-export {
-  createGame,
-  createChallenge,
-  applyAction,
-  advanceTicks,
-  legalActions,
-  requestHint,
-  undo,
-  statusOf,
-} from "./stone-collapse/engine.js";
-export { restartGame, encodeGame, decodeGame } from "./stone-collapse/persistence.js";
 export {
   campaignManifest,
+  createLevel,
+  getLevel,
+  getTutorial,
   levelManifest,
   tutorialManifest,
-  getLevel,
-  createLevel,
-  getTutorial,
 } from "./stone-collapse/content.js";
+export type {
+  CollapseCampaignLevel,
+  CollapseCampaignManifest,
+  CollapseDifficultyMetrics,
+  CollapseTutorialDefinition,
+  CollapseTutorialStep,
+  LocalizedText,
+} from "./stone-collapse/content-types.js";
+export {
+  advanceTicks,
+  applyAction,
+  createChallenge,
+  createGame,
+  legalActions,
+  requestHint,
+  statusOf,
+  undo,
+} from "./stone-collapse/engine.js";
+export { decodeGame, encodeGame, restartGame } from "./stone-collapse/persistence.js";
 export type {
   Action,
   BoardPreset,
@@ -40,11 +47,4 @@ export type {
   Transition,
   UndoFrame,
 } from "./stone-collapse/types.js";
-export type {
-  CollapseCampaignLevel,
-  CollapseCampaignManifest,
-  CollapseDifficultyMetrics,
-  CollapseTutorialDefinition,
-  CollapseTutorialStep,
-  LocalizedText,
-} from "./stone-collapse/content-types.js";
+export { StoneCollapseOptionsError } from "./stone-collapse/validation.js";

@@ -1,10 +1,12 @@
-import { serve, ORIGIN } from "../demo.mjs";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
+import { ORIGIN, serve } from "../demo.mjs";
+
 const screenshotDir = resolve(process.env.HOUSEKI_SCREENSHOT_DIR ?? "test-output");
 await mkdir(screenshotDir, { recursive: true });
-import { chromium } from "@playwright/test";
+
 import assert from "node:assert/strict";
+import { chromium } from "@playwright/test";
 
 const url = ORIGIN;
 const browser = await chromium.launch();
@@ -38,9 +40,9 @@ try {
         assert.match(await page.locator("#preset option:checked").textContent(), /Fixed/);
       }
       const failures = await page.evaluate(() => {
-        const screen = document.querySelector(".game-screen"),
-          bounds = screen.getBoundingClientRect(),
-          problems = [];
+        const screen = document.querySelector(".game-screen");
+        const bounds = screen.getBoundingClientRect();
+        const problems = [];
         for (const element of screen.querySelectorAll("p,h2,.stats span,.controls button")) {
           if (!element.getClientRects().length || element.closest("[hidden]")) continue;
           const range = document.createRange();

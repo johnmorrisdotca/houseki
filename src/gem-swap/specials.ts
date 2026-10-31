@@ -94,7 +94,12 @@ function planCreations(
   q: number | null,
 ): readonly PlannedSpecial[] {
   const parents = runs.map((_, index) => index);
-  const root = (value: number): number => (parents[value] === value ? value : (parents[value] = root(parents[value]!)));
+  const root = (value: number): number => {
+    if (parents[value] === value) return value;
+    const found = root(parents[value]!);
+    parents[value] = found;
+    return found;
+  };
   const join = (a: number, b: number) => {
     const ra = root(a);
     const rb = root(b);

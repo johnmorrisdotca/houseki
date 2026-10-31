@@ -1,5 +1,5 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
   applyMagneticPulse,
   applyPowerDrop,
@@ -112,8 +112,8 @@ test("magnetic marking is replayable, bounded, stable-ID preserving, and immutab
     Array.from({ length: 6 }, (_, x) => [x, 0, stone(x + 1, `c${x}`)]),
   );
   const options = { probability: 1, maximum: 3, anchoredProbability: 1 };
-  const first = markMagneticStones(state, options),
-    second = markMagneticStones(state, options);
+  const first = markMagneticStones(state, options);
+  const second = markMagneticStones(state, options);
   assert.deepEqual(first.state, second.state);
   assert.deepEqual(first.events, second.events);
   assert.deepEqual(first.events[0].ids, [1, 2, 3]);

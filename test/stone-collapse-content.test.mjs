@@ -1,9 +1,9 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { test } from "vitest";
 import {
-  applyAction,
   advanceTicks,
+  applyAction,
   campaignManifest,
   createChallenge,
   createLevel,
@@ -17,13 +17,13 @@ import { generateCampaign, tutorialDefinitions } from "../scripts/stone-collapse
 function oracleGroup(board, width, height, mask, stoneId) {
   const start = board.findIndex((stone) => stone?.id === stoneId);
   if (start < 0) return [];
-  const colour = board[start].colour,
-    seen = new Set([start]),
-    pending = [start];
+  const colour = board[start].colour;
+  const seen = new Set([start]);
+  const pending = [start];
   while (pending.length) {
-    const at = pending.pop(),
-      x = at % width,
-      y = Math.floor(at / width);
+    const at = pending.pop();
+    const x = at % width;
+    const y = Math.floor(at / width);
     for (const [nx, ny] of [
       [x - 1, y],
       [x + 1, y],
@@ -41,8 +41,8 @@ function oracleGroup(board, width, height, mask, stoneId) {
   return [...seen].map((index) => board[index].id).sort((a, b) => a - b);
 }
 function oracleGroups(board, width, height, mask) {
-  const seen = new Set(),
-    result = [];
+  const seen = new Set();
+  const result = [];
   for (const stone of board) {
     if (!stone || seen.has(stone.id)) continue;
     const group = oracleGroup(board, width, height, mask, stone.id);
@@ -52,17 +52,17 @@ function oracleGroups(board, width, height, mask) {
   return result;
 }
 function oracleSettle(board, removeIds, width, height, mask = Array(board.length).fill(true)) {
-  const remove = new Set(removeIds),
-    cells = board.map((stone) => (stone && remove.has(stone.id) ? null : stone)),
-    gravity = [...cells];
+  const remove = new Set(removeIds);
+  const cells = board.map((stone) => (stone && remove.has(stone.id) ? null : stone));
+  const gravity = [...cells];
   for (let x = 0; x < width; x++) {
     let y = 0;
     while (y < height) {
       while (y < height && !mask[y * width + x]) y++;
       const start = y;
       while (y < height && mask[y * width + x]) y++;
-      const end = y,
-        survivors = [];
+      const end = y;
+      const survivors = [];
       for (let row = start; row < end; row++) if (cells[row * width + x]) survivors.push(cells[row * width + x]);
       for (let row = start; row < end; row++)
         gravity[row * width + x] = row < end - survivors.length ? null : survivors[row - (end - survivors.length)];
@@ -80,13 +80,14 @@ function oracleSettle(board, removeIds, width, height, mask = Array(board.length
   );
 }
 function settleCommitted(state, expectedIds, width, height) {
-  const before = state.board;
+  let current = state;
+  const before = current.board;
   assert.deepEqual(
-    oracleGroup(before, width, height, state.settings.mask, expectedIds[0]),
+    oracleGroup(before, width, height, current.settings.mask, expectedIds[0]),
     expectedIds,
     "witness names the complete current connected component",
   );
-  const selected = applyAction(state, { kind: "select", stoneId: expectedIds[0] });
+  const selected = applyAction(current, { kind: "select", stoneId: expectedIds[0] });
   assert.equal(selected.accepted, true);
   assert.deepEqual(
     [...selected.state.selectedIds].sort((a, b) => a - b),
@@ -95,33 +96,33 @@ function settleCommitted(state, expectedIds, width, height) {
   assert.equal(selected.state.previewScore, 5 * expectedIds.length * (expectedIds.length - 1));
   const confirmed = applyAction(selected.state, { kind: "confirm" });
   assert.equal(confirmed.accepted, true);
-  state = confirmed.state;
-  assert.equal(state.phase, "clear-mark");
+  current = confirmed.state;
+  assert.equal(current.phase, "clear-mark");
   assert.deepEqual(
-    [...state.pendingIds].sort((a, b) => a - b),
+    [...current.pendingIds].sort((a, b) => a - b),
     expectedIds,
   );
-  assert.deepEqual(state.board, before, "marked stones remain visible during the mark phase");
+  assert.deepEqual(current.board, before, "marked stones remain visible during the mark phase");
   const afterRemoval = before.map((stone) => (stone && expectedIds.includes(stone.id) ? null : stone));
-  const expectedSettled = oracleSettle(before, expectedIds, width, height, state.settings.mask);
+  const expectedSettled = oracleSettle(before, expectedIds, width, height, current.settings.mask);
   assert.deepEqual(
-    state.gravityBoard,
+    current.gravityBoard,
     expectedSettled,
     "gravity destination follows an independent column-and-compression oracle",
   );
   assert.equal(
-    state.score,
+    current.score,
     (confirmed.state.history.at(-1)?.score ?? 0) + 5 * expectedIds.length * (expectedIds.length - 1),
   );
-  state = advanceTicks(state, 7).state;
-  assert.equal(state.phase, "clear-remove");
-  assert.deepEqual(state.board, afterRemoval, "removal exposes holes before gravity");
-  state = advanceTicks(state, 6).state;
-  assert.equal(state.phase, "gravity");
-  assert.deepEqual(state.board, afterRemoval, "gravity phase begins from the hole snapshot");
-  state = advanceTicks(state, 9).state;
-  assert.deepEqual(state.board, expectedSettled, "gravity settles at the independent expected destination");
-  return state;
+  current = advanceTicks(current, 7).state;
+  assert.equal(current.phase, "clear-remove");
+  assert.deepEqual(current.board, afterRemoval, "removal exposes holes before gravity");
+  current = advanceTicks(current, 6).state;
+  assert.equal(current.phase, "gravity");
+  assert.deepEqual(current.board, afterRemoval, "gravity phase begins from the hole snapshot");
+  current = advanceTicks(current, 9).state;
+  assert.deepEqual(current.board, expectedSettled, "gravity settles at the independent expected destination");
+  return current;
 }
 function replay(start, witness) {
   let state = start;
@@ -131,16 +132,16 @@ function replay(start, witness) {
 function independentCanonical(level) {
   const variants = [];
   for (const mirror of [false, true]) {
-    const labels = new Map(),
-      label = (colour) => {
-        if (!labels.has(colour)) labels.set(colour, labels.size);
-        return labels.get(colour);
-      };
+    const labels = new Map();
+    const label = (colour) => {
+      if (!labels.has(colour)) labels.set(colour, labels.size);
+      return labels.get(colour);
+    };
     const board = [];
     for (let y = 0; y < level.height; y++)
       for (let px = 0; px < level.width; px++) {
-        const x = mirror ? level.width - px - 1 : px,
-          stone = level.board[y * level.width + x];
+        const x = mirror ? level.width - px - 1 : px;
+        const stone = level.board[y * level.width + x];
         board.push(stone ? label(stone.colour) : null);
       }
     const mask = [];

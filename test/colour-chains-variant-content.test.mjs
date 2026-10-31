@@ -1,9 +1,9 @@
+import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { test } from "vitest";
-import assert from "node:assert/strict";
 import {
-  applyAction,
   advanceTicks,
+  applyAction,
   arashiCampaignManifest,
   arashiLevelManifest,
   createArashiLevel,
@@ -36,8 +36,8 @@ function canonical(level) {
     const board = [];
     for (let y = 0; y < level.height; y++)
       for (let px = 0; px < level.width; px++) {
-        const x = mirror ? level.width - 1 - px : px,
-          gem = level.board[y * level.width + x];
+        const x = mirror ? level.width - 1 - px : px;
+        const gem = level.board[y * level.width + x];
         board.push(
           gem
             ? [
@@ -53,8 +53,8 @@ function canonical(level) {
       level.goal.kind === "clear-targets"
         ? level.goal.targetIds
             .map((id) => {
-              const at = level.board.findIndex((gem) => gem?.id === id),
-                x = at % level.width;
+              const at = level.board.findIndex((gem) => gem?.id === id);
+              const x = at % level.width;
               return Math.floor(at / level.width) * level.width + (mirror ? level.width - 1 - x : x);
             })
             .sort((a, b) => a - b)
@@ -76,16 +76,17 @@ function canonical(level) {
 }
 
 function resolve(state) {
+  let current = state;
   let ticks = 0;
   const events = [];
-  while (["clear-mark", "clear-remove", "gravity"].includes(state.phase) && ticks < 100_000) {
-    const tick = advanceTicks(state, 3600);
-    state = tick.state;
+  while (["clear-mark", "clear-remove", "gravity"].includes(current.phase) && ticks < 100_000) {
+    const tick = advanceTicks(current, 3600);
+    current = tick.state;
     events.push(...tick.events);
     ticks += 3600;
   }
-  assert.ok(!["clear-mark", "clear-remove", "gravity"].includes(state.phase));
-  return { state, events };
+  assert.ok(!["clear-mark", "clear-remove", "gravity"].includes(current.phase));
+  return { state: current, events };
 }
 
 function replay(level, initial) {
@@ -171,14 +172,14 @@ function expectedGoalCoordination(level) {
   let components = 0;
   while (remaining.size) {
     components++;
-    const first = remaining.values().next().value,
-      colour = level.board[first]?.colour;
+    const first = remaining.values().next().value;
+    const colour = level.board[first]?.colour;
     const queue = [first];
     remaining.delete(first);
     while (queue.length) {
-      const at = queue.pop(),
-        x = at % level.width,
-        y = Math.floor(at / level.width);
+      const at = queue.pop();
+      const x = at % level.width;
+      const y = Math.floor(at / level.width);
       for (const [nx, ny] of [
         [x - 1, y],
         [x + 1, y],
@@ -258,8 +259,8 @@ for (const [name, manifest, levels, create] of [
 
 test("Shizen proofs use a real rebound or magnetic pulse and fail without nature", () => {
   for (const level of shizenLevelManifest) {
-    const state = createShizenLevel(level.id),
-      result = replay(level, state);
+    const state = createShizenLevel(level.id);
+    const result = replay(level, state);
     assert.equal(result.state.phase, "won", level.id);
     assert.ok(
       result.events.some(
@@ -313,8 +314,8 @@ test("nature campaign settings and action replay survive save and restart", () =
   ]) {
     let state = campaign === "shizen" ? createShizenLevel(level.id) : createArashiLevel(level.id);
     state = applyAction(state, { kind: "left" }).state;
-    const encoded = encodeGame(state),
-      recovered = decodeGame(encoded);
+    const encoded = encodeGame(state);
+    const recovered = decodeGame(encoded);
     assert.deepEqual(recovered, state);
     assert.deepEqual(restartGame(state).settings, state.settings);
     assert.deepEqual(decodeGame(encodeGame(recovered)), recovered);

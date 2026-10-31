@@ -1,7 +1,7 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
-import * as triplets from "../dist/falling-triplets.js";
+import { test } from "vitest";
 import * as chains from "../dist/colour-chains.js";
+import * as triplets from "../dist/falling-triplets.js";
 import * as collapse from "../dist/stone-collapse.js";
 
 test("Falling Triplets exposes bounded deep/large presets without changing its default or Daily well", () => {

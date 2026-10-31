@@ -79,8 +79,8 @@ export function canPlace(
 ): boolean {
   if (block.x < 0 || block.x + 1 >= width || block.y < 0 || block.y + 1 >= height) return false;
   return blockCells(block, width).every(({ index }) => {
-    const x = index % width,
-      y = Math.floor(index / width);
+    const x = index % width;
+    const y = Math.floor(index / width);
     return x >= 0 && x < width && y >= 0 && y < height && mask[index] && !board[index];
   });
 }
@@ -132,18 +132,18 @@ export function matchGroups(
   height: number,
   mask: readonly boolean[],
 ): readonly (readonly number[])[] {
-  const seen = new Set<number>(),
-    matches: number[][] = [];
+  const seen = new Set<number>();
+  const matches: number[][] = [];
   for (let start = 0; start < board.length; start++) {
     const gem = board[start];
     if (!gem || seen.has(start)) continue;
-    const group = [start],
-      pending = [start];
+    const group = [start];
+    const pending = [start];
     seen.add(start);
     while (pending.length) {
-      const at = pending.pop()!,
-        x = at % width,
-        y = Math.floor(at / width);
+      const at = pending.pop()!;
+      const x = at % width;
+      const y = Math.floor(at / width);
       for (const next of [
         x ? at - 1 : -1,
         x + 1 < width ? at + 1 : -1,
@@ -182,10 +182,10 @@ export function removeIds(
   bonds: readonly Bond[],
   indices: readonly number[],
 ): { readonly board: readonly (Gem | null)[]; readonly bonds: readonly Bond[]; readonly ids: readonly number[] } {
-  const removed = new Set(indices),
-    ids = indices.flatMap((index) => (board[index] ? [board[index]!.id] : [])),
-    remaining = board.map((gem, index) => (removed.has(index) ? null : gem)),
-    alive = new Set(remaining.flatMap((gem) => (gem ? [gem.id] : [])));
+  const removed = new Set(indices);
+  const ids = indices.flatMap((index) => (board[index] ? [board[index]!.id] : []));
+  const remaining = board.map((gem, index) => (removed.has(index) ? null : gem));
+  const alive = new Set(remaining.flatMap((gem) => (gem ? [gem.id] : [])));
   return {
     board: Object.freeze(remaining),
     bonds: Object.freeze(bonds.filter((edge) => alive.has(edge.a) && alive.has(edge.b))),
@@ -204,12 +204,12 @@ function connectedComponents(board: readonly (Gem | null)[], bonds: readonly Bon
       edges.get(edge.a)!.push(edge.b);
       edges.get(edge.b)!.push(edge.a);
     }
-  const seen = new Set<number>(),
-    groups: number[][] = [];
+  const seen = new Set<number>();
+  const groups: number[][] = [];
   for (const id of indices.keys()) {
     if (seen.has(id)) continue;
-    const pending = [id],
-      cells: number[] = [];
+    const pending = [id];
+    const cells: number[] = [];
     seen.add(id);
     while (pending.length) {
       const next = pending.pop()!;
@@ -247,9 +247,9 @@ export function calmGravity(
   height: number,
   mask: readonly boolean[],
 ): readonly (Gem | null)[] {
-  let board = [...initial],
-    moved = true,
-    guard = width * height * height;
+  let board = [...initial];
+  let moved = true;
+  let guard = width * height * height;
   while (moved && guard-- > 0) {
     moved = false;
     const groups = connectedComponents(board, bonds)
@@ -260,11 +260,11 @@ export function calmGravity(
       }))
       .sort((a, b) => b.bottom - a.bottom || a.id - b.id);
     for (const group of groups) {
-      const own = new Set(group.cells),
-        destinations = group.cells.map((index) => index + width);
+      const own = new Set(group.cells);
+      const destinations = group.cells.map((index) => index + width);
       const canMove = group.cells.every((index, i) => {
-        const y = Math.floor(index / width),
-          dest = destinations[i]!;
+        const y = Math.floor(index / width);
+        const dest = destinations[i]!;
         return y + 1 < height && mask[dest] && (!board[dest] || own.has(dest));
       });
       if (!canMove) continue;
@@ -307,8 +307,8 @@ export function magneticGravity(
       while (y < height && !mask[cell(x, y, width)]) y++;
       const start = y;
       while (y < height && mask[cell(x, y, width)]) y++;
-      const end = y,
-        survivors: Gem[] = [];
+      const end = y;
+      const survivors: Gem[] = [];
       for (let row = start; row < end; row++) {
         const gem = board[cell(x, row, width)];
         if (gem) survivors.push(gem);
@@ -373,8 +373,8 @@ export function impactSupportIds(
 ): readonly number[] {
   const byColumn = new Map<number, number>();
   for (const { index } of blockCells(block, width)) {
-    const x = index % width,
-      y = Math.floor(index / width);
+    const x = index % width;
+    const y = Math.floor(index / width);
     byColumn.set(x, Math.max(byColumn.get(x) ?? -1, y));
   }
   const ids = new Set<number>();

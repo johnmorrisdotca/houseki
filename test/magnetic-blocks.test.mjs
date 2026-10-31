@@ -1,5 +1,5 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
 import {
   advanceTicks,
   applyAction,
@@ -21,12 +21,12 @@ const nullBoard = (width, height) => Array(width * height).fill(null);
 function independentColourComponent(board, start, width, height, mask) {
   const gem = board[start];
   if (!gem) return [];
-  const pending = [start],
-    found = new Set(pending);
+  const pending = [start];
+  const found = new Set(pending);
   while (pending.length) {
-    const at = pending.pop(),
-      x = at % width,
-      y = Math.floor(at / width);
+    const at = pending.pop();
+    const x = at % width;
+    const y = Math.floor(at / width);
     for (const [nx, ny] of [
       [x - 1, y],
       [x + 1, y],

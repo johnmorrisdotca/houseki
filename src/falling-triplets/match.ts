@@ -30,12 +30,12 @@ export function findMatches(board: readonly (Gem | null)[], width: number, heigh
       const gem = board[index];
       if (!gem) continue;
       for (const [dx, dy] of directions) {
-        const px = x - dx,
-          py = y - dy;
+        const px = x - dx;
+        const py = y - dy;
         if (px >= 0 && px < width && py >= 0 && py < height && board[py * width + px]?.colour === gem.colour) continue;
         const run: number[] = [];
-        let cx = x,
-          cy = y;
+        let cx = x;
+        let cy = y;
         while (cx >= 0 && cx < width && cy >= 0 && cy < height && board[cy * width + cx]?.colour === gem.colour) {
           run.push(cy * width + cx);
           cx += dx;
@@ -43,7 +43,9 @@ export function findMatches(board: readonly (Gem | null)[], width: number, heigh
         }
         if (run.length >= 3) {
           const cells = found.get(gem.colour) ?? new Set<number>();
-          run.forEach((cell) => cells.add(cell));
+          run.forEach((cell) => {
+            cells.add(cell);
+          });
           found.set(gem.colour, cells);
         }
       }

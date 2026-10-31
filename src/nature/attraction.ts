@@ -1,4 +1,3 @@
-import { validateState } from "./validation.js";
 import { freezeNatureState } from "./state.js";
 import type {
   AttractionPairPreview,
@@ -8,6 +7,7 @@ import type {
   NatureState,
   NatureTransition,
 } from "./types.js";
+import { validateState } from "./validation.js";
 
 const indexOf = (x: number, y: number, width: number): number => y * width + x;
 const coordinates = (index: number, width: number): { x: number; y: number } => ({
@@ -21,9 +21,7 @@ function deepFreeze<T>(value: T): T {
   }
   return value;
 }
-function visiblePairCandidates(
-  state: NatureState,
-): {
+function visiblePairCandidates(state: NatureState): {
   a: NatureEntity;
   b: NatureEntity;
   aIndex: number;
@@ -37,22 +35,22 @@ function visiblePairCandidates(
   const pairs = [];
   for (let i = 0; i < magnets.length; i++)
     for (let j = i + 1; j < magnets.length; j++) {
-      const first = magnets[i]!,
-        second = magnets[j]!;
+      const first = magnets[i]!;
+      const second = magnets[j]!;
       if (first.entity.anchored && second.entity.anchored) continue;
-      const p = coordinates(first.index, state.width),
-        q = coordinates(second.index, state.width);
+      const p = coordinates(first.index, state.width);
+      const q = coordinates(second.index, state.width);
       const axis: "horizontal" | "vertical" | null = p.y === q.y ? "horizontal" : p.x === q.x ? "vertical" : null;
       if (!axis) continue;
       const distance = Math.abs(p.x - q.x) + Math.abs(p.y - q.y);
       if (distance <= 1) continue;
-      const stepX = Math.sign(q.x - p.x),
-        stepY = Math.sign(q.y - p.y);
+      const stepX = Math.sign(q.x - p.x);
+      const stepY = Math.sign(q.y - p.y);
       let clear = true;
       for (let offset = 1; offset < distance; offset++) {
-        const x = p.x + stepX * offset,
-          y = p.y + stepY * offset,
-          index = indexOf(x, y, state.width);
+        const x = p.x + stepX * offset;
+        const y = p.y + stepY * offset;
+        const index = indexOf(x, y, state.width);
         if (!state.activeCells[index] || state.cells[index] !== null) {
           clear = false;
           break;
@@ -128,16 +126,16 @@ function movePair(
   const ids = [pair.a.id, pair.b.id].sort((a, b) => a - b) as [number, number];
   let safety = state.width + state.height;
   while (safety-- > 0) {
-    const aIndexCurrent = findIndex(board, pair.a.id),
-      bIndexCurrent = findIndex(board, pair.b.id);
+    const aIndexCurrent = findIndex(board, pair.a.id);
+    const bIndexCurrent = findIndex(board, pair.b.id);
     if (aIndexCurrent < 0 || bIndexCurrent < 0) break;
-    const a = coordinates(aIndexCurrent, state.width),
-      b = coordinates(bIndexCurrent, state.width);
+    const a = coordinates(aIndexCurrent, state.width);
+    const b = coordinates(bIndexCurrent, state.width);
     const distance = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     if (distance <= 1) break;
     const vector = { x: Math.sign(b.x - a.x), y: Math.sign(b.y - a.y) };
-    const aEntity = board[aIndexCurrent]!,
-      bEntity = board[bIndexCurrent]!;
+    const aEntity = board[aIndexCurrent]!;
+    const bEntity = board[bIndexCurrent]!;
     if (aEntity.anchored || bEntity.anchored) {
       const moverIsA = bEntity.anchored;
       const from = moverIsA ? a : b;
@@ -193,10 +191,10 @@ function movePair(
       { id: moveB.entity.id, from: b, to: { x: moveB.x, y: moveB.y } },
     );
   }
-  const aIndex = findIndex(board, pair.a.id),
-    bIndex = findIndex(board, pair.b.id);
-  const a = coordinates(aIndex, state.width),
-    b = coordinates(bIndex, state.width);
+  const aIndex = findIndex(board, pair.a.id);
+  const bIndex = findIndex(board, pair.b.id);
+  const a = coordinates(aIndex, state.width);
+  const b = coordinates(bIndex, state.width);
   return deepFreeze({
     ids,
     axis: pair.axis,

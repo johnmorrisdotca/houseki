@@ -1,25 +1,25 @@
-import { test } from "vitest";
 import assert from "node:assert/strict";
+import { test } from "vitest";
+import { compactBoard, findGroups } from "../dist/colour-chains/match.js";
 import {
-  createGame,
-  createChallenge,
-  applyAction,
-  advanceTicks,
-  legalActions,
-  statusOf,
-  landingCells,
-  restartGame,
-  encodeGame,
-  decodeGame,
-  createInputScheduler,
-  setHeldInput,
-  queueInputEdge,
   actionsForTick,
+  advanceTicks,
+  applyAction,
   applyScheduledActions,
+  createChallenge,
+  createGame,
+  createInputScheduler,
+  decodeGame,
+  encodeGame,
+  landingCells,
+  legalActions,
   processInputTick,
+  queueInputEdge,
+  restartGame,
   StoneChainsOptionsError,
+  setHeldInput,
+  statusOf,
 } from "../dist/colour-chains.js";
-import { findGroups, compactBoard } from "../dist/colour-chains/match.js";
 
 const W = 6;
 const H = 12;
@@ -136,7 +136,9 @@ test("ordered rotation kick reaches the wall and a fully blocked rotation preser
     [2, 5],
     [4, 5],
     [3, 4],
-  ].forEach(([x, y], i) => put(board, x, y, "gold", 70 + i));
+  ].forEach(([x, y], i) => {
+    put(board, x, y, "gold", 70 + i);
+  });
   const blocked = stateWith(board, active(["red", "blue"], { x: 2, y: 5 }, "up"));
   const reject = applyAction(blocked, { kind: "rotate-clockwise" });
   assert.equal(reject.accepted, false);
@@ -163,7 +165,9 @@ test("diagonal contacts do not join, four-connected groups qualify, and disconne
     [1, 1],
     [2, 2],
     [3, 3],
-  ].forEach(([x, y], i) => put(diagonal, x, y, "red", i + 1));
+  ].forEach(([x, y], i) => {
+    put(diagonal, x, y, "red", i + 1);
+  });
   assert.deepEqual(findGroups(diagonal, W, FULL), []);
   const mixed = blank();
   [
@@ -171,7 +175,9 @@ test("diagonal contacts do not join, four-connected groups qualify, and disconne
     [1, 11],
     [1, 10],
     [2, 10],
-  ].forEach(([x, y], i) => put(mixed, x, y, "blue", 20 + i));
+  ].forEach(([x, y], i) => {
+    put(mixed, x, y, "blue", 20 + i);
+  });
   assert.deepEqual(findGroups(mixed, W, FULL), [
     [(11 + 3) * W, (11 + 3) * W + 1, (10 + 3) * W + 1, (10 + 3) * W + 2].sort((a, b) => a - b),
   ]);
@@ -185,14 +191,18 @@ test("diagonal contacts do not join, four-connected groups qualify, and disconne
     [5, 11],
     [4, 10],
     [5, 10],
-  ].forEach(([x, y], i) => put(groups, x, y, "green", 50 + i));
+  ].forEach(([x, y], i) => {
+    put(groups, x, y, "green", 50 + i);
+  });
   assert.equal(findGroups(groups, W, FULL).length, 2);
   const three = blank();
   [
     [0, 11],
     [1, 11],
     [2, 11],
-  ].forEach(([x, y], i) => put(three, x, y, "gold", i + 1));
+  ].forEach(([x, y], i) => {
+    put(three, x, y, "gold", i + 1);
+  });
   assert.deepEqual(findGroups(three, W, FULL), []);
 });
 
@@ -385,7 +395,9 @@ test("resolution batching preserves immutable snapshots and tick/event ordering"
     [1, 11],
     [2, 11],
     [3, 11],
-  ].forEach(([x, y], i) => put(board, x, y, "blue", 700 + i));
+  ].forEach(([x, y], i) => {
+    put(board, x, y, "blue", 700 + i);
+  });
   const start = stateWith(board, null, {
     phase: "clear-mark",
     clearCells: [14 * W, 14 * W + 1, 14 * W + 2, 14 * W + 3],
@@ -573,7 +585,9 @@ test("rotation consumes reset only on accepted grounded turns and rejected kicks
     [1, 10],
     [4, 10],
     [3, 9],
-  ].forEach(([x, y], i) => put(obstacleBoard, x, y, "gold", 6000 + i));
+  ].forEach(([x, y], i) => {
+    put(obstacleBoard, x, y, "gold", 6000 + i);
+  });
   const blocked = stateWith(
     obstacleBoard,
     { ...active(["red", "blue"], { x: 2, y: 10 }, "up"), groundedStarted: true, groundedTicks: 22 },

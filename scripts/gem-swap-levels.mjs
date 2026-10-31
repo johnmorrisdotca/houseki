@@ -1,8 +1,8 @@
-import { withContentDocs } from "./gem-swap-content-docs.mjs";
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { applyAction, advanceTicks, createGame, legalActions, validateChallengeWitness } from "../dist/gem-swap.js";
+import { advanceTicks, applyAction, createGame, legalActions, validateChallengeWitness } from "../dist/gem-swap.js";
+import { withContentDocs } from "./gem-swap-content-docs.mjs";
 
 export const GENERATION_REVISION = "gem-swap-campaign-1.3.0";
 export const GRADING_VERSION = "swap-choice-forgiveness-1";
@@ -293,8 +293,8 @@ function sampledSuccessRate(options, seedLabel) {
   return successes / SAMPLE_BUDGET;
 }
 function canonicalKey(level) {
-  const width = level.width,
-    height = level.height;
+  const width = level.width;
+  const height = level.height;
   const transforms =
     width === height
       ? [
