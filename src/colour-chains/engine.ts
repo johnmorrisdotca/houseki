@@ -630,6 +630,7 @@ function applyCore(state: GameState, action: Action): Transition {
   }
   if (state.phase !== "falling" || !state.active) return emptyTransition(state, "not-ready");
   const pair = state.active;
+  // biome-ignore lint/nursery/useExhaustiveSwitchCases: pause, resume and hint return above, so this union no longer includes them
   switch (action.kind) {
     case "left":
     case "right":
@@ -686,10 +687,6 @@ function applyCore(state: GameState, action: Action): Transition {
         ],
       };
     }
-    case "pause":
-    case "resume":
-    case "hint":
-      return emptyTransition(state, "invalid-action");
   }
 }
 /** Applies one immutable accepted action and records its logical-tick position.
