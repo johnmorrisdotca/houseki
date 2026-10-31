@@ -2,32 +2,32 @@
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
     ".": {
-      "minified": 1861977,
-      "gzip": 179110
+      "minified": 1862066,
+      "gzip": 179095
     },
     "./falling-triplets": {
-      "minified": 175092,
-      "gzip": 21788
+      "minified": 175097,
+      "gzip": 21674
     },
     "./colour-chains": {
-      "minified": 1019080,
-      "gzip": 75909
+      "minified": 1019078,
+      "gzip": 76608
     },
     "./stone-collapse": {
-      "minified": 206875,
-      "gzip": 32521
+      "minified": 206924,
+      "gzip": 31726
     },
     "./gem-swap": {
-      "minified": 106226,
-      "gzip": 20988
+      "minified": 106267,
+      "gzip": 21066
     },
     "./nature": {
-      "minified": 21730,
-      "gzip": 6967
+      "minified": 21727,
+      "gzip": 6979
     },
     "./magnetic-blocks": {
-      "minified": 353234,
-      "gzip": 28237
+      "minified": 353232,
+      "gzip": 27555
     }
   }
 }
