@@ -8,6 +8,7 @@ All notable changes to this package are written here, newest first, in the form 
 
 - Biome replaces ESLint as the formatter and linter, with the family's shared settings in `scripts/biome-family.json`; `pnpm lint` checks formatting too, and `pnpm format` applies it. The code is formatted once to 120 columns. Nothing a user of the package sees has changed.
 - TypeScript targets ES2022, treats an indexed read as possibly missing, and refuses switch fallthrough and unmarked overrides.
+- `pnpm check` also holds every source file to at most 500 lines of code (`scripts/check-size.mjs`; blank lines, comments, tests and data files are not counted). The campaign tables are `content.data.ts`, and each engine's phases live beside it: Colour Chains' board and actions, Falling Triplets' setup, waves, play and save, Gem Swap's setup, creation, ticks and actions, Magnetic Blocks' core, and Stone Collapse's setup and resolution.
 
 ### Fixed
 
