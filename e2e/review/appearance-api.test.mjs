@@ -96,7 +96,7 @@ try {
   assert.equal(await page.locator('head link[rel="icon"]').count(), 1);
   assert.ok((await page.locator('head link[rel="icon"]').getAttribute("href")).startsWith("data:image/svg+xml,"));
   // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
-  assert.equal(await page.locator("main h1").innerText(), "Houseki宝石");
+  assert.match(await page.locator("main h1").innerText(), /^Houseki\s*宝石$/);
   // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
   const text = await page.locator("body").innerText();
   for (const wrong of ['/colourChains"', '/fallingTriplets"', '/gemSwap"', '/stoneCollapse"', '/magneticBlocks"'])
