@@ -96,12 +96,12 @@ try {
   assert.equal(await page.locator('head link[rel="icon"]').count(), 1);
   assert.ok((await page.locator('head link[rel="icon"]').getAttribute("href")).startsWith("data:image/svg+xml,"));
   // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
-  assert.match(await page.locator("main h1").innerText(), /^Houseki\s*宝石$/);
+  assert.equal(await page.locator("main h1").innerText(), "Houseki API: every export");
   // biome-ignore lint/performance/useDomNodeTextContent: Playwright innerText reads visible text
   const text = await page.locator("body").innerText();
   for (const wrong of ['/colourChains"', '/fallingTriplets"', '/gemSwap"', '/stoneCollapse"', '/magneticBlocks"'])
     assert.equal(text.includes(wrong), false);
-  await page.locator("#falling-triplets-createGame").scrollIntoViewIfNeeded();
+  await page.locator("#falling-triplets-createGame h3 a").click();
   assert.equal(await page.locator('button[data-cloth="wood"]').getAttribute("aria-checked"), "true");
   assert.deepEqual(errors, []);
   await page.screenshot({ path: resolve(screenshotDir, "houseki-api-reviewed.png"), fullPage: false });

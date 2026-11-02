@@ -120,7 +120,7 @@
     "test:demo": "pnpm site && node scripts/docs-site.mjs build && playwright test && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
     "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
     "test:readme": "pnpm build && node scripts/check-readme-examples.mjs",
-    "test:review": "pnpm site && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
+    "test:review": "pnpm site && node scripts/docs-site.mjs build && node --test --test-concurrency=2 e2e/review/appearance-api.test.mjs e2e/review/boards-settings-and-keys.test.mjs e2e/review/endings.test.mjs e2e/review/full-board-recovery.test.mjs e2e/review/nature-previews.test.mjs e2e/review/responsive.test.mjs",
     "docs:site": "pnpm build && node scripts/docs-site.mjs build",
     "docs:check": "pnpm build && node scripts/docs-site.mjs check",
     "size": "node scripts/docs-site.mjs size"
