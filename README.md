@@ -9,7 +9,7 @@ Falling Triplets, Colour Chains, Stone Collapse and Gem Swap: each an immutable,
   <a href="./LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-2f5d4a">
-  <a href="https://johnmorrisdotca.github.io/houseki/docs/api/main/index.html"><img alt="179.1 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-179.1%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/houseki/docs/api/main/index.html"><img alt="189.2 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-189.2%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/houseki#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -78,8 +78,8 @@ Or straight from a page, with nothing to build:
 
 ## Features
 
-- **Five games**, each its own engine and its own entry point: [Falling Triplets](docs/design/01-FALLING-TRIPLETS.md), [Stone Collapse](docs/design/02-STONE-COLLAPSE.md), [Colour Chains](docs/design/03-COLOUR-CHAINS.md) [Gem Swap](docs/design/04-GEM-SWAP.md) and [Magnetic Blocks](docs/design/CAMPAIGN-EXTENSIONS.md).
-- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse, 50 Gem Swap, 128 Magnetic Blocks, 128 Shizen and 128 Arashi challenges (684 total), ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
+- **Six games**, each its own engine and its own entry point: [Falling Triplets](docs/design/01-FALLING-TRIPLETS.md), [Stone Collapse](docs/design/02-STONE-COLLAPSE.md), [Colour Chains](docs/design/03-COLOUR-CHAINS.md) [Gem Swap](docs/design/04-GEM-SWAP.md) and [Magnetic Blocks](docs/design/CAMPAIGN-EXTENSIONS.md).
+- **Graded campaigns and lessons**: 100 Falling Triplets, 50 Colour Chains, 100 Stone Collapse, 50 Gem Swap, 128 Magnetic Blocks, 128 Shizen, 128 Arashi and 64 Tsumiki challenges (748 total), ordered by measured difficulty, each with a recorded winning play that the tests replay, and three guided lessons for each game. The boards are original, regenerated from a script, and a challenge keeps its identity if the order changes.
 - **Three modes**: Relaxed (no clock, plan each move), Arcade (a timer drops the pieces) and Daily (the same board for everyone on a date).
 - **Seeded and replayable**: a state is made from a seed and a list of actions, so a save is that list, and it decodes to exactly the board it came from.
 - **Configurable boards**: presets from compact to extra wide and deep, custom sizes within stated limits, up to six colours, and shaped boards (heart, star, hexagon) for the full-board games.
@@ -100,6 +100,7 @@ Or straight from a page, with nothing to build:
 | Colour Chains | `colour-chains` | rotate a falling pair | a group of four or more | 50 |
 | Gem Swap | `gem-swap` | swap two neighbours | a run of three or more, which can make special gems | 50 |
 | Magnetic Blocks | `magnetic-blocks` | rotate a falling 2×2 block | four connected gems, with Calm/Pull settling | 128 |
+| Tsumiki | `tsumiki` | lay three shapes on an 8×8 board | a full row or column | 64 |
 | Shizen | `colour-chains` | anticipate marked stones and rebound | four connected gems after attraction | 128 |
 | Arashi | `colour-chains` | plan around earthquakes and lightning | four connected gems after weather | 128 |
 
@@ -543,7 +544,7 @@ falling { kind: 'clear-targets', targetIds: [ 1, 2, 3 ] } frequent
 
 ### A page that plays a level with the keyboard
 
-The demo's players are the worked example of drawing the states: `demo/chains.js`, `demo/blocks.js`, `demo/tools.js` and `demo/demo.js` are plain DOM, with the keyboard and keypad scheduled through `createInputScheduler`, which turns held keys into actions on a count of ticks.
+The demo's players are the worked example of drawing the states: `demo/chains.js`, `demo/blocks.js`, `demo/tsumiki.js`, `demo/tools.js` and `demo/demo.js` are plain DOM, with the keyboard and keypad scheduled through `createInputScheduler`, which turns held keys into actions on a count of ticks.
 
 ```ts no-run
 import { actionsForTick, advanceTicks, applyAction, createInputScheduler, createLevel, queueInputEdge } from "@johnmorrisdotca/houseki/falling-triplets";
@@ -579,6 +580,7 @@ Every export of every entry point is in the [API reference](https://johnmorrisdo
 | `@johnmorrisdotca/houseki/stone-collapse` | Stone Collapse: 100 challenges, three lessons, hints, undo and stored tools |
 | `@johnmorrisdotca/houseki/gem-swap` | Gem Swap: 50 challenges, three lessons, hints, undo, stored tools and the Black Hole |
 | `@johnmorrisdotca/houseki/magnetic-blocks` | Magnetic Blocks: bonded squares, the magnetic floor and its 128 challenges |
+| `@johnmorrisdotca/houseki/tsumiki` | Tsumiki: three shapes on an 8×8 board, 64 challenges, three lessons, a Daily and saves |
 | `@johnmorrisdotca/houseki/nature` | The deterministic attraction, rebound and environment utilities |
 
 ### The calls to learn first
@@ -604,6 +606,7 @@ The engines draw nothing. The demo's players take their colours from the family'
 | Colour Chains | 5 to 16 columns and 12 to 32 visible rows |
 | Magnetic Blocks | 4 to 16 columns and 4 to 32 rows; at most 200 pieces in the demo |
 | Stone Collapse | presets from 6×8 to 16×10 and 8×32 deep; shaped boards by mask |
+| Tsumiki | one board, eight by eight; three shapes in the tray |
 | Daily mode | the standard board and colour count only, from a date |
 | Saves | a replay of the actions taken, checked when it is decoded; a save that does not match its own record is refused |
 | Tools | capped inventory, earned by ordinary clears, and not offered in Daily or in authored challenges |
@@ -735,7 +738,7 @@ Ideas, bug reports and pull requests are welcome in the [issues](https://github.
 
 ## Changes
 
-Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.4.3, changes nothing a player sees.
+Every release is written up in [CHANGELOG.md](./CHANGELOG.md). The latest release, 0.5.0, adds Tsumiki, a sixth game.
 
 ## Licence
 

@@ -5,7 +5,7 @@ title: "Translation: "
 labels: translation
 ---
 
-The Japanese words are in the demo's pages (`demo/demo.js`, `demo/chains.js`, `demo/tools.js` and `demo/blocks.js`, each beside its English), in `demo/words.js` for the header and footer, and in the titles of the levels and lessons under `src/*/content.data.ts`.
+The Japanese words are in the demo's pages (`demo/demo.js`, `demo/chains.js`, `demo/tools.js`, `demo/blocks.js` and `demo/tsumiki.js`, each beside its English), in `demo/words.js` for the header and footer, and in the titles of the levels and lessons under `src/*/content-data.ts`.
 
 **Which string** (the page and the name of the string, or the level's number):
 

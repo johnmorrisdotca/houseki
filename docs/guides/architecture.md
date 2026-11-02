@@ -88,7 +88,16 @@ src/
 │   ├── persistence.ts
 │   ├── types.ts
 │   └── validation.ts
-└── stone-collapse.ts
+├── stone-collapse.ts
+├── tsumiki/
+│   ├── content.data.ts
+│   ├── content-types.ts
+│   ├── content.ts
+│   ├── engine.ts
+│   ├── persistence.ts
+│   ├── shapes.ts
+│   └── types.ts
+└── tsumiki.ts
 ```
 
 The [design pack](../design/README.md) specifies the rules, controls, materials, accessibility, level generation, grading, persistence and acceptance checks of every game; [level generation](../design/LEVEL-GENERATION.md) follows a deliberate complete count: generate and prove original boards, remove duplicates, grade the decisions a player faces, then sort and number from easy to hard.

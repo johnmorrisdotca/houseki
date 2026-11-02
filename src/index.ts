@@ -6,3 +6,4 @@ export * as gemSwap from "./gem-swap.js";
 export * as magneticBlocks from "./magnetic-blocks.js";
 export * as nature from "./nature.js";
 export * as stoneCollapse from "./stone-collapse.js";
+export * as tsumiki from "./tsumiki.js";

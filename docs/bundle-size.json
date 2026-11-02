@@ -2,8 +2,8 @@
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
     ".": {
-      "minified": 1862066,
-      "gzip": 179095
+      "minified": 1904846,
+      "gzip": 189241
     },
     "./falling-triplets": {
       "minified": 175097,
@@ -12,6 +12,10 @@
     "./colour-chains": {
       "minified": 1019078,
       "gzip": 76608
+    },
+    "./tsumiki": {
+      "minified": 42634,
+      "gzip": 10042
     },
     "./stone-collapse": {
       "minified": 206924,

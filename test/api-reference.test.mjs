@@ -8,7 +8,7 @@ const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url),
 
 test("namespace examples use the source-matched package export paths", async () => {
   const namespaces = apiOf()[0].exports.filter((item) => item.kind === "namespace");
-  assert.equal(namespaces.length, 6);
+  assert.equal(namespaces.length, 7);
   for (const item of namespaces) {
     const [rootImport, alternateImport] = item.signature.split("\n");
     const root = rootImport.match(/^import \{ (\w+) \} from "([^"]+)";$/);

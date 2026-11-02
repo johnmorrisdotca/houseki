@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--family:head-->
+  <link rel="stylesheet" href="family.css">
+  <link rel="stylesheet" href="houseki.css">
+  <link rel="stylesheet" href="tsumiki.css">
+  <link rel="stylesheet" href="ending.css">
+</head>
+<body>
+<main>
+  <!--family:header-->
+  <!--family:pages-->
+  <div class="layout tsumiki-layout">
+    <aside>
+      <details class="settings-fold" open>
+        <summary><span data-i="settings">Settings</span></summary>
+        <div class="settings-fields">
+          <label class="field" data-help-en="Relaxed goes on until no shape fits. Daily is today's tray order, the same for everybody." data-help-ja="ゆったりは、形が置けなくなるまで続きます。デイリーは今日の順番で、誰にとっても同じです。"><span data-i="mode">Mode</span><select id="mode"><option value="relaxed" data-i="relaxed">Relaxed</option><option value="daily" data-i="daily">Daily</option></select></label>
+          <label class="field" data-help-en="A fixed board with a goal: a score, a number of lines, or every stone cleared." data-help-ja="目標のある決まった盤です。目標は得点、消す本数、すべての石を消すことのどれかです。"><span data-i="campaign">Campaign level</span><select id="level"></select></label>
+          <label class="field" data-help-en="A short board that shows one idea. It starts from the same place each time." data-help-ja="考え方を1つ見せる短い盤です。毎回同じ場所から始まります。"><span data-i="lessonLabel">Lesson</span><select id="lesson"></select></label>
+          <section id="objective" class="tsumiki-objective" hidden aria-live="polite"></section>
+          <div class="fam-actions"><button class="fam-button" id="new" data-accent="true" data-i="new">New game</button><button class="fam-button" id="restart" data-i="restart">Restart</button></div>
+          <p class="micro" data-i="help">Choose a shape in the tray, then the square for its top left. A full row or column clears.</p>
+          <label class="check" data-help-en="Sound is kept on this device." data-help-ja="効果音の設定は、この端末に保存されます。"><input id="sound" type="checkbox"><span data-i="sound">Sound effects</span></label>
+        </div>
+      </details>
+    </aside>
+    <section class="fam-felt game-screen" tabindex="0" aria-label="Tsumiki game">
+      <div class="panel-head"><h2 data-i="title">Tsumiki</h2><div class="stats"><span><b data-i="score">Score</b> <output id="score">0</output></span><span><b data-i="lines">Lines</b> <output id="lines">0</output></span><span><b data-i="placed">Placed</b> <output id="moves">0</output></span></div></div>
+      <div id="grid" class="tsumiki-grid" role="grid" aria-label="Tsumiki board"></div>
+      <div id="tray" class="tsumiki-tray" role="group" aria-label="Tray of shapes"></div>
+      <p id="status" class="micro" aria-live="polite"></p>
+    </section>
+  </div>
+  <!--family:unreviewed-->
+  <!--family:footer-->
+</main>
+<!--family:scripts tsumiki.js-->
+</body>
+</html>

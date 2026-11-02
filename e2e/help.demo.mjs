@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 import { open } from "./demo.mjs";
 
 // Off, the page is as it was; on, every option row says in one line what it does, in the page's language, and every control in it has hover words.
-for (const file of ["index.html", "chains.html", "tools.html", "blocks.html"]) {
+for (const file of ["index.html", "chains.html", "tools.html", "blocks.html", "tsumiki.html"]) {
   test(`${file}: Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area`, async ({
     page,
   }) => {
