@@ -1,3 +1,5 @@
+<p align="center"><a href="https://johnmorrisdotca.github.io/houseki/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/thumbnail-dark.png"><img src="https://raw.githubusercontent.com/johnmorrisdotca/houseki/main/docs/images/thumbnail.png" alt="Houseki: a Gem Swap board of round gems in five colours, each marked with its own shape." width="1200"></picture></a></p>
+
 <h1 align="center">Houseki <sub>宝石</sub> — Match-3 gem puzzles</h1>
 
 <p align="center"><strong>Five original gem and stone puzzle games for JavaScript and TypeScript.</strong><br>

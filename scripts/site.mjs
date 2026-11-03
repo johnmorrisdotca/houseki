@@ -13,10 +13,15 @@ import {
   familyHeader,
   familyUnreviewed,
 } from "./family-template.mjs";
+import { publishThumbnails, thumbnailHead } from "./family-thumbnail.mjs";
 
 const id = "houseki";
 const ICON =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232f5d4a'/%3E%3Ctext x='50' y='66' font-size='46' text-anchor='middle' fill='%23f3efe4'%3E%E5%AE%9D%E7%9F%B3%3C/text%3E%3C/svg%3E";
+
+/** What the family's card shows, for a reader who cannot see it (the README's top picture says the same). */
+const ALT = "Houseki: a Gem Swap board of round gems in five colours, each marked with its own shape.";
+const HEAD_THUMBNAIL = thumbnailHead(JSON.parse(readFileSync("package.json", "utf8")), { alt: ALT });
 
 /** The row of links to the demo's pages, the page being read marked as the current one. */
 const pages = (
@@ -45,7 +50,7 @@ function render(key) {
     html
       .replace(
         "<!--family:head-->",
-        `${familyHead({ id, title: page.title, description: page.description })}\n  <link rel="icon" href="${ICON}">`,
+        `${familyHead({ id, title: page.title, description: page.description })}\n  ${HEAD_THUMBNAIL}\n  <link rel="icon" href="${ICON}">`,
       )
       .replace(
         "<!--family:header-->",
@@ -73,6 +78,8 @@ cpSync("demo", "site", { recursive: true });
 cpSync("dist", "site/dist", { recursive: true });
 writeFileSync("site/family-appearance.js", `export const words=${JSON.stringify(FAMILY_WORDS)};`);
 for (const key of Object.keys(PAGES)) writeFileSync(`site/${PAGES[key].file}`, render(key));
+// The family's card, dark card and icon, at <site>/thumbnail.png, thumbnail-dark.png and icon.png.
+publishThumbnails(".", "site");
 // The API reference, made from the source: every export of every entry point.
 writeFileSync("site/api.css", API_CSS);
 writeFileSync("site/api.json", JSON.stringify(apiOf(), null, 2));
