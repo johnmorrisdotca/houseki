@@ -25,12 +25,15 @@ src/
 │   └── validation.ts
 ├── colour-chains.ts
 ├── falling-triplets/
-│   ├── content.data.ts
 │   ├── content-types.ts
+│   ├── content.data.ts
 │   ├── content.ts
+│   ├── engine-challenge.ts
 │   ├── engine-codec.ts
 │   ├── engine-play.ts
 │   ├── engine-setup.ts
+│   ├── engine-ticks.ts
+│   ├── engine-view.ts
 │   ├── engine-waves.ts
 │   ├── engine.ts
 │   ├── input.ts
@@ -53,6 +56,9 @@ src/
 │   ├── random.ts
 │   ├── specials.ts
 │   ├── tools.ts
+│   ├── types-actions.ts
+│   ├── types-pieces.ts
+│   ├── types-state.ts
 │   └── types.ts
 ├── gem-swap.ts
 ├── index.ts
@@ -70,6 +76,11 @@ src/
 ├── magnetic-blocks.ts
 ├── nature/
 │   ├── attraction.ts
+│   ├── environment-earthquake.ts
+│   ├── environment-lightning.ts
+│   ├── environment-schedule.ts
+│   ├── environment-support.ts
+│   ├── environment-types.ts
 │   ├── environment.ts
 │   ├── marking.ts
 │   ├── random.ts
@@ -79,11 +90,14 @@ src/
 │   └── validation.ts
 ├── nature.ts
 ├── stone-collapse/
-│   ├── content.data.ts
 │   ├── content-types.ts
+│   ├── content.data.ts
 │   ├── content.ts
+│   ├── engine-challenge.ts
 │   ├── engine-resolve.ts
 │   ├── engine-setup.ts
+│   ├── engine-ticks.ts
+│   ├── engine-view.ts
 │   ├── engine.ts
 │   ├── persistence.ts
 │   ├── types.ts

@@ -4,6 +4,7 @@ All notable changes to this package are written here, newest first, in the form 
 
 ## [Unreleased]
 
+- Source files over 500 lines are split by what they do (the nature, Stone Collapse, Falling Triplets and Gem Swap engines, the level generators and their tests), with the same exports and no change to the package. `pnpm check` now runs `scripts/check-max-lines.mjs`, which fails a file over 500 lines.
 - The README opens with the package's thumbnail, and the demo carries it as its link preview (og:image) and publishes the card, a dark card and an icon on Pages at `thumbnail.png`, `thumbnail-dark.png` and `icon.png`.
 
 ## [0.5.0] - 2026-11-02
