@@ -1,0 +1,58 @@
+/* The page layout and the settings panel. */
+:root {
+  --board: #fbf8f1;
+  --frame: #a98954;
+  --gem-edge: #1b2721;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+aside {
+  padding: 18px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: grid;
+  gap: 13px;
+}
+aside h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.field {
+  display: grid;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.field select {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--page);
+  padding: 0 10px;
+}
+aside p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+aside .micro {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}

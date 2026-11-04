@@ -1,0 +1,81 @@
+/* The row of links to the demo's pages, and the goal counters. */
+.pages {
+  margin: 4px 0 14px;
+}
+.pages .fam-button[aria-current="page"] {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+
+p[data-say="status"] {
+  line-height: 20px;
+  min-height: 40px;
+  margin: 12px 0;
+}
+
+.pages .fam-label {
+  line-height: 20px;
+  min-height: 20px;
+}
+
+header .intro p {
+  line-height: 20px;
+}
+header .intro {
+  min-height: 200px;
+}
+@media (min-width: 700px) {
+  header .intro {
+    min-height: 124px;
+  }
+}
+
+/* Reserve the longer label's room so game navigation wraps identically in both languages. */
+.pages .fam-label {
+  flex: 0 0 52px;
+}
+.pages .fam-actions {
+  min-width: 0;
+  max-width: 100%;
+}
+.pages .fam-button {
+  flex: none;
+  white-space: nowrap;
+}
+.pages .fam-button:nth-child(1),
+.pages .fam-button:nth-child(2) {
+  width: 128px;
+}
+.pages .fam-button:nth-child(3) {
+  width: 252px;
+}
+.pages .fam-button:nth-child(4) {
+  width: 152px;
+}
+
+/* Goal counters reserve the same line boxes for Latin and Japanese fonts. */
+#objective p {
+  line-height: 24px;
+}
+#objective progress {
+  height: 12px;
+}
+/* A title takes the whole row on a phone, so that it is one line in any font and either language, and the board under it does not move when the language changes. */
+@media (max-width: 480px) {
+  .panel-head h2 {
+    flex-basis: 100%;
+    white-space: nowrap;
+  }
+}
+
+.gem.goal-target {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+.well-scroll[data-authored-fit="true"] .well {
+  --cell: var(--authored-fit-cell);
+}
+.well-scroll[data-authored-fit="true"] .gem {
+  font-size: clamp(6px, calc(var(--cell) * 0.42), 18px);
+}

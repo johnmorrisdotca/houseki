@@ -1,0 +1,56 @@
+/* Small screens and reduced motion. */
+@media (max-width: 980px) {
+  .well {
+    --cell: min(42px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows)));
+  }
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  aside {
+    order: 2;
+  }
+  .game-screen {
+    order: 1;
+    padding: 12px 8px;
+  }
+  .play-area {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .next-wrap {
+    order: -1;
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+  }
+  .next-wrap h3 {
+    margin: 0;
+  }
+  .next {
+    display: flex;
+    max-width: none;
+  }
+}
+@media (max-width: 380px) {
+  .well {
+    --cell: min(36px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows)));
+  }
+  .play-area {
+    gap: 4px;
+  }
+  .next-piece .gem {
+    width: 25px;
+    height: 25px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

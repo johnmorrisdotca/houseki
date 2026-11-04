@@ -1,0 +1,103 @@
+/* Scrolling boards, goals, and the look of marked and clearing gems. */
+.game-screen,
+.game-screen * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.well[data-width="10"] {
+  --cell: min(40px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows)));
+}
+.well[data-width="12"] {
+  --cell: min(34px, calc((100vw - 84px) / var(--cols)), calc((100dvh - 340px) / var(--rows)));
+}
+
+:root[data-animations="off"] .game-screen *,
+:root[data-motion="reduced"] .game-screen * {
+  transition: none !important;
+  animation: none !important;
+}
+
+#objective {
+  margin: 8px 0;
+}
+#objective p {
+  margin: 4px 0;
+}
+#goal-progress {
+  width: min(100%, 320px);
+  accent-color: var(--frame);
+}
+
+.hidden-row .gem {
+  width: calc(var(--cell) * 0.36);
+  height: calc(var(--cell) * 0.36);
+  font-size: calc(var(--cell) * 0.2);
+}
+
+.well-scroll {
+  max-width: 100%;
+}
+.well-scroll[data-oversized="true"] {
+  overflow: auto;
+  max-height: min(65dvh, 600px);
+  border-radius: 13px;
+  overscroll-behavior: contain;
+}
+.well-scroll[data-oversized="true"] .well {
+  --cell: max(32px, min(42px, calc((100vw - 84px) / var(--cols))));
+}
+.board-nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.board-nav[hidden] {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .well-scroll[data-oversized="true"] {
+    max-height: 50dvh;
+  }
+}
+
+.gem.magnetic {
+  box-shadow:
+    inset 0 0 0 2px #b9c2c9,
+    0 2px 4px #0006;
+}
+.gem.magnetic small {
+  position: absolute;
+  right: 1px;
+  top: 0;
+  font-size: 0.45em;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+}
+
+.gem.marked {
+  outline: 2px solid #ffe19b;
+  outline-offset: -2px;
+  filter: brightness(1.25);
+}
+.gem.removing {
+  opacity: 0.25;
+  animation: clear-away 100ms ease-in both;
+}
+@keyframes clear-away {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+.game-screen button:disabled:not(.full-cell) {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
