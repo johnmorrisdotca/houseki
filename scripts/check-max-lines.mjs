@@ -24,7 +24,6 @@ const KNOWN_OVER = {
   "scripts/docs-site.mjs": 1378,
   "scripts/family-template.mjs": 995,
   // Demo pages that share module-level state (MODULES-278 to MODULES-282).
-  "demo/demo.js": 733,
   "demo/tools.js": 928,
   "demo/houseki.css": 566,
 };
